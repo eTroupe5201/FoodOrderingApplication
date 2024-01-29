@@ -1,10 +1,10 @@
 import { Box } from "@chakra-ui/react";
 
 //Page for logging in or registering 
-export const Login = () => {
+export const Info = () => {
     return (
         <Box>
-            <p>Login Page</p>
+            <p>Info Page</p>
         </Box>
     );
 };

@@ -1,19 +1,10 @@
-// Page for cart management
+import { Box } from "@chakra-ui/react";
 
-import {NavBar} from '../components/NavBar';
-import { Footer } from '../components/Footer';
-
-function Cart() {
-
-  return (
-  <><div className='Cart'> 
-
-    <NavBar/>     
-    <p> Cart page </p>
-    <Footer/>
-
-    </div></>
-  )
-}
-
-export default Cart
+//Page for cart management
+export const Cart = () => {
+    return (
+        <Box>
+            <p>Cart Page</p>
+        </Box>
+    );
+};

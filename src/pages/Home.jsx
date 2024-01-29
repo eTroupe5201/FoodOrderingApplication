@@ -1,20 +1,12 @@
-//page for main landing / home page
+import { Box } from "@chakra-ui/react";
+import { Banner } from "../components/Banner";
 
-import {NavBar} from '../components/NavBar';
-import { Banner } from '../components/Banner';
-import { Footer } from '../components/Footer';
-
-function Login() {
-
-  return (
-  <><div className='Login'> 
-
-    <NavBar/>     
-    <Banner/>
-    <Footer/>
-
-    </div></>
-  )
-}
-
-export default Login
+// the HomePage will be our default page after log in
+export const Home = () => {
+    return (
+        <Box>
+            <Banner />
+            <p>Menu Page</p>
+        </Box>
+    );
+};
