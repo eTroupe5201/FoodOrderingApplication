@@ -9,7 +9,9 @@ import { Cart } from "./pages/Cart";
 import { CheckOut } from "./pages/CheckOut";
 import { Gratitude } from "./pages/Gratitude";
 import { Info } from "./pages/info";
+import { Contact } from "./pages/Contact";
 import { Login } from './pages/Login'; 
+import "./styles.css";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "info",
         element: <Info />,
+      },
+      {
+        path: "contact",
+        element: <Contact />,
       },
     ],
   },
