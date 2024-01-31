@@ -4,6 +4,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root } from './pages/Root'; 
 import { Home } from './pages/Home'; 
+import { Menu } from './pages/Menu'; 
 import { Item } from "./pages/Item";
 import { Cart } from "./pages/Cart";
 import { CheckOut } from "./pages/CheckOut";
@@ -13,6 +14,16 @@ import { Contact } from "./pages/Contact";
 import { Login } from './pages/Login'; 
 import "./styles.css";
 
+/**
+ * default page is homepage, and click oder button will go to menu page of our restaurant
+ * item page is about your choices like (do you add salad, need spicy?), special requirment, and also quantity for the unique food on the menu
+ * cart page includes all food you have ordered and ready to pay
+ * checkout page will be about the bank information, your first name, telephone number and so on
+ * gratitude page will be just a thankyou or pay fail after you pay
+ * info page will include opening hour, payment method, address and so on
+ * 
+ * contact page will be contact with the app developer
+*/
 const router = createBrowserRouter([
   {
     path: "/",
@@ -21,6 +32,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "menu",
+        element: <Menu />,
       },
       {
         path: "item/:id",
