@@ -10,7 +10,7 @@ import { Item } from "./pages/Item";
 import { Cart } from "./pages/Cart";
 import { CheckOut } from "./pages/CheckOut";
 import { Gratitude } from "./pages/Gratitude";
-import { Info } from "./pages/info";
+import { Info } from "./pages/Info";
 import { Contact } from "./pages/Contact";
 import { Login } from './pages/Login'; 
 import "./styles.css";
