@@ -12,7 +12,7 @@ import { CheckOut } from "./pages/CheckOut";
 import { Gratitude } from "./pages/Gratitude";
 import { Info } from "./pages/Info";
 import { Contact } from "./pages/Contact";
-import { Login } from './pages/Login'; 
+import { Admin } from './pages/Admin'; 
 import "./styles.css";
 
 /**
@@ -66,8 +66,8 @@ const router = createBrowserRouter([
   },
   // top-level routes such as login
   {
-    path: "login/*",
-    element: <Login />, // Added here as a top-level route
+    path: "admin/*",
+    element: <Admin />, // Added here as a top-level route
   },
 ]);
 
