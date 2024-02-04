@@ -5,6 +5,7 @@ import { IconButton } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { CategoryProps } from "../components/firebase/category-resource";
 import { ItemProps } from "../components/firebase/item-resource";
+import { OrderProps } from "../components/firebase/order-resource";
 import { Route } from "react-router-dom";
 import { Info } from "../components/firebase/info";
 
@@ -55,6 +56,7 @@ export const Admin = () => {
       <FAdmin layout={MyLayout} authProvider={authProvider} basename="/admin" dataProvider={dataProvider}>
         <Resource {...CategoryProps} />
         <Resource {...ItemProps} />
+        <Resource {...OrderProps} />
         <CustomRoutes>
           <Route path="/info" element={<Info />} />
         </CustomRoutes>
