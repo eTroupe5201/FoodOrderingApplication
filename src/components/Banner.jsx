@@ -6,7 +6,7 @@ import {Heading,Box, Grid, Center, Image, Text, SimpleGrid, Container, Flex} fro
 export function Banner() {
     return (
         <Box className="Banner">
-        <Container paddingBottom="700"paddingLeft="0" paddingRight="0" paddingTop="800px">
+        <Container paddingLeft="0" paddingRight="0" paddingTop="800px">
               <SimpleGrid columns={3}>
               
               <Box h='500' color="white" bg="black" pt='20' paddingLeft="200px" paddingRight="50px">

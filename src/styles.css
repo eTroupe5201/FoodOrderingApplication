@@ -25,17 +25,12 @@
     box-sizing: border-box;
 }
 
+
 .photo{
     height:75px;
     width:20%;
 }
-div.chakra-container {
-    color: #fff;
- 
 
-    border-radius: 0%;;
-    
-}
 /*this is the fix for full length*/
 .css-hnes9q {
     --chakra-sizes-prose: null;
@@ -116,6 +111,7 @@ div.chakra-container {
     justify-content: center;
     align-items: center;
     font-size: large;
+    
 }
 
 .Footer{
@@ -173,8 +169,8 @@ div.chakra-container {
 }
 .overlay {
     color:white;
-   height:300px;
-   width: 700px;
+    height:300px;
+    width: 700px;
     position: absolute;
     margin-top: 6.5%;
     text-align: center;
@@ -185,4 +181,41 @@ div.chakra-container {
     background-color: rgba(0, 0, 0, 0.8);
     font-family: 'Raleway', sans-serif;
     z-index: 100;
+}
+
+body {
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+  }
+  section{
+    width: 100%;
+    height: 600px;
+   
+  
+  }
+.wave{
+    position: relative;
+     transform: scale(1, 1);
+}
+
+
+.wave:after{
+    content:'';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 300px;
+    background:#000000;
+    clip-path: ellipse(100% 30% at 100% 100%);
+}
+.round-picture{
+    border-radius: 100%;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    display: block;
+    margin-top: 100px;
+
 }

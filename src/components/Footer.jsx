@@ -34,13 +34,13 @@ export function Footer() {
                 <Text mt={5}></Text>
                 </Box>
                 <Box><Heading fontFamily="'Raleway', sans-serif " mb={5} mt={10}>Follow Us</Heading>
-                <Flex display={{lg:'flex', base:'none'}} placeItems='center' color='white'>
+                <Grid>
                     <Link to="/">Facebook</Link>
                     <Link to="/">Instagram</Link>
                     <Link to="/">Twitter</Link>
                     <Link to="/">Youtube</Link>
                     <Link to="/">TikTok</Link>
-                </Flex>
+                </Grid>
                 </Box>
                 <Box><Heading fontFamily="'Raleway', sans-serif " mb={5} mt={10}>Contact Us</Heading>
                 <Grid >
