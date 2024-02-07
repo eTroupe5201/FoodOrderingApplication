@@ -7,7 +7,7 @@ export function NavBar() {
     return (
         <nav className="nav">      
 
-            <Image boxSize='60px' mr='50px' src='src\assets\FO_logo.png' alt='draft_logo' />
+            <Image className="photo"  src='src\assets\divine-delicacies2.png' alt='logo' />
 
             <ul>
                 <li><Link to="/"> Home </Link></li>

@@ -1,17 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+/* Import for goolge font*/
+/* @keyframes slideInFromLeft {
+    0% {
+        
+    }
+    100% {
+       
+    }}   */
+    
+@keyframes fadeInAnimation {
+    0% {
+         opacity: 0;
+         transform: translateX(-100%);
+    }
+    100% {
+         opacity: 1; 
+         transform: translateX(0);
+    }
+    }
+    /*Combined, just on page refresh*/
 * {
     box-sizing: border-box;
 }
 
-body {
-    margin: 0;
+.photo{
+    height:75px;
+    width:20%;
+}
+div.chakra-container {
+    color: #fff;
+ 
+
+    border-radius: 0%;;
+    
+}
+/*this is the fix for full length*/
+.css-hnes9q {
+    --chakra-sizes-prose: null;
 }
 
+
 .nav {
-    background-color: #C05621;
-    color:#F7FAFC;
+    color: #fff;
+    padding-right: 100px;;
+    height: 150px;
+    font-weight: 100;
+    background: #000000;
+    font-family: 'Raleway', sans-serif;
+    animation: 3s ease-out 0s 1 slideInFromLeft;
+    -webkit-animation: 3s ease-out 0s 1 slideInFromLeft;
+    -moz-animation: 3s ease-out 0s 1 slideInFromLeft;
+    -o-animation: 3s ease-out 0s 1 slideInFromLeft;
+    -ms-animation: 3s ease-out 0s 1 slideInFromLeft;
+   
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     gap: 3rem;
     padding: 0 2rem;
     padding-top: 1rem;
@@ -24,7 +71,7 @@ body {
     list-style: none;
     display: flex;
     gap: 2rem;
-    font-size: 15pt;
+    font-size: 23pt;
     
 }
 
@@ -59,4 +106,83 @@ body {
 
 .contact textarea {
     color:black;
+}
+
+
+.Banner{
+
+    font-family: 'Raleway', sans-serif;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+}
+
+.Footer{
+    font-family: 'Raleway', sans-serif;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+
+}
+.DiscoveryOurStory{
+    font-family: 'Raleway', sans-serif;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+    position: relative;
+}
+.FooterDiv{
+  
+    position: relative;
+   
+}
+.Footer :link {
+    padding: 10px;
+  
+}
+.Footer {
+    font-family: 'Raleway', sans-serif;
+  
+}
+
+.overlayCursive{
+    font-family: 'Great Vibes', cursive;
+    font-size: 40pt;
+    color: tan;
+    margin-bottom: 38%;
+    position: absolute;
+    z-index: 102;
+   
+    margin-right: 68%;
+
+    
+
+}
+.overlayHeading{
+    color: white;
+    position: absolute;
+    margin-bottom: 30%;
+    margin-right: 58%;
+    font-weight: bold;
+    font-size: 30pt;
+    z-index: 101;
+    
+    
+}
+.overlay {
+    color:white;
+   height:300px;
+   width: 700px;
+    position: absolute;
+    margin-top: 6.5%;
+    text-align: center;
+    padding-top: 7%;
+    margin-left: 40%;
+    padding-left: 3%;
+    padding-right: 3%;
+    background-color: rgba(0, 0, 0, 0.8);
+    font-family: 'Raleway', sans-serif;
+    z-index: 100;
 }

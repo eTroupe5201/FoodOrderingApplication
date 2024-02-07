@@ -19,6 +19,7 @@
     "firebase": "^9.6.4",
     "firebase-admin": "^12.0.0",
     "framer-motion": "^11.0.3",
+    "hero-slider": "^3.2.1",
     "react": "^18.2.0",
     "react-admin": "^4.16.8",
     "react-admin-firebase": "^4.1.3",

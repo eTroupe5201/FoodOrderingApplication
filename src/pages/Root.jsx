@@ -11,6 +11,7 @@ export const Root = () => {
             <Container minH="100vh" p={0}>
                 <Outlet /> {/* This will render the current route's component */}
             </Container>
+            
             <Footer />
         </Box>
     );

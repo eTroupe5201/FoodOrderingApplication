@@ -1,7 +1,10 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ChakraProvider } from '@chakra-ui/react';
+import { extendTheme } from '@chakra-ui/react';
+import { ChakraProvider, Center, Text, Heading, Box, Image, Spacer } from '@chakra-ui/react';
+import { Grid, Flex } from '@chakra-ui/react'
+
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root } from './pages/Root'; 
 import { Home } from './pages/Home'; 
@@ -13,6 +16,8 @@ import { Gratitude } from "./pages/Gratitude";
 import { Info } from "./pages/Info";
 import { Contact } from "./pages/Contact";
 import { Admin } from './pages/Admin'; 
+
+
 import "./styles.css";
 
 /**
@@ -73,19 +78,14 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+
+
+
 root.render(
   <React.StrictMode>
     <ChakraProvider>
       <RouterProvider router={router} />
+
     </ChakraProvider>
   </React.StrictMode>
 );
-
-
-// ReactDOM.createRoot(document.getElementById('root')).render(
-//   <React.StrictMode>
-//     <ChakraProvider>
-//       <App />
-//     </ChakraProvider>
-//   </React.StrictMode>,
-// )
