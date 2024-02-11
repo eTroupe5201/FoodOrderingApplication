@@ -14,7 +14,7 @@ import { Cart } from "./pages/Cart";
 import { CheckOut } from "./pages/CheckOut";
 import { Gratitude } from "./pages/Gratitude";
 import { Info } from "./pages/Info";
-import { Contact } from "./pages/Contact";
+import { Contact } from "./pages/contact/Contact";
 import { Admin } from './pages/Admin'; 
 import { Login } from './pages/Login'; 
 

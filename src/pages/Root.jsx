@@ -8,7 +8,8 @@ export const Root = () => {
     return (
         <Box>
             <NavBar />
-            <Container minH="100vh" p={0}>
+
+            <Container maxH="100%" minW="100vw" p={0}>
                 <Outlet /> {/* This will render the current route's component */}
             </Container>
             

@@ -4,9 +4,7 @@ import {Heading,Box, Grid, Center, Image, Text, SimpleGrid, Container, Flex} fro
 //add mobile first designs later
 export function DiscoverOurStory() {
     return (
-        <Container margin="0">
-          
-            
+        <Box className="DiscoverOurStory" margin="0">
           <Box className="overlay"> <Center>  
             <Text className="overlayCursive" >Discover</Text>
             <Text className="overlayHeading" >OUR STORY</Text>
@@ -25,7 +23,7 @@ export function DiscoverOurStory() {
         <Box bg="Linen"><Text></Text></Box>
         </SimpleGrid>
       
-</Container>
+</Box>
     );
 };
 /* Our menu is a symphony of flavors, carefully
