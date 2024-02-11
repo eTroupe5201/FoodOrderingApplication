@@ -10,7 +10,6 @@ const ORDER_STATUS = [
     { id: 'pending', name: 'Pending' },
     { id: 'confirmed', name: 'Confirmed' },
     { id: 'cancelled', name: 'Cancelled' },
-    { id: 'completed', name: 'Completed' },
 ];
 
 export { PAYMENT_METHODS, ORDER_STATUS };
