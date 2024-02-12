@@ -3,8 +3,9 @@ import React from 'react';
 import { Button, Image } from '@chakra-ui/react';
 import { Link } from "react-router-dom";
 import { useDataProvider } from "../components/dataProvider"
-import logoImage from '../assets/FO_logo.png';
+
 import { TiShoppingCart } from "react-icons/ti";
+
 
 export function NavBar() {
 
@@ -14,7 +15,7 @@ export function NavBar() {
     return (
         <nav className="nav">      
 
-            <Image className="photo"  src={logoImage} alt='logo' />
+<Image className="photo"  src='src\assets\divine-delicacies2.png' alt='logo' />
 
             <ul>
                 <li><Link to="/"> Home </Link></li>
@@ -34,3 +35,4 @@ export function NavBar() {
         </nav>
     );
 }
+//can add modal directly to this page, if we want to remove the login page

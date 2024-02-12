@@ -5,7 +5,7 @@ import {Heading,Box, Grid, Center, Image, Text, SimpleGrid, Container, Flex} fro
 //add mobile first designs later
 export function Banner() {
     return (
-        <Box className="Banner" pt='600px'>
+        <Box className="Banner" >
             
             <SimpleGrid columns={3}>
             
