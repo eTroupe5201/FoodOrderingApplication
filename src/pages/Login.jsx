@@ -7,9 +7,7 @@ export const Login = () => {
     //added NavBar until Login page is fully configured (so we can navigate back to other pages)
     return (
         <Box>
-            <NavBar/>
             <p>Login Page</p>
-            <Footer/>
         </Box>
     );
 };

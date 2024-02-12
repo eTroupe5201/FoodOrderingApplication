@@ -2,6 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { getFunctions } from "firebase/functions";
 
 const {
 	VITE_REACT_APP_API_KEY,
@@ -34,3 +36,5 @@ if (typeof VITE_REACT_APP_MEASUREMENT_ID === 'string') {
 
 export { analytics };
 export const db = getFirestore(app);
+export const auth = getAuth(app);
+export const functions = getFunctions(app);

@@ -6,7 +6,7 @@ import {BsTelephonePlusFill} from 'react-icons/bs'; //added react-icons
 
 export function Footer() {
     return (
-        <Box className="Footer" bg = 'black' color="white" paddingBottom={10}>
+        <Box className="Footer" mt="60px" bg = 'black' color="white" paddingBottom={10}>
             <Container maxW="container.xl">
                 <SimpleGrid columns={4}>
     

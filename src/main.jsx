@@ -20,6 +20,7 @@ import { Login } from './pages/Login';
 
 
 import "./styles.css";
+import { DataProvider } from './components/dataProvider';
 
 /**
  * default page is homepage, and click oder button will go to menu page of our restaurant
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
         element: <Info />,
       },
       {
+        path: "login",
+        element: <Login />,
+      },
+      {
         path: "contact",
         element: <Contact />,
       },
@@ -85,8 +90,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ChakraProvider>
-      <RouterProvider router={router} />
-
+      <DataProvider>
+        <RouterProvider router={router} />
+      </DataProvider>
     </ChakraProvider>
   </React.StrictMode>
 );

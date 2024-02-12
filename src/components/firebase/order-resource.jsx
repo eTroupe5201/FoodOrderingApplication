@@ -42,16 +42,16 @@ const OrderForm = () => {
             <RadioButtonGroupInput source="status" choices={ORDER_STATUS} />
             <TextInput source="reason" fullWidth />
             <ArrayField source="lines">
-                <Datagrid>
+                <Datagrid bulkActionButtons={false}>
                     <TextField source="label" />
                     <NumberField source="price" options={currencyOptions} />
                     <NumberField source="quantity" />
                     <TextField source="comments" />
                     <ArrayField source="value">
-                        <SingleFieldList>
+                        <Datagrid bulkActionButtons={false}>
                             <ChipField source="value" />
                             <NumberField source="price" options={currencyOptions} />
-                        </SingleFieldList>
+                        </Datagrid>
                     </ArrayField>
                 </Datagrid>
             </ArrayField>
