@@ -16,7 +16,8 @@ import { Gratitude } from "./pages/Gratitude";
 import { Info } from "./pages/Info";
 import { Contact } from "./pages/contact/Contact";
 import { Admin } from './pages/Admin'; 
-import { Login } from './pages/Login'; 
+import { Login } from './pages/login/Login'; 
+import { Signup } from './pages/signup/Signup'
 
 
 import "./styles.css";
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "signup",
+        element: <Signup />,
       },
       {
         path: "contact",
