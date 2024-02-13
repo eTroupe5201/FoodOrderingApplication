@@ -2,8 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { extendTheme } from '@chakra-ui/react';
-import { ChakraProvider, Center, Text, Heading, Box, Image, Spacer } from '@chakra-ui/react';
-import { Grid, Flex } from '@chakra-ui/react'
+import { ChakraProvider } from '@chakra-ui/react';
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root } from './pages/Root'; 
@@ -14,10 +13,10 @@ import { Cart } from "./pages/Cart";
 import { CheckOut } from "./pages/CheckOut";
 import { Gratitude } from "./pages/Gratitude";
 import { Info } from "./pages/Info";
-import { Contact } from "./pages/contact/Contact";
+import { Contact } from "./pages/Contact";
 import { Admin } from './pages/Admin'; 
 import { Login } from './pages/Login'; 
-
+import { Register } from './pages/Register';
 
 import "./styles.css";
 import { DataProvider } from './components/dataProvider';
@@ -72,6 +71,14 @@ const router = createBrowserRouter([
       {
         path: "contact",
         element: <Contact />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
       },
     ],
   },

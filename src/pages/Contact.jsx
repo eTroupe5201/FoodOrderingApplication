@@ -170,7 +170,7 @@ export const Contact = () => {
 
     return (
     <><div className='Contact' > 
-        <Flex>
+        <Flex alignContent='center' justifyContent='center'>
             {contactUsMessageBox}
             {formSubmittedAlertBox}
             {formBox}
