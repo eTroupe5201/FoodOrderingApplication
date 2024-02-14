@@ -1,5 +1,5 @@
 import {fireEvent, render, screen} from "@testing-library/react";
-import {Contact} from "./Contact";
+import {Contact} from "../pages/Contact";
 import { Toast } from "@chakra-ui/react";
 
 describe("Contact page", () => {

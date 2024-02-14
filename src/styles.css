@@ -85,17 +85,23 @@
     font-weight: bold;
 }
 
-.Contact {
+.Contact, .Login, .Register {
     font-family: 'Raleway', sans-serif;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center; 
-    padding-top: 4rem;
-    padding-bottom: 4rem;
 }
 
-.Contact input {
+.Contact, .Login {
+    padding-top: 5rem;
+}
+
+.Register {
+    padding-top: 0.5rem;
+}
+
+.Contact input, .Login input, .Register input {
     width: stretch;
     height: 3rem;
     font-family: 'Raleway', sans-serif;
@@ -234,6 +240,7 @@ body {
 .css-vhc7ah{
     --chakra-sizes-prose: null;
 }
+
 .round-picture{
     border-radius: 100%;
     width: 200px;
