@@ -42,7 +42,7 @@ export function ImageSlider() {
 
   return (
     <Container className="imageContainer"> 
-
+    
     <div className="SliderContent">
      <Text className="SliderHeading">{images[currentImageIndex].heading}</Text>
        <div className="line"></div>
@@ -52,7 +52,7 @@ export function ImageSlider() {
           <button className="SliderButton">{images[currentImageIndex].button}</button> </Link>
           </div>
     </div>
-
+   
     <img className="SliderImage" src={images[currentImageIndex].url} alt="Slider Image" />
      
     </Container>

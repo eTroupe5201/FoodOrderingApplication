@@ -35,4 +35,5 @@ export function NavBar() {
         </nav>
     );
 }
+//redo this
 //can add modal directly to this page, if we want to remove the login page

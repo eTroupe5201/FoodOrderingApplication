@@ -1,4 +1,4 @@
-import { Flex, Box, Text, VStack, Input, Textarea, useToast} from '@chakra-ui/react'
+import { Flex, Box, Text, VStack, Input, Textarea, useToast, SimpleGrid} from '@chakra-ui/react'
 import { useState } from "react";
 
 //page for Contact Us form
@@ -13,11 +13,11 @@ export const Contact = () => {
 
     const handleFname = (event) => {
         setFname(event.target.value);
-        document.getElementById('fname').style.outlineColor= "black";
+        document.getElementById('first-name').style.outlineColor= "black";
     }
     const handleLname = (event) => {
         setLname(event.target.value);
-        document.getElementById('lname').style.outlineColor= "black";
+        document.getElementById('last-name').style.outlineColor= "black";
     }
     const handleEmail = (event) => {
         setEmail(event.target.value); 
@@ -77,8 +77,8 @@ export const Contact = () => {
 
     const contactUsMessageBox = (
         <Box color= '#000000' ml='2rem' mr='2rem' p='1.5rem'>
-            <Text title="header" fontSize='58px' mb='1rem'> Welcome to Divine Delicacies! </Text>
-            <Text title='contact-message' fontSize='20px' maxW='43rem' whiteSpace="pre-line"> 
+            <Text title="header" fontSize={{ base: "22px", md: "29px", lg: "58px" }} mb='1rem'> Welcome to Divine Delicacies! </Text>
+            <Text title='contact-message' fontSize={{ base: "12px", md: "15px", lg: "20px" }}  maxW='43rem' whiteSpace="pre-line"> 
                 {contactUsMessage}
             </Text>
         </Box>
@@ -89,8 +89,8 @@ export const Contact = () => {
 
     const formSubmittedAlertBox = (
         <VStack title='form-submitted' id='form-submitted' textAlign='center' display="none" bg='#000000' color='#fff' maxW='30rem' height='100%' mr='2rem' p='1.5rem'>
-            <Text fontSize='30px' fontWeight='bold' mb='1rem' > Thank you! </Text>
-            <Text fontSize='20px' pb='1rem' whiteSpace="pre-line"> 
+            <Text fontSize={{ base: "12px", md: "17px", lg: "30px" }} fontWeight='bold' mb='1rem' > Thank you! </Text>
+            <Text fontSize={{ base: "12px", md: "15px", lg: "20px" }} pb='1rem' whiteSpace="pre-line"> 
                 {formSubmittedAlert}
             </Text>
             <Box 
@@ -110,24 +110,32 @@ export const Contact = () => {
             </Box>
         </VStack>   
     );
+//label added for accesibility, id name changed for accesibility
 
     const formBox = (
+        
         <Box title='form-box' id='form-box' bg='#000000' color='#fff' maxW='30rem' height='100%' mr='2rem' p='1.5rem'>
-            <Text fontSize='30px' fontWeight='bold' > EMAIL US </Text>
-            <Text fontSize='20px' pb='1rem'> Send us any questions, comments, or concerns! Or email us at DeliciousDelicacies@gmail.com</Text>
+            <Text fontSize={{ base: "15px", md: "20px", lg: "30px" }} fontWeight='bold' > EMAIL US </Text>
+            <Text fontSize={{ base: "10px", md: "15px", lg: "20px" }} pb='1rem'> Send us any questions, comments, or concerns! Or email us at DeliciousDelicacies@gmail.com</Text>
             <VStack align='stretch' >
+         
+            <label for="first-name" >First Name</label> 
                 <Input 
-                    id='fname'
-                    value={fname} 
+                    id='first-name'
+                     value={fname} 
                     onChange={handleFname} 
                     placeholder="first name (required)"
                 />
+
+                <label for="last-name">Last Name</label>
                 <Input 
-                    id='lname'
+                    id='last-name'
                     value={lname} 
                     onChange={handleLname} 
                     placeholder="last name (required)"
                 />
+
+                <label for="email">Email</label>
                 <Input 
                     id='email'
                     type='email'
@@ -135,12 +143,17 @@ export const Contact = () => {
                     onChange={handleEmail} 
                     placeholder="email address (required)"
                 />
+
+                <label for="phone">Phone</label>
                 <Input 
+                    id='phone'
                     type='tel'
                     value={phone} 
                     onChange={handlePhone} 
                     placeholder="phone number (optional)"
                 />
+
+                <label for="message">Message</label>
                 <Textarea 
                     id='message'
                     value={message} 
@@ -171,9 +184,11 @@ export const Contact = () => {
     return (
     <><div className='Contact' > 
         <Flex>
+            <SimpleGrid columns={2} templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' , lg: 'repeat(2, 1fr)' , xl: 'repeat(2, 1fr)' }}>
             {contactUsMessageBox}
             {formSubmittedAlertBox}
             {formBox}
+            </SimpleGrid>
         </Flex>
     </div></>
     )
