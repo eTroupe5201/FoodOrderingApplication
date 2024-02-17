@@ -162,8 +162,9 @@
 
 .overlay {
     color:white;
-    height:300px;
+ 
     width: 700px;
+    
     position: absolute;
     margin-top: 6.5%;
     text-align: center;
@@ -171,6 +172,7 @@
     margin-left: 40%;
     padding-left: 3%;
     padding-right: 3%;
+    padding-bottom: 3%;
     background-color: rgba(0, 0, 0, 0.8);
     font-family: 'Raleway', sans-serif;
     z-index: 100;
@@ -185,6 +187,7 @@ body {
 
 
 .wave{
+    
     position: relative;
     transform: scale(1, 1);
 }
@@ -233,6 +236,7 @@ body {
     height:700px;
     font-weight: bold;
     border-top: 20px solid rgb(0, 0, 0);
+    position: relative;
     
 }
 
@@ -257,13 +261,15 @@ body {
     align-items: center;
     margin-top: 5%;
     margin-left: 5%;
-    margin-right: 5%;
+    padding-top: 5%;
+    
     padding: 5%;
     height:100%;
     background-color: rgba(0, 0, 0, 0.9);
     border-radius: 10px;
     color: white;
     text-align: center;
+   
 }
 
 
