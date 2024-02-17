@@ -121,6 +121,104 @@ export const placeorder = onCall(async (request) => {
 });
 
 
+export const registerAccount = onCall(async (request) => {
+  //Check if the user calling the function has passed authentication. 
+  //If the user is not authenticated, the function returns an error.
+  if (!request.auth) {
+    return new HttpsError("failed-precondition", "You are not authorized");
+  }
+  
+  console.log("WE HERE");
+  //Create a reference to Firestore for database operations
+  const firestore = admin.firestore();
+
+  const draft = {
+    ...request.data,
+    createdBy: request.auth.uid, //Set the createdBy field to the current user's UID (User Identity)
+    pickupTime: admin.firestore.FieldValue.serverTimestamp(),
+    createAt: admin.firestore.FieldValue.serverTimestamp(),
+  };
+  //Save the user info to the Firestore collection named "users" and wait for the operation to complete
+  const userInfo = await firestore.collection("users").add(draft);
+  const restaurantDoc = await firestore.doc("restaurant/info").get();
+  const restaurant = restaurantDoc.data();
+
+  //after calling registerAccount in dataProvider, userInfo has needed user details to create an email confirmation
+  if (restaurant) {
+    try {
+      // Using the await keyword to wait for the asynchronous operation of sendMail to complete
+      let info = await transport.sendMail({
+        to: `${draft.email}`,
+        subject: `Welcome to Divine Delicacies, ${draft.firstName}!`,
+        html: `
+          <div>
+            <h1>Hi ${draft.firstName},.</h1>
+            <p>Thank you for linking your email, ${draft.email}, to create an account with us. 
+              We look forward to providing you with great service and even greater culinary experiences! 
+            </p>
+            <h2>Restaurant Information:</h2>
+            <p>${restaurant.name}</p>
+            <p>${restaurant.address}</p>
+            <p>If you need any assistance, feel free to contact us at ${restaurant.phone}.</p>
+          </div>
+        `,
+      });
+      console.log("Message sent: %s", info.messageId);
+    } catch (error) {
+      console.error("Error sending email: %s", error);
+    }
+  }
+
+  // //After the function is confirmed, return the newly created order ID and order draft object.
+   return {id: userInfo.id, userInfo: draft};
+});
+
+
+// export const tryLogin = onCall(async (request) => {
+//   //Check if the user calling the function has passed authentication. 
+//   //If the user is not authenticated, the function returns an error.
+//   if (!request.auth) {
+//     return new HttpsError("failed-precondition", "You are not authorized");
+//   }
+  
+//   //Create a reference to Firestore for database operations
+//   const firestore = admin.firestore();
+
+//   const email = request.data.email; 
+//   const pw = request.data.password;
+  
+//   //to track latest login
+//   const latestSuccessfulLogin = {
+//     createdBy: request.auth.uid, //Set the createdBy field to the current user's UID (User Identity)
+//     pickupTime: admin.firestore.FieldValue.serverTimestamp(),
+//     createAt: admin.firestore.FieldValue.serverTimestamp(),
+//   };
+
+//   //get reference to user for provided email address
+//   const userAccountRef = await firestore.doc(db, "users", email);
+//   const userAccount = userAccountRef.data();
+//   console.log(userAccount);
+
+//   //existing account found
+//   if (userAccount) {
+//     //check for matching password
+//     if (userAccount.password === pw) {
+//       setDoc(userAccountRef(db, "users", email), {
+//         createdBy: latestSuccessfulLogin.createdBy,
+//         pickupTime: latestSuccessfulLogin.pickupTime,
+//         createAt: latestSuccessfulLogin.createAt,
+//       })
+//       return {userInfo: userAccount}
+//     }
+//     //incorrect password
+//     else 
+
+//   }
+
+//   //return error, flagging Login page to alert user that no account exists
+//   return error;
+// });
+
 
 /**
  * Import function triggers from their respective submodules:

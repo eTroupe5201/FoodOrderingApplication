@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import { extendTheme } from '@chakra-ui/react';
 import { ChakraProvider } from '@chakra-ui/react';
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { BrowserRouter, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root } from './pages/Root'; 
 import { Home } from './pages/Home'; 
 import { Menu } from './pages/Menu'; 
@@ -17,6 +17,7 @@ import { Contact } from "./pages/Contact";
 import { Admin } from './pages/Admin'; 
 import { Login } from './pages/Login'; 
 import { Register } from './pages/Register';
+import { ForgotPassword } from './pages/ForgotPassword';
 
 import "./styles.css";
 import { DataProvider } from './components/dataProvider';
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
         path: "register",
         element: <Register />,
       },
+      {
+        path: "forgotpassword",
+        element: <ForgotPassword />,
+      },
     ],
   },
   // top-level routes such as login
@@ -88,14 +93,12 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 
-
-
 root.render(
   <React.StrictMode>
-    <ChakraProvider>
-      <DataProvider>
-        <RouterProvider router={router} />
-      </DataProvider>
-    </ChakraProvider>
+      <ChakraProvider>
+        <DataProvider>
+            <RouterProvider router={router} />
+        </DataProvider>
+      </ChakraProvider>
   </React.StrictMode>
 );

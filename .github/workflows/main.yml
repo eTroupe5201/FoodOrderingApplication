@@ -29,4 +29,5 @@ jobs:
 
     # Placeholder for future test command
     - name: Run tests (placeholder)
+      #run: npm test #once tests are established
       run: echo "No tests yet. This is a placeholder."

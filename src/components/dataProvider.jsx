@@ -20,6 +20,11 @@ const DataProviderContext = createContext({
     checkout: () => Promise.resolve(""),
 });
 
+// export const useDataProviderForEmailCode = () => useContext(DataProviderEmailCodeContext);
+// const DataProviderEmailCodeContext = createContext({
+//     code: [],
+// });
+
 export const useDataProvider = () => useContext(DataProviderContext);
 /**
  * Set up a DataProvider in the React front-end application, which is an intermediate layer between the application and Firebase, 
@@ -35,6 +40,7 @@ export const DataProvider = ({ children }) => {
   const [items, setItems] = useState([]);
   const [lines, setLines] = useState([]);
   const [order, setOrder] = useState();
+  const [user, setUser] = useState();
 
   //getDoc comes from firebase firestore, it can import automatically and receive the document
   const fetchRestaurantInfo = async () => {
@@ -139,6 +145,43 @@ export const DataProvider = ({ children }) => {
 
   }
   
+//get data from the form data of register page, save data to firebase
+const registerNewAccount = async (userInfo) => {
+  
+  //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
+  const registerNewAccountCallable = httpsCallable(functions, 'registerAccount');
+  console.log(userInfo);
+
+//TODO: change ID to match email - so referencing can be done by email
+
+  // //2. Calling functions and passing order data
+  const { data } = await registerNewAccountCallable({...userInfo})
+  console.log("waited for registerNewAccountCallable");
+  console.log(data);
+
+  // //4. also set user
+  setUser(data.userInfo);
+  return data.id; 
+}
+
+/* Get data from Login page. Check firebase to see if no account matching email is found or
+*  credentials match or do not match an existing account 
+*/
+const sendLoginRequest = async (credentials) => {
+  
+  //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
+  // const sendLoginRequestCallable = httpsCallable(functions, 'tryLogin');
+  // console.log(credentials);
+  
+  // // //2. Calling functions and passing login credentials
+  // const { data } = await sendLoginRequestCallable({...credentials})
+  // console.log(data);
+
+  // // //4. also set user
+  // setUser(data.credentials);
+  // return data.id; 
+}
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -155,7 +198,7 @@ export const DataProvider = ({ children }) => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-    <DataProviderContext.Provider value={{lines, restaurantInfo, categories, items, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, order}}>
+    <DataProviderContext.Provider value={{lines, restaurantInfo, categories, items, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, order}}>
       {isReady ? (
         children
       ) : (

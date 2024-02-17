@@ -1,9 +1,13 @@
 import {render, screen} from "@testing-library/react";
 import {Register} from "../pages/Register";
+import { BrowserRouter } from "react-router-dom";
 
 describe("Register page", () => {
     it("should render Register page correctly", () => {
-        render(<Register/>);
+        render(
+        <BrowserRouter>
+            <Register/>
+        </BrowserRouter>);
 
         // const e1 = screen.getByTitle("login-form-box");
         // expect(e1).toBeInTheDocument();

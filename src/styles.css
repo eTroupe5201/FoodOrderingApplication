@@ -111,6 +111,10 @@
     background-color: #fff;
 }
 
+.Login label, .Register label {
+    font-weight: bold;
+}
+
 .Contact textarea {
     font-family: 'Raleway', sans-serif;
     font-weight: bold;
