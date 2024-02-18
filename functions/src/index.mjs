@@ -13,6 +13,7 @@ import {
   calculateOrderTotal
 } from "./utils/calculations.mjs";
 
+
 /**
  * background: 
  * Firebase Functions: A serverless execution environment hosted on Google Cloud that allows you to run backend code in response to HTTP requests, database changes, and other events.
@@ -121,9 +122,45 @@ export const placeorder = onCall(async (request) => {
 });
 
 
+// export const registerAccount = onCall(async (request) => {
+//   //Check if the user calling the function has passed authentication. 
+//   //If the user is not authenticated, the function returns an error.
+//   if (!request.auth) {
+//     return new HttpsError("failed-precondition", "You are not authorized");
+//   }
+  
+//   //Create a reference to Firestore for database operations
+//   const firestore = admin.firestore();
+
+//   const email = request.data.email;
+
+//   const draft = {
+//     firstName: request.data.firstName,
+//     lastName: request.data.lastName,
+//     email: request.data.email,
+//     phone: request.data.phone,
+//     password: request.data.password,
+//     createdBy: request.auth.uid, //Set the createdBy field to the current user's UID (User Identity)
+//     lastLogin: admin.firestore.FieldValue.serverTimestamp(),
+//     pickupTime: admin.firestore.FieldValue.serverTimestamp(),
+//     createAt: admin.firestore.FieldValue.serverTimestamp(),
+//   };
+
+//   //if user with email exists already, do not process request 
+//   const existingUserDoc = await firestore.collection("users").doc(email).get();
+//   const existingUser = existingUserDoc.data();
+//   if (existingUser) {return;}
+
+//   //Save the user info to the Firestore collection named "users" and wait for the operation to complete
+//   const userInfo = await firestore.collection("users").doc(email).set(draft);
+
+//   // //After the function is confirmed, return the newly created order ID and order draft object.
+//    return {id: userInfo.id, userInfo: draft};
+// });
+
+//We don't need to save the user's password in Firestore because Firebase Authentication already securely handles the password.
 export const registerAccount = onCall(async (request) => {
-  //Check if the user calling the function has passed authentication. 
-  //If the user is not authenticated, the function returns an error.
+
   if (!request.auth) {
     return new HttpsError("failed-precondition", "You are not authorized");
   }
@@ -133,75 +170,83 @@ export const registerAccount = onCall(async (request) => {
 
   const email = request.data.email;
 
-  const draft = {
+  //check if user with email already exists
+  const existingUserDoc = await firestore.collection("users").doc(email).get();
+  const existingUser = existingUserDoc.data();
+  if (existingUser) {
+    throw new HttpsError('already-exists', 'The email provided is already in use by an existing user.');
+  }
+
+  // Create the user with email and password via Firebase Authentication to host our status
+  const userRecord = await admin.auth().createUser({
+    email: request.data.email,
+    password: request.data.password
+  });
+
+  // Prepare user info without the password
+  const userInfoWithoutPassword = {
     firstName: request.data.firstName,
     lastName: request.data.lastName,
     email: request.data.email,
     phone: request.data.phone,
-    password: request.data.password,
-    createdBy: request.auth.uid, //Set the createdBy field to the current user's UID (User Identity)
+    createdBy: request.auth.uid,
     lastLogin: admin.firestore.FieldValue.serverTimestamp(),
     pickupTime: admin.firestore.FieldValue.serverTimestamp(),
     createAt: admin.firestore.FieldValue.serverTimestamp(),
   };
 
-  //if user with email exists already, do not process request 
-  const existingUserDoc = await firestore.collection("users").doc(email).get();
-  const existingUser = existingUserDoc.data();
-  if (existingUser) {return;}
 
-  //Save the user info to the Firestore collection named "users" and wait for the operation to complete
-  const userInfo = await firestore.collection("users").doc(email).set(draft);
+  // Save the additional user data in Firestore (without the password)
+  await admin.firestore().collection('users').doc(userRecord.uid).set(userInfoWithoutPassword);
 
-  // //After the function is confirmed, return the newly created order ID and order draft object.
-   return {id: userInfo.id, userInfo: draft};
+  // Return success response
+  return { success: true, uid: userRecord.uid, userInfo: userInfoWithoutPassword };
 });
 
-
-export const tryLogin = onCall(async (request) => {
-  //Check if the user calling the function has passed authentication. 
-  //If the user is not authenticated, the function returns an error.
-  if (!request.auth) {
-    return new HttpsError("failed-precondition", "You are not authorized");
-  }
+// export const tryLogin = onCall(async (request) => {
+//   //Check if the user calling the function has passed authentication. 
+//   //If the user is not authenticated, the function returns an error.
+//   if (!request.auth) {
+//     return new HttpsError("failed-precondition", "You are not authorized");
+//   }
   
-  //Create a reference to Firestore for database operations
-  const firestore = admin.firestore();
+//   //Create a reference to Firestore for database operations
+//   const firestore = admin.firestore();
 
-  const email = request.data.email; 
-  const pw = request.data.password;
+//   const email = request.data.email; 
+//   const pw = request.data.password;
   
-  //to track latest login
-  const latestSuccessfulLogin = admin.firestore.FieldValue.serverTimestamp();
+//   //to track latest login
+//   const latestSuccessfulLogin = admin.firestore.FieldValue.serverTimestamp();
 
-  //get reference to user for provided email address
-  const userAccountRef = await firestore.collection("users").doc(email).get();
-  const userAccount = userAccountRef.data();
+//   //get reference to user for provided email address
+//   const userAccountRef = await firestore.collection("users").doc(email).get();
+//   const userAccount = userAccountRef.data();
 
-  //existing account found
-  if (userAccount) {
-    //check for matching password
-    if (userAccount.password === pw) {
+//   //existing account found
+//   if (userAccount) {
+//     //check for matching password
+//     if (userAccount.password === pw) {
 
-      //set new 
-      await firestore.collection("users").doc(email).set(
-        {
-          lastLogin: latestSuccessfulLogin,
-        }, 
-        {merge: true},
-      );
+//       //set new 
+//       await firestore.collection("users").doc(email).set(
+//         {
+//           lastLogin: latestSuccessfulLogin,
+//         }, 
+//         {merge: true},
+//       );
       
-      return {userInfo: userAccount}
-    }
-    //incorrect password
-    else {
-      return "incorrect password";
-    }
-  }
+//       return {userInfo: userAccount}
+//     }
+//     //incorrect password
+//     else {
+//       return "incorrect password";
+//     }
+//   }
 
-  //return , flagging Login page to alert user that no account exists
-  return "no existing account";
-});
+//   //return , flagging Login page to alert user that no account exists
+//   return "no existing account";
+// });
 
 
 export const contactUsSubmit = onCall(async (request) => {

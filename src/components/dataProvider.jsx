@@ -82,7 +82,8 @@ export const DataProvider = ({ children }) => {
   //because this wil be about internet latency
   //so here I have to use asychronized fuction to wait our request
   const fetchData = async () => {
-    //automatically log in using anonymous users I have stored in Firebase
+    //automatically log in using anonymous users I have stored in Firebase because I set up the firestore rule
+    //Because for security reasons I have to set it up to only allow read/write access to authenticated users (even anonymously authenticated users)
     await signInAnonymously(auth);
     await fetchRestaurantInfo();
     await fetchCategories();
@@ -167,20 +168,20 @@ const registerNewAccount = async (userInfo) => {
 /* Get data from Login page. Check firebase to see if no account matching email is found or
 *  credentials match or do not match an existing account 
 */
-const sendLoginRequest = async (credentials) => {
+// const sendLoginRequest = async (credentials) => {
   
-  //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
-  const sendLoginRequestCallable = httpsCallable(functions, 'tryLogin');
-  console.log(credentials);
+//   //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
+//   const sendLoginRequestCallable = httpsCallable(functions, 'tryLogin');
+//   console.log(credentials);
   
-  //2. Calling functions and passing login credentials
-  const { data } = await sendLoginRequestCallable({...credentials})
-  console.log(data);
+//   //2. Calling functions and passing login credentials
+//   const { data } = await sendLoginRequestCallable({...credentials})
+//   console.log(data);
 
-  //3. also set user
-  //setUser(data.credentials);
-  return data; 
-}
+//   //3. also set user
+//   //setUser(data.credentials);
+//   return data; 
+// }
 
 const storeContactUsForm = async (formInfo) => {
   //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
@@ -212,7 +213,7 @@ const storeContactUsForm = async (formInfo) => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-    <DataProviderContext.Provider value={{lines, restaurantInfo, categories, items, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, sendLoginRequest, storeContactUsForm, order}}>
+    <DataProviderContext.Provider value={{lines, restaurantInfo, categories, items, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, order}}>
       {isReady ? (
         children
       ) : (

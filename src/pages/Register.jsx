@@ -11,7 +11,7 @@ import { useDataProvider } from "../components/dataProvider"
 */
 export const Register = () => {
     const toast = useToast();
-     const navigate = useNavigate();
+    const navigate = useNavigate();
     const { registerNewAccount } = useDataProvider();
     const { register, handleSubmit, formState, watch } = useForm();
 
@@ -28,10 +28,15 @@ export const Register = () => {
     const handleRegister = async (data) => {
         //emails and passwords match
         if (data.email === data.confirmEmail && data.password === data.confirmPassword) {
+            /**
+             * When registerNewAccount is called and succeeds, Firebase Authentication SDK will automatically 
+             * manage the user's session and JWT token. So in most cases we don't need to manually handle JWT tokens on the front end 
+             * unless we need to send them to our own server for validation or other processing.
+             */
             const result = await registerNewAccount(data); 
             
             //if result is not blank, means new account created
-            if (result) {
+            if (result.success) {
                 toast ({    
                     addRole: true,
                     title: "Your account was successfully created.",

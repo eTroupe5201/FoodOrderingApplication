@@ -1,9 +1,12 @@
-import { Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, Center } from "@chakra-ui/react";
+import { Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, Center, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
+import { auth } from "../utils/firebase" 
+import { signInWithEmailAndPassword } from "firebase/auth";
+
 
 /* Login page - handle and validate user input, also checking against database for existing account and 
 *              correct credentials. 
@@ -11,38 +14,70 @@ import { useDataProvider } from "../components/dataProvider"
 * Route to ForgotPassword page if button is clicked
 */
 export const Login = () => {
+    const toast = useToast();
     const navigate = useNavigate();
-    const { sendLoginRequest } = useDataProvider();
+    // const { sendLoginRequest } = useDataProvider();
     const { register, handleSubmit, formState } = useForm();
 
     const [showPassword, setShowPassword] = React.useState(false)
     const handleShowPassword= () => setShowPassword(!showPassword)
 
     //used to show validation error after the form was submitted
-    const [wrongPassword, setWrongPassword] = useState(false);
-    const [noAccount, setNoAccount] = useState(false);
+    // const [wrongPassword, setWrongPassword] = useState(false);
+    // const [noAccount, setNoAccount] = useState(false);
 
     const navigateToRegister = () => {navigate('/register');}
     const navigateToResetPassword = () => {navigate('/forgotpassword');}
 
     const handleLogin = async (data) => {
         try {
-            const result = await sendLoginRequest(data);
-            
-            if (result == "incorrect password") {
-                setWrongPassword(true);
-            }
-            else if (result=="no existing account") {
-                setNoAccount(true);
-            }
-            else {
-                navigate('/');
-            }
+            /**
+             * Logging in with Firebase Authentication automatically handles the generation and management of JWT tokens. 
+             * When the signInWithEmailAndPassword function is called, this function automatically handles token generation and management, 
+             * and saves the user session on the client after successful login.
+             */
+            const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
+    
+            // Login successful, Firebase automatically handles the session and token
+            console.log("Logged in user:", userCredential.user);
+
+            // It is possible to obtain a token, but usually not required
+            // const token = await userCredential.user.getIdToken();
+
+            // Show success message and navigate to homepage
+            toast({
+                title: "Logged in successfully.",
+                position: 'top',
+                status: 'success',
+                isClosable: true,
+            });
+            navigate("/");
+        } catch (error) {
+            // Login failed with error message
+            toast({
+                title: error.message,
+                position: 'top',
+                status: 'error',
+                isClosable: true,
+            });
         }
-        //if failure, prompt invalid messag
-        catch (error) {
-            console.log(error);
-        };
+        // try {
+        //     const result = await sendLoginRequest(data);
+            
+        //     if (result == "incorrect password") {
+        //         setWrongPassword(true);
+        //     }
+        //     else if (result=="no existing account") {
+        //         setNoAccount(true);
+        //     }
+        //     else {
+        //         navigate('/');
+        //     }
+        // }
+        // //if failure, prompt invalid messag
+        // catch (error) {
+        //     console.log(error);
+        // };
     };
 
     return (
@@ -52,7 +87,7 @@ export const Login = () => {
                     <VStack>
                         <Text fontSize='30px' fontWeight='bold' mb='1rem'> Log In or Register </Text>
                         
-                        <FormControl id='emailField' isInvalid={!!formState?.errors?.email?.type || noAccount}>
+                        <FormControl id='emailField' isInvalid={!!formState?.errors?.email?.type}>
                             <FormLabel>Email Address</FormLabel>
                             <Input 
                                 id='email'
@@ -61,7 +96,7 @@ export const Login = () => {
                             <FormErrorMessage>{"Email address is invalid or does not have an account associated with it"}</FormErrorMessage>
                         </FormControl>
 
-                        <FormControl id='passwordField' isInvalid={!!formState?.errors?.password?.type || wrongPassword}>
+                        <FormControl id='passwordField' isInvalid={!!formState?.errors?.password?.type}>
                             <FormLabel>Password</FormLabel>
                             <InputGroup>
                                 <Input 
