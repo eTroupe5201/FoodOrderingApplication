@@ -142,7 +142,6 @@ export const DataProvider = ({ children }) => {
     });
 
     return data.id; 
-
   }
   
 //get data from the form data of register page, save data to firebase
@@ -160,8 +159,9 @@ const registerNewAccount = async (userInfo) => {
   console.log(data);
 
   // //4. also set user
-  setUser(data.userInfo);
-  return data.id; 
+  //setUser(data.userInfo);
+
+  return data;
 }
 
 /* Get data from Login page. Check firebase to see if no account matching email is found or
@@ -170,16 +170,30 @@ const registerNewAccount = async (userInfo) => {
 const sendLoginRequest = async (credentials) => {
   
   //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
-  // const sendLoginRequestCallable = httpsCallable(functions, 'tryLogin');
-  // console.log(credentials);
+  const sendLoginRequestCallable = httpsCallable(functions, 'tryLogin');
+  console.log(credentials);
   
-  // // //2. Calling functions and passing login credentials
-  // const { data } = await sendLoginRequestCallable({...credentials})
-  // console.log(data);
+  //2. Calling functions and passing login credentials
+  const { data } = await sendLoginRequestCallable({...credentials})
+  console.log(data);
 
-  // // //4. also set user
-  // setUser(data.credentials);
-  // return data.id; 
+  //3. also set user
+  //setUser(data.credentials);
+  return data; 
+}
+
+const storeContactUsForm = async (formInfo) => {
+  //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
+  const sendContactUsRequestCallable = httpsCallable(functions, 'contactUsSubmit');
+  console.log(formInfo);
+  
+  //2. Calling functions and passing form info 
+  const { data } = await sendContactUsRequestCallable({...formInfo})
+  console.log(data);
+
+  //3. also set user
+  //setUser(data.credentials);
+  return data.id; 
 }
 
   useEffect(() => {
@@ -198,7 +212,7 @@ const sendLoginRequest = async (credentials) => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-    <DataProviderContext.Provider value={{lines, restaurantInfo, categories, items, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, order}}>
+    <DataProviderContext.Provider value={{lines, restaurantInfo, categories, items, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, sendLoginRequest, storeContactUsForm, order}}>
       {isReady ? (
         children
       ) : (

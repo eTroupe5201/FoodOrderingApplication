@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage } from "@chakra-ui/react";
+import { Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, useToast} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
@@ -8,11 +8,10 @@ import { useDataProvider } from "../components/dataProvider"
 /* Register page - use React hook Forms for collecting input and validating. Once validated and submitted, send request to Firebase and:
 *   - if account exists with provided email, route to Login page
 *   - if no account exists with provided email, create account and store user info in DB. Upon return, route back to Home page
-* 
-*  TODO: also checking against database for existing account.
 */
 export const Register = () => {
-    const navigate = useNavigate();
+    const toast = useToast();
+     const navigate = useNavigate();
     const { registerNewAccount } = useDataProvider();
     const { register, handleSubmit, formState, watch } = useForm();
 
@@ -27,13 +26,31 @@ export const Register = () => {
     const handleShowConfirmPassword= () => setShowConfirmPassword(!showConfirmPassword)
 
     const handleRegister = async (data) => {
-        //TODO: prevent incorrect form from being submitted 
-        //TODO: if accounts exist with email, route to Login page
-
-        if (emailsMatch && passwordsMatch) {
-            console.log("it worked");
-            await registerNewAccount(data); 
-            navigate("/login")
+        //emails and passwords match
+        if (data.email === data.confirmEmail && data.password === data.confirmPassword) {
+            const result = await registerNewAccount(data); 
+            
+            //if result is not blank, means new account created
+            if (result) {
+                toast ({    
+                    addRole: true,
+                    title: "Your account was successfully created.",
+                    position: 'top', 
+                    status: 'success',
+                    isClosable: true,
+                });
+            }
+            //else, existing account
+            else {
+                toast ({    
+                    addRole: true,
+                    title: "The email provided is associated with an existing account.",
+                    position: 'top', 
+                    status: 'info',
+                    isClosable: true,
+                });
+            }
+             navigate("/login");
         }        
     }
 

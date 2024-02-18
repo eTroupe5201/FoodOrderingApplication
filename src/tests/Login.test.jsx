@@ -10,7 +10,14 @@ describe("Login page", () => {
             </BrowserRouter>
         );
 
-        const e1 = screen.getByTitle("login-form-box");
-        expect(e1).toBeInTheDocument();
+        const element = screen.getByTitle("login-form-box");
+        expect(element).toBeInTheDocument();
     })
+
+    //TODO: integration tests
+    //should show FormErrorMessage when all fields are not entered 
+    //should not show FormErrorMessage when component is initially loaded
+    //should check for valid credentials
+    //should navigate to Forgot Password if button clicked 
+    //should navigate Home if Login successful
 });

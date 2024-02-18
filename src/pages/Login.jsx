@@ -1,4 +1,4 @@
-import { Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage } from "@chakra-ui/react";
+import { Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, Center } from "@chakra-ui/react";
 import { useState } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,34 +17,33 @@ export const Login = () => {
 
     const [showPassword, setShowPassword] = React.useState(false)
     const handleShowPassword= () => setShowPassword(!showPassword)
-   
-    const handleLogin = async (data) => {
-        console.log("login button clicked");
 
-        ////TODO send request to server
-        // try {
-        //     await sendLoginRequest(data);
-            
-        //     //TODO if success, what to do?
+    //used to show validation error after the form was submitted
+    const [wrongPassword, setWrongPassword] = useState(false);
+    const [noAccount, setNoAccount] = useState(false);
 
-        //     //navigate('/');
-        // }
-        // //TODO if failure, prompt invalid messag
-        // catch (error) {
-            
-        
-        // console.log(error);
-        // };
-        
-    }
-
-    //TODO if email entered, send with Sign Up page req
     const navigateToRegister = () => {navigate('/register');}
     const navigateToResetPassword = () => {navigate('/forgotpassword');}
 
-    //TODO: once DB checks added, add logic for 'An account registered to this email address does not exist'
-    const [emailErrorMsg, setEmailErrorMsg]= useState("Incorrect email address");
-    const [passwordErrorMsg, setPasswordErrorMsg]= useState("Incorrect password");
+    const handleLogin = async (data) => {
+        try {
+            const result = await sendLoginRequest(data);
+            
+            if (result == "incorrect password") {
+                setWrongPassword(true);
+            }
+            else if (result=="no existing account") {
+                setNoAccount(true);
+            }
+            else {
+                navigate('/');
+            }
+        }
+        //if failure, prompt invalid messag
+        catch (error) {
+            console.log(error);
+        };
+    };
 
     return (
         <><form className='Login' onSubmit={handleSubmit(handleLogin)}> 
@@ -53,16 +52,16 @@ export const Login = () => {
                     <VStack>
                         <Text fontSize='30px' fontWeight='bold' mb='1rem'> Log In or Register </Text>
                         
-                        <FormControl id='emailField' isInvalid={!!formState?.errors?.email?.type}>
+                        <FormControl id='emailField' isInvalid={!!formState?.errors?.email?.type || noAccount}>
                             <FormLabel>Email Address</FormLabel>
                             <Input 
                                 id='email'
                                 {...register("email", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/})}
                             />
-                            <FormErrorMessage>{emailErrorMsg}</FormErrorMessage>
+                            <FormErrorMessage>{"Email address is invalid or does not have an account associated with it"}</FormErrorMessage>
                         </FormControl>
 
-                        <FormControl id='passwordField' isInvalid={!!formState?.errors?.password?.type}>
+                        <FormControl id='passwordField' isInvalid={!!formState?.errors?.password?.type || wrongPassword}>
                             <FormLabel>Password</FormLabel>
                             <InputGroup>
                                 <Input 
@@ -84,11 +83,10 @@ export const Login = () => {
                                     </Box>
                                 </InputRightElement>
                             </InputGroup>
-                            <FormErrorMessage>{passwordErrorMsg}</FormErrorMessage>
+                            <FormErrorMessage>{"Incorrect password"}</FormErrorMessage>
                         </FormControl>
 
-                        <Box 
-                            as='button'  
+                        <Center 
                             color='#fff'
                             fontWeight='bold'
                             alignSelf='end'
@@ -96,7 +94,7 @@ export const Login = () => {
                             onClick={navigateToResetPassword} 
                             > 
                             Forgot Password?
-                        </Box>
+                        </Center>
                         <Box 
                             as='button'  
                             mt='1rem'
@@ -110,8 +108,8 @@ export const Login = () => {
                             > 
                             Log In to Your Account
                         </Box>
-                        <Box 
-                            as='button'  
+                        <Center 
+                            title='registerButton'
                             mt='0.5rem'
                             bg='#fff' 
                             color='#000000'
@@ -123,7 +121,7 @@ export const Login = () => {
                             onClick={navigateToRegister} 
                             > 
                             Register for an Account
-                        </Box>
+                        </Center>
                     </VStack>
                 </Box>
             </Flex>

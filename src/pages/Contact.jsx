@@ -1,72 +1,16 @@
-import { Flex, Box, Text, VStack, Input, Textarea, useToast, SimpleGrid} from '@chakra-ui/react'
-import { useState } from "react";
+import { Flex, Box, Text, VStack, Input, Textarea, SimpleGrid, Center, FormControl, FormLabel, FormErrorMessage} from '@chakra-ui/react'
+import { useDataProvider } from '../components/dataProvider';
+import { useForm } from 'react-hook-form';
 
 //page for Contact Us form
 export const Contact = () => {
-    const toast = useToast();
+    const { storeContactUsForm } = useDataProvider();
+    const { register, handleSubmit, formState, reset} = useForm();
 
-    const [fname, setFname] = useState("");
-    const [lname, setLname] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [message, setMessage] = useState("");
-
-    const handleFname = (event) => {
-        setFname(event.target.value);
-        document.getElementById('first-name').style.outlineColor= "black";
-    }
-    const handleLname = (event) => {
-        setLname(event.target.value);
-        document.getElementById('last-name').style.outlineColor= "black";
-    }
-    const handleEmail = (event) => {
-        setEmail(event.target.value); 
-        document.getElementById('email').style.outlineColor= "black";
-    }
-    const handlePhone = (event) => { setPhone(event.target.value); }
-    const handleMessage = (event) => {
-        setMessage(event.target.value);
-        document.getElementById('message').style.outlineColor= "black";
-    }
-
-    const handleSubmit = (event) => {
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        
-        const fnameInvalid = (fname.length === 0);
-        const lnameInvalid = (lname.length === 0);
-        const emailInvalid = ((email.length === 0 || !(emailPattern.test(email))));
-        const messageInvalid = (message.length === 0);
-
-        //validate all required lines in the form 
-        if (fnameInvalid)   { document.getElementById('fname').style.outlineColor= "red"; }
-        if (lnameInvalid)   { document.getElementById('lname').style.outlineColor= "red"; }
-        if (emailInvalid)   { document.getElementById('email').style.outlineColor= "red"; }
-        if (messageInvalid) { document.getElementById('message').style.outlineColor= "red"; }
-        
-        //if any items are incorrectly filled out, show error Toast 
-        if (fnameInvalid || lnameInvalid || emailInvalid || messageInvalid) {         
-            toast ({    
-                addRole: true,
-                title: "Uh oh! Something you entered is invalid. Please fix your input in any boxes outlined in red.",
-                position: 'top', 
-                status: 'error',
-                isClosable: true,
-            });
-           
-        }
-        //if all true, form is correctly filled out. Send to server, hide Form and show success message, and reset fields
-        else {
-            //TODO create container and server-side model for form 
-            //TODO send form to server 
-
-
-            hideFormShowAlert(); 
-            setFname("");
-            setLname("");
-            setEmail("");
-            setPhone("");
-            setMessage("");
-        }
+    const handleSendForm = async (data) => {  
+        await storeContactUsForm(data);
+        hideFormShowAlert(); 
+        reset();
     }
 
     const contactUsMessage = "All of our hard work here at Divine Delicacies is done with extreme care, " + 
@@ -75,122 +19,141 @@ export const Contact = () => {
     "desk at 407-555-5555.\n\n Otherwise, please fill out the form on the right-hand side, and we will respond " +
     "as soon as possible.\n\n We look forward to hearing from you!";
 
-    const contactUsMessageBox = (
-        <Box color= '#000000' ml='2rem' mr='2rem' p='1.5rem'>
-            <Text title="header" fontSize={{ base: "22px", md: "29px", lg: "58px" }} mb='1rem'> Welcome to Divine Delicacies! </Text>
-            <Text title='contact-message' fontSize={{ base: "12px", md: "15px", lg: "20px" }}  maxW='43rem' whiteSpace="pre-line"> 
-                {contactUsMessage}
-            </Text>
-        </Box>
-    );
-
     const formSubmittedAlert = "Your message has successfully been submitted.\n\n" +
     "Do you have something else to tell us? Click the button below to send us another message!";
 
-    const formSubmittedAlertBox = (
-        <VStack title='form-submitted' id='form-submitted' textAlign='center' display="none" bg='#000000' color='#fff' maxW='30rem' height='100%' mr='2rem' p='1.5rem'>
-            <Text fontSize={{ base: "12px", md: "17px", lg: "30px" }} fontWeight='bold' mb='1rem' > Thank you! </Text>
-            <Text fontSize={{ base: "12px", md: "15px", lg: "20px" }} pb='1rem' whiteSpace="pre-line"> 
-                {formSubmittedAlert}
-            </Text>
-            <Box 
-                as='button'  
-                mt='1rem'
-                p='0.5rem'
-                bg='#fff' 
-                color='#000000'
-                h='100%'
-                w='150px'
-                fontWeight='bold'
-                fontSize='20px'
-                borderRadius='md'
-                onClick={showFormHideAlert} 
-                > 
-                Click here! 
-            </Box>
-        </VStack>   
-    );
-//label added for accesibility, id name changed for accesibility
-
-    const formBox = (
-        
-        <Box title='form-box' id='form-box' bg='#000000' color='#fff' maxW='30rem' height='100%' mr='2rem' p='1.5rem'>
-            <Text fontSize={{ base: "15px", md: "20px", lg: "30px" }} fontWeight='bold' > EMAIL US </Text>
-            <Text fontSize={{ base: "10px", md: "15px", lg: "20px" }} pb='1rem'> Send us any questions, comments, or concerns! Or email us at DeliciousDelicacies@gmail.com</Text>
-            <VStack align='stretch' >
-         
-            <label for="first-name" >First Name</label> 
-                <Input 
-                    id='first-name'
-                     value={fname} 
-                    onChange={handleFname} 
-                    placeholder="first name (required)"
-                />
-
-                <label for="last-name">Last Name</label>
-                <Input 
-                    id='last-name'
-                    value={lname} 
-                    onChange={handleLname} 
-                    placeholder="last name (required)"
-                />
-
-                <label for="email">Email</label>
-                <Input 
-                    id='email'
-                    type='email'
-                    value={email} 
-                    onChange={handleEmail} 
-                    placeholder="email address (required)"
-                />
-
-                <label for="phone">Phone</label>
-                <Input 
-                    id='phone'
-                    type='tel'
-                    value={phone} 
-                    onChange={handlePhone} 
-                    placeholder="phone number (optional)"
-                />
-
-                <label for="message">Message</label>
-                <Textarea 
-                    id='message'
-                    value={message} 
-                    onChange={handleMessage} 
-                    placeholder="enter feedback or questions here (required)"
-                    maxH='400px'
-                />
-                <Flex alignContent='center' justifyContent='center'> 
-                    <Box 
-                        as='button'  
-                        mt='1rem'
-                        bg='#fff' 
-                        color='#000000'
-                        h='40px'
-                        w='90px'
-                        fontWeight='bold'
-                        fontSize='20px'
-                        borderRadius='md'
-                        onClick={handleSubmit} 
-                        > 
-                        Submit 
-                    </Box>
-                </Flex>
-            </VStack>
-        </Box>
-    );
 
     return (
-    <><div className='Contact' > 
-        <Flex>
-            <SimpleGrid columns={2} templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' , lg: 'repeat(2, 1fr)' , xl: 'repeat(2, 1fr)' }}>
-            {contactUsMessageBox}
-            {formSubmittedAlertBox}
-            {formBox}
-            </SimpleGrid>
-        </Flex>
-    </div></>
+    <><form className='Contact' onSubmit={handleSubmit(handleSendForm)} > 
+        <SimpleGrid columns={2} templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' , lg: 'repeat(2, 1fr)' , xl: 'repeat(2, 1fr)' }}>
+            <Center>
+                <Box color= '#000000' ml='2rem' mr='2rem' p='1.5rem'>
+                    <Text 
+                        title="header" 
+                        fontSize={{ base: "22px", md: "29px", lg: "58px" }} 
+                        mb='1rem'
+                    > 
+                        Welcome to Divine Delicacies! 
+                    </Text>
+                    <Text 
+                        title='contact-message' 
+                        fontSize={{ base: "12px", md: "15px", lg: "20px" }}  
+                        maxW='43rem' 
+                        whiteSpace="pre-line"
+                    > 
+                        {contactUsMessage}
+                    </Text>
+                </Box>
+            </Center>
+
+            <Center>
+                <VStack title='form-submitted' id='form-submitted' textAlign='center' display="none" bg='#000000' color='#fff' maxW='30rem' h="70%" mr='2rem' p='1.5rem'>
+                    <Text 
+                        fontSize={{ base: "12px", md: "17px", lg: "30px" }} 
+                        fontWeight='bold' 
+                        mb='1rem' 
+                    > 
+                        Thank you! 
+                    </Text>
+                    <Text 
+                        fontSize={{ base: "12px", md: "15px", lg: "20px" }} 
+                        pb='1rem' 
+                        whiteSpace="pre-line"
+                    > 
+                        {formSubmittedAlert}
+                    </Text>
+                    <Center>
+                        <Box   
+                            mt='1rem'
+                            p='0.5rem'
+                            bg='#fff' 
+                            color='#000000'
+                            h='40px'
+                            w='150px'
+                            fontWeight='bold'
+                            fontSize='20px'
+                            borderRadius='md'
+                            onClick={showFormHideAlert} 
+                            > 
+                            Click here! 
+                        </Box>
+                    </Center>
+                </VStack>   
+
+            
+                <Box title='form-box' id='form-box' bg='#000000' color='#fff' maxW='30rem' height='100%' mr='2rem' p='1.5rem'>
+                    <Text 
+                        fontSize={{ base: "15px", md: "20px", lg: "30px" }} 
+                        fontWeight='bold' 
+                    > 
+                        EMAIL US 
+                    </Text>
+                    <Text 
+                        fontSize={{ base: "10px", md: "15px", lg: "20px" }} 
+                        pb='1rem'
+                    > 
+                        Send us any questions, comments, or concerns! Or email us at DeliciousDelicacies@gmail.com
+                    </Text>
+                    <VStack align='stretch' >
+                        <FormControl id='fnameField' isInvalid={!!formState?.errors?.firstName?.type}>
+                            <FormLabel>First Name</FormLabel>
+                            <Input 
+                                id='firstName'
+                                {...register("firstName", { required: true})}
+                            />
+                            <FormErrorMessage>Required</FormErrorMessage>
+                        </FormControl>
+                        <FormControl id='lnameField' isInvalid={!!formState?.errors?.lastName?.type}>
+                            <FormLabel>Last Name</FormLabel>
+                            <Input 
+                                id='lastName'
+                                {...register("lastName", { required: true })}
+                            />
+                            <FormErrorMessage>Required</FormErrorMessage>
+                        </FormControl>
+                        <FormControl id='emailField' isInvalid={!!formState?.errors?.email?.type}>
+                            <FormLabel>Email Address</FormLabel>
+                            <Input 
+                                id='email'
+                                {...register("email", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/})}
+                            />
+                            <FormErrorMessage>Email address is invalid</FormErrorMessage>
+                        </FormControl>
+                        <FormControl id='phoneField'>
+                            <FormLabel>Phone Number (optional)</FormLabel>
+                            <Input 
+                                type='tel'
+                                {...register("phone")}
+                            />
+                        </FormControl>
+                        <FormControl id='message' isInvalid={!!formState?.errors?.message?.type}>
+                            <FormLabel>Message</FormLabel>
+                        <Textarea 
+                            id='message'
+                            {...register("message", {required: true, maxLength:400})}
+                        />
+                        </FormControl>
+
+                        <Flex>
+                            <Box 
+                                as='button'  
+                                mt='1rem'
+                                bg='#fff' 
+                                color='#000000'
+                                h='40px'
+                                w='90px'
+                                fontWeight='bold'
+                                fontSize='20px'
+                                borderRadius='md' 
+                                > 
+                                Submit 
+                            </Box>
+                        </Flex>
+                    </VStack>
+                </Box>
+            </Center>            
+        </SimpleGrid>
+    </form></>
     )
 }
 

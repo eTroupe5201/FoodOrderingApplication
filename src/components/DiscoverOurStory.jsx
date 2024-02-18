@@ -5,7 +5,7 @@ import { Heading, Box, Grid, Center, Image, Text, SimpleGrid, Container, Flex } 
 export function DiscoverOurStory() {
     return (
         <Box className="DiscoverOurStory" margin="0" display="Flex">
-            <Box className="overlay" FlexShrink={3} >
+            <Box className="overlay" flexShrink={3} >
                 <Center>
                     <Text className="overlayCursive"  >
                         Discover
