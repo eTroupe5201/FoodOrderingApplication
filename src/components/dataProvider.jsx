@@ -145,6 +145,10 @@ export const DataProvider = ({ children }) => {
     return data.id; 
   }
   
+  const setUserAccount = (request) => {
+    setUser(request);
+  };
+
 //get data from the form data of register page, save data to firebase
 const registerNewAccount = async (userInfo) => {
   
@@ -152,36 +156,13 @@ const registerNewAccount = async (userInfo) => {
   const registerNewAccountCallable = httpsCallable(functions, 'registerAccount');
   console.log(userInfo);
 
-//TODO: change ID to match email - so referencing can be done by email
-
   // //2. Calling functions and passing order data
   const { data } = await registerNewAccountCallable({...userInfo})
   console.log("waited for registerNewAccountCallable");
   console.log(data);
 
-  // //4. also set user
-  //setUser(data.userInfo);
-
   return data;
 }
-
-/* Get data from Login page. Check firebase to see if no account matching email is found or
-*  credentials match or do not match an existing account 
-*/
-// const sendLoginRequest = async (credentials) => {
-  
-//   //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
-//   const sendLoginRequestCallable = httpsCallable(functions, 'tryLogin');
-//   console.log(credentials);
-  
-//   //2. Calling functions and passing login credentials
-//   const { data } = await sendLoginRequestCallable({...credentials})
-//   console.log(data);
-
-//   //3. also set user
-//   //setUser(data.credentials);
-//   return data; 
-// }
 
 const storeContactUsForm = async (formInfo) => {
   //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
@@ -213,7 +194,7 @@ const storeContactUsForm = async (formInfo) => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-    <DataProviderContext.Provider value={{lines, restaurantInfo, categories, items, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, order}}>
+    <DataProviderContext.Provider value={{lines, restaurantInfo, categories, items, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, setUserAccount, user, order}}>
       {isReady ? (
         children
       ) : (

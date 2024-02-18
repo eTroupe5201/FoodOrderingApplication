@@ -179,6 +179,7 @@ export const registerAccount = onCall(async (request) => {
 
   // Create the user with email and password via Firebase Authentication to host our status
   const userRecord = await admin.auth().createUser({
+    uid: request.data.email,
     email: request.data.email,
     password: request.data.password
   });
@@ -202,52 +203,6 @@ export const registerAccount = onCall(async (request) => {
   // Return success response
   return { success: true, uid: userRecord.uid, userInfo: userInfoWithoutPassword };
 });
-
-// export const tryLogin = onCall(async (request) => {
-//   //Check if the user calling the function has passed authentication. 
-//   //If the user is not authenticated, the function returns an error.
-//   if (!request.auth) {
-//     return new HttpsError("failed-precondition", "You are not authorized");
-//   }
-  
-//   //Create a reference to Firestore for database operations
-//   const firestore = admin.firestore();
-
-//   const email = request.data.email; 
-//   const pw = request.data.password;
-  
-//   //to track latest login
-//   const latestSuccessfulLogin = admin.firestore.FieldValue.serverTimestamp();
-
-//   //get reference to user for provided email address
-//   const userAccountRef = await firestore.collection("users").doc(email).get();
-//   const userAccount = userAccountRef.data();
-
-//   //existing account found
-//   if (userAccount) {
-//     //check for matching password
-//     if (userAccount.password === pw) {
-
-//       //set new 
-//       await firestore.collection("users").doc(email).set(
-//         {
-//           lastLogin: latestSuccessfulLogin,
-//         }, 
-//         {merge: true},
-//       );
-      
-//       return {userInfo: userAccount}
-//     }
-//     //incorrect password
-//     else {
-//       return "incorrect password";
-//     }
-//   }
-
-//   //return , flagging Login page to alert user that no account exists
-//   return "no existing account";
-// });
-
 
 export const contactUsSubmit = onCall(async (request) => {
 //Check if the user calling the function has passed authentication. 

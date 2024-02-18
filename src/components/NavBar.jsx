@@ -1,36 +1,63 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
-import { Button, Image } from '@chakra-ui/react';
-import { Link } from "react-router-dom";
+import { Image, HStack, Box, useToast} from '@chakra-ui/react';
+import { Link, useNavigate } from "react-router-dom";
 import { useDataProvider } from "../components/dataProvider"
-
-import { TiShoppingCart } from "react-icons/ti";
-
+import { TiShoppingCart, TiUser } from "react-icons/ti";
 
 export function NavBar() {
-
-    const { lines } = useDataProvider();
+    const { lines, user, setUserAccount } = useDataProvider();
+    const navigate = useNavigate();
+    const toast = useToast();
     const hasCartItems = lines.length > 0;
+
+    const logout = () => {
+        setUserAccount(null); 
+    
+        toast({
+            title: "Logged out successfully.",
+            position: 'top',
+            status: 'success',
+            isClosable: true,
+        });
+    
+        navigate("/");
+    }
+
 
     return (
         <nav className="nav">      
 
-<Image className="photo"  src='src\assets\divine-delicacies2.png' alt='logo' />
+            <Image className="photo"  src='src\assets\divine-delicacies2.png' alt='logo' />
 
             <ul>
                 <li><Link to="/"> Home </Link></li>
                 {/* <li><Link to="/item"> Menu </Link></li> */}
                 <li><Link to="/contact"> Contact Us </Link></li>
                 <li><Link to="/menu"> Order </Link></li>
-                <li><Link to="/login"> Login </Link></li>
-                <li>
-                    {hasCartItems ? (
-                        <Link to="/cart"> <TiShoppingCart /> </Link>
+                <li > 
+                    {user ? (
+                        <Box pt='0.25rem' as='button' onClick={logout} > Logout </Box>
                     ) : (
-                        <TiShoppingCart style={{ opacity: 0.5, cursor: "not-allowed" }} />
-                    )}
+                        <Link to="/login"> Login </Link> 
+                    ) }
                 </li>
-                
+                <HStack spacing='1.5rem'>
+                    <li > 
+                        {user ? (
+                            <Link to="/profile"> <TiUser/> </Link>
+                        ) : (
+                            <TiUser style={{visibility: "hidden"}} />
+                        ) }
+                    </li>
+                    <li>
+                        {hasCartItems ? (
+                            <Link to="/cart"> <TiShoppingCart /> </Link>
+                        ) : (
+                            <TiShoppingCart style={{ opacity: 0.5, cursor: "not-allowed" }} />
+                        )}
+                    </li>
+                </HStack>
                 {/* <li><Link to="/info"> OurInfo </Link></li> */}
             </ul>
         </nav>
