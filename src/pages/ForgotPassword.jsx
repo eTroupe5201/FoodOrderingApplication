@@ -24,7 +24,7 @@ export const ForgotPassword = ({saveData}) => {
         } catch (error) {console.log("This is a test call - will throw error in dev/prod")} //console.log("This is a test call - will throw error in dev/prod")};
 
         //check email field is empty or not
-        if (!email || email.trim().length) {
+        if (!email) {
             console.log("invalid email - empty string or only whitespace");
             toast({
                 title: "Please enter your email address.",
