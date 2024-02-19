@@ -7,22 +7,26 @@ import { useState, useEffect } from "react";
 import { TiShoppingCart, TiUser } from "react-icons/ti";
 
 export function NavBar() {
-    const { user, checkCartNotEmpty, getUserInfo } = useDataProvider();
+    const { user, checkCartNotEmpty, getUserInfo, cartChanged, setCartChanged } = useDataProvider();
     const navigate = useNavigate();
     const toast = useToast();
     const [hasCartItems, setHasCartItems] = useState(false);
 
     useEffect(() => {
-        if (user) {
-            const fetchCartStatus = async () => {
+        const fetchCartStatus = async () => {
+            if (user) {
                 const isNotEmpty = await checkCartNotEmpty();
                 console.log('Cart not empty:', isNotEmpty);
                 setHasCartItems(isNotEmpty);
-            };
-
-            fetchCartStatus();
-        }
-    }, [user]);
+            } else {
+                setHasCartItems(false);
+            }
+        };
+    
+        fetchCartStatus();
+        // Reset the cardChanged state so that the next change can be detected
+        setCartChanged(false);
+    }, [user, cartChanged]); //Now this effect depends on two states: user and cartChanged
 
     const logout = () => {
         getUserInfo(null); 

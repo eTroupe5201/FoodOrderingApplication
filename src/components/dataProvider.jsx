@@ -41,6 +41,7 @@ export const DataProvider = ({ children }) => {
   const [lines, setLines] = useState([]);
   const [order, setOrder] = useState();
   const [user, setUser] = useState();
+  const [cartChanged, setCartChanged] = useState(false);
 
   //getDoc comes from firebase firestore, it can import automatically and receive the document
   const fetchRestaurantInfo = async () => {
@@ -171,6 +172,7 @@ export const DataProvider = ({ children }) => {
 
     //2. Calling functions and passing order data
     const { data } = await placeCartCallable({...line, uid});
+    setCartChanged(true);
     console.log(data);
 
     return;
@@ -185,6 +187,7 @@ export const DataProvider = ({ children }) => {
     await deleteDoc(itemRef); // Use deleteDoc to delete the document
     // update UI
     setLines(currentLines => currentLines.filter(line => line.id !== itemId));
+    setCartChanged(true);
   };
 
   //get the data from the form data of checkout page, we should save this data to the firebase
@@ -293,7 +296,7 @@ const storeContactUsForm = async (formInfo) => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-    <DataProviderContext.Provider value={{user, lines, setLines, restaurantInfo, categories, items, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order}}>
+    <DataProviderContext.Provider value={{user, lines, setLines, restaurantInfo, categories, items, cartChanged, setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order}}>
       {isReady ? (
         children
       ) : (
