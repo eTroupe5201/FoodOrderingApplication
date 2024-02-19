@@ -1,10 +1,10 @@
-// import {describe, it, expect } from "vitest";
-// import TestRenderer from 'react-test-renderer';
-// import { MemoryRouter } from "react-router-dom";
-// import { NavBar } from "../components/NavBar";
+import {describe, it, expect } from "vitest";
+import TestRenderer from 'react-test-renderer';
+import { MemoryRouter } from "react-router-dom";
+import { NavBar } from "../components/NavBar";
 
-// describe("NavBar.jsx", () => {
-//     it("test the children inside my NavBar Component", () => {
+describe("NavBar.jsx", () => {
+    it("test the children inside my NavBar Component", () => {
 //         const navBar = TestRenderer.create(<MemoryRouter><NavBar/></MemoryRouter>).toJSON();
 //         console.log(navBar.children);
 
@@ -20,8 +20,8 @@
 //         //expect(navBar.children[1].children[2].type).toBe("li");
 //         expect(navBar.children[1].children[3].type).toBe("li");
 //        //expect(navBar.children[1].children[4].type).toBe("li"); 
-//    })
-// })
+   })
+})
 
 // it("will create a snapshot of NavBar", () => {
 //     const navBar = TestRenderer.create(<MemoryRouter><NavBar/></MemoryRouter>).toJSON();

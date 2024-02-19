@@ -215,7 +215,7 @@ export const DataProvider = ({ children }) => {
 
     return data.id; 
   }
-
+  
   const clearCartAfterConfirmation = async () => {
     if (!user) return; // make sure user exists
     const uid = user.uid;
@@ -238,7 +238,6 @@ export const DataProvider = ({ children }) => {
   };
 
 
-  
 //get data from the form data of register page, save data to firebase
 const registerNewAccount = async (userInfo) => {
   
@@ -258,6 +257,7 @@ const registerNewAccount = async (userInfo) => {
 
   return data;
 }
+
 
 const getUserInfo = async (userInfo) => {
   setUser(userInfo);

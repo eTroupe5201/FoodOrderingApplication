@@ -69,7 +69,7 @@
     
 }
 
-.nav a {
+.nav a  {
     color: inherit;
     display: flex; 
     align-items: center; 
@@ -77,15 +77,18 @@
 
 }
 
-.nav li.active {
+.nav button:hover{
+    font-weight: bold;
+}
+.nav li.active{
     background-color:#555;
 }
 
-.nav li:hover {
+.nav li:hover{
     font-weight: bold;
 }
 
-.Contact, .Login, .Register {
+.Contact, .Login, .Register{
     font-family: 'Raleway', sans-serif;
     font-weight: bold;
     display: flex;
