@@ -1,4 +1,4 @@
-name: CI
+name: Continuous Integration and Deployment
 
 on:
   push:
@@ -7,8 +7,11 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-lint:
+  build-and-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
 
     steps:
     - uses: actions/checkout@v2
@@ -16,18 +19,53 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '16'
+        node-version: '18'
 
     - name: Install dependencies
       run: npm install
 
-    # - name: Lint
-    #   run: npm run lint
+    - name: Lint
+      run: npm run lint
 
     - name: Build
       run: npm run build
 
-    # Placeholder for future test command
-    - name: Run tests (placeholder)
-      #run: npm test #once tests are established
-      run: echo "No tests yet. This is a placeholder."
+    - name: Run tests
+      run: npm test
+
+  deploy-to-firebase:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Firebase
+      uses: w9jds/firebase-action@master
+      with:
+        args: deploy
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+  create-release:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Extract version from package.json
+      run: echo "VERSION=$(cat package.json | jq -r .version)" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.VERSION }}
+        release_name: Release ${{ env.VERSION }}
+        draft: false
+        prerelease: false
+      
