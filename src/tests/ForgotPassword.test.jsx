@@ -58,7 +58,7 @@ describe("ForgotPassword page", () => {
         });
 
         expect(mockConsole).toHaveBeenCalled();
-        expect(mockConsole).toHaveBeenNthCalledWith(1, "invalid email - empty string or only whitespace");
+        expect(mockConsole).toHaveBeenNthCalledWith(2, "invalid email - empty string or only whitespace");
     });
 
 });

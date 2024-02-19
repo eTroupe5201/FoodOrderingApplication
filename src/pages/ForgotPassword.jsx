@@ -19,9 +19,9 @@ export const ForgotPassword = ({saveData}) => {
     };
 
     const handleForgotPasswordEmail = async () => {
-        // try {
-        //     saveData(data);
-        // } catch (error) {} //console.log("This is a test call - will throw error in dev/prod")};
+        try {
+            saveData(email);
+        } catch (error) {console.log("This is a test call - will throw error in dev/prod")} //console.log("This is a test call - will throw error in dev/prod")};
 
         //check email field is empty or not
         if (!email || email.trim().length) {

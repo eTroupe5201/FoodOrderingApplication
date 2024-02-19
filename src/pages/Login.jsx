@@ -25,10 +25,9 @@ export const Login = ({saveData}) => {
     const navigateToResetPassword = () => {navigate("/forgotpassword");}
 
     const handleLogin = async (data) => {
-
-        // try {
-        //     saveData(data);
-        // } catch (error) {} //console.log("This is a test call - will throw error in dev/prod")};
+        try {
+            saveData(data);
+        } catch (error) {console.log("This is a test call - will throw error in dev/prod")} //console.log("This is a test call - will throw error in dev/prod")};
 
         try {
             console.log(data);
