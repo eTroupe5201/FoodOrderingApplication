@@ -1,6 +1,6 @@
 import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, FormControl, FormErrorMessage, FormLabel, Input, Radio, RadioGroup, Textarea, VStack, } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from "react";
 import { BottomButton } from "../components/BottomButton";
 import { useDataProvider } from "../components/dataProvider"
 import { calculateOrderSubtotal, calculateOrderTotal, } from "../utils/calculations";
@@ -28,10 +28,10 @@ export const CheckOut = () => {
                     In this way, the user's personal information will be automatically filled in the form, 
                     and if the user updates the information, the updated information will also be sent when submitting the form
                 */
-                setValue('firstName', data.firstName);
-                setValue('lastName', data.lastName);
-                setValue('email', data.email);
-                setValue('phone', data.phone);
+                setValue("firstName", data.firstName);
+                setValue("lastName", data.lastName);
+                setValue("email", data.email);
+                setValue("phone", data.phone);
                 //...other fields in future
             }
     

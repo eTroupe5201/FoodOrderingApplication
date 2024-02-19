@@ -1,7 +1,7 @@
 import {render, screen} from "@testing-library/react";
 import {Menu} from "../pages/Menu";
 import { BrowserRouter } from "react-router-dom";
-import { afterEach, describe, it, expect, vi} from 'vitest';
+import { afterEach, describe, it, expect, vi} from "vitest";
 import userEvent from "@testing-library/user-event";
 
 //Firebase integration tests must be done within functions > test due to firebase/analytics restrictions 
@@ -13,12 +13,12 @@ describe("Menu page", () => {
             user: userEvent.setup(),
             ...render(jsx),
         };
-    };
+    }
 
     afterEach(() => { vi.clearAllMocks();});
 
     it ("should log via the mockConsole", () => {
-        const mockConsole = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+        const mockConsole = vi.spyOn(console, "log").mockImplementation(() => undefined);
 
         console.log("test Menu mock log");
         expect(mockConsole).toHaveBeenCalledOnce();

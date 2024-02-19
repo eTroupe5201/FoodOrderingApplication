@@ -27,9 +27,9 @@ export const Register = ({saveData}) => {
 
     const handleRegister = async (data) => {
 
-        try {
-            saveData(data);
-        } catch (error) {}; //console.log("This is a test call - will throw error in dev/prod")};
+        // try {
+        //     saveData(data);
+        // } catch (error) {} //console.log("This is a test call - will throw error in dev/prod")};
 
         //emails and passwords match
         if (data.email === data.confirmEmail && data.password === data.confirmPassword) {
@@ -47,8 +47,8 @@ export const Register = ({saveData}) => {
                     toast ({    
                         addRole: true,
                         title: "Your account was successfully created.",
-                        position: 'top', 
-                        status: 'success',
+                        position: "top", 
+                        status: "success",
                         isClosable: true,
                     });
                 }
@@ -57,8 +57,8 @@ export const Register = ({saveData}) => {
                     toast ({    
                         addRole: true,
                         title: "The email provided is associated with an existing account.",
-                        position: 'top', 
-                        status: 'info',
+                        position: "top", 
+                        status: "info",
                         isClosable: true,
                     });
                 }
@@ -154,7 +154,7 @@ export const Register = ({saveData}) => {
                                 <Input 
                                     id="password"
                                     title='register-password'
-                                    type={showPassword ? 'text' : 'password'}
+                                    type={showPassword ? "text" : "password"}
                                     {...register("password", { 
                                         required: true,
                                         validate: (val) => {
@@ -180,7 +180,7 @@ export const Register = ({saveData}) => {
                                         pt='0.25rem' 
                                         onClick={handleShowPassword} 
                                     >
-                                        {showPassword ? 'Hide' : 'Show'}
+                                        {showPassword ? "Hide" : "Show"}
                                     </Box>
                                 </InputRightElement>
                             </InputGroup>
@@ -193,7 +193,7 @@ export const Register = ({saveData}) => {
                                 <Input 
                                     id="confirmPassword"
                                     title='register-confirm-password'
-                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    type={showConfirmPassword ? "text" : "password"}
                                     {...register("confirmPassword", { 
                                         required: true,
                                         validate: (val) => {
@@ -219,7 +219,7 @@ export const Register = ({saveData}) => {
                                         pt='0.25rem' 
                                         onClick={handleShowConfirmPassword} 
                                     >
-                                        {showConfirmPassword ? 'Hide' : 'Show'}
+                                        {showConfirmPassword ? "Hide" : "Show"}
                                     </Box>
                                 </InputRightElement>
                             </InputGroup>

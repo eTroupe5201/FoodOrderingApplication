@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
-import React from 'react';
-import { Image, HStack, Box, useToast} from '@chakra-ui/react';
+import React from "react";
+import { Image, HStack, Box, useToast} from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDataProvider } from "../components/dataProvider"
 import { useState, useEffect } from "react";
@@ -16,7 +16,7 @@ export function NavBar() {
         const fetchCartStatus = async () => {
             if (user) {
                 const isNotEmpty = await checkCartNotEmpty();
-                console.log('Cart not empty:', isNotEmpty);
+                console.log("Cart not empty:", isNotEmpty);
                 setHasCartItems(isNotEmpty);
             } else {
                 setHasCartItems(false);
@@ -33,8 +33,8 @@ export function NavBar() {
     
         toast({
             title: "Logged out successfully.",
-            position: 'top',
-            status: 'success',
+            position: "top",
+            status: "success",
             isClosable: true,
         });
     

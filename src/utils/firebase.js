@@ -30,7 +30,7 @@ let analytics;
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-if (typeof VITE_REACT_APP_MEASUREMENT_ID === 'string') {
+if (typeof VITE_REACT_APP_MEASUREMENT_ID === "string") {
     analytics = getAnalytics(app);
 }
 

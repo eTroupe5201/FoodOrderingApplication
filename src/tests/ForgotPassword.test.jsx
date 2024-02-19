@@ -1,7 +1,7 @@
 import {render, screen} from "@testing-library/react";
 import {ForgotPassword} from "../pages/ForgotPassword";
 import { BrowserRouter } from "react-router-dom";
-import { afterEach, describe, it, expect, vi} from 'vitest';
+import { afterEach, describe, it, expect, vi} from "vitest";
 import { act } from "react-dom/test-utils";
 import userEvent from "@testing-library/user-event";
 
@@ -17,12 +17,12 @@ describe("ForgotPassword page", () => {
             user: userEvent.setup(),
             ...render(jsx),
         };
-    };
+    }
 
     afterEach(() => { vi.clearAllMocks();});
 
     it ("should log via the mockConsole", () => {
-        const mockConsole = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+        const mockConsole = vi.spyOn(console, "log").mockImplementation(() => undefined);
 
         console.log("test ForgotPassword mock log");
         expect(mockConsole).toHaveBeenCalledOnce();
@@ -43,18 +43,18 @@ describe("ForgotPassword page", () => {
     })
 
     it("should show an alert if no input or all whitespace is entered", async () => {
-        const mockConsole = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+        const mockConsole = vi.spyOn(console, "log").mockImplementation(() => undefined);
 
         const {user} = setup(
             <BrowserRouter>
                 <ForgotPassword />
             </BrowserRouter>);
 
-        emailInput = screen.getByTitle('forgot-password-email');
+        emailInput = screen.getByTitle("forgot-password-email");
         
         await act(async () => {
-            await user.type(emailInput, '    ');
-            await user.click(screen.getByTitle('forgot-password-button'))
+            await user.type(emailInput, "    ");
+            await user.click(screen.getByTitle("forgot-password-button"))
         });
 
         expect(mockConsole).toHaveBeenCalled();

@@ -1,6 +1,6 @@
 import { Box, Flex, Heading, IconButton, VStack, Text, Divider, } from "@chakra-ui/react";
 import { GrClose } from "react-icons/gr";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useDataProvider } from "../components/dataProvider"
 import { BottomButton } from "../components/BottomButton";
 import { useNavigate } from "react-router-dom";

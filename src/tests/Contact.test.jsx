@@ -1,7 +1,7 @@
 import {fireEvent, render, screen} from "@testing-library/react";
 import {Contact} from "../pages/Contact";
 import { BrowserRouter } from "react-router-dom";
-import { afterEach, describe, it, expect, vi} from 'vitest';
+import { afterEach, describe, it, expect, vi} from "vitest";
 import { act } from "react-dom/test-utils";
 import userEvent from "@testing-library/user-event";
 
@@ -16,7 +16,7 @@ describe("Contact page", () => {
     afterEach(() => { vi.clearAllMocks;});
     
     it ("should log via the mockConsole", () => {
-        const mockConsole = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+        const mockConsole = vi.spyOn(console, "log").mockImplementation(() => undefined);
 
         console.log("test Contact mock log");
         expect(mockConsole).toHaveBeenCalledOnce();

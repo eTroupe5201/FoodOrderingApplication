@@ -12,5 +12,5 @@ export function Home(){
         <OurTeam />
         </div>
     );
-};
+}
 //wrap in fragment to return multiple components

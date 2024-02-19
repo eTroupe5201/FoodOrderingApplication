@@ -1,6 +1,6 @@
-import { Flex, Box, Text, VStack, Input, Textarea, SimpleGrid, Center, FormControl, FormLabel, FormErrorMessage} from '@chakra-ui/react'
-import { useDataProvider } from '../components/dataProvider';
-import { useForm } from 'react-hook-form';
+import { Flex, Box, Text, VStack, Input, Textarea, SimpleGrid, Center, FormControl, FormLabel, FormErrorMessage} from "@chakra-ui/react"
+import { useDataProvider } from "../components/dataProvider";
+import { useForm } from "react-hook-form";
 
 //page for Contact Us form
 export const Contact = () => {
@@ -25,7 +25,7 @@ export const Contact = () => {
 
     return (
     <><form className='Contact' onSubmit={handleSubmit(handleSendForm)} > 
-        <SimpleGrid columns={2} templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' , lg: 'repeat(2, 1fr)' , xl: 'repeat(2, 1fr)' }}>
+        <SimpleGrid columns={2} templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" , lg: "repeat(2, 1fr)" , xl: "repeat(2, 1fr)" }}>
             <Center>
                 <Box color= '#000000' ml='2rem' mr='2rem' p='1.5rem'>
                     <Text 
@@ -158,11 +158,11 @@ export const Contact = () => {
 }
 
 function showFormHideAlert() {
-    document.getElementById('form-box').style.display="block";
-    document.getElementById('form-submitted').style.display="none";
+    document.getElementById("form-box").style.display="block";
+    document.getElementById("form-submitted").style.display="none";
 }
 
 function hideFormShowAlert() {
-    document.getElementById('form-box').style.display="none";
-    document.getElementById('form-submitted').style.display="block";
+    document.getElementById("form-box").style.display="none";
+    document.getElementById("form-submitted").style.display="block";
 }

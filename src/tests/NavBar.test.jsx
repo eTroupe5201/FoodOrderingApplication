@@ -1,5 +1,5 @@
 import {describe, it, expect } from "vitest";
-import TestRenderer from 'react-test-renderer';
+import TestRenderer from "react-test-renderer";
 import { MemoryRouter } from "react-router-dom";
 import { NavBar } from "../components/NavBar";
 

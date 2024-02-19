@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/jsx-key */
+ 
 import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Flex, Heading, Image, Link, Text, Grid } from "@chakra-ui/react";
 import { useDataProvider } from "../components/dataProvider";
 import { useNavigate } from "react-router-dom";

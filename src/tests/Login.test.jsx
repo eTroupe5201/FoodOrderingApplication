@@ -1,7 +1,7 @@
 import {render, screen} from "@testing-library/react";
 import {Login} from "../pages/Login";
 import { BrowserRouter } from "react-router-dom";
-import { afterEach, describe, it, expect, vi} from 'vitest';
+import { afterEach, describe, it, expect, vi} from "vitest";
 import { act } from "react-dom/test-utils";
 import userEvent from "@testing-library/user-event";
 
@@ -24,7 +24,7 @@ describe("Login page", () => {
     afterEach(() => { vi.clearAllMocks();});
 
     it ("should log via the mockConsole", () => {
-        const mockConsole = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+        const mockConsole = vi.spyOn(console, "log").mockImplementation(() => undefined);
 
         console.log("test LoginPage log");
         expect(mockConsole).toHaveBeenCalledOnce();
@@ -40,15 +40,15 @@ describe("Login page", () => {
 
         const formBox = screen.getByTitle("login-form-box");
         expect(formBox).toBeInTheDocument();
-        const emailElement = screen.getByTitle('login-email');
+        const emailElement = screen.getByTitle("login-email");
         expect(emailElement).toBeInTheDocument();
-        const passwordElement = screen.getByTitle('login-password');
+        const passwordElement = screen.getByTitle("login-password");
         expect(passwordElement).toBeInTheDocument();
-        const showPasswordButton = screen.getByTitle('login-show-password-button');
+        const showPasswordButton = screen.getByTitle("login-show-password-button");
         expect(showPasswordButton).toBeInTheDocument();
-        const loginButton = screen.getByTitle('login-login-button');
+        const loginButton = screen.getByTitle("login-login-button");
         expect(loginButton).toBeInTheDocument();
-        const registerButton = screen.getByTitle('login-register-button');
+        const registerButton = screen.getByTitle("login-register-button");
         expect(registerButton).toBeInTheDocument();
     })
 
@@ -59,13 +59,13 @@ describe("Login page", () => {
                 <Login saveData={mockSave}/>
             </BrowserRouter>);
 
-        emailInput = screen.getByTitle('login-email');
-        passwordInput = screen.getByTitle('login-password');
+        emailInput = screen.getByTitle("login-email");
+        passwordInput = screen.getByTitle("login-password");
 
         await act(async () => {
-            await user.type(emailInput, 'testing.com');
-            await user.type(passwordInput, 'test1234');
-            await user.click(screen.getByTitle('login-login-button'));
+            await user.type(emailInput, "testing.com");
+            await user.type(passwordInput, "test1234");
+            await user.click(screen.getByTitle("login-login-button"));
         });
         
         expect(mockSave).not.toBeCalled();
@@ -78,13 +78,13 @@ describe("Login page", () => {
                 <Login saveData={mockSave}/>
             </BrowserRouter>);
 
-        emailInput = screen.getByTitle('login-email');
-        passwordInput = screen.getByTitle('login-password');
+        emailInput = screen.getByTitle("login-email");
+        passwordInput = screen.getByTitle("login-password");
         
         await act(async () => {
-            await user.type(emailInput, 'testing@test.com');
+            await user.type(emailInput, "testing@test.com");
             await user.type(passwordInput, " ");
-            await user.click(screen.getByTitle('login-login-button'));
+            await user.click(screen.getByTitle("login-login-button"));
         });
         
         expect(mockSave).not.toBeCalled();
@@ -97,13 +97,13 @@ describe("Login page", () => {
                 <Login saveData={mockSave}/>
             </BrowserRouter>);
 
-        emailInput = screen.getByTitle('login-email');
-        passwordInput = screen.getByTitle('login-password');
+        emailInput = screen.getByTitle("login-email");
+        passwordInput = screen.getByTitle("login-password");
         
         await act(async () => {
-            await user.type(emailInput, 'testing@test.com');
+            await user.type(emailInput, "testing@test.com");
             await user.type(passwordInput, "test123");
-            await user.click(screen.getByTitle('login-login-button'));
+            await user.click(screen.getByTitle("login-login-button"));
         });
         
         expect(mockSave).toBeCalled();

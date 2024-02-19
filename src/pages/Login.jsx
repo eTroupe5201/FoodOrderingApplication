@@ -21,14 +21,14 @@ export const Login = ({saveData}) => {
     const [showPassword, setShowPassword] = React.useState(false)
     const handleShowPassword= () => setShowPassword(!showPassword)
 
-    const navigateToRegister = () => {navigate('/register');}
-    const navigateToResetPassword = () => {navigate('/forgotpassword');}
+    const navigateToRegister = () => {navigate("/register");}
+    const navigateToResetPassword = () => {navigate("/forgotpassword");}
 
     const handleLogin = async (data) => {
 
-        try {
-            saveData(data);
-        } catch (error) {}; //console.log("This is a test call - will throw error in dev/prod")};
+        // try {
+        //     saveData(data);
+        // } catch (error) {} //console.log("This is a test call - will throw error in dev/prod")};
 
         try {
             console.log(data);
@@ -51,17 +51,17 @@ export const Login = ({saveData}) => {
             // Show success message and navigate to homepage
             toast({
                 title: "Logged in successfully.",
-                position: 'top',
-                status: 'success',
+                position: "top",
+                status: "success",
                 isClosable: true,
             });
             navigate("/");
         } catch (error) {
             // Login failed with error message
             toast({
-                title: 'Invalid login credentials.', //error.message, custom message for user friendliness
-                position: 'top',
-                status: 'error', 
+                title: "Invalid login credentials.", //error.message, custom message for user friendliness
+                position: "top",
+                status: "error", 
                 isClosable: true,
             });
             console.log("Failed login");
@@ -92,7 +92,7 @@ export const Login = ({saveData}) => {
                                 <Input 
                                     title='login-password'
                                     id="password"
-                                    type={showPassword ? 'text' : 'password'}
+                                    type={showPassword ? "text" : "password"}
                                     {...register("password", { required: true, pattern: /(.|\s)*\S(.|\s)/})} //checks for whitespace
                                 />
                                 <InputRightElement width='4.5rem' h='48px'>
@@ -106,7 +106,7 @@ export const Login = ({saveData}) => {
                                         pt='0.25rem' 
                                         onClick={handleShowPassword} 
                                     >
-                                        {showPassword ? 'Hide' : 'Show'}
+                                        {showPassword ? "Hide" : "Show"}
                                     </Box>
                                 </InputRightElement>
                             </InputGroup>

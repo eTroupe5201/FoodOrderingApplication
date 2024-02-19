@@ -39,7 +39,7 @@ const GratitudeContent = () => {
         );
     }
 
-    if (order.status === 'confirmed') {
+    if (order.status === "confirmed") {
         console.log("order confirmed");
         //when the status is confirmed, call this function to empty the cart, meaning that you have paid successfully!!!
         clearCartAfterConfirmation();

@@ -1,11 +1,11 @@
 // eslint-disable-next-line no-unused-vars
-import React from 'react';
-import { Heading, Box, Grid, Center, Image, Text, SimpleGrid, Container, Flex } from '@chakra-ui/react';
+import React from "react";
+import { Heading, Box, Center, Image, Text, SimpleGrid, } from "@chakra-ui/react";
 
 export function Banner() {
     return (
         <Box className="Banner" aria-label="Banner">
-            <SimpleGrid columns={3} templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}>
+            <SimpleGrid columns={3} templateColumns={{ base: "repeat(1, 1fr)", lg: "repeat(3, 1fr)" }}>
                 <Box h="500" color="white" bg="black" pt="20">
                     <Center>
                         <Image h="100" src="src\assets\FoodLogo.png" alt="logo" />

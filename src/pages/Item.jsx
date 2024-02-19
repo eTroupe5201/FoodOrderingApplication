@@ -31,7 +31,7 @@ export const Item = () => {
     //here id is from the param of "navigate(`/item/${item.id}`)}""
     const { id } = useParams();
     const { getItemById, addToCart } = useDataProvider();
-    const item = getItemById(id || '');
+    const item = getItemById(id || "");
 
     /**
      * UseForm is one of the main hooks of react hook form. It is used to handle the status of forms, input registration forms, and submit forms.
@@ -44,8 +44,8 @@ export const Item = () => {
         defaultValues: {
           quantity: 1,
           value: [],
-          price: item.price || '',
-          label: item.label || '',
+          price: item.price || "",
+          label: item.label || "",
         },
       });
 

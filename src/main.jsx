@@ -1,27 +1,26 @@
-// eslint-disable-next-line no-unused-vars
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { extendTheme } from '@chakra-ui/react';
-import { ChakraProvider } from '@chakra-ui/react';
+ 
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { ChakraProvider } from "@chakra-ui/react";
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Root } from './pages/Root'; 
-import { Home } from './pages/Home'; 
-import { Menu } from './pages/Menu'; 
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Root } from "./pages/Root"; 
+import { Home } from "./pages/Home"; 
+import { Menu } from "./pages/Menu"; 
 import { Item } from "./pages/Item";
 import { Cart } from "./pages/Cart";
 import { CheckOut } from "./pages/CheckOut";
 import { Gratitude } from "./pages/Gratitude";
 import { Info } from "./pages/Info";
 import { Contact } from "./pages/Contact";
-import { Admin } from './pages/Admin'; 
-import { Login } from './pages/Login'; 
-import { Register } from './pages/Register';
-import { Profile } from './pages/Profile'; 
-import { ForgotPassword } from './pages/ForgotPassword';
+import { Admin } from "./pages/Admin"; 
+import { Login } from "./pages/Login"; 
+import { Register } from "./pages/Register";
+import { Profile } from "./pages/Profile"; 
+import { ForgotPassword } from "./pages/ForgotPassword";
 
 import "./styles.css";
-import { DataProvider } from './components/dataProvider';
+import { DataProvider } from "./components/dataProvider";
 
 /**
  * default page is homepage, and click oder button will go to menu page of our restaurant
@@ -95,7 +94,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 
 root.render(

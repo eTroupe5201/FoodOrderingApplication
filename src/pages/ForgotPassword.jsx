@@ -19,9 +19,9 @@ export const ForgotPassword = ({saveData}) => {
     };
 
     const handleForgotPasswordEmail = async () => {
-        try {
-            saveData(data);
-        } catch (error) {}; //console.log("This is a test call - will throw error in dev/prod")};
+        // try {
+        //     saveData(data);
+        // } catch (error) {} //console.log("This is a test call - will throw error in dev/prod")};
 
         //check email field is empty or not
         if (!email || email.trim().length) {
@@ -29,7 +29,7 @@ export const ForgotPassword = ({saveData}) => {
             toast({
                 title: "Please enter your email address.",
                 status: "warning",
-                position: 'top',
+                position: "top",
                 duration: 9000,
                 isClosable: true,
             });
@@ -44,19 +44,19 @@ export const ForgotPassword = ({saveData}) => {
                     title: "Password reset email sent.",
                     description: "Check your email for the password reset instructions.",
                     status: "success",
-                    position: 'top',
+                    position: "top",
                     duration: 9000,
                     isClosable: true,
                 });
-                navigate('/login');
+                navigate("/login");
             })
             .catch((error) => {
                 console.log("invalid email - not a valid format");
                 toast({
                     title: "An error occurred.",
-                    description: 'Invalid email address', //error.message, custom message for user friendliness
+                    description: "Invalid email address", //error.message, custom message for user friendliness
                     status: "error",
-                    position: 'top',
+                    position: "top",
                     duration: 9000,
                     isClosable: true,
                 });

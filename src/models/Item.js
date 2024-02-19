@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore";
-import ImageType from './ImageType'; 
-import Variant from './Variant'; 
+import ImageType from "./ImageType"; 
+import Variant from "./Variant"; 
 
 class Item {
   constructor(id, createdate, lastupdate, createby, image, description, price, label, category, variants) {
@@ -10,7 +10,7 @@ class Item {
     this.createby = createby;
     
     if (!(image instanceof ImageType)) {
-      throw new Error('image must be an instance of ImageType');
+      throw new Error("image must be an instance of ImageType");
     }
     this.image = image;
 
@@ -20,7 +20,7 @@ class Item {
     this.category = category;
 
     if (!Array.isArray(variants) || !variants.every(v => v instanceof Variant)) {
-      throw new Error('variants must be an array of Variant instances');
+      throw new Error("variants must be an array of Variant instances");
     }
     this.variants = variants;
   }

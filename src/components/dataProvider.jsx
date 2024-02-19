@@ -1,12 +1,12 @@
-/* eslint-disable react/prop-types */
+ 
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
-import React, { FunctionComponent, PropsWithChildren, createContext, useContext, useEffect, useState, } from 'react';
-import { Center, Spinner } from '@chakra-ui/react';
+ 
+import React, { FunctionComponent, PropsWithChildren, createContext, useContext, useEffect, useState, } from "react";
+import { Center, Spinner } from "@chakra-ui/react";
 import { collection, doc, getDoc, getDocs, onSnapshot, deleteDoc, query, limit, writeBatch } from "firebase/firestore";
 import { db, auth, functions } from "../utils/firebase";
 import { signInAnonymously } from "firebase/auth";
-import { httpsCallable } from 'firebase/functions';
+import { httpsCallable } from "firebase/functions";
 
 
 const DataProviderContext = createContext({ 
@@ -50,19 +50,19 @@ export const DataProvider = ({ children }) => {
     We need to provide a reference to a specific document in Firestore.
     If we know the exact document ID I want, then we will use getDoc. 
     */
-    const restaurantInfoSnapshot = await getDoc(doc(db, 'restaurant', 'info'));
+    const restaurantInfoSnapshot = await getDoc(doc(db, "restaurant", "info"));
     setRestaurantInfo(restaurantInfoSnapshot.data());
   }
 
   const fetchUserProfile = async () => {
-    console.log('Current user:', user); // Check current user
+    console.log("Current user:", user); // Check current user
     if (!user || !user.uid) {
-      console.log('No user logged in, or missing UID.');
+      console.log("No user logged in, or missing UID.");
       return null; // If no user login or user doesn't have uid, return null
     }
     const uid = user.uid;
     try {
-      const userProfileDoc = await getDoc(doc(db, 'users', uid));
+      const userProfileDoc = await getDoc(doc(db, "users", uid));
       if (!userProfileDoc.exists()) {
         console.log(`No user profile found for UID: ${uid}`);
         return null;
@@ -104,14 +104,14 @@ export const DataProvider = ({ children }) => {
   };
 
   const fetchCartItems = async () => {
-    console.log('Current user:', user); // check current user
+    console.log("Current user:", user); // check current user
     if (!user || !user.uid) {
-      console.log('No user logged in, or missing UID.');
+      console.log("No user logged in, or missing UID.");
       return []; // if no user login or user doesn't have uid, return null array
     }
     const cartItems = [];
     const uid = user.uid;
-    const cartRef = collection(db, 'carts', uid, 'items');
+    const cartRef = collection(db, "carts", uid, "items");
     try {
       const snapshot = await getDocs(cartRef);
       if (snapshot.empty) {
@@ -158,17 +158,17 @@ export const DataProvider = ({ children }) => {
   const checkCartNotEmpty = async () => {
     if (!user) return false; 
     const uid = user.uid;
-    const cartRef = collection(db, 'carts', uid, 'items'); // Using collection to locate the user's shopping cart entry
+    const cartRef = collection(db, "carts", uid, "items"); // Using collection to locate the user's shopping cart entry
     // Create a query object and apply limit on it
     const querySnapshot = await getDocs(query(cartRef, limit(1)));
-    console.log('Snapshot empty:', querySnapshot.empty);
+    console.log("Snapshot empty:", querySnapshot.empty);
     return !querySnapshot.empty; // If snapshot. empty is true, then the shopping cart is empty, otherwise it is not empty
   };
 
   const addToCart = async (line) => {
     const uid = user.uid;
     //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
-    const placeCartCallable = httpsCallable(functions, 'placecart');
+    const placeCartCallable = httpsCallable(functions, "placecart");
 
     //2. Calling functions and passing order data
     const { data } = await placeCartCallable({...line, uid});
@@ -183,7 +183,7 @@ export const DataProvider = ({ children }) => {
   const removeCartItem = async (itemId) => {
     if (!user) return; // make sure user does exist
     const uid = user.uid;
-    const itemRef = doc(db, 'carts', uid, 'items', itemId); // Using doc to locate specific shopping cart entry documents
+    const itemRef = doc(db, "carts", uid, "items", itemId); // Using doc to locate specific shopping cart entry documents
     await deleteDoc(itemRef); // Use deleteDoc to delete the document
     // update UI
     setLines(currentLines => currentLines.filter(line => line.id !== itemId));
@@ -193,7 +193,7 @@ export const DataProvider = ({ children }) => {
   //get the data from the form data of checkout page, we should save this data to the firebase
   const checkout = async (order) => {
     //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
-    const placeOrderCallable = httpsCallable(functions, 'placeorder');
+    const placeOrderCallable = httpsCallable(functions, "placeorder");
 
     //2. Calling functions and passing order data
     const { data } = await placeOrderCallable({...order, lines})
@@ -222,7 +222,7 @@ export const DataProvider = ({ children }) => {
   const clearCartAfterConfirmation = async () => {
     if (!user) return; // make sure user exists
     const uid = user.uid;
-    const cartRef = collection(db, 'carts', uid, 'items'); // Locate the subcollection for the user's cart items
+    const cartRef = collection(db, "carts", uid, "items"); // Locate the subcollection for the user's cart items
 
     // Retrieve all cart items
     const snapshot = await getDocs(cartRef);
@@ -245,7 +245,7 @@ export const DataProvider = ({ children }) => {
 const registerNewAccount = async (userInfo) => {
   
   //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
-  const registerNewAccountCallable = httpsCallable(functions, 'registerAccount');
+  const registerNewAccountCallable = httpsCallable(functions, "registerAccount");
   console.log(userInfo);
 
   //TODO: change ID to match email - so referencing can be done by email
@@ -268,7 +268,7 @@ const getUserInfo = async (userInfo) => {
 
 const storeContactUsForm = async (formInfo) => {
   //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
-  const sendContactUsRequestCallable = httpsCallable(functions, 'contactUsSubmit');
+  const sendContactUsRequestCallable = httpsCallable(functions, "contactUsSubmit");
   console.log(formInfo);
   
   //2. Calling functions and passing form info 
