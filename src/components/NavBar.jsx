@@ -3,14 +3,26 @@ import React from 'react';
 import { Button, Image } from '@chakra-ui/react';
 import { Link } from "react-router-dom";
 import { useDataProvider } from "../components/dataProvider"
-
+import { useState, useEffect } from "react";
 import { TiShoppingCart } from "react-icons/ti";
 
 
 export function NavBar() {
 
-    const { lines } = useDataProvider();
-    const hasCartItems = lines.length > 0;
+    const { user, checkCartNotEmpty } = useDataProvider();
+    const [hasCartItems, setHasCartItems] = useState(false);
+
+    useEffect(() => {
+        if (user) {
+            const fetchCartStatus = async () => {
+                const isNotEmpty = await checkCartNotEmpty();
+                console.log('Cart not empty:', isNotEmpty);
+                setHasCartItems(isNotEmpty);
+            };
+
+            fetchCartStatus();
+        }
+    }, [user]);
 
     return (
         <nav className="nav">      

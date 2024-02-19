@@ -1,5 +1,6 @@
 import { Box, Flex, Heading, IconButton, VStack, Text, Divider, } from "@chakra-ui/react";
 import { GrClose } from "react-icons/gr";
+import React, { useEffect, useState } from 'react';
 import { useDataProvider } from "../components/dataProvider"
 import { BottomButton } from "../components/BottomButton";
 import { useNavigate } from "react-router-dom";
@@ -8,8 +9,21 @@ import { calculateOrderSubtotal, calculateOrderTax, calculateOrderTotal } from "
 //Page for cart management
 export const Cart = () => {
 
+    //we change the logic here,we fetch the item data from the database and setlines in cart page, for cancelling item 
     const navigate = useNavigate();
-    const { lines, removeCartItem } = useDataProvider();
+    const { fetchCartItems, removeCartItem, lines, setLines} = useDataProvider();
+
+    useEffect(() => {
+        // Define an asynchronous function to retrieve shopping cart items
+        const fetchItems = async () => {
+          const items = await fetchCartItems();
+          // Directly use setLines from middleware to update the status of lines
+          setLines(items); // This assumes that setLines is passed from middleware
+        };
+      
+        // Calling asynchronous functions
+        fetchItems();
+      }, [fetchCartItems]);
 
     return (
         /**
@@ -59,7 +73,7 @@ export const Cart = () => {
                         <IconButton
                             size="xs"
                             variant="ghost"
-                            onClick={() => removeCartItem(index)}
+                            onClick={() => removeCartItem(line.id)}
                             icon={<GrClose />}
                             aria-label="Remove from cart"
                         />
@@ -75,7 +89,7 @@ export const Cart = () => {
                 </Flex>
                 <Flex w="100%" justify="space-between" color="gray.600">
                     <Text fontSize={12}>Taxes (10%)</Text>
-                    <Text fontSize={12}>${calculateOrderTax(lines, 13).toFixed(2)}</Text>
+                    <Text fontSize={12}>${calculateOrderTax(lines, 10).toFixed(2)}</Text>
                 </Flex>
                 <Flex w="100%" justify="space-between">
                     <Heading fontSize={16}>Total</Heading>

@@ -66,7 +66,9 @@ export const Item = () => {
         name: "value",
       });
 
-    const onSubmit = (values) => addToCart(values);
+    const onSubmit = async (values) => {
+        await addToCart(values);
+    }
 
     /**
      * If there is no item, we will return empty, but before that, let's first use useEffect to look at the value of variant in the item

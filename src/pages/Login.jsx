@@ -16,7 +16,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 export const Login = () => {
     const toast = useToast();
     const navigate = useNavigate();
-    // const { sendLoginRequest } = useDataProvider();
+    const { getUserInfo } = useDataProvider();
     const { register, handleSubmit, formState } = useForm();
 
     const [showPassword, setShowPassword] = React.useState(false)
@@ -40,6 +40,8 @@ export const Login = () => {
     
             // Login successful, Firebase automatically handles the session and token
             console.log("Logged in user:", userCredential.user);
+
+            getUserInfo(userCredential.user);
 
             // It is possible to obtain a token, but usually not required
             // const token = await userCredential.user.getIdToken();

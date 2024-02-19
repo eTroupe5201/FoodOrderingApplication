@@ -7,7 +7,7 @@ import {
 } from "react-icons/md";
 
 const GratitudeContent = () => {
-    const { order } = useDataProvider();
+    const { order, clearCartAfterConfirmation } = useDataProvider();
 
     if (!order) return null;
 
@@ -37,16 +37,24 @@ const GratitudeContent = () => {
         );
     }
 
-    //as long as not the status of cancelled or pending, will render confirmed page
-    return (
-        <>
-            <Icon as={MdOutlineCelebration} w={24} h={24} color="gray.700" />
-            <Heading textAlign="center">Order Confirmed</Heading>
-            <Text textAlign="center">
-                See you soon! Your order has been confirmed and will be ready for pickup
-            </Text>
-        </>
-    );
+    if (order.status === 'confirmed') {
+
+        //when the status is confirmed, call this function to empty the cart, meaning that you have paid successfully!!!
+        clearCartAfterConfirmation();
+
+        //as long as not the status of cancelled or pending, will render confirmed page
+        return (
+            <>
+                <Icon as={MdOutlineCelebration} w={24} h={24} color="gray.700" />
+                <Heading textAlign="center">Order Confirmed</Heading>
+                <Text textAlign="center">
+                    See you soon! Your order has been confirmed and will be ready for pickup
+                </Text>
+            </>
+        );
+        
+    }
+    
 };
 
 

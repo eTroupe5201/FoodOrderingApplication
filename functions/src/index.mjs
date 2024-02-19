@@ -121,6 +121,34 @@ export const placeorder = onCall(async (request) => {
   return {id: order.id, order: draft, restaurant: restaurant};
 });
 
+export const placecart = onCall(async (request) => {
+  //Check if the user calling the function has passed authentication. 
+  //If the user is not authenticated, the function returns an error.
+  if (!request.auth) {
+    return new HttpsError("failed-precondition", "You are not authorized");
+  }
+
+  const uid = request.auth.uid;
+  
+  const line = request.data;
+
+  // prepare cart data
+  const cartData = {
+    ...line, // 包含商品信息
+    createdAt: admin.firestore.FieldValue.serverTimestamp(), // 添加服务器时间戳
+};
+
+
+  // save user's cart info to database
+  // Here, the carts collection is used to store each user's shopping cart. Each user's shopping cart is a document, and the ID of the document is the user's UID. 
+  // The product items in each shopping cart are stored in the items subset of the document
+  try {
+      await admin.firestore().collection('carts').doc(uid).collection('items').add(cartData);
+      return { result: "Item added to cart" };
+  } catch (error) {
+      throw new functions.https.HttpsError('internal', 'Unable to add item to cart', error);
+  }
+});
 
 // export const registerAccount = onCall(async (request) => {
 //   //Check if the user calling the function has passed authentication. 
