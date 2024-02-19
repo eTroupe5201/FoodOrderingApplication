@@ -9,7 +9,7 @@ import { useDataProvider } from "../components/dataProvider"
 *   - if account exists with provided email, route to Login page
 *   - if no account exists with provided email, create account and store user info in DB. Upon return, route back to Home page
 */
-export const Register = () => {
+export const Register = ({saveData}) => {
     const toast = useToast();
     const navigate = useNavigate();
     const { registerNewAccount } = useDataProvider();
@@ -26,6 +26,11 @@ export const Register = () => {
     const handleShowConfirmPassword= () => setShowConfirmPassword(!showConfirmPassword)
 
     const handleRegister = async (data) => {
+
+        try {
+            saveData(data);
+        } catch (error) {}; //console.log("This is a test call - will throw error in dev/prod")};
+
         //emails and passwords match
         if (data.email === data.confirmEmail && data.password === data.confirmPassword) {
             /**
@@ -33,30 +38,36 @@ export const Register = () => {
              * manage the user's session and JWT token. So in most cases we don't need to manually handle JWT tokens on the front end 
              * unless we need to send them to our own server for validation or other processing.
              */
-            const result = await registerNewAccount(data); 
-            
-            //if result is not blank, means new account created
-            if (result.success) {
-                toast ({    
-                    addRole: true,
-                    title: "Your account was successfully created.",
-                    position: 'top', 
-                    status: 'success',
-                    isClosable: true,
-                });
+            try {
+                console.log("valid registration input");
+                const result = await registerNewAccount(data); 
+                
+                //if result is not blank, means new account created
+                if (result.success) {
+                    toast ({    
+                        addRole: true,
+                        title: "Your account was successfully created.",
+                        position: 'top', 
+                        status: 'success',
+                        isClosable: true,
+                    });
+                }
+                //else, existing account
+                else {
+                    toast ({    
+                        addRole: true,
+                        title: "The email provided is associated with an existing account.",
+                        position: 'top', 
+                        status: 'info',
+                        isClosable: true,
+                    });
+                }
+                navigate("/login");
+            } catch (error) {
+                console.log(error);
             }
-            //else, existing account
-            else {
-                toast ({    
-                    addRole: true,
-                    title: "The email provided is associated with an existing account.",
-                    position: 'top', 
-                    status: 'info',
-                    isClosable: true,
-                });
-            }
-             navigate("/login");
         }        
+        else (console.log("passwords or emails do not match"));
     }
 
     return (
@@ -69,7 +80,8 @@ export const Register = () => {
                             <FormLabel>First Name</FormLabel>
                             <Input 
                                 id='firstName'
-                                {...register("firstName", { required: true})}
+                                title='register-first-name'
+                                {...register("firstName", { required: true, pattern:/(^[a-zA-Z,'-][a-zA-Z\s,'-]{0,20}[a-zA-Z]$)/})}
                             />
                             <FormErrorMessage>Required</FormErrorMessage>
                         </FormControl>
@@ -77,7 +89,8 @@ export const Register = () => {
                             <FormLabel>Last Name</FormLabel>
                             <Input 
                                 id='lastName'
-                                {...register("lastName", { required: true })}
+                                title='register-last-name'
+                                {...register("lastName", { required: true, pattern:/(^[a-zA-Z,'-][a-zA-Z\s,'-]{0,20}[a-zA-Z]$)/ })}
                             />
                             <FormErrorMessage>Required</FormErrorMessage>
                         </FormControl>
@@ -85,6 +98,7 @@ export const Register = () => {
                             <FormLabel >Email Address</FormLabel>
                             <Input 
                                 id='email'
+                                title='register-email'
                                 type='email'
                                 {...register("email", { 
                                     required: true,
@@ -106,6 +120,7 @@ export const Register = () => {
                         <FormLabel>Confirm Email Address</FormLabel>
                             <Input 
                                 id='confirmEmail'
+                                title='register-confirm-email'
                                 type='confirmEmail'
                                 {...register("confirmEmail", { 
                                     required: true,
@@ -118,16 +133,17 @@ export const Register = () => {
                                         else {
                                             setEmailErrorMsg("Required");
                                             setEmailsMatch(true);
-                                        }
+                                        } 
                                     }
                                 })}
                             />
                             <FormErrorMessage>{emailErrorMsg}</FormErrorMessage>
                         </FormControl>
-                        <FormControl id='phoneField'>
+                        <FormControl id='phoneField' >
                             <FormLabel>Phone Number (optional)</FormLabel>
                             <Input 
                                 type='tel'
+                                title='register-phone'
                                 {...register("phone")}
                             />
                         </FormControl>
@@ -137,6 +153,7 @@ export const Register = () => {
                             <InputGroup>
                                 <Input 
                                     id="password"
+                                    title='register-password'
                                     type={showPassword ? 'text' : 'password'}
                                     {...register("password", { 
                                         required: true,
@@ -148,12 +165,13 @@ export const Register = () => {
                                             else {
                                                 setPasswordErrorMsg("Required");
                                                 setPasswordsMatch(true);
-                                            }
+                                            } //TODO: error for user , pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/   //eight char, one upper, one lower, one num
                                         } 
                                     })}
                                 />
                                 <InputRightElement width='4.5rem' h='48px'>
                                     <Box  
+                                        title='show-password-button'
                                         bg='#A4A1A2' 
                                         w='3.5rem' 
                                         h='2rem' 
@@ -174,6 +192,7 @@ export const Register = () => {
                             <InputGroup>
                                 <Input 
                                     id="confirmPassword"
+                                    title='register-confirm-password'
                                     type={showConfirmPassword ? 'text' : 'password'}
                                     {...register("confirmPassword", { 
                                         required: true,
@@ -191,6 +210,7 @@ export const Register = () => {
                                 />
                                 <InputRightElement width='4.5rem' h='48px'>
                                     <Box 
+                                        title='show-confirm-password-button'
                                         bg='#A4A1A2' 
                                         w='3.5rem' 
                                         h='2rem' 
@@ -210,6 +230,7 @@ export const Register = () => {
                             {"Passwords must contain at least 8 characters, one lowercase letter, one uppercase letter, and one number."} 
                         </Text>
                         <Box 
+                            title='register-register-button'
                             align='center'
                             as='button' 
                             pt='0.25rem' 

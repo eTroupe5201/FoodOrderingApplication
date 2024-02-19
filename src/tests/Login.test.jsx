@@ -1,21 +1,25 @@
-import {fireEvent, render, screen} from "@testing-library/react";
+import {render, screen} from "@testing-library/react";
 import {Login} from "../pages/Login";
 import { BrowserRouter } from "react-router-dom";
 import { afterEach, describe, it, expect, vi} from 'vitest';
 import { act } from "react-dom/test-utils";
+import userEvent from "@testing-library/user-event";
 
 //Firebase integration tests must be done within functions > test due to firebase/analytics restrictions 
-    //TODO: integration tests
-    //should show FormErrorMessage when all fields are not entered 
-    //should not show FormErrorMessage when component is initially loaded
-    //should check for valid credentials
-    //should navigate Home if Login successful
+    //TODO: should navigate Home if Login successful
+    //TODO: should navigate to Register if clicked
+    //TODO: should navigate to ForgotPassword if clicked
 
-    
-describe("LoginPage with mock of console.log", () => {
+describe("Login page", () => {
     let emailInput;
     let passwordInput; 
-    let submitButton; 
+
+    function setup(jsx) {
+        return {
+            user: userEvent.setup(),
+            ...render(jsx),
+        };
+    }
 
     afterEach(() => { vi.clearAllMocks();});
 
@@ -48,6 +52,63 @@ describe("LoginPage with mock of console.log", () => {
         expect(registerButton).toBeInTheDocument();
     })
 
+    it("should not process login if email input is invalid", async () => {
+        const mockSave = vi.fn();
+        const {user} = setup(
+            <BrowserRouter>
+                <Login saveData={mockSave}/>
+            </BrowserRouter>);
+
+        emailInput = screen.getByTitle('login-email');
+        passwordInput = screen.getByTitle('login-password');
+
+        await act(async () => {
+            await user.type(emailInput, 'testing.com');
+            await user.type(passwordInput, 'test1234');
+            await user.click(screen.getByTitle('login-login-button'));
+        });
+        
+        expect(mockSave).not.toBeCalled();
+    });
+
+    it("should not process login if password input is invalid", async () => {
+        const mockSave = vi.fn();
+        const {user} = setup(
+            <BrowserRouter>
+                <Login saveData={mockSave}/>
+            </BrowserRouter>);
+
+        emailInput = screen.getByTitle('login-email');
+        passwordInput = screen.getByTitle('login-password');
+        
+        await act(async () => {
+            await user.type(emailInput, 'testing@test.com');
+            await user.type(passwordInput, " ");
+            await user.click(screen.getByTitle('login-login-button'));
+        });
+        
+        expect(mockSave).not.toBeCalled();
+        });
+
+    it("should process login if email and password input are valid", async () => {
+        const mockSave = vi.fn();
+        const {user} = setup(
+            <BrowserRouter>
+                <Login saveData={mockSave}/>
+            </BrowserRouter>);
+
+        emailInput = screen.getByTitle('login-email');
+        passwordInput = screen.getByTitle('login-password');
+        
+        await act(async () => {
+            await user.type(emailInput, 'testing@test.com');
+            await user.type(passwordInput, "test123");
+            await user.click(screen.getByTitle('login-login-button'));
+        });
+        
+        expect(mockSave).toBeCalled();
+    });
+
     // it("should navigate to 'Register' page when the button is clicked", () => {
     //     render( 
     //         <BrowserRouter>
@@ -64,4 +125,8 @@ describe("LoginPage with mock of console.log", () => {
     // })
 
         //should navigate to Forgot Password if button clicked 
+
+
 });
+
+

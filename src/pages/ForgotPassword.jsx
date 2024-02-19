@@ -9,7 +9,7 @@ import { sendPasswordResetEmail } from "firebase/auth";
 /* Firebase Authentication provides a function to reset a user's password, which  
 *  involves sending a password reset link to the user's registered email address.
 */
-export const ForgotPassword = () => {
+export const ForgotPassword = ({saveData}) => {
     const [email, setEmail] = useState("");
     const toast = useToast();
     const navigate = useNavigate();
@@ -19,8 +19,13 @@ export const ForgotPassword = () => {
     };
 
     const handleForgotPasswordEmail = async () => {
+        try {
+            saveData(data);
+        } catch (error) {}; //console.log("This is a test call - will throw error in dev/prod")};
+
         //check email field is empty or not
-        if (!email) {
+        if (!email || email.trim().length) {
+            console.log("invalid email - empty string or only whitespace");
             toast({
                 title: "Please enter your email address.",
                 status: "warning",
@@ -34,6 +39,7 @@ export const ForgotPassword = () => {
         //if not empty, we will call this firebase function directly and then we can go to our email box to rest the password
         sendPasswordResetEmail(auth, email)
             .then(() => {
+                console.log("Success - password email sent");
                 toast({
                     title: "Password reset email sent.",
                     description: "Check your email for the password reset instructions.",
@@ -45,6 +51,7 @@ export const ForgotPassword = () => {
                 navigate('/login');
             })
             .catch((error) => {
+                console.log("invalid email - not a valid format");
                 toast({
                     title: "An error occurred.",
                     description: 'Invalid email address', //error.message, custom message for user friendliness
@@ -63,6 +70,7 @@ export const ForgotPassword = () => {
                     <Text fontFamily="'Raleway', sans-serif" fontSize='30px' fontWeight='bold'> To reset your password, please enter your email address. </Text>
                     <Input
                         id='email-forgot'
+                        title='forgot-password-email'
                         type='email'
                         value={email} 
                         onChange={handleEmailChange} 
@@ -76,6 +84,7 @@ export const ForgotPassword = () => {
                     />
                     <Box 
                         as='button'  
+                        title='forgot-password-button'
                         mt='1rem'
                         bg='#fff' 
                         color='#000000'

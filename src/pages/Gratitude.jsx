@@ -12,6 +12,7 @@ const GratitudeContent = () => {
     if (!order) return null;
 
     if (order.status === "pending") {
+        console.log("order pending");
         return (
             <>
                 <Icon as={MdHourglassBottom} w={24} h={24} color="gray.700" />
@@ -25,6 +26,7 @@ const GratitudeContent = () => {
     }
 
     if (order.status === "cancelled") {
+        console.log("order cancelled");
         return (
             <>
                 <Icon as={MdCancel} w={24} h={24} color="gray.700" />
@@ -38,7 +40,7 @@ const GratitudeContent = () => {
     }
 
     if (order.status === 'confirmed') {
-
+        console.log("order confirmed");
         //when the status is confirmed, call this function to empty the cart, meaning that you have paid successfully!!!
         clearCartAfterConfirmation();
 
@@ -58,7 +60,6 @@ const GratitudeContent = () => {
 };
 
 
-//Page for logging in or registering 
 export const Gratitude = () => {
     return (
         <VStack gap={4} mt={4} mx={4}>

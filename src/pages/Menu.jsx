@@ -11,7 +11,7 @@ export const Menu = () => {
 
     return (
         //I set up 3 categories in one line temporarily, can adjust this syntax later
-        <Grid templateColumns="repeat(3, minmax(400px, 1fr))" gap={6} alignItems="flex-start">
+        <Grid title="menu-grid" templateColumns="repeat(3, minmax(400px, 1fr))" gap={6} alignItems="flex-start">
             {categories.map((category) => (
                 <Box key={category.id} p={5} boxShadow="md" >
                     <Box p={2} color="gray.700" bg="orange.100" borderRadius="md" mb={3} _hover={{ bg: "orange.300" }}>

@@ -99,7 +99,7 @@ export const Contact = () => {
                             <FormLabel>First Name</FormLabel>
                             <Input 
                                 id='firstName'
-                                {...register("firstName", { required: true})}
+                                {...register("firstName", { required: true, pattern:/(^[a-zA-Z,'-][a-zA-Z\s,'-]{0,20}[a-zA-Z]$)/})}
                             />
                             <FormErrorMessage>Required</FormErrorMessage>
                         </FormControl>
@@ -107,7 +107,7 @@ export const Contact = () => {
                             <FormLabel>Last Name</FormLabel>
                             <Input 
                                 id='lastName'
-                                {...register("lastName", { required: true })}
+                                {...register("lastName", { required: true, pattern:/(^[a-zA-Z,'-][a-zA-Z\s,'-]{0,20}[a-zA-Z]$)/ })}
                             />
                             <FormErrorMessage>Required</FormErrorMessage>
                         </FormControl>

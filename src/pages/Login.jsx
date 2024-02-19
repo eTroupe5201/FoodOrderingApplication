@@ -11,7 +11,7 @@ import { useDataProvider } from "../components/dataProvider"
 * Route to Register page if button is clicked
 * Route to ForgotPassword page if button is clicked
 */
-export const Login = () => {
+export const Login = ({saveData}) => {
     const {setUserAccount} = useDataProvider();
     const toast = useToast();
     const navigate = useNavigate();
@@ -25,6 +25,11 @@ export const Login = () => {
     const navigateToResetPassword = () => {navigate('/forgotpassword');}
 
     const handleLogin = async (data) => {
+
+        try {
+            saveData(data);
+        } catch (error) {}; //console.log("This is a test call - will throw error in dev/prod")};
+
         try {
             console.log(data);
             /**
@@ -59,7 +64,6 @@ export const Login = () => {
                 status: 'error', 
                 isClosable: true,
             });
-            setEmailInvalid(true);
             console.log("Failed login");
         }
     };
@@ -89,7 +93,7 @@ export const Login = () => {
                                     title='login-password'
                                     id="password"
                                     type={showPassword ? 'text' : 'password'}
-                                    {...register("password", { required: true})}
+                                    {...register("password", { required: true, pattern: /(.|\s)*\S(.|\s)/})} //checks for whitespace
                                 />
                                 <InputRightElement width='4.5rem' h='48px'>
                                     <Box  
