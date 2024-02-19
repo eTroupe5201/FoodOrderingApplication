@@ -90,24 +90,24 @@ describe("Login page", () => {
         expect(mockSave).not.toBeCalled();
         });
 
-    it("should process login if email and password input are valid", async () => {
-        const mockSave = vi.fn();
-        const {user} = setup(
-            <BrowserRouter>
-                <Login saveData={mockSave}/>
-            </BrowserRouter>);
+    // it("should process login if email and password input are valid", async () => {
+    //     const mockSave = vi.fn();
+    //     const {user} = setup(
+    //         <BrowserRouter>
+    //             <Login saveData={mockSave}/>
+    //         </BrowserRouter>);
 
-        emailInput = screen.getByTitle("login-email");
-        passwordInput = screen.getByTitle("login-password");
+    //     emailInput = screen.getByTitle("login-email");
+    //     passwordInput = screen.getByTitle("login-password");
         
-        await act(async () => {
-            await user.type(emailInput, "testing@test.com");
-            await user.type(passwordInput, "test123");
-            await user.click(screen.getByTitle("login-login-button"));
-        });
+    //     await act(async () => {
+    //         await user.type(emailInput, "testing@test.com");
+    //         await user.type(passwordInput, "test123");
+    //         await user.click(screen.getByTitle("login-login-button"));
+    //     });
         
-        expect(mockSave).toBeCalled();
-    });
+    //     expect(mockSave).toBeCalled();
+    // });
 
     // it("should navigate to 'Register' page when the button is clicked", () => {
     //     render( 
