@@ -42,25 +42,31 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
     - uses: actions/checkout@v2
-
+  
     # New step to set up Google Credentials
     - name: Set up Google Cloud credentials
       run: |
         echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}" | base64 -d > "$HOME/gcloud.json"
         echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json" >> $GITHUB_ENV
       shell: bash
-
-    - name: Install Dependencies for Firebase Functions
+  
+    - name: Clear Cache and Reinstall Dependencies
       run: |
         cd functions
-        npm install
-    
+        rm -rf node_modules package-lock.json 
+        npm install                           
+  
     - name: Install ESLint React Plugin
       run: |
         cd functions
         npm install eslint-plugin-react@latest --save-dev
   
-    - name: Login to Firebase
+    - name: Run ESLint
+      run: |
+        cd functions
+        npx eslint . --ext js,jsx --report-unused-disable-directives 
+  
+    - name: Login to Firebase and Deploy
       uses: w9jds/firebase-action@master
       with:
         args: deploy

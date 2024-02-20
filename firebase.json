@@ -14,7 +14,7 @@
         "firebase-debug.*.log"
       ],
       "predeploy": [
-        "npx eslint . --ext js,jsx --report-unused-disable-directives"
+        "cd functions && npx eslint . --ext js,jsx --report-unused-disable-directives"
       ]
     }
   ],
