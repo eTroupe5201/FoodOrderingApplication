@@ -1,4 +1,4 @@
-import { Text, Image, VStack, FormControl, FormLabel, Textarea, Input, FormErrorMessage, CheckboxGroup, Checkbox, RadioGroup, Radio, Box, Flex } from "@chakra-ui/react";
+import { Text, Image, VStack, FormControl, FormLabel, Textarea, Input, Center, FormErrorMessage, CheckboxGroup, Checkbox, RadioGroup, Radio, Box, Flex, AbsoluteCenter } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
@@ -119,13 +119,23 @@ export const Item = () => {
      */
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <VStack gap={4} pb={100} alignItems="flex-start">
-                <Image src={item.image?.src} w="100%" maxH="380px" objectFit="cover" />
-                <VStack gap={4} p={4} w="100%" alignItems="flex-start">
-                    <Text> {item.description} </Text>
+            <Center>
+            <VStack  mt="25px"  gap={4} pb={100}  width="90%" justifyContent={"center"}>
+           <Text fontFamily="'Great Vibes', cursive" padding="15px"  
+           fontSize={{base: '30px',sm: '35px', md:"40px"}}>{item.label}</Text>
+                   
+                <Image  
+                border="black 3px outset"
+                borderRadius="25px"
+                src={item.image?.src} 
+                w={{base: '20em',sm: '20em', md:"20em", lg:"30em"}} 
+                maxH={{base: '20em', sm: '20em', md:"30em",lg:"40em"}}   />
+                
+                <VStack gap={4}  p={4} w="100%">
+                    <Text fontFamily="'Raleway', sans-serif" fontWeight="bold"> {item.description} </Text>
                     {item.variants.map((variant, index) => (
                         <FormControl key={variant.type + index}>
-                            <FormLabel>
+                            <FormLabel >
                                 {variant.type}
                                 {variant.isRequired && (
                                 <Text as="span" fontSize={12} color="gray.500">
@@ -188,14 +198,14 @@ export const Item = () => {
                                 }}
                             >
                                 {/* the function of VStack is align all items in the center */}
-                                <VStack alignItems="flex-start" border="1px solid" borderColor="gray.200" borderRadius={4}>
+                                <VStack border="1px solid" borderColor="gray.200" borderRadius={4}>
                                     {variant.choices.map((choice, index, arr) => (
                                         <Box 
                                             key={`${variant.type}_${choice.label}_${index}`} 
                                             px={4} 
                                             py={2} 
                                             w="100%" 
-                                            borderColor="gray.200" 
+                                            borderColor="black" 
                                             borderBottomWidth={arr.length - 1 === index ? 0 : 1} 
                                             mt="0px !important"
                                         >
@@ -219,9 +229,9 @@ export const Item = () => {
                         </FormControl>
                     ))}
                     <FormControl>
-                        <FormLabel>Special Instructions</FormLabel>
-                            <Textarea
-                            placeholder="pepper / salt / cutluty..."
+                        <FormLabel >Special Instructions</FormLabel>
+                            <Textarea bg="black" color="white"
+                            placeholder="pepper / salt / cutlery..."
                             {...register("instructions")}
                             />
                     </FormControl>
@@ -231,6 +241,7 @@ export const Item = () => {
                         <Input
                             type="number"
                             defaultValue={1}
+                            bg="black" color="white"
                             {...register("quantity", { min: 1, valueAsNumber: true })}
                         />
                         {/*Optional Chaining is used here. Its function is to obtain the type attribute if errors. quantity exists. 
@@ -243,7 +254,8 @@ export const Item = () => {
                     </FormControl>
                 </VStack>
             </VStack>
-            <BottomButton
+            </Center>
+            <BottomButton 
                 label="Add to Cart"
                 total={calculationItemTotal(
                     fields,

@@ -65,92 +65,263 @@ export const Login = ({saveData}) => {
             });
             console.log("Failed login");
         }
-    };
+    }
 
+    const navigate = useNavigate();
+    const navigateToRegister = () => {
+        //TODO go to Sign Up page
+        //TODO if email entered, send with Sign Up page req
 
-    return (
-        <><form className='Login' title='Login' onSubmit={handleSubmit(handleLogin)}> 
-            <Flex alignContent='center' justifyContent='center'>
-                <Box title='login-form-box' id='login-form-box' bg='#000000' color='#fff' w='35rem' height='100%' m='2rem' p='1.5rem'> 
-                    <VStack>
-                        <Text fontSize='30px' fontWeight='bold' mb='1rem'> Log In or Register </Text>
+        navigate('/register');
+    }
+
+    const handleForgotPwEmail = (event) => { 
+        //TODO verify that provided email has an existing account in the system - if not, take them to Signup page 
+        //TODO generate 6 digit reset code (email)
+        //TODO email code to provided address
+
+        document.getElementById('pw-reset-form-box').style.display= "none";
+        document.getElementById('email-code-form-box').style.display= "block";
+    }
+
+    const handleResetCodeValidation = (event) => { 
+        //TODO check that provided code matches state code
+
+        document.getElementById('email-code-form-box').style.display= "none";
+        document.getElementById('pw-change-form-box').style.display= "block";
+    }
+
+    const handlePasswordChangeSave = (event) => { 
+        //TODO verify passwords match and meet standards
+        //TODO overwrite database PW for current set email
+        document.getElementById('pw-change-form-box').style.display= "none";
+        document.getElementById('login-form-box').style.display= "block";
+        resetFields();
+    }
+
+    const baseLoginOrRegisterForm = (
+        <Box  w={{base:"25em", sm:"30em", md:"35em"}} title='login-form-box' id='login-form-box' bg='#000000' color='#fff' height='100%' m='2rem' p='1.5rem' > 
+            <VStack >
+                <Text   fontSize={{ base: "20px", md: "25px"}} 
+                fontWeight='bold' 
+                mb='1rem'> SIGN IN </Text>
+                <Input 
+                    id='email'
+                    type='email'
+                    value={email} 
+                    onChange={handleEmail} 
+                    placeholder="enter email address"
+                    border="tan 2px outset"
+              
+                />
+                <InputGroup>
+                    <Input 
+                        id="password"
+                        type={show ? 'text' : 'password'}
+                        value={password} 
+                        onChange={handlePassword} 
+                        placeholder="enter password"
+                        border="tan 2px outset"
+                        w={{base:"20em", sm:"26em", md:"27em"}}
                         
-                        <FormControl id='emailField' isInvalid={!!formState?.errors?.email?.type}>
-                            <FormLabel>Email Address</FormLabel>
-                            <Input 
-                                title='login-email'
-                                id='email'
-                                {...register("email", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/})}
-                            />
-                            <FormErrorMessage title='emailError'>{"Email address is invalid or does not have an account associated with it"}</FormErrorMessage>
-                        </FormControl>
-
-                        <FormControl id='passwordField' isInvalid={!!formState?.errors?.password?.type}>
-                            <FormLabel>Password</FormLabel>
-                            <InputGroup>
-                                <Input 
-                                    title='login-password'
-                                    id="password"
-                                    type={showPassword ? "text" : "password"}
-                                    {...register("password", { required: true, pattern: /(.|\s)*\S(.|\s)/})} //checks for whitespace
-                                />
-                                <InputRightElement width='4.5rem' h='48px'>
-                                    <Box  
-                                        title='login-show-password-button'
-                                        bg='#A4A1A2' 
-                                        w='3.5rem' 
-                                        h='2rem' 
-                                        borderRadius='md' 
-                                        align='center'
-                                        pt='0.25rem' 
-                                        onClick={handleShowPassword} 
-                                    >
-                                        {showPassword ? "Hide" : "Show"}
-                                    </Box>
-                                </InputRightElement>
-                            </InputGroup>
-                            <FormErrorMessage>{"Incorrect password"}</FormErrorMessage>
-                        </FormControl>
-
-                        <Center 
-                            title='login-forgot-password'
-                            color='#fff'
-                            fontWeight='bold'
-                            alignSelf='end'
-                            fontSize='20px'
-                            onClick={navigateToResetPassword} 
-                            > 
-                            Forgot Password?
-                        </Center>
+                        
+                    />
+                    <InputRightElement width='4.5rem' h='48px'>
                         <Box 
-                            title='login-login-button'
-                            as='button'  
-                            mt='1rem'
-                            bg='#fff' 
-                            color='#000000'
-                            h='40px'
-                            w='250px'
+                        
+                            as='button' 
+                            bg='white' 
+                            color="black"
+                            w='3.5rem' 
+                            h='25px' 
                             fontWeight='bold'
-                            fontSize='20px'
-                            borderRadius='md'
-                            > 
-                            Log In to Your Account
+                            fontSize="11px"
+                            borderRadius='md' 
+                            border="tan 2px outset"
+                            _hover={{ boxShadow: "0 0 5px 1px tan" }}
+                            onClick={handleShowPassword} 
+                            mb="9px"
+                        >
+                            {show ? 'Hide' : 'Show'}
                         </Box>
-                        <Center 
-                            title='login-register-button'
-                            mt='0.5rem'
-                            bg='#fff' 
-                            color='#000000'
-                            h='40px'
-                            w='250px'
-                            fontWeight='bold'
-                            fontSize='20px'
-                            borderRadius='md'
-                            onClick={navigateToRegister} 
-                            > 
-                            Register for an Account
-                        </Center>
-                    </VStack>
+                    </InputRightElement>
+                </InputGroup>
+                <Box 
+                    as='button'  
+                    color='#fff'
+                    fontWeight='bold'
+                    alignSelf='end'
+                    fontSize="11px"
+                    h='40px'
+                    w='50%'
+                    margin="2%"
+                    border="tan 2px outset"
+                    _hover={{ boxShadow: "0 0 5px 1px linen" }}
+                    onClick={emailPromptForReset} 
+                    > 
+                    Forgot Password?
+                </Box>
+                <Box 
+                    as='button'  
+                 
+                    mt="10%"
+                    _hover={{ boxShadow: "0 0 5px 1px linen" }}
+                    color='white'
+                    h='40px'
+                    w='70%'
+                    fontWeight='bold'
+                    fontSize="12px"
+                    border="tan 2px outset"
+                    borderRadius='md'
+                    background="black"
+                    onClick={handleLogin} 
+                    > 
+                    CONTINUE
+                </Box>
+                <Box 
+                      _hover={{ boxShadow: "0 0 5px 1px linen" }}
+                         border="tan 2px outset"
+                    as='button'  
+                    mt='0.5rem'
+                    
+                    color='white'
+                    h='40px'
+                    w='70%'
+                    fontWeight='bold'
+                    fontSize="12px"
+                    borderRadius='md'
+                    background="black"
+                    onClick={navigateToRegister} 
+                    > 
+                    REGISTER
+                </Box>
+            </VStack>
+        </Box>
+    );
+
+    const sendEmailCodeForm = (
+        <Box 
+        borderRadius="25px" border="tan 2px outset"
+         title='pw-reset-form-box' id='pw-reset-form-box' 
+         display='none' bg='#000000' color='#fff' height='2%' m='2rem' mb="10em"p='1.5rem' w={{base:"25em", sm:"30em"}} > 
+            <VStack>
+                <Text  fontSize="15px"  fontWeight='bold'> To reset your password, please enter your email address. </Text>
+                <Text  fontSize="15px"  fontWeight='bold' mb='1rem'> We will email you a code to verify that it is you attempting to reset the password. </Text>
+                <Input 
+                    id='email'
+                    type='email'
+                    value={email} 
+                    onChange={handleEmail} 
+                    placeholder="enter email address"
+                    
+                />
+                <Box 
+                    as='button'  
+                    mt='1rem'
+                    bg='black' 
+                    color='white'
+                    h='40px'
+                    w='250px'
+                    fontWeight='bold'
+                    fontSize="15px"
+                    borderRadius='md'
+                    border="tan 2px outset"
+                    _hover={{ boxShadow: "0 0 5px 1px linen" }}
+                    onClick={handleForgotPwEmail} 
+                    > 
+                    Send Code
+                </Box>
+            </VStack>
+        </Box>
+    );
+
+    const enterEmailCodeForm = (
+        <Box title='email-code-form-box' id='email-code-form-box' display='none' bg='#000000' color='#fff' w='35rem' height='100%' m='2rem' p='1.5rem'> 
+            <VStack>
+                <Text fontSize='30px' fontWeight='bold' mb='1rem'> Enter the 6 digit code that was sent to the email address tied to your account. </Text>
+                <Input 
+                    id='reset-code'
+                    value={resetCode} 
+                    onChange={handleResetCode} 
+                    placeholder="enter 6 digit code here"
+                />
+                <Box 
+                    as='button'  
+                    mt='1rem'
+                    bg='#fff' 
+                    color='#000000'
+                    h='40px'
+                    w='250px'
+                    fontWeight='bold'
+                    fontSize='20px'
+                    borderRadius='md'
+                    onClick={handleResetCodeValidation} 
+                    > 
+                    Verify Code
+                </Box>
+            </VStack>
+        </Box>
+    );
+
+    const passwordChangeForm = (
+        <Box title='pw-change-form-box' id='pw-change-form-box' display='none' bg='#000000' color='#fff' w='35rem' height='100%' m='2rem' p='1.5rem'> 
+            <VStack>
+                <Text fontSize='30px' fontWeight='bold' mb='1rem'> Enter your new password. </Text>
+                <InputGroup>
+                    <Input 
+                        id="password"
+                        type={show ? 'text' : 'password'}
+                        value={password} 
+                        onChange={handlePassword} 
+                        placeholder="enter password"
+                    />
+                    <InputRightElement width='4.5rem' h='48px'>
+                        <Box 
+                            as='button' 
+                            bg='#A4A1A2' 
+                            w='3.5rem' 
+                            h='2rem' 
+                            borderRadius='md' 
+                            onClick={handleShowPassword} 
+                        >
+                            {show ? 'Hide' : 'Show'}
+                        </Box>
+                    </InputRightElement>
+                </InputGroup>
+                <InputGroup>
+                    <Input 
+                        id="password2"
+                        type={show2 ? 'text' : 'password'}
+                        value={password2} 
+                        onChange={handlePassword2} 
+                        placeholder="enter password again"
+                    />
+                    <InputRightElement width='4.5rem' h='48px'>
+                        <Box 
+                            as='button' 
+                            bg='#A4A1A2' 
+                            w='3.5rem' 
+                            h='2rem' 
+                            borderRadius='md' 
+                            onClick={handleShowPassword2} 
+                        >
+                            {show2 ? 'Hide' : 'Show'}
+                        </Box>
+                    </InputRightElement>
+                </InputGroup>
+                <Box 
+                    as='button'  
+                    mt='1rem'
+                    bg='#fff' 
+                    color='#000000'
+                    h='40px'
+                    w='250px'
+                    fontWeight='bold'
+                    fontSize='20px'
+                    borderRadius='md'
+                    onClick={handlePasswordChangeSave} 
+                    > 
+                    Save New Password
                 </Box>
             </Flex>
         </form></>
