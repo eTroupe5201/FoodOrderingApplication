@@ -14,7 +14,7 @@
         "firebase-debug.*.log"
       ],
       "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint"
+        "./node_modules/.bin/eslint . --ext js,jsx --report-unused-disable-directives"
       ]
     }
   ],
