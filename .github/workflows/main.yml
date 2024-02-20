@@ -62,29 +62,29 @@ jobs:
       env:
         GCP_SA_KEY: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64}}
 
-  create-release:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      actions: write
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    steps:
-    - uses: actions/checkout@v2
+  # create-release:
+  #   needs: build-and-test
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: write
+  #     actions: write
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #   steps:
+  #   - uses: actions/checkout@v2
   
-    - name: Extract version from package.json
-      run: echo "VERSION=$(cat package.json | jq -r .version)" >> $GITHUB_ENV
-      shell: bash
+  #   - name: Extract version from package.json
+  #     run: echo "VERSION=$(cat package.json | jq -r .version)" >> $GITHUB_ENV
+  #     shell: bash
   
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{ github.run_number }}
-        release_name: Release v${{ github.run_number }}
-        draft: false
-        prerelease: false
+  #   - name: Create Release
+  #     id: create_release
+  #     uses: actions/create-release@v1
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     with:
+  #       tag_name: v${{ github.run_number }}
+  #       release_name: Release v${{ github.run_number }}
+  #       draft: false
+  #       prerelease: false
         
       
