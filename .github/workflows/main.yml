@@ -49,8 +49,12 @@ jobs:
         echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}" | base64 -d > "$HOME/gcloud.json"
         echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json" >> $GITHUB_ENV
       shell: bash
-  
 
+    - name: Install Dependencies for Firebase Functions
+      run: |
+        cd functions
+        npm install
+  
     - name: Login to Firebase
       uses: w9jds/firebase-action@master
       with:

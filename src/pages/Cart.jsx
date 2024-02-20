@@ -42,7 +42,7 @@ export const Cart = () => {
                 variant: "spicy"
          * 
          */
-        <VStack px={4} py={2} mt={4}>
+        <VStack px={4} py={2} mt={4} font-family="'Raleway', sans-serif">
             {lines.map((line, index) => (
                 <Flex key={index} justify="space-between" w="100%">
                     <Heading flex={1} fontSize={16} maxW={50}>
@@ -54,7 +54,7 @@ export const Cart = () => {
                         <Heading fontSize={16}>{line.label}</Heading>
                         {line.value?.map((value, valueIndex) => (
                              /* 2* beef burger spicy saurce */
-                            <Text key={valueIndex} color="gray.600">{value.value}</Text>
+                            <Text key={valueIndex} color="red">{value.value}</Text>
                         ))}
                     </Box>
                     <Box flex={1}>
@@ -76,6 +76,7 @@ export const Cart = () => {
                             onClick={() => removeCartItem(line.id)}
                             icon={<GrClose />}
                             aria-label="Remove from cart"
+                            
                         />
                     </Flex>
                 </Flex>

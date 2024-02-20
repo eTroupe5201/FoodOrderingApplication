@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
- 
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Flex, Heading, Image, Link, Text, Grid } from "@chakra-ui/react";
+///* eslint-disable react/jsx-key */
+import { Accordion, AccordionButton, AccordionItem, AccordionPanel,Center, Box, SimpleGrid, Heading, Image, Link, Text } from "@chakra-ui/react";
 import { useDataProvider } from "../components/dataProvider";
 import { useNavigate } from "react-router-dom";
 
@@ -11,47 +11,65 @@ export const Menu = () => {
 
     return (
         //I set up 3 categories in one line temporarily, can adjust this syntax later
-        <Grid title="menu-grid" templateColumns="repeat(3, minmax(400px, 1fr))" gap={6} alignItems="flex-start">
-            {categories.map((category) => (
-                <Box key={category.id} p={5} boxShadow="md" >
-                    <Box p={2} color="gray.700" bg="orange.100" borderRadius="md" mb={3} _hover={{ bg: "orange.300" }}>
-                        <Heading as="h2" fontSize="20px" mb={1} >
+        <Center> 
+            <Box title='menu-grid' className="MenuContainer" mt="30px" maxW="90%" justifyContent="center" p={5}>
+                {categories.map((category) => ( 
+
+                <Box  className="Menu" key={category.id} p={5} boxShadow="md"  width="100%">
+                    <Box p={2}  borderRadius="md" mb={3}>
+                        <Heading as="h2" fontFamily="'Great Vibes', cursive" padding="15px" fontSize={{ base: "30px", md: "40px", lg: "50px" }} mb={1} >
                             {category.title}
                         </Heading>
                         {category.description && (
-                            <Text fontSize="14px" color="gray.600">
+                            <Text padding="15px"fontSize={{ base: "12px", md: "13px", lg: "14px" }} color="white">
                                 {category.description}
                             </Text>
                         )}
                     </Box>
                     
-                    <Image src={category.image?.src} objectFit="cover" w="full" h="200px" mb={3} />
-                    
+                    {/* <Image src={category.image?.src} objectFit="cover" w="full" h="200px" mb={3} /> */}
+                     <SimpleGrid  templateColumns={{base:'repeat(1, 1fr)', sm:'repeat(2, 1fr)', md:'repeat(2, 1fr)' , lg:'repeat(2, 1fr)' , xl:'repeat(4, 1fr)'}} spacing={10}>  
                     {getItemsByCategory(category.id).map((item) => (
+                   
+            
                         <Link key={item.id} onClick={() => navigate(`/item/${item.id}`)} _hover={{ textDecoration: "none" }}>
-                            <Flex
-                                p={2}
-                                justify="space-between"
-                                align="center"
-                                borderWidth="1px"
-                                borderColor="gray.200"
-                                mb={2}
-                                _hover={{ backgroundColor: "gray.100" }}
-                            >
-                                <Image src={item.image?.src} boxSize="50px" objectFit="cover" mr={3} />
-                                <Box flex="1">
-                                    <Heading as="h3" fontSize="14px" color="gray.800">
+                           
+                            
+                            <Box 
+                            
+                            colSpan={{base: 1, sm:1,  xl: 4}}
+                            borderRadius="25px"  p={2}
+                            justify="space-between"
+                            align="center"
+                            borderWidth="1px"
+                            borderColor="white"
+                            border-radius="25px"
+                            padding="15px"
+                            maxWidth={{ base: "100%", md: "100%", lg: "100%" }}
+                             mb={2}
+                             _hover={{ boxShadow: "0 0 10px 1px linen"}} >
+                                <Image src={item.image?.src} borderRadius="25px" 
+                                width={{base:"100%", md:"100%", lg:"100%", xl:"100%"}}
+                                size={{base:"100%"}} 
+                                objectFit="cover" mr={3} />
+                                
+                                    <Heading    fontFamily="'Raleway', sans-serif" padding="20px" as="h3"
+                                     fontSize={{ base: "12px", sm: "13px", md:"14px", lg: "15px", xl: "15px" }} >
                                         {item.label}
                                     </Heading>
-                                    <Text fontSize={12}>{item.description}</Text>
-                                </Box>
+                                {/* <Text padding="15px" fontSize={{ base: "12px", md: "13px", lg: "14px" }} >{item.description}</Text>
+                                 */}
                                 <Text fontSize={14} fontWeight="bold">${item.price.toFixed(2)}</Text>
-                            </Flex>
-                        </Link>
-                    ))}
+                                </Box>
+                          
+                         
+                        </Link> 
+                        
+                    ))}</SimpleGrid>
                 </Box>
-            ))}
-        </Grid>
+            ))}  
+       
+        </Box> </Center>
     );
     
 };

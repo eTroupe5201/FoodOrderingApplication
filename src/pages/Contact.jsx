@@ -24,7 +24,8 @@ export const Contact = () => {
 
 
     return (
-    <><form className='Contact' onSubmit={handleSubmit(handleSendForm)} > 
+    <><Center position="relative" mb="100px">
+    <form className='Contact' onSubmit={handleSubmit(handleSendForm)} > 
         <SimpleGrid columns={2} templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" , lg: "repeat(2, 1fr)" , xl: "repeat(2, 1fr)" }}>
             <Center>
                 <Box color= '#000000' ml='2rem' mr='2rem' p='1.5rem'>
@@ -153,7 +154,9 @@ export const Contact = () => {
                 </Box>
             </Center>            
         </SimpleGrid>
-    </form></>
+    </form>
+    </Center>
+    </>
     )
 }
 

@@ -4,10 +4,10 @@ import { Box, Center, Image, Text, SimpleGrid } from "@chakra-ui/react";
 //add mobile first designs later
 export function OurTeam() {
     return (
-      <section className="wave">
+     
         <Box className="OurTeam"  position= "block">
-
-          <SimpleGrid columns={4} pb='150px' templateColumns={{base:"repeat(1, 1fr)", sm:"repeat(2, 1fr)",lg:"repeat(4, 1fr)" }}> 
+      
+          <SimpleGrid columns={4} pb='2%' templateColumns={{base:'repeat(1, 1fr)', sm:'repeat(2, 1fr)',lg:'repeat(4, 1fr)' }}> 
             <Box className="OurTeamBox">
               <Center> <Image className="round-picture" src="src\assets\chef1.jpg" alt="logo" /></Center>
               <Text className="team-text">Head Chef John</Text>
@@ -30,7 +30,7 @@ export function OurTeam() {
             </Box>
           </SimpleGrid>
         </Box>
-      </section> 
+   
   );
 }
 

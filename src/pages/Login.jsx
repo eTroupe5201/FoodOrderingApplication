@@ -71,15 +71,18 @@ export const Login = ({saveData}) => {
     return (
         <><form className='Login' title='Login' onSubmit={handleSubmit(handleLogin)}> 
             <Flex alignContent='center' justifyContent='center'>
-                <Box title='login-form-box' id='login-form-box' bg='#000000' color='#fff' w='35rem' height='100%' m='2rem' p='1.5rem'> 
+                <Box title='login-form-box' id='login-form-box' bg='#000000' color='#fff' w={{base:"25em", sm:"30em", md:"35em"}} height='100%' m='2rem' p='1.5rem'> 
                     <VStack>
-                        <Text fontSize='30px' fontWeight='bold' mb='1rem'> Log In or Register </Text>
+                        <Text fontSize={{ base: "20px", md: "25px"}} 
+                            fontWeight='bold' 
+                            mb='1rem'> SIGN IN </Text>
                         
                         <FormControl id='emailField' isInvalid={!!formState?.errors?.email?.type}>
                             <FormLabel>Email Address</FormLabel>
                             <Input 
                                 title='login-email'
                                 id='email'
+                                border="tan 2px outset"
                                 {...register("email", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/})}
                             />
                             <FormErrorMessage title='emailError'>{"Email address is invalid or does not have an account associated with it"}</FormErrorMessage>
@@ -92,15 +95,23 @@ export const Login = ({saveData}) => {
                                     title='login-password'
                                     id="password"
                                     type={showPassword ? "text" : "password"}
+                                    border="tan 2px outset"
+                                    w={{base:"20em", sm:"26em", md:"27em"}}
                                     {...register("password", { required: true, pattern: /(.|\s)*\S(.|\s)/})} //checks for whitespace
                                 />
                                 <InputRightElement width='4.5rem' h='48px'>
                                     <Box  
                                         title='login-show-password-button'
-                                        bg='#A4A1A2' 
+                                        bg='#white' 
+                                        color='black'
                                         w='3.5rem' 
-                                        h='2rem' 
+                                        h='25px' 
+                                        fontWeight='bold'
+                                        fontSize="11px"
                                         borderRadius='md' 
+                                        border="tan 2px outset"
+                                        _hover={{ boxShadow: "0 0 5px 1px tan" }}
+                                        mb="9px"
                                         align='center'
                                         pt='0.25rem' 
                                         onClick={handleShowPassword} 
@@ -117,7 +128,12 @@ export const Login = ({saveData}) => {
                             color='#fff'
                             fontWeight='bold'
                             alignSelf='end'
-                            fontSize='20px'
+                            fontSize="11px"
+                            h='40px'
+                            w='50%'
+                            margin="2%"
+                            border="tan 2px outset"
+                            _hover={{ boxShadow: "0 0 5px 1px linen" }}
                             onClick={navigateToResetPassword} 
                             > 
                             Forgot Password?
@@ -125,30 +141,34 @@ export const Login = ({saveData}) => {
                         <Box 
                             title='login-login-button'
                             as='button'  
-                            mt='1rem'
-                            bg='#fff' 
-                            color='#000000'
+                            mt="10%"
+                            _hover={{ boxShadow: "0 0 5px 1px linen" }}
+                            color='white'
                             h='40px'
-                            w='250px'
+                            w='70%'
                             fontWeight='bold'
-                            fontSize='20px'
+                            fontSize="12px"
+                            border="tan 2px outset"
+                            bg='black'
                             borderRadius='md'
                             > 
-                            Log In to Your Account
+                            CONTINUE
                         </Box>
                         <Center 
+                            _hover={{ boxShadow: "0 0 5px 1px linen" }}
+                            border="tan 2px outset"
                             title='login-register-button'
                             mt='0.5rem'
-                            bg='#fff' 
-                            color='#000000'
+                            color='white'
                             h='40px'
-                            w='250px'
+                            w='70%'
                             fontWeight='bold'
-                            fontSize='20px'
+                            fontSize='12px'
                             borderRadius='md'
+                            bg='black'
                             onClick={navigateToRegister} 
                             > 
-                            Register for an Account
+                            REGISTER
                         </Center>
                     </VStack>
                 </Box>
