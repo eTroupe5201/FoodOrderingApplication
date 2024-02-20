@@ -21,15 +21,23 @@ Currently, two official plugins are available:<br/>
 • <b>Routing:</b> Utilize React Router to handle front-end routing.<br/>
 
 ## Login Page/Register Page
-![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/e19616c7-868a-428e-a988-39690b6523c0)
-<br/>
-![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/10239ad2-066e-4a82-bc6e-569f3b43bc29)
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/67bc014d-6c61-425b-8233-c038e4c12de2)
+
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/1491591f-c9cf-4271-aecf-2012926a15d2)
 
 ## Homepage
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/bf41b496-81d0-4f49-a545-073f2a95a5d7)
 
 ## Order Page
-![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/61eabf02-65f9-4ed4-bd6b-535e312ee8a9)
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/31fa8212-c696-4015-89a4-2cc415143279)
+![0070ccd6332b67b7c0aa417716ad80b](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/fd4cc85d-1783-4a9a-9015-7943bfeb1762)
+
+## CheckOut Page
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/b28b980a-38eb-493c-81bc-ef5893a6b907)
+
+## Payment Successful Page
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/8c64793d-a796-451c-a120-6e20ac29c6da)
+
 
 # Back-end
 
@@ -43,18 +51,21 @@ Currently, two official plugins are available:<br/>
 1 null delivery information ->2 delivery information ->3 delivery current location ->4 delivery current location and remaining time expect ->5, xxx ->6 Deliveryman has been to destination.<br/>
 
 ## Register situation
-![8de3062792dddf4de659c96a3c75d7d](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/e9d5740f-a7f4-4711-bc1a-e7752ab0bff3)
+![06b90dd1ddb1f47ee14f01dccaf2748](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/87cc5506-4e38-432a-afbb-1a5c575a9002)
 
 ## Login situation
-![32105b8e8c08f7fa06a87c39d3148aa](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/4975e02b-003e-40da-b24e-7fd8af0433d7)
-![055a5f2497d6764ab984bb3cd5139aa](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/c847b403-acd0-4ba4-8551-89c773209ac7)
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/29230a52-1ad1-4c45-bc20-b820bbf3911e)
 
 ## Reset password
 ![9325987f3a6e7e43b5873b66d814ef2](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/fef4b03b-8728-495e-abb1-9431e9151ecf)
-![b5b100a7c4f80e22ccfcdc67ac7f65f](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/0e3fec86-5a87-43aa-a2d4-3ce3bcb4744d)
+
+## Add To Cart
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/44902985-ca2c-40f3-88eb-b0b7b4c26f5c)
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/019a3d9d-e237-4a5a-a5e2-47340df5bb5b)
 
 ## react-admin
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/f3cdab56-0f1c-442e-8bfe-766e5a9c0df7)
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/695bf014-eb97-4f74-9ab7-1b896a6f046d)
 
 # Database
 ## • firebase
@@ -66,5 +77,16 @@ Currently, two official plugins are available:<br/>
 
 ## Tech stack
 • <b>CI/CD:</b> Set up GitHub Actions for automated build, testing, and deployment.<br/>
-• <b>Containerization(TBD):</b> Use Docker containerization applications to maintain environmental consistency.<br/>
+• <b>Containerization:</b> Use Docker containerization applications to maintain environmental consistency.<br/>
 • <b>Orchestration(TBD):</b> Kubernetes for managing container lifecycle<br/> 
+
+## • CI/CD With Github Actions
+![3b24da6ae07d8cca23c83b61633d565](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/2ea93c2e-fd0e-4296-9e00-e3382913312e)
+
+## • Docker Container Running
+![278c4de07e8738b50b52ceb75d90e79](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/6bcbb9c3-c279-4859-9dd4-202cc5a511e4)
+![53d63e4628c5bdf183327f639d0a7d0](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/2025bb8e-d8c5-4fcf-8840-875c5f4b9f65)
+
+
+
+
