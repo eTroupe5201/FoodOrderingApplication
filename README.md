@@ -57,14 +57,14 @@ Currently, two official plugins are available:<br/>
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/f3cdab56-0f1c-442e-8bfe-766e5a9c0df7)
 
 # Database
-• <b>firebase</b> <br/>
+## • firebase
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/3e43dc01-9265-43a7-a2fa-86d233aefc88)
-• <b>redis(TBD)</ b> <br/>
+## • redis(TBD)
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/00a05552-65b7-462b-8611-75ff4dd53592)
 
 # Devops
 
 ## Tech stack
-• <b>CI/CD:</b> Set up GitHub Actions for automated build, testing, and deployment.
-• <b>Containerization(TBD):</b> Use Docker containerization applications to maintain environmental consistency.
-• <b>Orchestration(TBD):</b> Kubernetes for managing container lifecycle 
+• <b>CI/CD:</b> Set up GitHub Actions for automated build, testing, and deployment.<br/>
+• <b>Containerization(TBD):</b> Use Docker containerization applications to maintain environmental consistency.<br/>
+• <b>Orchestration(TBD):</b> Kubernetes for managing container lifecycle<br/> 
