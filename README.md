@@ -38,7 +38,7 @@ Currently, two official plugins are available:<br/>
 • <b>Authentication:</b> Use Firebase tokens to manage sessions and maintain user status.<br/>
 • <b>Business logic:</b> Use React admin as a front-end and back-end interaction to process orders, payments, and user management.And integrate third-party payment APIs such as Stripe or PayPal to handle payments and refunds.<br/>
 • <b>Introducing Google Maps</b><br/>
-• <b>notification WebSocket：</b>achieve bidirectional link communication, push messages to the front-end consumer, and the message format may be similar to {order information, delivery information}. <br/>For example, simulate what the communication location of this message will look like, <br/><br/>
+• <b>notification WebSocket：</b>achieve bidirectional link communication, push messages to the front-end consumer, and the message format may be similar to {order information, delivery information}. <br/>For example, simulate what the communication location of this message will look like: <br/>
 
 1 null delivery information ->2 delivery information ->3 delivery current location ->4 delivery current location and remaining time expect ->5, xxx ->6 Deliveryman has been to destination.<br/>
 
@@ -47,15 +47,24 @@ Currently, two official plugins are available:<br/>
 
 ## Login situation
 ![32105b8e8c08f7fa06a87c39d3148aa](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/4975e02b-003e-40da-b24e-7fd8af0433d7)
-<br/>
 ![055a5f2497d6764ab984bb3cd5139aa](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/c847b403-acd0-4ba4-8551-89c773209ac7)
 
 ## Reset password
 ![9325987f3a6e7e43b5873b66d814ef2](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/fef4b03b-8728-495e-abb1-9431e9151ecf)
-<br/>
 ![b5b100a7c4f80e22ccfcdc67ac7f65f](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/0e3fec86-5a87-43aa-a2d4-3ce3bcb4744d)
 
 ## react-admin
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/f3cdab56-0f1c-442e-8bfe-766e5a9c0df7)
 
+# Database
+• <b>firebase</b> <br/>
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/3e43dc01-9265-43a7-a2fa-86d233aefc88)
+• <b>redis(TBD)</ b> <br/>
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/00a05552-65b7-462b-8611-75ff4dd53592)
 
+# Devops
+
+## Tech stack
+• <b>CI/CD:</b> Set up GitHub Actions for automated build, testing, and deployment.
+• <b>Containerization(TBD):</b> Use Docker containerization applications to maintain environmental consistency.
+• <b>Orchestration(TBD):</b> Kubernetes for managing container lifecycle 
