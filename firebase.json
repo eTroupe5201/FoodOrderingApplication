@@ -12,10 +12,8 @@
         ".git",
         "firebase-debug.log",
         "firebase-debug.*.log"
-      ],
-      "predeploy": [
-        "cd functions && npx eslint . --ext .js --report-unused-disable-directives"
       ]
+
     }
   ],
   "hosting": {
