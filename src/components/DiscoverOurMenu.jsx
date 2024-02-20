@@ -1,15 +1,15 @@
 import React from 'react';
 import { Heading, Box, Grid, Center, Image, Text, SimpleGrid, Container, Flex } from '@chakra-ui/react';
-import {motion} from "framer-motion";
+
 // add mobile first designs later
 export function DiscoverOurMenu() {
     return (
         <Box className="DiscoverOurStory" margin="0" display="Flex">
             <Box className="overlay" FlexShrink={3} >
                 <Center>
-                    <animate.Text className="overlayCursive" initial={{x: -100}} animate={{x:0}} transition={{duration:"2", delay:"1"}} >
+                    <Text className="overlayCursive" initial={{x: -100}} animate={{x:0}} transition={{duration:"2", delay:"1"}} >
                         Discover
-                    </animate.Text>
+                    </Text>
                     <Text className="overlayHeading" >
                         OUR STORY
                     </Text>
@@ -19,7 +19,7 @@ export function DiscoverOurMenu() {
                      expertly crafted to delight even the most discerning palates. From 
                      enticing appetizers to mouthwatering mains and decadent desserts, 
                      each dish is thoughtfully prepared using only the freshest, highest
-                      quality ingredients. Whether you're craving a taste of tradition or 
+                      quality ingredients. Whether you&lsquo;re craving a taste of tradition or 
                       seeking bold, innovative flavors, our diverse selection offers something 
                       to satisfy every craving. Join us and embark on a gastronomic journey that promises
                        to excite, inspire, and leave you craving for more.

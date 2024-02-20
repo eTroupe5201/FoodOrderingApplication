@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import {motion} from "framer-motion";
+import { Box, Image } from '@chakra-ui/react';
 
 export function ImageSlider() {
   const images = [
