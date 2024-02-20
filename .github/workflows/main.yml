@@ -54,6 +54,11 @@ jobs:
       run: |
         cd functions
         npm install
+    
+    - name: Install ESLint React Plugin
+      run: |
+        cd functions
+        npm install eslint-plugin-react@latest --save-dev
   
     - name: Login to Firebase
       uses: w9jds/firebase-action@master
