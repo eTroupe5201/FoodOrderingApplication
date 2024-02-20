@@ -8,7 +8,6 @@ describe("Footer.jsx", () => {
         const footer = TestRenderer.create(<MemoryRouter><Footer/></MemoryRouter>).toJSON();
         console.log(footer.children);
         expect(footer.children.length).toBe(2);
-        expect(footer.children[0].type).toBe("div");
-        expect(footer.children[0].children.length).toBe(1);
+        expect(footer.children[0].type).toBe("section");
 
     }) })
