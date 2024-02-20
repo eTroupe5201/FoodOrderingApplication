@@ -46,7 +46,10 @@ jobs:
     # New step to set up Google Credentials
     - name: Set up Google Cloud credentials
       run: |
+        which base64
+        echo ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }} | base64 --help
         echo ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }} | base64 -d > ./gcloud.json
+        cat ./gcloud.json
         echo "GOOGLE_APPLICATION_CREDENTIALS=./gcloud.json" >> $GITHUB_ENV
       shell: bash
 
