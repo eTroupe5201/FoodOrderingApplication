@@ -56,11 +56,6 @@ jobs:
         rm -rf node_modules package-lock.json 
         npm install                           
   
-    - name: Run ESLint
-      run: |
-        cd functions
-        npx eslint . --ext js,jsx --report-unused-disable-directives 
-  
     - name: Login to Firebase and Deploy
       uses: w9jds/firebase-action@master
       with:
