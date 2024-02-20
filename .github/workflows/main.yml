@@ -36,20 +36,33 @@ jobs:
   deploy-to-firebase:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
     - uses: actions/checkout@v2
+
+    # New step to set up Google Credentials
+    - name: Set up Google Cloud credentials
+      run: |
+        echo ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }} | base64 -d > ./gcloud.json
+        echo "GOOGLE_APPLICATION_CREDENTIALS=./gcloud.json" >> $GITHUB_ENV
+      shell: bash
 
     - name: Login to Firebase
       uses: w9jds/firebase-action@master
       with:
         args: deploy
       env:
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
 
   create-release:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
     - uses: actions/checkout@v2
