@@ -56,11 +56,6 @@ jobs:
         rm -rf node_modules package-lock.json 
         npm install                           
   
-    - name: Install ESLint React Plugin
-      run: |
-        cd functions
-        npm install eslint-plugin-react@latest --save-dev
-  
     - name: Run ESLint
       run: |
         cd functions
