@@ -106,7 +106,7 @@ export const Item = () => {
                   })
                 );
 
-    }, [])
+    }, [append, item.variants])
 
     if (!item) return null;
 

@@ -1,5 +1,7 @@
 import {describe, it } from "vitest";
 
+//TODO: write tests for NavBar component
+
 describe("NavBar.jsx", () => {
     it("test the children inside my NavBar Component", () => {
 //         const navBar = TestRenderer.create(<MemoryRouter><NavBar/></MemoryRouter>).toJSON();

@@ -39,7 +39,7 @@ export function ImageSlider() {
       );
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [images.length]);
 
   return (
     <Container className="imageContainer"> 

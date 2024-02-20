@@ -26,9 +26,9 @@ export const Register = ({saveData}) => {
 
     const handleRegister = async (data) => {
 
-        // try {
-        //     saveData(data);
-        // } catch (error) {} //console.log("This is a test call - will throw error in dev/prod")};
+        try {
+            saveData(data);
+        } catch (error) {console.log(error);}
 
         //emails and passwords match
         if (data.email === data.confirmEmail && data.password === data.confirmPassword) {

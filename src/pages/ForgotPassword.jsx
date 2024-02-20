@@ -21,8 +21,8 @@ export const ForgotPassword = ({saveData}) => {
     const handleForgotPasswordEmail = async () => {
         try {
             saveData(email);
-        } catch (error) {console.log("This is a test call - will throw error in dev/prod")} //console.log("This is a test call - will throw error in dev/prod")};
-
+        } catch (error) {console.log(error)} 
+        
         //check email field is empty or not
         if (!email) {
             console.log("invalid email - empty string or only whitespace");
@@ -51,7 +51,7 @@ export const ForgotPassword = ({saveData}) => {
                 navigate("/login");
             })
             .catch((error) => {
-                console.log("invalid email - not a valid format");
+                console.log(error);
                 toast({
                     title: "An error occurred.",
                     description: "Invalid email address", //error.message, custom message for user friendliness
