@@ -15,13 +15,14 @@ Currently, two official plugins are available:<br/>
 # Front-end
 
 ## Tech stack
-• Architecture and framework: Use React to create SPA and modular design.<br/>
-• User interface: Use Chakra UI and Sass for responsive and modern interface design.<br/>
-• Status management: Use Redux to manage application status, such as user login and shopping cart.<br/>
-• Routing: Utilize React Router to handle front-end routing.<br/>
+• <b>Architecture and framework:</b> Use React to create SPA and modular design.<br/>
+• <b>User interface:</b> Use Chakra UI and Sass for responsive and modern interface design.<br/>
+• <b>Status management:</b> Use Redux to manage application status, such as user login and shopping cart.<br/>
+• <b>Routing:</b> Utilize React Router to handle front-end routing.<br/>
 
 ## Login Page/Register Page
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/e19616c7-868a-428e-a988-39690b6523c0)
+<br/>
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/10239ad2-066e-4a82-bc6e-569f3b43bc29)
 
 ## Homepage
@@ -33,12 +34,12 @@ Currently, two official plugins are available:<br/>
 # Back-end
 
 ## Tech stack
-• Database: Use Firebase Firestore as the primary database. Store user data, menu items, order records, etc. for the application.<br/>
-• Authentication: Use Firebase tokens to manage sessions and maintain user status.<br/>
-• Business logic: Use React admin as a front-end and back-end interaction to process orders, payments, and user management.<br/>And integrate third-party payment APIs such as Stripe or PayPal to handle payments and refunds.<br/>
-• Introducing Google Maps<br/>
-• notification WebSocket：achieve bidirectional link communication, push messages to the front-end consumer, and the message format may be similar to {order information, delivery information}. <br/>For example, simulate what the communication location of this message will look like, <br/>
-Similar to:<br/>
+• <b>Database:</b> Use Firebase Firestore as the primary database. Store user data, menu items, order records, etc. for the application.<br/>
+• <b>Authentication:</b> Use Firebase tokens to manage sessions and maintain user status.<br/>
+• <b>Business logic:</b> Use React admin as a front-end and back-end interaction to process orders, payments, and user management.And integrate third-party payment APIs such as Stripe or PayPal to handle payments and refunds.<br/>
+• <b>Introducing Google Maps</b><br/>
+• <b>notification WebSocket：</b>achieve bidirectional link communication, push messages to the front-end consumer, and the message format may be similar to {order information, delivery information}. <br/>For example, simulate what the communication location of this message will look like, <br/><br/>
+
 1 null delivery information ->2 delivery information ->3 delivery current location ->4 delivery current location and remaining time expect ->5, xxx ->6 Deliveryman has been to destination.<br/>
 
 ## Register situation
@@ -46,10 +47,12 @@ Similar to:<br/>
 
 ## Login situation
 ![32105b8e8c08f7fa06a87c39d3148aa](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/4975e02b-003e-40da-b24e-7fd8af0433d7)
+<br/>
 ![055a5f2497d6764ab984bb3cd5139aa](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/c847b403-acd0-4ba4-8551-89c773209ac7)
 
 ## Reset password
 ![9325987f3a6e7e43b5873b66d814ef2](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/fef4b03b-8728-495e-abb1-9431e9151ecf)
+<br/>
 ![b5b100a7c4f80e22ccfcdc67ac7f65f](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/0e3fec86-5a87-43aa-a2d4-3ce3bcb4744d)
 
 ## react-admin
