@@ -13,6 +13,7 @@ import {
   calculateOrderTotal
 } from "./utils/calculations.mjs";
 
+
 /**
  * background: 
  * Firebase Functions: A serverless execution environment hosted on Google Cloud that allows you to run backend code in response to HTTP requests, database changes, and other events.
@@ -120,7 +121,146 @@ export const placeorder = onCall(async (request) => {
   return {id: order.id, order: draft, restaurant: restaurant};
 });
 
+export const placecart = onCall(async (request) => {
+  //Check if the user calling the function has passed authentication. 
+  //If the user is not authenticated, the function returns an error.
+  if (!request.auth) {
+    return new HttpsError("failed-precondition", "You are not authorized");
+  }
 
+  const uid = request.auth.uid;
+  
+  const line = request.data;
+
+  // prepare cart data
+  const cartData = {
+    ...line, // 包含商品信息
+    createdAt: admin.firestore.FieldValue.serverTimestamp(), // 添加服务器时间戳
+};
+
+
+  // save user's cart info to database
+  // Here, the carts collection is used to store each user's shopping cart. Each user's shopping cart is a document, and the ID of the document is the user's UID. 
+  // The product items in each shopping cart are stored in the items subset of the document
+  try {
+      await admin.firestore().collection('carts').doc(uid).collection('items').add(cartData);
+      return { result: "Item added to cart" };
+  } catch (error) {
+      throw new functions.https.HttpsError('internal', 'Unable to add item to cart', error);
+  }
+});
+
+// export const registerAccount = onCall(async (request) => {
+//   //Check if the user calling the function has passed authentication. 
+//   //If the user is not authenticated, the function returns an error.
+//   if (!request.auth) {
+//     return new HttpsError("failed-precondition", "You are not authorized");
+//   }
+  
+//   //Create a reference to Firestore for database operations
+//   const firestore = admin.firestore();
+
+//   const email = request.data.email;
+
+//   const draft = {
+//     firstName: request.data.firstName,
+//     lastName: request.data.lastName,
+//     email: request.data.email,
+//     phone: request.data.phone,
+//     password: request.data.password,
+//     createdBy: request.auth.uid, //Set the createdBy field to the current user's UID (User Identity)
+//     lastLogin: admin.firestore.FieldValue.serverTimestamp(),
+//     pickupTime: admin.firestore.FieldValue.serverTimestamp(),
+//     createAt: admin.firestore.FieldValue.serverTimestamp(),
+//   };
+
+//   //if user with email exists already, do not process request 
+//   const existingUserDoc = await firestore.collection("users").doc(email).get();
+//   const existingUser = existingUserDoc.data();
+//   if (existingUser) {return;}
+
+//   //Save the user info to the Firestore collection named "users" and wait for the operation to complete
+//   const userInfo = await firestore.collection("users").doc(email).set(draft);
+
+//   // //After the function is confirmed, return the newly created order ID and order draft object.
+//    return {id: userInfo.id, userInfo: draft};
+// });
+
+//We don't need to save the user's password in Firestore because Firebase Authentication already securely handles the password.
+export const registerAccount = onCall(async (request) => {
+
+  if (!request.auth) {
+    return new HttpsError("failed-precondition", "You are not authorized");
+  }
+  
+  //Create a reference to Firestore for database operations
+  const firestore = admin.firestore();
+
+  const email = request.data.email;
+
+  //check if user with email already exists
+  const existingUserDoc = await firestore.collection("users").doc(email).get();
+  const existingUser = existingUserDoc.data();
+  if (existingUser) {
+    throw new HttpsError('already-exists', 'The email provided is already in use by an existing user.');
+  }
+
+  // Create the user with email and password via Firebase Authentication to host our status
+  const userRecord = await admin.auth().createUser({
+    uid: request.data.email,
+    email: request.data.email,
+    password: request.data.password
+  });
+
+  // Prepare user info without the password
+  const userInfoWithoutPassword = {
+    firstName: request.data.firstName,
+    lastName: request.data.lastName,
+    email: request.data.email,
+    phone: request.data.phone,
+    createdBy: request.auth.uid,
+    lastLogin: admin.firestore.FieldValue.serverTimestamp(),
+    pickupTime: admin.firestore.FieldValue.serverTimestamp(),
+    createAt: admin.firestore.FieldValue.serverTimestamp(),
+  };
+
+
+  // Save the additional user data in Firestore (without the password)
+  await admin.firestore().collection('users').doc(userRecord.uid).set(userInfoWithoutPassword);
+
+  // Return success response
+  return { success: true, uid: userRecord.uid, userInfo: userInfoWithoutPassword };
+});
+
+export const contactUsSubmit = onCall(async (request) => {
+//Check if the user calling the function has passed authentication. 
+  //If the user is not authenticated, the function returns an error.
+  if (!request.auth) {
+    return new HttpsError("failed-precondition", "You are not authorized");
+  }
+  
+  //Create a reference to Firestore for database operations
+  const firestore = admin.firestore();
+
+  //parse contact form data into draft 
+  const draft = {
+    firstName: request.data.firstName,
+    lastName: request.data.lastName,
+    email: request.data.email,
+    phone: request.data.phone,
+    message: request.data.message,
+    createdBy: request.auth.uid, //Set the createdBy field to the current user's UID (User Identity)
+    lastLogin: admin.firestore.FieldValue.serverTimestamp(),
+    pickupTime: admin.firestore.FieldValue.serverTimestamp(),
+    createAt: admin.firestore.FieldValue.serverTimestamp(),
+  };
+  
+  //send form data to DB to be saved 
+  const contactForm = await firestore.collection("contactus").add(draft);
+
+  //After the function is confirmed, return the newly created order ID and order draft object.
+  return {id: contactForm.id, contactForm: draft};
+});
 
 /**
  * Import function triggers from their respective submodules:

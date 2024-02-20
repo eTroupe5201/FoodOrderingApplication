@@ -73,13 +73,7 @@
     font-size: 23pt;
     
 }
-.Footer ul {
-    list-style: none;
 
-    gap: 2rem;
-    
-    
-}
 .nav a {
     color: inherit;
     display: flex; 
@@ -88,26 +82,17 @@
 
 }
 
-.nav li.active {
+.nav button:hover{
+    font-weight: bold;
+}
+.nav li.active{
     background-color:#555;
 }
 
-.nav li:hover {
+.nav li:hover{
     font-weight: bold;
-    scale: 1.1 ;
-    text-shadow: #fff 0px 0px 10px;
 }
-.Footer li:hover {
-    font-weight: bold;
-    scale: 1.1 ;
-    text-shadow: #fff 0px 0px 10px;
 
-}
-.Footer li {
- 
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
 .Contact, .Login, .Register {
     font-family: 'Raleway', sans-serif;
     font-weight: bold;
@@ -135,7 +120,6 @@
     color:black;
     background-color: #fff;
 }
-
 
 .Contact textarea {
     font-family: 'Raleway', sans-serif;

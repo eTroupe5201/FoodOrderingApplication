@@ -1,144 +1,80 @@
 import React, {useState} from "react";
-import { Box, Text, useToast, Flex, VStack, InputGroup, Input, InputRightElement } from "@chakra-ui/react";
+import { Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, useToast} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-
+import { useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
 
 
-//Page for signing in 
-export const Register = () => {
+/* Register page - use React hook Forms for collecting input and validating. Once validated and submitted, send request to Firebase and:
+*   - if account exists with provided email, route to Login page
+*   - if no account exists with provided email, create account and store user info in DB. Upon return, route back to Home page
+*/
+export const Register = ({saveData}) => {
     const toast = useToast();
     const navigate = useNavigate();
+    const { registerNewAccount } = useDataProvider();
+    const { register, handleSubmit, formState, watch } = useForm();
 
-    // const {lines, register } = useDataProvider();
-    const navigateToHome = () => {
-        navigate('/');
-    };
+    const [emailErrorMsg, setEmailErrorMsg]= useState("Required");
+    const [passwordErrorMsg, setPasswordErrorMsg]= useState("Required");
+    const [emailsMatch, setEmailsMatch] = useState(true);
+    const [passwordsMatch, setPasswordsMatch]= useState(true);
 
-    //TODO: implement dataProvider logic
-    //TODO: comment out current and delete once above works
-    // const onSubmit = async (data) => {}
-    //     await register (data);
-    //     navigate('/');
-    // }
-
-    const [fname, setFname] = useState("");
-    const [lname, setLname] = useState("");
-    const [email, setEmail] = useState("");
-    const [confirmEmail, setConfirmEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [showPassword, setShowPassword] = React.useState(false)
-    const [showConfirmPassword, setShowConfirmPassword] = React.useState(false)
-
-    const handleFname = (event) => { 
-        setFname(event.target.value); 
-        document.getElementById('fname').style.outlineColor= "black";
-    }
-    const handleLname = (event) => { 
-        setLname(event.target.value); 
-        document.getElementById('lname').style.outlineColor= "black";
-    }
-    const handleEmail = (event) => { 
-        setEmail(event.target.value);
-        document.getElementById('email').style.outlineColor= "black";
-    }
-    const handleConfirmEmail = (event) => { 
-        setConfirmEmail(event.target.value); 
-        document.getElementById('confirmEmail').style.outlineColor= "black";
-    }
-    const handlePhone = (event) => { setPhone(event.target.value); }
-    const handlePassword = (event) => { 
-        setPassword (event.target.value); 
-        document.getElementById('password').style.outlineColor= "black";
-    }
-    const handleConfirmPassword = (event) => { 
-        setConfirmPassword (event.target.value); 
-        document.getElementById('confirmPassword').style.outlineColor= "black";
-    }
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
     const handleShowPassword= () => setShowPassword(!showPassword)
     const handleShowConfirmPassword= () => setShowConfirmPassword(!showConfirmPassword)
-   
-    const handleRegister = (event) => {
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-        const fnameInvalid = (fname.length === 0);
-        const lnameInvalid = (lname.length === 0);
-        const emailInvalid = ((email.length === 0 || !(emailPattern.test(email))));
-        const confirmEmailInvalid = ((email.length === 0 || !(emailPattern.test(email))));
-        const emailsMatch = (email === confirmEmail);
-        //TODO: add actual password validation 
-        //one upper, one lower, min 8 chars, one number 
-        const passwordInvalid = (password.length === 0);
-        const confirmPasswordInvalid = (password.length === 0);
-        const passwordsMatch = (password === confirmPassword);
+    const handleRegister = async (data) => {
 
-        //validate all required lines in the form 
-        if (fnameInvalid)   { document.getElementById('fname').style.outlineColor= "red"; }
-        if (lnameInvalid)   { document.getElementById('lname').style.outlineColor= "red"; }
-        if (emailInvalid || confirmEmailInvalid || !emailsMatch)   { 
-            document.getElementById('email').style.outlineColor= "red"; 
-            document.getElementById('confirmEmail').style.outlineColor= "red";
-        }
-        else {
-            document.getElementById('email').style.outlineColor= "black"; 
-            document.getElementById('confirmEmail').style.outlineColor= "black";
-        }
-        if (passwordInvalid || confirmPasswordInvalid || !passwordsMatch)   { 
-            document.getElementById('password').style.outlineColor= "red"; 
-            document.getElementById('confirmPassword').style.outlineColor= "red"; 
-        }
-        else {
-            document.getElementById('password').style.outlineColor= "black"; 
-            document.getElementById('confirmPassword').style.outlineColor= "black"; 
-        }
+        // try {
+        //     saveData(data);
+        // } catch (error) {} //console.log("This is a test call - will throw error in dev/prod")};
 
-        //if any base items are incorrectly filled out, show error Toast 
-        if (fnameInvalid || lnameInvalid || emailInvalid) { /*passwordInvalid) {  */      
-            toast ({    
-                addRole: true,
-                title: "ITEMS IN RED ARE WRONG. Please try again.",
-                position: 'top', 
-                status: 'error',
-                isClosable: true,
-            });
-        }
-        else if (!emailsMatch) {
-            toast ({    
-                addRole: true,
-                title: "The email addresses do not match. Please try again.",
-                position: 'top', 
-                status: 'error',
-                isClosable: true,
-            });
-        }
-        else if (!passwordsMatch) {
-            toast ({    
-                addRole: true,
-                title: "The passwords do not match. Please try again.",
-                position: 'top', 
-                status: 'error',
-                isClosable: true,
-            });
-        }
-        //if all true, form is correctly filled out. Send to server, hide Form and show success message, and reset fields
-        else {
-            //TODO send request to server
-            //TODO if success, what to do?
-            //TODO if failure, prompt invalid message
-
-            navigateToHome();
-        }
+        //emails and passwords match
+        if (data.email === data.confirmEmail && data.password === data.confirmPassword) {
+            /**
+             * When registerNewAccount is called and succeeds, Firebase Authentication SDK will automatically 
+             * manage the user's session and JWT token. So in most cases we don't need to manually handle JWT tokens on the front end 
+             * unless we need to send them to our own server for validation or other processing.
+             */
+            try {
+                console.log("valid registration input");
+                const result = await registerNewAccount(data); 
+                
+                //if result is not blank, means new account created
+                if (result.success) {
+                    toast ({    
+                        addRole: true,
+                        title: "Your account was successfully created.",
+                        position: "top", 
+                        status: "success",
+                        isClosable: true,
+                    });
+                }
+                //else, existing account
+                else {
+                    toast ({    
+                        addRole: true,
+                        title: "The email provided is associated with an existing account.",
+                        position: "top", 
+                        status: "info",
+                        isClosable: true,
+                    });
+                }
+                navigate("/login");
+            } catch (error) {
+                console.log(error);
+            }
+        }        
+        else (console.log("passwords or emails do not match"));
     }
 
-    const passwordReqMessage = ("Passwords must contain:\nMinimum of 8 characters\nAt least one lowercase letter\nAt least one uppercase letter\nAt least one number");
-
     return (
-        <><div className='Register' > 
+        <><form className='Register' onSubmit={handleSubmit(handleRegister)}> 
             <Flex  mb="5em" alignContent='center' justifyContent='center'>
                 <Box border="outset 2px tan" borderRadius="25px"
-                 title='register-form-box' id='regjster-form-box' bg='#000000' 
+                 title='register-form-box' id='register-form-box' bg='#000000' 
                  color='#fff' w={{base:"25em", sm:"30em", md:"35em"}} height='100%' m='2rem' p='2rem'> 
                     <VStack>
                         <Text fontSize='20px' fontWeight='bold' mb='1rem'> REGISTER </Text>
@@ -177,61 +113,110 @@ export const Register = () => {
                         />
                         <InputGroup mt='1rem'>
                             <Input 
-                                id="password"
-                                type={showPassword ? 'text' : 'password'}
-                                value={password} 
-                                onChange={handlePassword} 
-                                placeholder="enter password"
+                                type='tel'
+                                title='register-phone'
+                                {...register("phone")}
                             />
-                            <InputRightElement width='4.5rem' h='48px'>
-                                <Box 
-                                    as='button' 
-                                    bg='white' 
-                                    mb="9px"
+                        </FormControl>
+                        
+                        <FormControl id='passwordField' isInvalid={!!formState?.errors?.password?.type || !passwordsMatch}>
+                            <FormLabel>Password</FormLabel>
+                            <InputGroup>
+                                <Input 
+                                    id="password"
+                                    title='register-password'
+                                    type={showPassword ? "text" : "password"}
+                                    {...register("password", { 
+                                        required: true,
+                                        validate: (val) => {
+                                            if (watch("confirmPassword") != val) {
+                                                setPasswordErrorMsg("Passwords do not match.");
+                                                setPasswordsMatch(false);
+                                            } 
+                                            else {
+                                                setPasswordErrorMsg("Required");
+                                                setPasswordsMatch(true);
+                                            } //TODO: error for user , pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/   //eight char, one upper, one lower, one num
+                                        } 
+                                    })}
+                                />
+                                <InputRightElement width='4.5rem' h='48px'>
+                                    <Box  
+                                        title='show-password-button'
+                                        bg='white' 
+                                        mb="9px"
                                     color="black"
                                     w='3.5rem' 
-                                    h='25px' 
-                                    fontWeight='bold'
+                                        h='25px' 
+                                        fontWeight='bold'
                                     fontSize="11px"
                                     _hover={{ boxShadow: "0 0 5px 1px tan" }}
                                     border="tan 2px outset"
                                     borderRadius='md' 
-                                    onClick={handleShowPassword} 
-                                >
-                                    {showPassword ? 'Hide' : 'Show'}
-                                </Box>
-                            </InputRightElement>
-                        </InputGroup>
-                        <InputGroup>
-                            <Input 
-                                id="confirmPassword"
-                                type={showConfirmPassword ? 'text' : 'password'}
-                                value={confirmPassword} 
-                                onChange={handleConfirmPassword} 
-                                placeholder="confirm password"
-                            />
-                            <InputRightElement width='4.5rem' h='48px'>
-                                <Box 
-                                    as='button' 
-                                    border="tan 2px outset"
+                                        align='center'
+                                        pt='0.25rem' 
+                                        onClick={handleShowPassword} 
+                                    >
+                                        {showPassword ? "Hide" : "Show"}
+                                    </Box>
+                                </InputRightElement>
+                            </InputGroup>
+                            <FormErrorMessage>{passwordErrorMsg}</FormErrorMessage>
+                        </FormControl>
+
+                        <FormControl id='confirmPasswordField' isInvalid={!!formState?.errors?.confirmPassword?.type || !passwordsMatch}>
+                            <FormLabel>Confirm Password</FormLabel>
+                            <InputGroup>
+                                <Input 
+                                    id="confirmPassword"
+                                    title='register-confirm-password'
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    {...register("confirmPassword", { 
+                                        required: true,
+                                        validate: (val) => {
+                                            if (watch("password") != val) {
+                                                setPasswordErrorMsg("Passwords do not match.");
+                                                setPasswordsMatch(false);
+                                            } 
+                                            else {
+                                                setPasswordErrorMsg("Required");
+                                                setPasswordsMatch(true);
+                                            }
+                                        }
+                                    })}
+                                />
+                                <InputRightElement width='4.5rem' h='48px'>
+                                    <Box 
+                                        title='show-confirm-password-button'
+                                        border="tan 2px outset"
                                     bg='white' 
-                                    mb="9px"
+                                        mb="9px"
                                     color="black"
                                     w='3.5rem' 
-                                    h='25px' 
-                                    fontWeight='bold'
+                                        h='25px' 
+                                        fontWeight='bold'
                                     fontSize="11px"
                                     _hover={{ boxShadow: "0 0 5px 1px tan" }}
                                     borderRadius='md' 
-                                    onClick={handleShowConfirmPassword} 
-                                >
-                                    {showConfirmPassword ? 'Hide' : 'Show'}
-                                </Box>
-                            </InputRightElement>
-                        </InputGroup>
-                        <Text mt="10px" lineHeight="5"textAlign="center" padding="20px" textTransform="uppercase" fontSize="12px" whiteSpace="pre-line"> {passwordReqMessage} </Text>
+                                        align='center'
+                                        pt='0.25rem' 
+                                        onClick={handleShowConfirmPassword} 
+                                    >
+                                        {showConfirmPassword ? "Hide" : "Show"}
+                                    </Box>
+                                </InputRightElement>
+                            </InputGroup>
+                            <FormErrorMessage>{passwordErrorMsg}</FormErrorMessage>
+                        </FormControl>
+
+                        <Text mt="10px" lineHeight="5"textAlign="center" padding="20px" textTransform="uppercase" fontSize="12px" fontStyle="italic"> 
+                            {"Passwords must contain at least 8 characters, one lowercase letter, one uppercase letter, and one number."} 
+                        </Text>
                         <Box 
-                            as='button'  
+                            title='register-register-button'
+                            align='center'
+                            as='button' 
+                            pt='0.25rem' 
                             mt='0.5rem'
                             bg='black' 
                             color='white'
@@ -242,13 +227,12 @@ export const Register = () => {
                             _hover={{ boxShadow: "0 0 5px 1px tan" }}
                             border="outset 2px tan"
                             borderRadius='md'
-                            onClick={handleRegister} 
                             > 
                             Register
                         </Box>
                     </VStack>
                 </Box>
             </Flex>
-        </div></>
+        </form></>
     );
 };

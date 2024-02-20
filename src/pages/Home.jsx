@@ -18,5 +18,5 @@ export function Home(){
    
 </>
     );
-};
+}
 //wrap in fragment to return multiple components

@@ -31,7 +31,7 @@ export const Item = () => {
     //here id is from the param of "navigate(`/item/${item.id}`)}""
     const { id } = useParams();
     const { getItemById, addToCart } = useDataProvider();
-    const item = getItemById(id || '');
+    const item = getItemById(id || "");
 
     /**
      * UseForm is one of the main hooks of react hook form. It is used to handle the status of forms, input registration forms, and submit forms.
@@ -44,8 +44,8 @@ export const Item = () => {
         defaultValues: {
           quantity: 1,
           value: [],
-          price: item.price || '',
-          label: item.label || '',
+          price: item.price || "",
+          label: item.label || "",
         },
       });
 
@@ -66,7 +66,9 @@ export const Item = () => {
         name: "value",
       });
 
-    const onSubmit = (values) => addToCart(values);
+    const onSubmit = async (values) => {
+        await addToCart(values);
+    }
 
     /**
      * If there is no item, we will return empty, but before that, let's first use useEffect to look at the value of variant in the item

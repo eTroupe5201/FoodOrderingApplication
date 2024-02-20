@@ -11,13 +11,11 @@ export const Menu = () => {
 
     return (
         //I set up 3 categories in one line temporarily, can adjust this syntax later
-              <Center> <Box className="MenuContainer" mt="30px" maxW="90%" justifyContent="center" p={5}>
-                
-            {categories.map((category) => ( 
-           
-                <Box  className="Menu" key={category.id} p={5} boxShadow="md"  width="100%">
-                    <Box p={2}  borderRadius="md" mb={3}>
-                        <Heading as="h2" fontFamily="'Great Vibes', cursive" padding="15px" fontSize={{ base: "30px", md: "40px", lg: "50px" }} mb={1} >
+        <Grid templateColumns="repeat(3, minmax(400px, 1fr))" gap={6} alignItems="flex-start">
+            {categories.map((category) => (
+                <Box key={category.id} p={5} boxShadow="md" >
+                    <Box p={2} color="gray.700" bg="orange.100" borderRadius="md" mb={3} _hover={{ bg: "orange.300" }}>
+                        <Heading as="h2" fontSize="20px" mb={1} >
                             {category.title}
                         </Heading>
                         {category.description && (

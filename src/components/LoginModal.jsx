@@ -1,6 +1,6 @@
 import {
-    Modal, Text, ModalOverlay, ModalContent, ModalHeader, ModalFooter,ModalBody, ModalCloseButton, Container, Spacer,
-} from '@chakra-ui/react';
+    Modal, Text, ModalOverlay, ModalContent, ModalHeader, ModalFooter,ModalBody, ModalCloseButton, Container,
+} from "@chakra-ui/react";
 import {
    
     FormControl,
@@ -8,19 +8,19 @@ import {
    Input, Flex,
    FormErrorMessage,
    FormHelperText, 
-   Select
-  } from '@chakra-ui/react';
+  } from "@chakra-ui/react";
  import { useState } from "react";
-import { Button } from '@chakra-ui/react';
-import { useDisclosure } from '@chakra-ui/react';
+import { Button } from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
 
 export function LoginModal() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
- 
+    const [first, setFirst] = useState(""); // Correct declaration
 
-    const isError = email === '';
+
+    const isError = email === "";
     //may remove this it pops up as red
 
     const handleFirst = (event) => setFirst(event.target.value);
@@ -64,7 +64,7 @@ export function LoginModal() {
       <Input bg='white'type='email' value={email} onChange={handleEmail} />
       {!isError ? (
         <FormHelperText>
-          Enter the email you'd like to receive the newsletter on.
+          Enter the email you&lsquo;d like to receive the newsletter on.
         </FormHelperText>
       ) : (
         <FormErrorMessage>Email is required.</FormErrorMessage>
@@ -89,7 +89,7 @@ export function LoginModal() {
         </Container>
       </>
     );
-  };
+  }
   function validateEmail(address) {
     //email 
     //if valid email, return true. else false 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   List,
   Datagrid,
@@ -7,20 +7,18 @@ import {
   SimpleForm,
   TextInput,
   required,
-  NumberInput,
   NumberField,
   DateField,
   ArrayField,
-  SingleFieldList,
   ChipField,
   EditButton,
   RadioButtonGroupInput,
 } from "react-admin";
 import { MdReceipt } from "react-icons/md";
-import { ORDER_STATUS } from '../../utils/constants';
+import { ORDER_STATUS } from "../../utils/constants";
 
 //Defines a shared configuration object for formatting currency-related fields.
-const currencyOptions = { style: 'currency', currency: 'USD' };
+const currencyOptions = { style: "currency", currency: "USD" };
 
 
 /** 

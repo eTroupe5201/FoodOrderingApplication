@@ -1,72 +1,69 @@
-import { Box, Text, useToast, Flex, VStack, InputGroup, Input, InputRightElement } from "@chakra-ui/react";
-import { useState } from "react";
-import React from "react";
+import { Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, Center, useToast } from "@chakra-ui/react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { auth } from "../utils/firebase" 
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useDataProvider } from "../components/dataProvider"
 
-//Page for logging in or registering 
-export const Login = () => {
+/* Login page - handle and validate user input, also checking against database for existing account and 
+*              correct credentials. 
+* Route to Register page if button is clicked
+* Route to ForgotPassword page if button is clicked
+*/
+export const Login = ({saveData}) => {
+    const {setUserAccount} = useDataProvider();
     const toast = useToast();
+    const navigate = useNavigate();
+    const { getUserInfo } = useDataProvider();
+    const { register, handleSubmit, formState } = useForm();
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [show, setShow] = React.useState(false)
-    const [password2, setPassword2] = useState("");
-    const [show2, setShow2] = React.useState(false)
-    const [resetCode, setResetCode] = useState("");
+    const [showPassword, setShowPassword] = React.useState(false)
+    const handleShowPassword= () => setShowPassword(!showPassword)
 
-    const resetFields = () => {
-        setEmail("");
-        setPassword("");
-        setShow(false);
-        setPassword2("");
-        setShow2(false);
-        setResetCode("");
-    };
+    const navigateToRegister = () => {navigate("/register");}
+    const navigateToResetPassword = () => {navigate("/forgotpassword");}
 
-    const handleEmail = (event) => {
-        setEmail(event.target.value); 
-        document.getElementById('email').style.outlineColor= "black";
-    }
-    const handlePassword = (event) => { 
-        setPassword(event.target.value); 
-        document.getElementById('password').style.outlineColor= "black";
-    }
+    const handleLogin = async (data) => {
+        try {
+            saveData(data);
+        } catch (error) {console.log("This is a test call - will throw error in dev/prod")} //console.log("This is a test call - will throw error in dev/prod")};
 
-    const handlePassword2 = (event) => { 
-        setPassword2(event.target.value); 
-        document.getElementById('password2').style.outlineColor= "black";
-    }
+        try {
+            console.log(data);
+            /**
+             * Logging in with Firebase Authentication automatically handles the generation and management of JWT tokens. 
+             * When the signInWithEmailAndPassword function is called, this function automatically handles token generation and management, 
+             * and saves the user session on the client after successful login.
+             */
+            const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
+    
+            // Login successful, Firebase automatically handles the session and token
+            console.log("Logged in user:", userCredential.user);
 
-    const handleShowPassword= () => setShow(!show)
-    const handleShowPassword2= () => setShow2(!show2)
-    const handleResetCode = (event) => { setResetCode(event.target.value); }
+            getUserInfo(userCredential.user);
 
-    const handleLogin = (event) => {
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        
-        const emailInvalid = ((email.length === 0 || !(emailPattern.test(email))));
-        const passwordInvalid = (password.length === 0);
+            // It is possible to obtain a token, but usually not required
+            //const token = await userCredential.user.getIdToken();
+            //console.log(token);
 
-        //validate all required lines in the form 
-        if (emailInvalid)   { document.getElementById('email').style.outlineColor= "red"; }
-        if (passwordInvalid) {document.getElementById('password').style.outlineColor= "red"; }
-
-        //if any items are incorrectly filled out, show error Toast 
-        if (emailInvalid || passwordInvalid) {         
-            toast ({    
-                addRole: true,
-                title: "The email address or password entered are invalid. Please try again.",
-                position: 'top', 
-                status: 'error',
+            // Show success message and navigate to homepage
+            toast({
+                title: "Logged in successfully.",
+                position: "top",
+                status: "success",
                 isClosable: true,
             });
-           
-        }
-        //if all true, form is correctly filled out. Send to server, hide Form and show success message, and reset fields
-        else {
-            //TODO send request to server
-            //TODO if success, what to do?
-            //TODO if failure, prompt invalid message
+            navigate("/");
+        } catch (error) {
+            // Login failed with error message
+            toast({
+                title: "Invalid login credentials.", //error.message, custom message for user friendliness
+                position: "top",
+                status: "error", 
+                isClosable: true,
+            });
+            console.log("Failed login");
         }
     }
 
@@ -326,23 +323,7 @@ export const Login = () => {
                     > 
                     Save New Password
                 </Box>
-            </VStack>
-        </Box>
-    );
-
-    return (
-        <><div className='Login' > 
-            <Flex alignContent='center' justifyContent='center'>
-                {baseLoginOrRegisterForm}
-                {sendEmailCodeForm}
-                {enterEmailCodeForm}
-                {passwordChangeForm}
             </Flex>
-        </div></>
+        </form></>
     );
 };
-
-function emailPromptForReset () {
-    document.getElementById('login-form-box').style.display= "none";
-    document.getElementById('pw-reset-form-box').style.display= "block";
-}

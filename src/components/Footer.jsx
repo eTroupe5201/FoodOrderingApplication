@@ -7,10 +7,8 @@ import {BsTelephonePlusFill} from 'react-icons/bs'; //added react-icons
 
 export function Footer() {
     return (
-     
-        <Box  className="Footer"  bg = 'black' color="white" paddingBottom={10}>
-           <section className="wave"></section>  
-            <Container> 
+        <Box className="Footer"  bg = 'black' color="white" paddingBottom={10}>
+            <Container maxW="container.xl">
                 <SimpleGrid columns={4} templateColumns={{base:'repeat(1, 1fr)', sm:'repeat(2, 1fr)',lg:'repeat(4, 1fr)' }}>
     
                     <Box colSpan={{base: 1, md:4,  xl: 4}}>
@@ -19,7 +17,7 @@ export function Footer() {
                     <Center><Image height="10"src="src\assets\White-Favicon.png"></Image></Center>
             
                     <Text fontSize={{ base: "12px",md: "15px", lg: "18px"}} mt={5}>
-                        Discover culinary excellence at Delcious Delicacies. We're passionate about crafting 
+                        Discover culinary excellence at Delcious Delicacies. We are passionate about crafting 
                         extraordinary flavors and providing a memorable dining experience. From our kitchen to
                         your table, savor the essence of exceptional cuisine with us. Welcome to Delicious Delicacies, 
                         where every bite tells our story.</Text>

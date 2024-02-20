@@ -1,12 +1,12 @@
-/* eslint-disable react/prop-types */
+ 
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
-import React, { FunctionComponent, PropsWithChildren, createContext, useContext, useEffect, useState, } from 'react';
-import { Center, Spinner } from '@chakra-ui/react';
-import { collection, doc, getDoc, getDocs, onSnapshot, } from "firebase/firestore";
+ 
+import React, { FunctionComponent, PropsWithChildren, createContext, useContext, useEffect, useState, } from "react";
+import { Center, Spinner } from "@chakra-ui/react";
+import { collection, doc, getDoc, getDocs, onSnapshot, deleteDoc, query, limit, writeBatch } from "firebase/firestore";
 import { db, auth, functions } from "../utils/firebase";
 import { signInAnonymously } from "firebase/auth";
-import { httpsCallable } from 'firebase/functions';
+import { httpsCallable } from "firebase/functions";
 
 
 const DataProviderContext = createContext({ 
@@ -19,6 +19,11 @@ const DataProviderContext = createContext({
     removeCartItem: () => {},
     checkout: () => Promise.resolve(""),
 });
+
+// export const useDataProviderForEmailCode = () => useContext(DataProviderEmailCodeContext);
+// const DataProviderEmailCodeContext = createContext({
+//     code: [],
+// });
 
 export const useDataProvider = () => useContext(DataProviderContext);
 /**
@@ -35,6 +40,8 @@ export const DataProvider = ({ children }) => {
   const [items, setItems] = useState([]);
   const [lines, setLines] = useState([]);
   const [order, setOrder] = useState();
+  const [user, setUser] = useState();
+  const [cartChanged, setCartChanged] = useState(false);
 
   //getDoc comes from firebase firestore, it can import automatically and receive the document
   const fetchRestaurantInfo = async () => {
@@ -43,9 +50,32 @@ export const DataProvider = ({ children }) => {
     We need to provide a reference to a specific document in Firestore.
     If we know the exact document ID I want, then we will use getDoc. 
     */
-    const restaurantInfoSnapshot = await getDoc(doc(db, 'restaurant', 'info'));
+    const restaurantInfoSnapshot = await getDoc(doc(db, "restaurant", "info"));
     setRestaurantInfo(restaurantInfoSnapshot.data());
   }
+
+  const fetchUserProfile = async () => {
+    console.log("Current user:", user); // Check current user
+    if (!user || !user.uid) {
+      console.log("No user logged in, or missing UID.");
+      return null; // If no user login or user doesn't have uid, return null
+    }
+    const uid = user.uid;
+    try {
+      const userProfileDoc = await getDoc(doc(db, "users", uid));
+      if (!userProfileDoc.exists()) {
+        console.log(`No user profile found for UID: ${uid}`);
+        return null;
+      }
+      const userData = userProfileDoc.data();
+      console.log(`User profile fetched for UID ${uid}:`, userData);
+      return userData;
+    } catch (error) {
+      console.error(`Error fetching user profile for UID ${uid}:`, error);
+      return null;
+    }
+  };
+  
 
   const fetchCategories = async () => {
     /*
@@ -72,11 +102,38 @@ export const DataProvider = ({ children }) => {
     itemsSnapshot.forEach((item) => dbItems.push(item.data()));
     setItems(dbItems);
   };
+
+  const fetchCartItems = async () => {
+    console.log("Current user:", user); // check current user
+    if (!user || !user.uid) {
+      console.log("No user logged in, or missing UID.");
+      return []; // if no user login or user doesn't have uid, return null array
+    }
+    const cartItems = [];
+    const uid = user.uid;
+    const cartRef = collection(db, "carts", uid, "items");
+    try {
+      const snapshot = await getDocs(cartRef);
+      if (snapshot.empty) {
+        console.log(`No cart items found for UID: ${uid}`);
+      } else {
+        snapshot.forEach(doc => {
+          cartItems.push({ id: doc.id, ...doc.data() });
+        });
+      }
+    } catch (error) {
+      console.error(`Error fetching cart items for UID ${uid}:`, error);
+    }
+    console.log(`Cart items fetched for UID ${uid}:`, cartItems);
+    return cartItems;
+  };
+  
   
   //because this wil be about internet latency
   //so here I have to use asychronized fuction to wait our request
   const fetchData = async () => {
-    //automatically log in using anonymous users I have stored in Firebase
+    //automatically log in using anonymous users I have stored in Firebase because I set up the firestore rule
+    //Because for security reasons I have to set it up to only allow read/write access to authenticated users (even anonymously authenticated users)
     await signInAnonymously(auth);
     await fetchRestaurantInfo();
     await fetchCategories();
@@ -98,31 +155,55 @@ export const DataProvider = ({ children }) => {
     return items.filter((item) => item.category === category);
   };
 
-  const addToCart = (line) => {
-    setLines([...lines, line]);
+  const checkCartNotEmpty = async () => {
+    if (!user) return false; 
+    const uid = user.uid;
+    const cartRef = collection(db, "carts", uid, "items"); // Using collection to locate the user's shopping cart entry
+    // Create a query object and apply limit on it
+    const querySnapshot = await getDocs(query(cartRef, limit(1)));
+    console.log("Snapshot empty:", querySnapshot.empty);
+    return !querySnapshot.empty; // If snapshot. empty is true, then the shopping cart is empty, otherwise it is not empty
+  };
+
+  const addToCart = async (line) => {
+    const uid = user.uid;
+    //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
+    const placeCartCallable = httpsCallable(functions, "placecart");
+
+    //2. Calling functions and passing order data
+    const { data } = await placeCartCallable({...line, uid});
+    setCartChanged(true);
+    console.log(data);
+
+    return;
   };
 
   console.log(lines);
 
-  const removeCartItem = (itemIndex) => {
-    setLines(lines.filter((_, index) => index !== itemIndex));
+  const removeCartItem = async (itemId) => {
+    if (!user) return; // make sure user does exist
+    const uid = user.uid;
+    const itemRef = doc(db, "carts", uid, "items", itemId); // Using doc to locate specific shopping cart entry documents
+    await deleteDoc(itemRef); // Use deleteDoc to delete the document
+    // update UI
+    setLines(currentLines => currentLines.filter(line => line.id !== itemId));
+    setCartChanged(true);
   };
 
   //get the data from the form data of checkout page, we should save this data to the firebase
   const checkout = async (order) => {
     //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
-    const placeOrderCallable = httpsCallable(functions, 'placeorder');
+    const placeOrderCallable = httpsCallable(functions, "placeorder");
 
     //2. Calling functions and passing order data
     const { data } = await placeOrderCallable({...order, lines})
     console.log(data);
-    //3. after saving into database, we should fresh the lines array
-    setLines([]);
-    //4. also set order
+
+    //3. also set order
     setOrder(data.order);
     
     /**
-     * 5 Set up a document listener to monitor changes in specific order documents in the Firestore database. 
+     * 4. Set up a document listener to monitor changes in specific order documents in the Firestore database. 
      * For example, if the order status changes from "pending" to "confirmed" or "cancelled", 
      * we can use this listener to capture this change and update the UI of the client application to notify users of the change in order status
      * 
@@ -136,9 +217,69 @@ export const DataProvider = ({ children }) => {
     });
 
     return data.id; 
-
   }
   
+  const clearCartAfterConfirmation = async () => {
+    if (!user) return; // make sure user exists
+    const uid = user.uid;
+    const cartRef = collection(db, "carts", uid, "items"); // Locate the subcollection for the user's cart items
+
+    // Retrieve all cart items
+    const snapshot = await getDocs(cartRef);
+    // Create a batch to delete all items in a single atomic operation
+    const batch = writeBatch(db);
+
+    snapshot.docs.forEach((doc) => {
+        batch.delete(doc.ref); // Add delete operation for each cart item to the batch
+    });
+
+    // Commit the batch
+    await batch.commit();
+
+    // Clear the lines state after all items have been deleted
+    setLines([]);
+  };
+
+
+//get data from the form data of register page, save data to firebase
+const registerNewAccount = async (userInfo) => {
+  
+  //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
+  const registerNewAccountCallable = httpsCallable(functions, "registerAccount");
+  console.log(userInfo);
+
+  //TODO: change ID to match email - so referencing can be done by email
+
+  //2. Calling functions and passing order data
+  const { data } = await registerNewAccountCallable({...userInfo})
+  console.log("waited for registerNewAccountCallable");
+  console.log(data);
+
+  //3. also set user
+  //setUser(data.userInfo);
+
+  return data;
+}
+
+
+const getUserInfo = async (userInfo) => {
+  setUser(userInfo);
+}
+
+const storeContactUsForm = async (formInfo) => {
+  //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
+  const sendContactUsRequestCallable = httpsCallable(functions, "contactUsSubmit");
+  console.log(formInfo);
+  
+  //2. Calling functions and passing form info 
+  const { data } = await sendContactUsRequestCallable({...formInfo})
+  console.log(data);
+
+  //3. also set user
+  //setUser(data.credentials);
+  return data.id; 
+}
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -155,7 +296,7 @@ export const DataProvider = ({ children }) => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-    <DataProviderContext.Provider value={{lines, restaurantInfo, categories, items, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, order}}>
+    <DataProviderContext.Provider value={{user, lines, setLines, restaurantInfo, categories, items, cartChanged, setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order}}>
       {isReady ? (
         children
       ) : (
