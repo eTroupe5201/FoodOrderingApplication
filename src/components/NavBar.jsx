@@ -199,14 +199,14 @@ export function NavBar() {
             _hover={{ boxShadow: "0 0 10px 1px tan"}}                     
             w={{ base: "50px", sm: "4em" }}
             maxH={{ base: "40px", sm: "4em"}}
-            className="photo" src="src\assets\White-Favicon.png" alt="logo" /></Link> 
+            className="photo" src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/assets/White-Favicon.png" alt="logo" /></Link> 
 
                 ) : (
                     <Link to="/">  <Image
                     _hover={{ boxShadow: "0 0 10px 1px tan"}}
                     w={{  md: "18em" }}
                     maxH={{  md: "11em"}}
-                    className="photo" src="src\assets\divine-delicacies2.png" alt="logo" /> </Link> 
+                    className="photo" src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/assets/divine-delicacies2.png" /> </Link> 
                 )}
 
             <ul>
