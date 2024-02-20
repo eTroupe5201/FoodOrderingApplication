@@ -6,10 +6,22 @@ import { useDataProvider } from "../components/dataProvider";
 import { BottomButton } from "../components/BottomButton";
 import { calculateOrderSubtotal, calculateOrderTax, calculateOrderTotal } from "../utils/calculations";
 import { Button, Modal, ModalContent, ModalOverlay, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
-
+import { useEffect } from "react";
 export const CartModal = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
-    const { lines, removeCartItem } = useDataProvider();
+    const { fetchCartItems, removeCartItem, lines, setLines} = useDataProvider();
+
+    useEffect(() => {
+        // Define an asynchronous function to retrieve shopping cart items
+        const fetchItems = async () => {
+          const items = await fetchCartItems();
+          // Directly use setLines from middleware to update the status of lines
+          setLines(items); // This assumes that setLines is passed from middleware
+        };
+      
+        // Calling asynchronous functions
+        fetchItems();
+      }, [fetchCartItems]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">
@@ -112,7 +124,8 @@ export const CartModal = ({ isOpen, onClose }) => {
                             background="black"
                             border="white solid 1px"
                             _hover={{ boxShadow: "0 0 10px 1px linen" }}
-                            onClick={onClose}
+                            onClick={() => navigate("/checkout")}
+                            total={calculateOrderTotal(lines, 10).toFixed(2)}
                         >
                             Checkout
                         </Button>

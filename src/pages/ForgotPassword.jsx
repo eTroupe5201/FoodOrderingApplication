@@ -68,7 +68,7 @@ export const ForgotPassword = ({saveData}) => {
             <Box 
                     borderRadius="25px" border="tan 2px outset"
                     title='pw-reset-form-box' id='pw-reset-form-box' 
-                    display='none' bg='#000000' color='#fff' height='2%' m='2rem' mb="10em"p='1.5rem' w={{base:"25em", sm:"30em"}} >                 <VStack>
+                     bg='#000000' color='#fff' height='2%' m='2rem' mb="10em"p='1.5rem' w={{base:"25em", sm:"30em"}} >                 <VStack>
             <Text  fontSize="15px"  fontWeight='bold'> To reset your password, please enter your email address. </Text>
                 <Text  fontSize="15px"  fontWeight='bold' mb='1rem'> We will email you a code to verify that it is you attempting to reset the password. </Text>                    <Input
                         id='email-forgot'

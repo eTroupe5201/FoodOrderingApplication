@@ -74,6 +74,10 @@
     
 }
 
+.Footer ul {
+    list-style: none;
+    gap: 2rem;
+}
 .nav a {
     color: inherit;
     display: flex; 
@@ -91,6 +95,17 @@
 
 .nav li:hover{
     font-weight: bold;
+}
+.Footer li:hover {
+    font-weight: bold;
+    scale: 1.1 ;
+    text-shadow: #fff 0px 0px 10px;
+
+}
+.Footer li {
+ 
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 .Contact, .Login, .Register {
@@ -142,7 +157,6 @@
     text-align: center;
     justify-content: center;
     align-items: center;
-  
     position: relative;
 }
 
@@ -169,7 +183,6 @@
 .overlay {
     color:white;
     width: 700px;
-    
     position: absolute;
     margin-top: 6.5%;
     text-align: center;
