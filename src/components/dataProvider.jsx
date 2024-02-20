@@ -1,7 +1,7 @@
  
 /* eslint-disable no-unused-vars */
  
-import React, { FunctionComponent, PropsWithChildren, createContext, useContext, useEffect, useState, } from "react";
+import React, { createContext, useContext, useEffect, useState, } from "react";
 import { Center, Spinner } from "@chakra-ui/react";
 import { collection, doc, getDoc, getDocs, onSnapshot, deleteDoc, query, limit, writeBatch } from "firebase/firestore";
 import { db, auth, functions } from "../utils/firebase";

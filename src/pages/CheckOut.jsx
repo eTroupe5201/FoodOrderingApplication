@@ -1,9 +1,9 @@
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, FormControl, FormErrorMessage, FormLabel, Input, Radio, RadioGroup, Textarea, VStack, } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionItem, AccordionPanel, FormControl, FormErrorMessage, FormLabel, Input, Radio, RadioGroup, Textarea, VStack, } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import React, { useEffect, useState, useRef } from "react";
+import  { useEffect,  useRef } from "react";
 import { BottomButton } from "../components/BottomButton";
 import { useDataProvider } from "../components/dataProvider"
-import { calculateOrderSubtotal, calculateOrderTotal, } from "../utils/calculations";
+import { calculateOrderTotal, } from "../utils/calculations";
 import { PAYMENT_METHODS } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 

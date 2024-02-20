@@ -1,8 +1,8 @@
-import {fireEvent, render, screen} from "@testing-library/react";
+import { render, screen} from "@testing-library/react";
 import {Contact} from "../pages/Contact";
 import { BrowserRouter } from "react-router-dom";
 import { afterEach, describe, it, expect, vi} from "vitest";
-import { act } from "react-dom/test-utils";
+// import { act } from "react-dom/test-utils";
 import userEvent from "@testing-library/user-event";
 
 describe("Contact page", () => {

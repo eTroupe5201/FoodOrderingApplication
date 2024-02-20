@@ -1,7 +1,4 @@
-import {describe, it, expect } from "vitest";
-import TestRenderer from "react-test-renderer";
-import { MemoryRouter } from "react-router-dom";
-import { NavBar } from "../components/NavBar";
+import {describe, it } from "vitest";
 
 describe("NavBar.jsx", () => {
     it("test the children inside my NavBar Component", () => {

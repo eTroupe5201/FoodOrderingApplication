@@ -12,7 +12,7 @@ export const Menu = () => {
     return (
         //I set up 3 categories in one line temporarily, can adjust this syntax later
         <Center> 
-            <Box title='menu-grid' className="MenuContainer" mt="30px" maxW="90%" justifyContent="center" p={5}>
+            <Box title="menu-grid" className="MenuContainer" mt="30px" maxW="90%" justifyContent="center" p={5}>
                 {categories.map((category) => ( 
 
                 <Box  className="Menu" key={category.id} p={5} boxShadow="md"  width="100%">
@@ -28,7 +28,7 @@ export const Menu = () => {
                     </Box>
                     
                     {/* <Image src={category.image?.src} objectFit="cover" w="full" h="200px" mb={3} /> */}
-                     <SimpleGrid  templateColumns={{base:'repeat(1, 1fr)', sm:'repeat(2, 1fr)', md:'repeat(2, 1fr)' , lg:'repeat(2, 1fr)' , xl:'repeat(4, 1fr)'}} spacing={10}>  
+                     <SimpleGrid  templateColumns={{base:"repeat(1, 1fr)", sm:"repeat(2, 1fr)", md:"repeat(2, 1fr)" , lg:"repeat(2, 1fr)" , xl:"repeat(4, 1fr)"}} spacing={10}>  
                     {getItemsByCategory(category.id).map((item) => (
                    
             

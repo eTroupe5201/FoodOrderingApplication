@@ -1,5 +1,4 @@
-import React from 'react';
-import { Box, Center, Image, Text, SimpleGrid } from '@chakra-ui/react';
+import { Box, Center, Image, Text, SimpleGrid } from "@chakra-ui/react";
 
 // add mobile first designs later
 export function DiscoverOurMenu() {
@@ -32,7 +31,7 @@ export function DiscoverOurMenu() {
                         <Image h="100%" src="src\assets\slide_5.jpg" alt="logo" />
                     </Center>
                 </Box>
-                <Box bg="Linen" width={{ base: '100%', md: '50%', lg: '40%' }}>
+                <Box bg="Linen" width={{ base: "100%", md: "50%", lg: "40%" }}>
                     <Text></Text>
                 </Box>
             </SimpleGrid>

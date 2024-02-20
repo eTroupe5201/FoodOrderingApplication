@@ -1,5 +1,5 @@
 import { Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, Center, useToast } from "@chakra-ui/react";
-import React, { useState } from "react";
+ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { auth } from "../utils/firebase" 
@@ -12,7 +12,7 @@ import { useDataProvider } from "../components/dataProvider"
 * Route to ForgotPassword page if button is clicked
 */
 export const Login = ({saveData}) => {
-    const {setUserAccount} = useDataProvider();
+    // const {setUserAccount} = useDataProvider();
     const toast = useToast();
     const navigate = useNavigate();
     const { getUserInfo } = useDataProvider();
