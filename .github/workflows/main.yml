@@ -56,7 +56,7 @@ jobs:
       with:
         args: deploy
       env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
+        GCP_SA_KEY: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64}}
 
   create-release:
     needs: build-and-test
