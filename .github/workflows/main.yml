@@ -59,6 +59,7 @@ jobs:
     - name: Install ESLint React Plugin
       run: |
         cd functions
+        npm ci
         npm install eslint-plugin-react@latest --save-dev
   
     - name: Run ESLint
