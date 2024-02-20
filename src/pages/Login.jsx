@@ -103,15 +103,19 @@ export const Login = () => {
     }
 
     const baseLoginOrRegisterForm = (
-        <Box title='login-form-box' id='login-form-box' bg='#000000' color='#fff' w='35rem' height='100%' m='2rem' p='1.5rem'> 
-            <VStack>
-                <Text fontSize='30px' fontWeight='bold' mb='1rem'> Log In or Register </Text>
+        <Box  w={{base:"25em", sm:"30em", md:"35em"}} title='login-form-box' id='login-form-box' bg='#000000' color='#fff' height='100%' m='2rem' p='1.5rem' > 
+            <VStack >
+                <Text   fontSize={{ base: "20px", md: "25px"}} 
+                fontWeight='bold' 
+                mb='1rem'> SIGN IN </Text>
                 <Input 
                     id='email'
                     type='email'
                     value={email} 
                     onChange={handleEmail} 
                     placeholder="enter email address"
+                    border="tan 2px outset"
+              
                 />
                 <InputGroup>
                     <Input 
@@ -120,15 +124,26 @@ export const Login = () => {
                         value={password} 
                         onChange={handlePassword} 
                         placeholder="enter password"
+                        border="tan 2px outset"
+                        w={{base:"20em", sm:"26em", md:"27em"}}
+                        
+                        
                     />
                     <InputRightElement width='4.5rem' h='48px'>
                         <Box 
+                        
                             as='button' 
-                            bg='#A4A1A2' 
+                            bg='white' 
+                            color="black"
                             w='3.5rem' 
-                            h='2rem' 
+                            h='25px' 
+                            fontWeight='bold'
+                            fontSize="11px"
                             borderRadius='md' 
+                            border="tan 2px outset"
+                            _hover={{ boxShadow: "0 0 5px 1px tan" }}
                             onClick={handleShowPassword} 
+                            mb="9px"
                         >
                             {show ? 'Hide' : 'Show'}
                         </Box>
@@ -139,65 +154,82 @@ export const Login = () => {
                     color='#fff'
                     fontWeight='bold'
                     alignSelf='end'
-                    fontSize='20px'
+                    fontSize="11px"
+                    h='40px'
+                    w='50%'
+                    margin="2%"
+                    border="tan 2px outset"
+                    _hover={{ boxShadow: "0 0 5px 1px linen" }}
                     onClick={emailPromptForReset} 
                     > 
                     Forgot Password?
                 </Box>
                 <Box 
                     as='button'  
-                    mt='1rem'
-                    bg='#fff' 
-                    color='#000000'
+                 
+                    mt="10%"
+                    _hover={{ boxShadow: "0 0 5px 1px linen" }}
+                    color='white'
                     h='40px'
-                    w='250px'
+                    w='70%'
                     fontWeight='bold'
-                    fontSize='20px'
+                    fontSize="12px"
+                    border="tan 2px outset"
                     borderRadius='md'
+                    background="black"
                     onClick={handleLogin} 
                     > 
-                    Log In to Your Account
+                    CONTINUE
                 </Box>
                 <Box 
+                      _hover={{ boxShadow: "0 0 5px 1px linen" }}
+                         border="tan 2px outset"
                     as='button'  
                     mt='0.5rem'
-                    bg='#fff' 
-                    color='#000000'
+                    
+                    color='white'
                     h='40px'
-                    w='250px'
+                    w='70%'
                     fontWeight='bold'
-                    fontSize='20px'
+                    fontSize="12px"
                     borderRadius='md'
+                    background="black"
                     onClick={navigateToRegister} 
                     > 
-                    Register for an Account
+                    REGISTER
                 </Box>
             </VStack>
         </Box>
     );
 
     const sendEmailCodeForm = (
-        <Box title='pw-reset-form-box' id='pw-reset-form-box' display='none' bg='#000000' color='#fff' w='35rem' height='100%' m='2rem' p='1.5rem'> 
+        <Box 
+        borderRadius="25px" border="tan 2px outset"
+         title='pw-reset-form-box' id='pw-reset-form-box' 
+         display='none' bg='#000000' color='#fff' height='2%' m='2rem' mb="10em"p='1.5rem' w={{base:"25em", sm:"30em"}} > 
             <VStack>
-                <Text fontSize='30px' fontWeight='bold'> To reset your password, please enter your email address. </Text>
-                <Text fontSize='20px' fontWeight='bold' mb='1rem'> We will email you a code to verify that it is you attempting to reset the password. </Text>
+                <Text  fontSize="15px"  fontWeight='bold'> To reset your password, please enter your email address. </Text>
+                <Text  fontSize="15px"  fontWeight='bold' mb='1rem'> We will email you a code to verify that it is you attempting to reset the password. </Text>
                 <Input 
                     id='email'
                     type='email'
                     value={email} 
                     onChange={handleEmail} 
                     placeholder="enter email address"
+                    
                 />
                 <Box 
                     as='button'  
                     mt='1rem'
-                    bg='#fff' 
-                    color='#000000'
+                    bg='black' 
+                    color='white'
                     h='40px'
                     w='250px'
                     fontWeight='bold'
-                    fontSize='20px'
+                    fontSize="15px"
                     borderRadius='md'
+                    border="tan 2px outset"
+                    _hover={{ boxShadow: "0 0 5px 1px linen" }}
                     onClick={handleForgotPwEmail} 
                     > 
                     Send Code

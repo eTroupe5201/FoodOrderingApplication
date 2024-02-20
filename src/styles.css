@@ -10,22 +10,27 @@
        
     }}   */
     
-@keyframes fadeInAnimation {
-    0% {
-         opacity: 0;
-         transform: translateX(-100%);
-    }
-    100% {
-         opacity: 1; 
-         transform: translateX(0);
-    }
-    }
-    /*Combined, just on page refresh*/
+
+
+/*Combined, just on page refresh*/
 * {
     box-sizing: border-box;
 }
 
-
+.Menu{
+    font-family: 'Raleway', sans-serif;
+    font-weight: bold;
+    color:white;
+    background-color: #000000;
+    border-color: white;
+    border-width: 1px;
+    border-style: solid;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 25px;
+    margin-bottom: 10%;
+}
 .photo{
     height:75px;
     width:20%;
@@ -39,7 +44,7 @@
 .nav {
     color: #fff;
     padding-right: 100px;;
-    height: 150px;
+   
     font-weight: 100;
     background: #000000;
     font-family: 'Raleway', sans-serif;
@@ -68,7 +73,13 @@
     font-size: 23pt;
     
 }
+.Footer ul {
+    list-style: none;
 
+    gap: 2rem;
+    
+    
+}
 .nav a {
     color: inherit;
     display: flex; 
@@ -83,14 +94,28 @@
 
 .nav li:hover {
     font-weight: bold;
+    scale: 1.1 ;
+    text-shadow: #fff 0px 0px 10px;
 }
+.Footer li:hover {
+    font-weight: bold;
+    scale: 1.1 ;
+    text-shadow: #fff 0px 0px 10px;
 
+}
+.Footer li {
+ 
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
 .Contact, .Login, .Register {
     font-family: 'Raleway', sans-serif;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center; 
+    border-radius: 25px;
+   
 }
 
 .Contact, .Login {
@@ -103,18 +128,19 @@
 
 .Contact input, .Login input, .Register input {
     width: stretch;
-    height: 3rem;
+    height: 2.5rem;
     font-family: 'Raleway', sans-serif;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 15px;
     color:black;
     background-color: #fff;
 }
 
+
 .Contact textarea {
     font-family: 'Raleway', sans-serif;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 15px;
     color:black;
     background-color: #fff;
 }
@@ -124,7 +150,7 @@
     text-align: center;
     justify-content: center;
     align-items: center;
-    font-size: large;
+   
 }
 
 .DiscoveryOurStory{
@@ -132,7 +158,7 @@
     text-align: center;
     justify-content: center;
     align-items: center;
-    font-size: large;
+  
     position: relative;
 }
 
@@ -158,7 +184,6 @@
 
 .overlay {
     color:white;
- 
     width: 700px;
     
     position: absolute;
@@ -191,12 +216,13 @@ body {
 .wave::after{
     content:'';
     position: absolute;
+   
     bottom: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: 300px;
     background:#000000;
-    clip-path: ellipse(100% 30% at 100% 100%);
+    clip-path: ellipse(100% 20% at 100% 100%);
 } 
 
 .Footer{
@@ -208,9 +234,7 @@ body {
     align-items: center;
 }
 
-.Footer :link {
-    padding: 10px;
-}
+
 .team-text{
     font-family: 'Raleway', sans-serif;
     text-align: center;
@@ -228,14 +252,24 @@ body {
     font-family: 'Raleway', sans-serif;
     justify-content: center;
     align-items: center;
-    width:100%;
-    height:700px;
-    font-weight: bold;
-    border-top: 20px solid rgb(0, 0, 0);
-    position: relative;
-    
-}
+    margin-bottom: 5%;  
+    background-color: black;
 
+}
+.OurTeamBox{
+    justify-content: center;
+    align-items: center;
+    padding: 5%;
+    height:100%;
+  
+    border-radius: 25px;
+    border: white 2px solid;
+    color: white;
+    text-align: center;
+    margin: 5%;
+    display: grid;
+   
+}
 /*this is the fix for full length*/
 .css-vhc7ah{
     --chakra-sizes-prose: null;
@@ -249,24 +283,10 @@ body {
     display: block;
     margin-top: 2%;
    filter: drop-shadow(15px 12px 15px #000000);
-}
+   border: white 2px solid;
+ }
 
-.OurTeamBox{
-   
-    justify-content: center;
-    align-items: center;
-    margin-top: 5%;
-    margin-left: 5%;
-    padding-top: 5%;
-    
-    padding: 5%;
-    height:100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    border-radius: 10px;
-    color: white;
-    text-align: center;
-   
-}
+
 
 
 
@@ -275,35 +295,28 @@ body {
     text-align: center;
     justify-content: center;
     align-items: center;
-    font-size: large;
    position: absolute;
-   margin-top: 25%;
-    height:300px;
+  
    width:75%;
 
 }
 .SliderHeading{
     font-family: 'Great Vibes', cursive;
-    font-size: 40pt;
-   text-shadow: 2px 2px 4px #000000;
+    text-shadow: 2px 2px 4px #000000;
     color: tan;
-  margin-left: 10%;
+    margin-left: 10%;
     text-align: left;
     z-index: 102;
-    font-weight: bold;
+    
 }
-.SliderButton{
-    font-weight: bolder;
-    margin-top: 2%;
-}
+
 .line {
-    border-top: 2px solid rgb(255, 255, 255);
+    border-top: 2px solid black;
     width: 100%; /* Adjust width as needed */
 
   }
 .SliderOverlay {
     color:rgb(255, 255, 255);
-    height:50%;
     width: 75%;
     position: absolute;
     margin-top: 2%;
@@ -324,6 +337,21 @@ body {
     margin-bottom: 0%;
    
 
+}
+#login-form-box{
+    font-family: 'Raleway', sans-serif;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    margin-bottom: 20%;
+    border-radius: 25px;
+    border: tan 2px outset;
+    color: white;
+    padding: 5%;
+    display: grid;
+    background-color: black;
+ 
 }
 
 

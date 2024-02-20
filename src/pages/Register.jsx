@@ -136,10 +136,12 @@ export const Register = () => {
 
     return (
         <><div className='Register' > 
-            <Flex alignContent='center' justifyContent='center'>
-                <Box title='register-form-box' id='regjster-form-box' bg='#000000' color='#fff' w='35rem' height='100%' m='2rem' p='1.5rem'> 
+            <Flex  mb="5em" alignContent='center' justifyContent='center'>
+                <Box border="outset 2px tan" borderRadius="25px"
+                 title='register-form-box' id='regjster-form-box' bg='#000000' 
+                 color='#fff' w={{base:"25em", sm:"30em", md:"35em"}} height='100%' m='2rem' p='2rem'> 
                     <VStack>
-                        <Text fontSize='30px' fontWeight='bold' mb='1rem'> Register for an Account </Text>
+                        <Text fontSize='20px' fontWeight='bold' mb='1rem'> REGISTER </Text>
                         <Input 
                             id='fname'
                             value={fname} 
@@ -184,9 +186,15 @@ export const Register = () => {
                             <InputRightElement width='4.5rem' h='48px'>
                                 <Box 
                                     as='button' 
-                                    bg='#A4A1A2' 
+                                    bg='white' 
+                                    mb="9px"
+                                    color="black"
                                     w='3.5rem' 
-                                    h='2rem' 
+                                    h='25px' 
+                                    fontWeight='bold'
+                                    fontSize="11px"
+                                    _hover={{ boxShadow: "0 0 5px 1px tan" }}
+                                    border="tan 2px outset"
                                     borderRadius='md' 
                                     onClick={handleShowPassword} 
                                 >
@@ -205,9 +213,15 @@ export const Register = () => {
                             <InputRightElement width='4.5rem' h='48px'>
                                 <Box 
                                     as='button' 
-                                    bg='#A4A1A2' 
+                                    border="tan 2px outset"
+                                    bg='white' 
+                                    mb="9px"
+                                    color="black"
                                     w='3.5rem' 
-                                    h='2rem' 
+                                    h='25px' 
+                                    fontWeight='bold'
+                                    fontSize="11px"
+                                    _hover={{ boxShadow: "0 0 5px 1px tan" }}
                                     borderRadius='md' 
                                     onClick={handleShowConfirmPassword} 
                                 >
@@ -215,16 +229,18 @@ export const Register = () => {
                                 </Box>
                             </InputRightElement>
                         </InputGroup>
-                        <Text whiteSpace="pre-line"> {passwordReqMessage} </Text>
+                        <Text mt="10px" lineHeight="5"textAlign="center" padding="20px" textTransform="uppercase" fontSize="12px" whiteSpace="pre-line"> {passwordReqMessage} </Text>
                         <Box 
                             as='button'  
                             mt='0.5rem'
-                            bg='#fff' 
-                            color='#000000'
+                            bg='black' 
+                            color='white'
                             h='40px'
                             w='250px'
                             fontWeight='bold'
-                            fontSize='20px'
+                            fontSize="15px"
+                            _hover={{ boxShadow: "0 0 5px 1px tan" }}
+                            border="outset 2px tan"
                             borderRadius='md'
                             onClick={handleRegister} 
                             > 

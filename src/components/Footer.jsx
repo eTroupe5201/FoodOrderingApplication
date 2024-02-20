@@ -2,12 +2,15 @@
 import React from 'react';
 import {Center,Container,Heading, SimpleGrid, Box,  Image, Text, Grid, Flex} from '@chakra-ui/react'
 import { Link } from 'react-router-dom';
+import {motion} from "framer-motion";
 import {BsTelephonePlusFill} from 'react-icons/bs'; //added react-icons 
 
 export function Footer() {
     return (
-        <Box className="Footer"  bg = 'black' color="white" paddingBottom={10}>
-            <Container maxW="container.xl">
+     
+        <Box  className="Footer"  bg = 'black' color="white" paddingBottom={10}>
+           <section className="wave"></section>  
+            <Container> 
                 <SimpleGrid columns={4} templateColumns={{base:'repeat(1, 1fr)', sm:'repeat(2, 1fr)',lg:'repeat(4, 1fr)' }}>
     
                     <Box colSpan={{base: 1, md:4,  xl: 4}}>
@@ -25,24 +28,30 @@ export function Footer() {
                     <Box colSpan={{base: 1,  md:4,  xl: 4}}>
                         <Heading fontSize={{ base: "15px", md: "20px", lg: "30px" }}
                         fontFamily="'Raleway', sans-serif "mb={5} mt={10}>Useful Links</Heading>
+                    
                     <Grid fontSize={{ base: "12px",md: "15px", lg: "18px" }}>
-                        <Link to="/">Home</Link>
-                        <Link to="/menu">Menu</Link>
-                        <Link to="/login">Login</Link>
-                        <Link to="/register">Register</Link>
-                        <Link to="/contact">Contact</Link>
-                        <Link to="/about">About</Link>
+                <ul>
+                    <li><Link to="/"><Text>Home</Text></Link></li>
+                <li><Link to="/contact"><Text >Contact Us</Text></Link></li>
+                <li><Link to="/menu"><Text >Order</Text></Link></li>
+                <li><Link to="/login"><Text >Login</Text></Link></li>
+                <li><Link to="/contact"><Text>Contact</Text></Link></li>
+                <li><Link to="/about"><Text>About</Text></Link></li>
+                </ul>
+                 
                     </Grid>
                     <Text mt={5}></Text>
                     </Box>
                     <Box colSpan={{base: 1,  md:4,  xl: 4}}>
                     <Heading fontSize={{ base: "15px", md: "20px", lg: "30px" }}fontFamily="'Raleway', sans-serif " mb={5} mt={10}>Follow Us</Heading>
                     <Grid fontSize={{ base: "12px",md: "15px", lg: "18px"}}>
-                        <Link to="/">Facebook</Link>
-                        <Link to="/">Instagram</Link>
-                        <Link to="/">Twitter</Link>
-                        <Link to="/">Youtube</Link>
-                        <Link to="/">TikTok</Link>
+                 <ul>
+                <li><Link to="/"><Text >Facebook</Text></Link></li>
+                <li><Link to="/"><Text >Instagram</Text></Link></li>
+                <li><Link to="/"><Text >Twitter</Text></Link></li>
+                <li><Link to="/"><Text >Youtube</Text></Link></li>
+                <li><Link to="/"><Text >TikTok</Text></Link></li>
+       </ul>
                     </Grid>
                     </Box>
                     <Box colSpan={{base: 1, md:4,  xl: 4}}>
@@ -59,5 +68,6 @@ export function Footer() {
                 </SimpleGrid> 
                 </Container>
         </Box>
+      
     );
 }
