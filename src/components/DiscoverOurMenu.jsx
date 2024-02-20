@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heading, Box, Grid, Center, Image, Text, SimpleGrid, Container, Flex } from '@chakra-ui/react';
+import { Box, Center, Image, Text, SimpleGrid } from '@chakra-ui/react';
 
 // add mobile first designs later
 export function DiscoverOurMenu() {

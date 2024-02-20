@@ -1,11 +1,11 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
-import { Heading, Box, Grid, Center, Image, Text, SimpleGrid, Container, Flex } from '@chakra-ui/react';
+import { Heading, Box, Center, Image, Text, SimpleGrid } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
 export function Banner() {
     return (
-        <motion.Box className="Banner" aria-label="Banner" 
+        <Box className="Banner" aria-label="Banner"  ////motion.Box
         initial={{y:-250}}
         animate={{y:0}}
         transition={{ delay: 0.2, type: 'spring', stiffness: 120 }}
@@ -90,7 +90,7 @@ export function Banner() {
                     </Text>
                 </Box>
             </SimpleGrid>
-        </motion.Box>
+        </Box> //motion.Box
     );
 }
 

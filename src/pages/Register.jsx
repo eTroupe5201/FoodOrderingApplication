@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
 
-
 /* Register page - use React hook Forms for collecting input and validating. Once validated and submitted, send request to Firebase and:
 *   - if account exists with provided email, route to Login page
 *   - if no account exists with provided email, create account and store user info in DB. Upon return, route back to Home page
@@ -76,42 +75,74 @@ export const Register = ({saveData}) => {
                 <Box border="outset 2px tan" borderRadius="25px"
                  title='register-form-box' id='register-form-box' bg='#000000' 
                  color='#fff' w={{base:"25em", sm:"30em", md:"35em"}} height='100%' m='2rem' p='2rem'> 
+                   
                     <VStack>
-                        <Text fontSize='20px' fontWeight='bold' mb='1rem'> REGISTER </Text>
-                        <Input 
-                            id='fname'
-                            value={fname} 
-                            onChange={handleFname} 
-                            placeholder="first name (required)"
-                        />
-                        <Input 
-                            id='lname'
-                            value={lname} 
-                            onChange={handleLname} 
-                            placeholder="last name (required)"
-                        />
-                        <Input 
-                            id='email'
-                            type='email'
-                            value={email} 
-                            onChange={handleEmail} 
-                            placeholder="enter email address"
-                            mt='1rem'
-                        />
-                        <Input 
-                            id='confirmEmail'
-                            type='confirmEmail'
-                            value={confirmEmail} 
-                            onChange={handleConfirmEmail} 
-                            placeholder="confirm email address"
-                        />
-                        <Input 
-                            type='tel'
-                            value={phone} 
-                            onChange={handlePhone} 
-                            placeholder="phone number (optional)"
-                        />
-                        <InputGroup mt='1rem'>
+                        <Text fontSize='20px' fontWeight='bold' mb='1rem'> REGISTER </Text>                        
+                        <FormControl id='fnameField' isInvalid={!!formState?.errors?.firstName?.type}>
+                            <FormLabel>First Name</FormLabel>
+                            <Input 
+                                id='firstName'
+                                title='register-first-name'
+                                {...register("firstName", { required: true, pattern:/(^[a-zA-Z,'-][a-zA-Z\s,'-]{0,20}[a-zA-Z]$)/})}
+                            />
+                            <FormErrorMessage>Required</FormErrorMessage>
+                        </FormControl>
+                        <FormControl id='lnameField' isInvalid={!!formState?.errors?.lastName?.type}>
+                            <FormLabel>Last Name</FormLabel>
+                            <Input 
+                                id='lastName'
+                                title='register-last-name'
+                                {...register("lastName", { required: true, pattern:/(^[a-zA-Z,'-][a-zA-Z\s,'-]{0,20}[a-zA-Z]$)/ })}
+                            />
+                            <FormErrorMessage>Required</FormErrorMessage>
+                        </FormControl>
+                        <FormControl id='emailField' isInvalid={!!formState?.errors?.email?.type || !emailsMatch}>
+                            <FormLabel >Email Address</FormLabel>
+                            <Input 
+                                id='email'
+                                title='register-email'
+                                type='email'
+                                {...register("email", { 
+                                    required: true,
+                                    validate: (val) => {
+                                        if (watch("confirmEmail") != val) {
+                                            setEmailErrorMsg("Email addresses do not match.");
+                                            setEmailsMatch(false);
+                                        } 
+                                        else {
+                                            setEmailErrorMsg("Required");
+                                            setEmailsMatch(true);
+                                        }
+                                    }
+                                })}
+                            />
+                            <FormErrorMessage>{emailErrorMsg}</FormErrorMessage>
+                        </FormControl>
+                        <FormControl id='confirmEmailField' isInvalid={!!formState?.errors?.confirmEmail?.type || !emailsMatch}>
+                        <FormLabel>Confirm Email Address</FormLabel>
+                            <Input 
+                                id='confirmEmail'
+                                title='register-confirm-email'
+                                type='confirmEmail'
+                                {...register("confirmEmail", { 
+                                    required: true,
+                                    validate: (val) => {
+                                        if (watch("email") != val) {
+                                            setEmailErrorMsg("Email addresses do not match.");
+                                            setEmailsMatch(false);
+                                            
+                                        } 
+                                        else {
+                                            setEmailErrorMsg("Required");
+                                            setEmailsMatch(true);
+                                        } 
+                                    }
+                                })}
+                            />
+                            <FormErrorMessage>{emailErrorMsg}</FormErrorMessage>
+                        </FormControl>
+                        <FormControl id='phoneField' >
+                            <FormLabel>Phone Number (optional)</FormLabel>
                             <Input 
                                 type='tel'
                                 title='register-phone'
@@ -145,14 +176,14 @@ export const Register = ({saveData}) => {
                                         title='show-password-button'
                                         bg='white' 
                                         mb="9px"
-                                    color="black"
-                                    w='3.5rem' 
+                                        color="black"
+                                        w='3.5rem' 
                                         h='25px' 
                                         fontWeight='bold'
-                                    fontSize="11px"
-                                    _hover={{ boxShadow: "0 0 5px 1px tan" }}
-                                    border="tan 2px outset"
-                                    borderRadius='md' 
+                                        fontSize="11px"
+                                        _hover={{ boxShadow: "0 0 5px 1px tan" }}
+                                        border="tan 2px outset" 
+                                        borderRadius='md' 
                                         align='center'
                                         pt='0.25rem' 
                                         onClick={handleShowPassword} 
@@ -189,15 +220,15 @@ export const Register = ({saveData}) => {
                                     <Box 
                                         title='show-confirm-password-button'
                                         border="tan 2px outset"
-                                    bg='white' 
+                                        bg='white' 
                                         mb="9px"
-                                    color="black"
-                                    w='3.5rem' 
+                                        color="black"
+                                        w='3.5rem' 
                                         h='25px' 
                                         fontWeight='bold'
-                                    fontSize="11px"
-                                    _hover={{ boxShadow: "0 0 5px 1px tan" }}
-                                    borderRadius='md' 
+                                        fontSize="11px"
+                                        _hover={{ boxShadow: "0 0 5px 1px tan" }} 
+                                        borderRadius='md' 
                                         align='center'
                                         pt='0.25rem' 
                                         onClick={handleShowConfirmPassword} 
@@ -206,10 +237,10 @@ export const Register = ({saveData}) => {
                                     </Box>
                                 </InputRightElement>
                             </InputGroup>
-                            <FormErrorMessage>{passwordErrorMsg}</FormErrorMessage>
+                            <FormErrorMessage mt="10px" lineHeight="5"textAlign="center" padding="20px" textTransform="uppercase" fontSize="12px" >{passwordErrorMsg}</FormErrorMessage>
                         </FormControl>
 
-                        <Text mt="10px" lineHeight="5"textAlign="center" padding="20px" textTransform="uppercase" fontSize="12px" fontStyle="italic"> 
+                        <Text fontStyle="italic"> 
                             {"Passwords must contain at least 8 characters, one lowercase letter, one uppercase letter, and one number."} 
                         </Text>
                         <Box 

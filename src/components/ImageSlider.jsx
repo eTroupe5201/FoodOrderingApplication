@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Text } from '@chakra-ui/react';
+import { Container, Text, Box, Image} from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import {motion} from "framer-motion";
-import { Box, Image } from '@chakra-ui/react';
 
 export function ImageSlider() {
   const images = [
@@ -60,11 +59,12 @@ export function ImageSlider() {
       </div>
       
       {/* Apply size variation to the image */}
-      <Box >
+      
+      <Box>
         <Image  mr="0"
-        boxSize={{ base: '300px', sm: '400px', md: "500px", lg: "800px", xl:"800px"}}
-        width={{ base: '100vw', sm: '100vw', md: "100vw", lg: "100vw", xl:"100vw"}}
-        src={images[currentImageIndex].url} alt="Slider Image" />
+          boxSize={{ base: '300px', sm: '400px', md: "500px", lg: "800px", xl:"800px"}}
+          width={{ base: '100vw', sm: '100vw', md: "100vw", lg: "100vw", xl:"100vw"}}
+          src={images[currentImageIndex].url} alt="Slider Image" />
       </Box>
     </Container>
   );

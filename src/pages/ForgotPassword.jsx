@@ -65,10 +65,12 @@ export const ForgotPassword = ({saveData}) => {
 
     return (
         <Flex alignContent='center' justifyContent='center'>
-            <Box title='pw-reset-form-box' id='pw-reset-form-box' bg='#000000' color='#fff' w='35rem' height='100%' m='2rem' p='1.5rem'> 
-                <VStack>
-                    <Text fontFamily="'Raleway', sans-serif" fontSize='30px' fontWeight='bold'> To reset your password, please enter your email address. </Text>
-                    <Input
+            <Box 
+                    borderRadius="25px" border="tan 2px outset"
+                    title='pw-reset-form-box' id='pw-reset-form-box' 
+                    display='none' bg='#000000' color='#fff' height='2%' m='2rem' mb="10em"p='1.5rem' w={{base:"25em", sm:"30em"}} >                 <VStack>
+            <Text  fontSize="15px"  fontWeight='bold'> To reset your password, please enter your email address. </Text>
+                <Text  fontSize="15px"  fontWeight='bold' mb='1rem'> We will email you a code to verify that it is you attempting to reset the password. </Text>                    <Input
                         id='email-forgot'
                         title='forgot-password-email'
                         type='email'
@@ -86,14 +88,16 @@ export const ForgotPassword = ({saveData}) => {
                         as='button'  
                         title='forgot-password-button'
                         mt='1rem'
-                        bg='#fff' 
-                        color='#000000'
+                        bg='black' 
+                        color='white'
                         h='40px'
                         w='250px'
                         fontWeight='bold'
-                        fontSize='20px'
+                        fontSize='15px'
                         fontFamily="'Raleway', sans-serif"
                         borderRadius='md'
+                        border="tan 2px outset"
+                        _hover={{ boxShadow: "0 0 5px 1px linen" }}
                         onClick={handleForgotPasswordEmail} 
                     > 
                         Send Reset Email

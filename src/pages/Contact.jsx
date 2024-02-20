@@ -24,7 +24,8 @@ export const Contact = () => {
 
 
     return (
-    <><form className='Contact' onSubmit={handleSubmit(handleSendForm)} > 
+    <><Center position="relative" mb="100px">
+    <form className='Contact' onSubmit={handleSubmit(handleSendForm)} > 
         <SimpleGrid columns={2} templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" , lg: "repeat(2, 1fr)" , xl: "repeat(2, 1fr)" }}>
             <Center>
                 <Box color= '#000000' ml='2rem' mr='2rem' p='1.5rem'>
@@ -80,85 +81,82 @@ export const Contact = () => {
                     </Center>
                 </VStack>   
 
-    const formBox = (
-        
-        <Box title='form-box' id='form-box' bg='#000000' color='#fff' maxW='30rem' height='100%' mr='2rem' p='1.5rem'>
-            <Text fontSize={{ base: "15px", md: "20px", lg: "30px" }} fontWeight='bold' > EMAIL US </Text>
-            <Text fontSize={{ base: "10px", md: "15px", lg: "20px" }} pb='1rem'> Send us any questions, comments, or concerns! Or email us at DeliciousDelicacies@gmail.com</Text>
-            <VStack align='stretch' >
-         
-            <label for="first-name" >First Name</label> 
-                <Input 
-                    id='first-name'
-                     value={fname} 
-                    onChange={handleFname} 
-                    placeholder="first name (required)"
-                />
+            
+                <Box title='form-box' id='form-box' bg='#000000' color='#fff' maxW='30rem' height='100%' mr='2rem' p='1.5rem'>
+                    <Text 
+                        fontSize={{ base: "15px", md: "20px", lg: "30px" }} 
+                        fontWeight='bold' 
+                    > 
+                        EMAIL US 
+                    </Text>
+                    <Text 
+                        fontSize={{ base: "10px", md: "15px", lg: "20px" }} 
+                        pb='1rem'
+                    > 
+                        Send us any questions, comments, or concerns! Or email us at DeliciousDelicacies@gmail.com
+                    </Text>
+                    <VStack align='stretch' >
+                        <FormControl id='fnameField' isInvalid={!!formState?.errors?.firstName?.type}>
+                            <FormLabel>First Name</FormLabel>
+                            <Input 
+                                id='firstName'
+                                {...register("firstName", { required: true, pattern:/(^[a-zA-Z,'-][a-zA-Z\s,'-]{0,20}[a-zA-Z]$)/})}
+                            />
+                            <FormErrorMessage>Required</FormErrorMessage>
+                        </FormControl>
+                        <FormControl id='lnameField' isInvalid={!!formState?.errors?.lastName?.type}>
+                            <FormLabel>Last Name</FormLabel>
+                            <Input 
+                                id='lastName'
+                                {...register("lastName", { required: true, pattern:/(^[a-zA-Z,'-][a-zA-Z\s,'-]{0,20}[a-zA-Z]$)/ })}
+                            />
+                            <FormErrorMessage>Required</FormErrorMessage>
+                        </FormControl>
+                        <FormControl id='emailField' isInvalid={!!formState?.errors?.email?.type}>
+                            <FormLabel>Email Address</FormLabel>
+                            <Input 
+                                id='email'
+                                {...register("email", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/})}
+                            />
+                            <FormErrorMessage>Email address is invalid</FormErrorMessage>
+                        </FormControl>
+                        <FormControl id='phoneField'>
+                            <FormLabel>Phone Number (optional)</FormLabel>
+                            <Input 
+                                type='tel'
+                                {...register("phone")}
+                            />
+                        </FormControl>
+                        <FormControl id='message' isInvalid={!!formState?.errors?.message?.type}>
+                            <FormLabel>Message</FormLabel>
+                        <Textarea 
+                            id='message'
+                            {...register("message", {required: true, maxLength:400})}
+                        />
+                        </FormControl>
 
-                <label for="last-name">Last Name</label>
-                <Input 
-                    id='last-name'
-                    value={lname} 
-                    onChange={handleLname} 
-                    placeholder="last name (required)"
-                />
-
-                <label for="email">Email</label>
-                <Input 
-                    id='email'
-                    type='email'
-                    value={email} 
-                    onChange={handleEmail} 
-                    placeholder="email address (required)"
-                />
-
-                <label for="phone">Phone</label>
-                <Input 
-                    id='phone'
-                    type='tel'
-                    value={phone} 
-                    onChange={handlePhone} 
-                    placeholder="phone number (optional)"
-                />
-
-                <label for="message">Message</label>
-                <Textarea 
-                    id='message'
-                    value={message} 
-                    onChange={handleMessage} 
-                    placeholder="enter feedback or questions here (required)"
-                    maxH='400px'
-                />
-                <Flex alignContent='center' justifyContent='center'> 
-                    <Box 
-                        as='button'  
-                        mt='1rem'
-                        bg='#fff' 
-                        color='#000000'
-                        h='40px'
-                        w='90px'
-                        fontWeight='bold'
-                        fontSize='20px'
-                        borderRadius='md'
-                        onClick={handleSubmit} 
-                        > 
-                        Submit 
-                    </Box>
-                </Flex>
-            </VStack>
-        </Box>
-    );
-
-    return (
-    <><div position="relative" margin-bottom="100px" className='Contact' > 
-        <Flex>
-            <SimpleGrid columns={2} templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' , lg: 'repeat(2, 1fr)' , xl: 'repeat(2, 1fr)' }}>
-            {contactUsMessageBox}
-            {formSubmittedAlertBox}
-            {formBox}
-            </SimpleGrid>
-        </Flex>
-    </div></>
+                        <Flex>
+                            <Box 
+                                as='button'  
+                                mt='1rem'
+                                bg='#fff' 
+                                color='#000000'
+                                h='40px'
+                                w='90px'
+                                fontWeight='bold'
+                                fontSize='20px'
+                                borderRadius='md' 
+                                > 
+                                Submit 
+                            </Box>
+                        </Flex>
+                    </VStack>
+                </Box>
+            </Center>            
+        </SimpleGrid>
+    </form>
+    </Center>
+    </>
     )
 }
 
