@@ -1,6 +1,6 @@
 import { Box, Text, useToast, Flex, VStack, Input } from "@chakra-ui/react";
 import { useState } from "react";
-import React from "react";
+
 import { useNavigate } from "react-router-dom";
 import { auth } from "../utils/firebase" 
 import { sendPasswordResetEmail } from "firebase/auth";

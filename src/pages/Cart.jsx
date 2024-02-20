@@ -1,6 +1,6 @@
 import { Box, Flex, Heading, IconButton, VStack, Text, Divider, } from "@chakra-ui/react";
 import { GrClose } from "react-icons/gr";
-import React, { useEffect, useState } from "react";
+import  { useEffect} from "react";
 import { useDataProvider } from "../components/dataProvider"
 import { BottomButton } from "../components/BottomButton";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ export const Cart = () => {
       
         // Calling asynchronous functions
         fetchItems();
-      }, [fetchCartItems]);
+      }, [fetchCartItems, setLines]);
 
     return (
         /**

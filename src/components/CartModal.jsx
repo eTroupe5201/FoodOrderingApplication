@@ -1,11 +1,11 @@
-import React from 'react';
+
 import { Link, useNavigate } from "react-router-dom";
 import { Box, Flex, Heading, IconButton, VStack, Text, Divider } from "@chakra-ui/react";
 import { GrClose } from "react-icons/gr";
 import { useDataProvider } from "../components/dataProvider";
-import { BottomButton } from "../components/BottomButton";
+// import { BottomButton } from "../components/BottomButton";
 import { calculateOrderSubtotal, calculateOrderTax, calculateOrderTotal } from "../utils/calculations";
-import { Button, Modal, ModalContent, ModalOverlay, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
+import { Button, Modal, ModalContent, ModalOverlay, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
 import { useEffect } from "react";
 export const CartModal = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ export const CartModal = ({ isOpen, onClose }) => {
       
         // Calling asynchronous functions
         fetchItems();
-      }, [fetchCartItems]);
+      }, [fetchCartItems,setLines]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">

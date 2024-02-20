@@ -1,27 +1,21 @@
-import React from 'react';
-import { Heading, Box, Center, Image, Text, SimpleGrid } from '@chakra-ui/react';
+import { Heading, Box, Center, Image, Text, SimpleGrid } from "@chakra-ui/react"
 
 
 export function Banner() {
     return (
-        <Box className="Banner" aria-label="Banner" 
-        initial={{y:-250}}
-        animate={{y:0}}
-        transition={{ delay: 0.2, type: 'spring', stiffness: 120 }}
-           
-        >
-             <SimpleGrid columns={3} templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}>
-                <Box padding="20" maxH={{ base: '20em', sm: '50em', md: "70em", lg: "80em", xl: "100em" }} color="white" bg="black">
+        <Box className="Banner" aria-label="Banner" >
+             <SimpleGrid columns={3} templateColumns={{ base: "repeat(1, 1fr)", lg: "repeat(3, 1fr)" }}>
+                <Box padding="20" maxH={{ base: "20em", sm: "50em", md: "70em", lg: "80em", xl: "100em" }} color="white" bg="black">
                     <Center>
                         <Image
                             src="src\assets\FoodLogo.png"
                             alt="logo"
-                            w={{ base: '3em', sm: '4em', md: "5em", lg: "6em", xl: "7em" }}
-                            maxH={{ base: '3em', sm: '4em', md: "5em", lg: "6em", xl: "7em" }}
+                            w={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
+                            maxH={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
                         />
                     </Center>
                     <Heading
-                        fontSize={{ base: '15px', sm: '12px', md: "15px", lg: "17px" }}
+                        fontSize={{ base: "15px", sm: "12px", md: "15px", lg: "17px" }}
                         fontFamily="'Raleway', sans-serif "
                         pt="7"
                     >
@@ -30,24 +24,24 @@ export function Banner() {
                     
                     <Text
                         pt="5"
-                        fontSize={{ base: '12px', sm: '12px', md: "15px", lg: "17px" }}
+                        fontSize={{ base: "12px", sm: "12px", md: "15px", lg: "17px" }}
                     >
                         Savor the extraordinary at our restaurant, where every dish is a delectable masterpiece. From savory starters
                         to mouthwatering main courses and irresistible desserts, our menu is a celebration of flavor and freshness.
                     </Text>
                 </Box>
 
-                <Box padding="20" maxH={{ base: '20em', sm: '50em', md: "70em", lg: "80em", xl: "100em" }} color="white" bg="black">
+                <Box padding="20" maxH={{ base: "20em", sm: "50em", md: "70em", lg: "80em", xl: "100em" }} color="white" bg="black">
                     <Center>
                         <Image
                             src="src\assets\OrderLogo.png"
                             alt="logo"
-                            w={{ base: '3em', sm: '4em', md: "5em", lg: "6em", xl: "7em" }}
-                            maxH={{ base: '3em', sm: '4em', md: "5em", lg: "6em", xl: "7em" }}
+                            w={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
+                            maxH={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
                         />
                     </Center>
                     <Heading
-                        fontSize={{ base: '15px', sm: '12px', md: "15px", lg: "17px" }}
+                        fontSize={{ base: "15px", sm: "12px", md: "15px", lg: "17px" }}
                         fontFamily="'Raleway', sans-serif "
                         pt="7"
                     >
@@ -55,7 +49,7 @@ export function Banner() {
                     </Heading>
                     <Text
                         pt="5"
-                        fontSize={{ base: '12px', sm: '12px', md: "15px", lg: "17px" }}
+                        fontSize={{ base: "12px", sm: "12px", md: "15px", lg: "17px" }}
                     >
                         Experience the ease of ordering with our restaurant – simplicity at your fingertips. Our user-friendly online
                         platform ensures a seamless and effortless ordering process. Browse our menu, customize your preferences, and
@@ -63,17 +57,17 @@ export function Banner() {
                     </Text>
                 </Box>
 
-                <Box padding="20" maxH={{ base: '20em', sm: '50em', md: "70em", lg: "80em", xl: "100em" }} color="white" bg="black">
+                <Box padding="20" maxH={{ base: "20em", sm: "50em", md: "70em", lg: "80em", xl: "100em" }} color="white" bg="black">
                     <Center>
                         <Image
                             src="src\assets\deliveryLogo.png"
                             alt="logo"
-                            w={{ base: '3em', sm: '4em', md: "5em", lg: "6em", xl: "7em" }}
-                            maxH={{ base: '3em', sm: '4em', md: "5em", lg: "6em", xl: "7em" }}
+                            w={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
+                            maxH={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
                         />
                     </Center>
                     <Heading
-                        fontSize={{ base: '15px', sm: '12px', md: "15px", lg: "17px" }}
+                        fontSize={{ base: "15px", sm: "12px", md: "15px", lg: "17px" }}
                         fontFamily="'Raleway', sans-serif "
                         pt="7"
                     >
@@ -81,7 +75,7 @@ export function Banner() {
                     </Heading>
                     <Text
                         pt="5"
-                        fontSize={{ base: '12px', sm: '12px', md: "15px", lg: "17px" }}
+                        fontSize={{ base: "12px", sm: "12px", md: "15px", lg: "17px" }}
                     >
                         At our restaurant, we take pride in offering the fastest delivery service to bring the flavors straight to your
                         doorstep. With our efficient delivery team and state-of-the-art logistics, we prioritize swift and reliable

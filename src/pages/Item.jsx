@@ -1,4 +1,4 @@
-import { Text, Image, VStack, FormControl, FormLabel, Textarea, Input, Center, FormErrorMessage, CheckboxGroup, Checkbox, RadioGroup, Radio, Box, Flex, AbsoluteCenter } from "@chakra-ui/react";
+import { Text, Image, VStack, FormControl, FormLabel, Textarea, Input, Center, FormErrorMessage, CheckboxGroup, Checkbox, RadioGroup, Radio, Box, Flex} from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
@@ -122,14 +122,14 @@ export const Item = () => {
             <Center>
             <VStack  mt="25px"  gap={4} pb={100}  width="90%" justifyContent={"center"}>
            <Text fontFamily="'Great Vibes', cursive" padding="15px"  
-           fontSize={{base: '30px',sm: '35px', md:"40px"}}>{item.label}</Text>
+           fontSize={{base: "30px",sm: "35px", md:"40px"}}>{item.label}</Text>
                    
                 <Image  
                 border="black 3px outset"
                 borderRadius="25px"
                 src={item.image?.src} 
-                w={{base: '20em',sm: '20em', md:"20em", lg:"30em"}} 
-                maxH={{base: '20em', sm: '20em', md:"30em",lg:"40em"}}   />
+                w={{base: "20em",sm: "20em", md:"20em", lg:"30em"}} 
+                maxH={{base: "20em", sm: "20em", md:"30em",lg:"40em"}}   />
                 
                 <VStack gap={4}  p={4} w="100%">
                     <Text fontFamily="'Raleway', sans-serif" fontWeight="bold"> {item.description} </Text>

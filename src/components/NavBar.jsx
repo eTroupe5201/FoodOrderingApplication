@@ -8,7 +8,7 @@
 // import { useBreakpointValue } from "@chakra-ui/react";
 // import {MobileNav} from "./MobileNav";
 
-// import { CartModal } from '../components/CartModal';
+// import { CartModal } from "../components/CartModal";
 // import {
 //   IconButton,
 //   Modal,
@@ -19,7 +19,7 @@
 //   ModalBody,
 //   ModalCloseButton,
 //   useDisclosure,
-// } from '@chakra-ui/react';
+// } from "@chakra-ui/react";
 
 //     export function NavBar() {
 //     const isSmallScreen = useBreakpointValue({ base: true, sm: true, md: true, lg: false, xl: false }); // Define when to show the icon based on screen size
@@ -70,35 +70,35 @@
 //             <Link to="/">  
 //             <Image    
 //             _hover={{ boxShadow: "0 0 10px 1px tan"}}                     
-//             w={{ base: '50px', sm: '4em' }}
-//             maxH={{ base: '40px', sm: '4em'}}
-//             className="photo" src='src\assets\White-Favicon.png' alt='logo' /></Link> 
+//             w={{ base: "50px", sm: "4em" }}
+//             maxH={{ base: "40px", sm: "4em"}}
+//             className="photo" src="src\assets\White-Favicon.png" alt="logo" /></Link> 
 
 //                 ) : (
 //                     <Link to="/">  <Image
 //                     _hover={{ boxShadow: "0 0 10px 1px tan"}}
 //                     w={{  md: "18em" }}
 //                     maxH={{  md: "11em"}}
-//                     className="photo" src='src\assets\divine-delicacies2.png' alt='logo' /> </Link> 
+//                     className="photo" src="src\assets\divine-delicacies2.png" alt="logo" /> </Link> 
 //                 )}
 
 
 //         <ul >
 
-//         <li><Link to="/"><Text fontSize={{ base: '0em', sm: '0em', md: "0em", lg: "25px" }}>Home</Text></Link></li>
-//            <li> <Link to="/contact"><Text fontSize={{ base: '0em', sm: '0em', md: "0em", lg: "25px" }}>Contact Us</Text></Link></li>
-//                 <li><Link to="/menu"><Text fontSize={{ base: '0em', sm: '0em', md: "0em", lg: "25px" }}>Order</Text></Link></li>
-//                 <li><Link to="/login"><Text fontSize={{ base: '0em', sm: '0em', md: "0em", lg: "25px" }}>Login</Text></Link></li>
+//         <li><Link to="/"><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Home</Text></Link></li>
+//            <li> <Link to="/contact"><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Contact Us</Text></Link></li>
+//                 <li><Link to="/menu"><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Order</Text></Link></li>
+//                 <li><Link to="/login"><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Login</Text></Link></li>
 //                 <li>{isSmallScreen && <MobileNav />}</li>
      
 //                <li > 
 //                     {user ? (
-//                         <Box pt='0.25rem' as='button' onClick={logout} > Logout </Box> && checkSize
+//                         <Box pt="0.25rem" as="button" onClick={logout} > Logout </Box> && checkSize
 //                     ) : (
 //                         <Link to="/login"> Login </Link> && checkSize
 //                     ) }
 //                 </li>
-//                 <HStack spacing='1.5rem'>
+//                 <HStack spacing="1.5rem">
 //                     <li > 
 //                         {user ? (
 //                             <Link to="/profile"> <TiUser/> </Link>&& checkSize
@@ -109,8 +109,8 @@
 //                     {/* <li>
 //                         {hasCartItems ? (
 //                              <><Button bg="black" color="white" border="white 2px solid" 
-//                              w={{ base: '50px', sm: '4em' }}
-//                              maxH={{ base: '40px', sm: '4em'}}
+//                              w={{ base: "50px", sm: "4em" }}
+//                              maxH={{ base: "40px", sm: "4em"}}
 //                              _hover={{ boxShadow: "0 0 10px 1px linen"}}  
 //                              onClick={onOpen} >
 //                             <TiShoppingCart  />
@@ -139,18 +139,18 @@ import { TiShoppingCart, TiUser } from "react-icons/ti";
 import { useBreakpointValue } from "@chakra-ui/react";
 import {MobileNav} from "./MobileNav";
 
-import { CartModal } from '../components/CartModal';
+import { CartModal } from "../components/CartModal";
 import {
-  IconButton,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
+//   IconButton,
+//   Modal,
+//   ModalOverlay,
+//   ModalContent,
+//   ModalHeader,
+//   ModalFooter,
+//   ModalBody,
+//   ModalCloseButton,
   useDisclosure,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
 export function NavBar() {
     const isSmallScreen = useBreakpointValue({ base: true, sm: true, md: true, lg: false, xl: false }); // Define when to show the icon based on screen size
@@ -197,35 +197,35 @@ export function NavBar() {
             <Link to="/">  
             <Image    
             _hover={{ boxShadow: "0 0 10px 1px tan"}}                     
-            w={{ base: '50px', sm: '4em' }}
-            maxH={{ base: '40px', sm: '4em'}}
-            className="photo" src='src\assets\White-Favicon.png' alt='logo' /></Link> 
+            w={{ base: "50px", sm: "4em" }}
+            maxH={{ base: "40px", sm: "4em"}}
+            className="photo" src="src\assets\White-Favicon.png" alt="logo" /></Link> 
 
                 ) : (
                     <Link to="/">  <Image
                     _hover={{ boxShadow: "0 0 10px 1px tan"}}
                     w={{  md: "18em" }}
                     maxH={{  md: "11em"}}
-                    className="photo" src='src\assets\divine-delicacies2.png' alt='logo' /> </Link> 
+                    className="photo" src="src\assets\divine-delicacies2.png" alt="logo" /> </Link> 
                 )}
 
             <ul>
-            <li><Link to="/"><Text fontSize={{ base: '0em', sm: '0em', md: "0em", lg: "25px" }}>Home</Text></Link></li>
+            <li><Link to="/"><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Home</Text></Link></li>
      
                 {/* <li><Link to="/item"> Menu </Link></li> */}
-                <li><Link to="/contact"><Text fontSize={{ base: '0em', sm: '0em', md: "0em", lg: "25px" }}> Contact Us</Text> </Link></li>
-                <li><Link to="/menu"> <Text fontSize={{ base: '0em', sm: '0em', md: "0em", lg: "25px" }}>Order </Text></Link></li>
+                <li><Link to="/contact"><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}> Contact Us</Text> </Link></li>
+                <li><Link to="/menu"> <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Order </Text></Link></li>
                 <li > 
                     {user ? (
-                        <Box pt='0.25rem' as='button' onClick={logout} ><Text fontSize={{ base: '0em', sm: '0em', md: "0em", lg: "25px" }}> Logout</Text> </Box>
+                        <Box  pt="0.25rem" as="button" onClick={logout} ><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}> Logout</Text> </Box>
                     ) : (
-                        <Link to="/login"> <Text fontSize={{ base: '0em', sm: '0em', md: "0em", lg: "25px" }}>Login </Text></Link> 
+                        <Link to="/login"> <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Login </Text></Link> 
                     ) }
                 </li>
-                <HStack spacing='1.5rem'>
+                <HStack spacing="1.5rem">
                     <li > 
                         {user ? (
-                            <Link to="/profile"> <TiUser/> </Link>
+                            <Link to="/profile"> <TiUser  /> </Link>
                         ) : (
                             <TiUser style={{visibility: "hidden"}} />
                         ) }
@@ -233,9 +233,9 @@ export function NavBar() {
                     <li>
                         {hasCartItems ? (
                           <><Button bg="black" color="white" border="white 2px solid" 
-                                                       w={{ base: '50px', sm: '4em' }}
-                                                       maxH={{ base: '40px', sm: '4em'}}
-                                                       _hover={{ boxShadow: "0 0 10px 1px linen"}}  
+                                                       w={{ base: "50px", sm: "4em" }}
+                                                       maxH={{ base: "40px", sm: "4em"}}
+                                                       _hover={{ boxShadow: "0 0 10px 1px tan"}}  
                                                        onClick={onOpen} >
                                                       <TiShoppingCart  />
                                                        </Button><CartModal isOpen={isOpen} onClose={onClose} /></> 
@@ -244,6 +244,7 @@ export function NavBar() {
                             <TiShoppingCart style={{ opacity: 0.5, cursor: "not-allowed" }} />
                         )}
                     </li>
+                    <li>{isSmallScreen && <MobileNav />}</li>
                 </HStack>
                 {/* <li><Link to="/info"> OurInfo </Link></li> */}
             </ul>

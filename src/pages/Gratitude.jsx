@@ -1,4 +1,4 @@
-import { Box, Heading, Icon, VStack, Text } from "@chakra-ui/react";
+import {  Heading, Icon, VStack, Text } from "@chakra-ui/react";
 import { useDataProvider } from "../components/dataProvider";
 import {
     MdOutlineCelebration,

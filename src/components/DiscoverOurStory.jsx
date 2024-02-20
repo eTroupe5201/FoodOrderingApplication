@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Center, Image, Text, SimpleGrid } from "@chakra-ui/react";
 
 // add mobile first designs later
