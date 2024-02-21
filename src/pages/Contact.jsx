@@ -31,14 +31,14 @@ export const Contact = () => {
                 <Box color= '#000000' ml='2rem' mr='2rem' p='1.5rem'>
                     <Text 
                         title="header" 
-                        fontSize={{ base: "22px", md: "29px", lg: "58px" }} 
+                        fontSize={{ base: "22px", md: "29px", lg: "40px" }} 
                         mb='1rem'
                     > 
                         Welcome to Divine Delicacies! 
                     </Text>
                     <Text 
                         title='contact-message' 
-                        fontSize={{ base: "12px", md: "15px", lg: "20px" }}  
+                        fontSize={{ base: "12px", md: "13px", lg: "14px" }}  
                         maxW='43rem' 
                         whiteSpace="pre-line"
                     > 
@@ -48,33 +48,41 @@ export const Contact = () => {
             </Center>
 
             <Center>
-                <VStack title='form-submitted' id='form-submitted' textAlign='center' display="none" bg='#000000' color='#fff' maxW='30rem' h="70%" mr='2rem' p='1.5rem'>
+                <VStack boxSize={{base:"25em", sm: "25em", md:"26em", lg:"28em"}} 
+                maxHeight={{base:"15em", sm: "16em", md:"17em", lg:"19em"}}
+                marginBottom={{base:"4em"}}
+                marginRight={{md:"2em"}}
+                title='form-submitted' id='form-submitted' borderRadius="25px" border="tan 2px outset"  textAlign='center' display="none" bg='black' color='white' maxW='30rem'  p='1.5rem'>
                     <Text 
-                        fontSize={{ base: "12px", md: "17px", lg: "30px" }} 
+                        fontSize={{ base: "15px", md: "20px", lg: "23px" }} 
                         fontWeight='bold' 
                         mb='1rem' 
                     > 
                         Thank you! 
                     </Text>
                     <Text 
-                        fontSize={{ base: "12px", md: "15px", lg: "20px" }} 
+                        fontSize={{ base: "12px", md: "13px", lg: "14px" }} 
                         pb='1rem' 
                         whiteSpace="pre-line"
+                        
                     > 
                         {formSubmittedAlert}
                     </Text>
                     <Center>
                         <Box   
-                            mt='1rem'
+                           
                             p='0.5rem'
-                            bg='#fff' 
-                            color='#000000'
-                            h='40px'
+                            bg='black'
+                            border="tan 2px outset" 
+                            _hover={{ boxShadow: "0 0 5px 1px tan" }}
+                            color='#white'
+                            h='3em'
                             w='150px'
                             fontWeight='bold'
-                            fontSize='20px'
+                            fontSize='11px'
                             borderRadius='md'
                             onClick={showFormHideAlert} 
+                            
                             > 
                             Click here! 
                         </Box>
@@ -82,23 +90,25 @@ export const Contact = () => {
                 </VStack>   
 
             
-                <Box title='form-box' id='form-box' bg='#000000' color='#fff' maxW='30rem' height='100%' mr='2rem' p='1.5rem'>
+                <Box title='form-box' borderRadius="25px" border="tan 2px outset"  id='form-box' bg='#000000' color='#fff' maxW='30rem' height='100%' mr='2rem' p='1.5rem'>
                     <Text 
-                        fontSize={{ base: "15px", md: "20px", lg: "30px" }} 
+                        fontSize={{ base: "15px", md: "18px", lg: "20px" }} 
                         fontWeight='bold' 
                     > 
                         EMAIL US 
                     </Text>
                     <Text 
-                        fontSize={{ base: "10px", md: "15px", lg: "20px" }} 
+                        fontSize={{ base: "11px", md: "12px", lg: "12px" }} 
                         pb='1rem'
+                        
                     > 
-                        Send us any questions, comments, or concerns! Or email us at DeliciousDelicacies@gmail.com
+                        Send us any questions, comments, or concerns! Or email us at DevineDelicacies@gmail.com
                     </Text>
                     <VStack align='stretch' >
                         <FormControl id='fnameField' isInvalid={!!formState?.errors?.firstName?.type}>
                             <FormLabel>First Name</FormLabel>
-                            <Input 
+                            <Input  
+                                border="tan 2px outset" 
                                 id='firstName'
                                 {...register("firstName", { required: true, pattern:/(^[a-zA-Z,'-][a-zA-Z\s,'-]{0,20}[a-zA-Z]$)/})}
                             />
@@ -106,7 +116,8 @@ export const Contact = () => {
                         </FormControl>
                         <FormControl id='lnameField' isInvalid={!!formState?.errors?.lastName?.type}>
                             <FormLabel>Last Name</FormLabel>
-                            <Input 
+                            <Input  
+                                border="tan 2px outset" 
                                 id='lastName'
                                 {...register("lastName", { required: true, pattern:/(^[a-zA-Z,'-][a-zA-Z\s,'-]{0,20}[a-zA-Z]$)/ })}
                             />
@@ -115,6 +126,7 @@ export const Contact = () => {
                         <FormControl id='emailField' isInvalid={!!formState?.errors?.email?.type}>
                             <FormLabel>Email Address</FormLabel>
                             <Input 
+                                border="tan 2px outset" 
                                 id='email'
                                 {...register("email", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/})}
                             />
@@ -123,6 +135,7 @@ export const Contact = () => {
                         <FormControl id='phoneField'>
                             <FormLabel>Phone Number (optional)</FormLabel>
                             <Input 
+                                 border="tan 2px outset" 
                                 type='tel'
                                 {...register("phone")}
                             />
@@ -130,6 +143,7 @@ export const Contact = () => {
                         <FormControl id='message' isInvalid={!!formState?.errors?.message?.type}>
                             <FormLabel>Message</FormLabel>
                         <Textarea 
+                            border="tan 2px outset" 
                             id='message'
                             {...register("message", {required: true, maxLength:400})}
                         />
@@ -144,8 +158,11 @@ export const Contact = () => {
                                 h='40px'
                                 w='90px'
                                 fontWeight='bold'
-                                fontSize='20px'
-                                borderRadius='md' 
+                                borderRadius='md'
+                                fontSize="15px"
+                                        border="tan 2px outset"
+                                        _hover={{ boxShadow: "0 0 5px 1px tan" }} 
+                                     
                                 > 
                                 Submit 
                             </Box>

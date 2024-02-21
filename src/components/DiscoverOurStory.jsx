@@ -1,19 +1,29 @@
-import { Box, Center, Image, Text, SimpleGrid } from "@chakra-ui/react";
+import React from "react";
+import { Box, Center, Image, SimpleGrid, Text } from "@chakra-ui/react";
 
-// add mobile first designs later
 export function DiscoverOurStory() {
     return (
-        <Box className="DiscoverOurStory" margin="0" display="Flex">
-            <Box className="overlay" flexShrink={3} >
+        <Box className="DiscoverOurStory" role="DiscoverOurStory" >
+            <Box className="overlay" 
+              
+                marginLeft= {{ base: "20%", sm: "18%", md: "15%", lg: "15%", xl: "20%", "2xl": "20%"}}
+                marginTop={{ base: "20%", sm: "25%", md: "20%", lg: "20%", xl: "15%", "2xl": "10%"}}
+                width="80%"  >
                 <Center>
-                    <Text className="overlayCursive"  >
+                    <Text className="overlayCursive" 
+                        marginBottom= {{ base: "56%", sm: "54%", md: "40%", lg: "35%", xl: "28%", "2xl": "21%"}}
+                        marginLeft= {{base:"50%", sm:"50%", md:"50%", lg:"58%", xl:"60%", "2xl":"64%"}}
+                        fontSize={{ base: "45px", sm: "50px", md: "55px", lg: "60px", xl:"65px", "2xl":"80px" }}>
                         Discover
                     </Text>
-                    <Text className="overlayHeading" >
+                    <Text className="overlayHeading" 
+                        marginBottom= {{ base: "44%", sm: "44%", md: "32%", lg: "28%", xl: "22%", "2xl": "16%"}}
+                        marginLeft= {{base:"60%", sm:"60%", md:"60%", lg:"64%", xl:"65%", "2xl":"70%"}}
+                        fontSize={{ base: "16px", sm: "18px", md: "20px", lg: "22px", xl:"24px", "2xl":"26px" }}>
                         OUR STORY
                     </Text>
 
-                    <Text >
+                    <Text fontSize={{ base: "12px", sm: "14px", md: "16px", lg: "18px" }}>
                         At Divine Delicacies, our story is as rich and flavorful as our dishes. We embarked on a culinary adventure
                         with a simple yet profound vision: to create a haven where food transcends the ordinary, and every dining
                         experience becomes a cherished memory. From the very beginning, our chefs at Divine Delicacies have been
@@ -21,27 +31,14 @@ export function DiscoverOurStory() {
                     </Text>
                 </Center>
             </Box>
-            <SimpleGrid columns={2}>
-                <Box>
-                    <Center>
-                        <Image h="100%" src="src\assets\slide_5.jpg" alt="logo" />
-                    </Center>
+            {/* <SimpleGrid columns={{ base: 1, md: 2 }} width="100vw">  */}
+                <Box height="100%" bg="linen" maxHeight="30em">
+                    <Image src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/shutterstock_1505194289.jpg" alt="logo" height="100%" />
                 </Box>
-                <Box bg="Linen" width={{ base: "100%", md: "50%", lg: "40%" }}>
+                {/* <Box bg="Linen">
                     <Text></Text>
-                </Box>
-            </SimpleGrid>
+                </Box>  */}
+            {/* </SimpleGrid>  */}
         </Box>
     );
 }
-/* Our menu is a symphony of flavors, carefully
-                    composed to offer a sensory journey that delights the taste buds.
-                    Each dish is an ode to creativity, authenticity, and the finest
-                    ingredients. Our commitment to excellence extends beyond the kitchen.
-                    We believe that every meal should be a celebration, and every dining
-                    experience should be a joyous occasion. Our team is dedicated to
-                    providing exceptional service, ensuring that every guest feels welcome
-                    and cherished. We invite you to join us on a culinary journey that
-                    will tantalize your senses and leave you craving for more. Welcome to
-                    Divine Delicacies, where every meal is a celebration of life, love,
-                    and the joy of good food. */

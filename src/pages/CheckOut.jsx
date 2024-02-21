@@ -1,4 +1,4 @@
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, FormControl, FormErrorMessage, FormLabel, Input, Radio, RadioGroup, Textarea, VStack, } from "@chakra-ui/react";
+import { Accordion, AccordionButton, Center, Container, AccordionItem, AccordionPanel, FormControl, FormErrorMessage, FormLabel, Input, Radio, RadioGroup, Textarea, VStack, } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import  { useEffect,  useRef } from "react";
 import { BottomButton } from "../components/BottomButton";
@@ -6,6 +6,7 @@ import { useDataProvider } from "../components/dataProvider"
 import { calculateOrderTotal, } from "../utils/calculations";
 import { PAYMENT_METHODS } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
+
 
 export const CheckOut = () => {
     
@@ -60,25 +61,28 @@ export const CheckOut = () => {
     if (!restaurantInfo) return null;
 
     return (
-        <form title='checkout-form' onSubmit={handleSubmit(onSubmit)}>
-            <Accordion defaultIndex={[0, 1, 2]} allowMultiple>
+        <Center><Container margin="5em" mb="5em" >
+        <form  title='checkout-form' onSubmit={handleSubmit(onSubmit)}>
+            <Accordion 
+            defaultIndex={[0, 1, 2]} allowMultiple>
 
                 <AccordionItem title='checkout-user-info'>
-                    <AccordionButton bg="gray.200">CONTACT</AccordionButton>
+                    <AccordionButton  _hover={{ boxShadow: "0 0 10px 1px gold" }} color="white" bg="black">CONTACT</AccordionButton>
                     <AccordionPanel>
                         <VStack mt={4}>
                         <FormControl isInvalid={!!errors?.firstName?.type}>
                                 <FormLabel>First Name</FormLabel>
                                 <Input
+                                    border="outset 2px tan"
                                     title='checkout-first-name'
                                     placeholder="First Name"
                                     {...register("firstName", { required: true })}
                                 />
                                 <FormErrorMessage>Required</FormErrorMessage>
                             </FormControl>
-                            <FormControl isInvalid={!!errors?.lastName?.type}>
+                            <FormControl  isInvalid={!!errors?.lastName?.type}>
                                 <FormLabel>Last Name</FormLabel>
-                                <Input
+                                <Input border="outset 2px tan"
                                     title='checkout-last-name'
                                     placeholder="Last Name"
                                     {...register("lastName", { required: true })}
@@ -88,6 +92,7 @@ export const CheckOut = () => {
                             <FormControl isInvalid={!!errors?.email?.type}>
                                 <FormLabel>Email</FormLabel>
                                 <Input
+                                    border="outset 2px tan"
                                     title='checkout-email'
                                     placeholder="Email"
                                     {...register("email", { required: true })}
@@ -97,6 +102,7 @@ export const CheckOut = () => {
                             <FormControl isInvalid={!!errors?.phone?.type}>
                                 <FormLabel>Phone</FormLabel>
                                 <Input
+                                    border="outset 2px tan"
                                     title='checkout-phone'
                                     placeholder="Phone"
                                     {...register("phone", { required: true })}
@@ -108,7 +114,7 @@ export const CheckOut = () => {
                 </AccordionItem>
 
                 <AccordionItem title='checkout-payment'>
-                    <AccordionButton bg="gray.200">PAYMENT METHOD</AccordionButton>
+                    <AccordionButton bg="black" color="white">PAYMENT METHOD</AccordionButton>
                     <AccordionPanel>
                         <VStack mt={4}>
                             <FormControl isInvalid={!!errors?.paymentMethod?.type}>
@@ -117,6 +123,7 @@ export const CheckOut = () => {
                                     <VStack alignItems="flex-start">
                                         {restaurantInfo.paymentMethods.map((method, index) => (
                                             <Radio
+                                            border="outset 2px tan"
                                                 key={index}
                                                 value={method}
                                                 {...register("paymentMethod", { required: true })}
@@ -134,22 +141,23 @@ export const CheckOut = () => {
 
 
                 <AccordionItem title='checkout-comments'>
-                    <AccordionButton bg="gray.200">COMMENTS</AccordionButton>
+                    <AccordionButton bg="black" color="white">COMMENTS</AccordionButton>
                     <AccordionPanel>
                         <VStack mt={4}>
                             <FormControl>
                                 <FormLabel>Comments</FormLabel>
-                                <Textarea placeholder="Comments..." {...register("comments")} />
+                                <Textarea border="outset 2px tan" placeholder="Comments..." {...register("comments")} />
                             </FormControl>
                         </VStack>
                     </AccordionPanel> 
                 </AccordionItem>
             </Accordion>
-            <BottomButton
+            <BottomButton color="white" bg="black" border="tan 2px outset"
                 title='checkout-button'
                 label="Place pick up order"
                 total={calculateOrderTotal(lines, 10).toFixed(2)}
             />
         </form>
+        </Container></Center>  
     );
 };

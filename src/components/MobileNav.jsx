@@ -39,11 +39,11 @@ export function MobileNav() {
         _hover={{ boxShadow: "0 0 6px 1px tan" }}
         icon={<HamburgerIcon color="white" />}
       />
-      <MenuList bg="black" textAlign="center" fontWeight="bold">
-        <MenuItem bg="black" _hover={{ color: "black", bg: "white", borderColor: "white 2px" }} as="a" href="/" fontSize={{ base: "15px" }}> Home </MenuItem>
-        <MenuItem bg="black" _hover={{ color: "black", bg: "white", borderColor: "white 2px" }} as="a" href="/contact" fontSize={{ base: "15px" }}> Contact </MenuItem>
-        <MenuItem bg="black" _hover={{ color: "black", bg: "white", borderColor: "white 2px" }} as="a" href="/menu" fontSize={{ base: "15px" }}> Order </MenuItem>
-        <MenuItem bg="black" _hover={{ color: "black", bg: "white", borderColor: "white 2px" }} as="a" href="/login" fontSize={{ base: "15px" }}> Login </MenuItem>
+      <MenuList border="2px outset tan"bg="black" textAlign="center" fontWeight="bold">
+        <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px",borderColor: "white 2px" }} as="a" href="/" fontSize={{ base: "15px" }}> Home </MenuItem>
+        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" href="/contact" fontSize={{ base: "15px" }}> Contact </MenuItem>
+        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" href="/menu" fontSize={{ base: "15px" }}> Order </MenuItem>
+        <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" href="/login" fontSize={{ base: "15px" }}> Login </MenuItem>
 
         {/* {user ? (                 
         <MenuItem bg="black" onClick={logout}_hover={{ color: "black", bg: "white", borderColor: "white 2px" }}  as="button"fontSize={{ base: "15px" }}> Logout </MenuItem>
@@ -54,14 +54,14 @@ export function MobileNav() {
     ) } */}
         
         {hasCartItems ? (
-           <MenuItem bg="black" _hover={{ color: "black", bg: "white", borderColor: "white 2px" }} fontSize={{ base: "15px" }} onClick={onOpen} >
-            <Text color="white" fontSize={{ base: "15px" }}>Cart</Text>
+           <MenuItem bg="black" fontWeight="bold" fontSize={{ base: "15px" }} onClick={onOpen} >
+            <Text color="white"  _hover={{  borderColor: "white 2px" }} fontSize={{ base: "15px" }}>Cart</Text>
             <CartModal isOpen={isOpen} onClose={onClose} />
         </MenuItem>
         ) : (
-          <MenuItem  _hover={{ color: "black", bg: "white", borderColor: "white 2px" }} fontSize={{ base: "15px" }} bg="black">
+          <MenuItem  fontSize={{ base: "15px" }} bg="black">
             <Link to="/cart" style={{ opacity: 0.5, cursor: "not-allowed" }}>
-              <Text color="white" fontSize={{ base: "0em", sm: "0em" }}>Cart</Text>
+              <Text  _hover={{  borderColor: "white 2px" }} color="white" fontSize={{ base: "0em", sm: "0em" }}>Cart</Text>
             </Link>
           </MenuItem>
         )}

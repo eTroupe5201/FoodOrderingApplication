@@ -3,10 +3,10 @@ import { Box, Center, Image, Text, SimpleGrid } from "@chakra-ui/react";
 // add mobile first designs later
 export function DiscoverOurMenu() {
     return (
-        <Box className="DiscoverOurStory" margin="0" display="Flex">
+        <Box className="DiscoverOurStory" margin="0"role="DiscoverOurMenu" display="Flex">
             <Box className="overlay" FlexShrink={3} >
                 <Center>
-                    <Text className="overlayCursive" initial={{x: -100}} animate={{x:0}} transition={{duration:"2", delay:"1"}} >
+                    <Text className="overlayCursive"  >
                         Discover
                     </Text>
                     <Text className="overlayHeading" >

@@ -47,7 +47,7 @@ export const CartModal = ({ isOpen, onClose }) => {
                     color="white"
                     background="black"
                     border="white solid 1px"
-                    _hover={{ boxShadow: "0 0 10px 1px linen" }}
+                    _hover={{ boxShadow: "0 0 10px 1px tan" }}
                 />
                 <ModalBody>
                     <VStack px={4} py={2} mt={4} font-family="'Raleway', sans-serif">
@@ -78,7 +78,7 @@ export const CartModal = ({ isOpen, onClose }) => {
                                         color="white"
                                         background="black"
                                         border="white solid 1px"
-                                        _hover={{ boxShadow: "0 0 10px 1px linen" }}
+                                        _hover={{ boxShadow: "0 0 10px 1px tan" }}
                                         onClick={() => removeCartItem(index)}
                                         icon={<GrClose />}
                                         aria-label="Remove from cart"
@@ -112,7 +112,7 @@ export const CartModal = ({ isOpen, onClose }) => {
                             color="white"
                             background="black"
                             border="white solid 1px"
-                            _hover={{ boxShadow: "0 0 10px 1px linen" }}
+                            _hover={{ boxShadow: "0 0 10px 1px tan" }}
                             onClick={onClose}
                         >
                             Continue Shopping
@@ -123,7 +123,7 @@ export const CartModal = ({ isOpen, onClose }) => {
                             color="white"
                             background="black"
                             border="white solid 1px"
-                            _hover={{ boxShadow: "0 0 10px 1px linen" }}
+                            _hover={{ boxShadow: "0 0 10px 1px tan" }}
                             onClick={() => navigate("/checkout")}
                             total={calculateOrderTotal(lines, 10).toFixed(2)}
                         >
