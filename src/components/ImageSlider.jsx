@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Text, Box } from "@chakra-ui/react";
+import { Container, Text, Box, Image } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -76,7 +76,7 @@ export function ImageSlider() {
 
       {/* Apply size variation to the image */}
       <Box>
-        <img 
+        <Image 
           boxSize={{ base: "300px", sm: "400px", md: "500px", lg: "800px", xl:"800px"}} 
           width={{ base: "100vw", sm: "100vw", md: "100vw", lg: "100vw", xl:"100vw"}} 
           src={images[currentImageIndex].url} 
