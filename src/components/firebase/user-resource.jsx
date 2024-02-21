@@ -12,28 +12,28 @@ import {
 const UserEdit = () => (
     <Edit>
         <SimpleForm sanitizeEmptyValues />
-        <TextInput source="first_name" fullWidth />      
-        <TextInput source="last_name" fullWidth />
-        <TextInput source="email_address" fullWidth />
-        <TextInput source="phone_number" fullWidth />
-        <PasswordInput source="new_password"  fullWidth />
+        <TextInput source="firstName" fullWidth />      
+        <TextInput source="lastName" fullWidth />
+        <TextInput source="email" fullWidth />
+        <TextInput source="phone" fullWidth />
+        <PasswordInput source="password"  fullWidth />
     </Edit>
 );
 
 const UserList = () => (
     <List>
       <Datagrid rowClick="edit">
-        <TextInput source="first_name" />      
-        <TextInput source="last_name" />
-        <TextInput source="email_address" />
-        <TextInput source="phone_number" />
+        <TextInput source="firstName" />      
+        <TextInput source="lastName" />
+        <TextInput source="email" />
+        <TextInput source="phone" />
       </Datagrid>
     </List>
   );
 
 export const UserProps = {
     icon: MdContacts,
-    name: "user",
+    name: "users",
     list: UserList,
     edit: UserEdit,
 }

@@ -14,8 +14,8 @@ export const Register = ({saveData}) => {
     const { registerNewAccount } = useDataProvider();
     const { register, handleSubmit, formState, watch } = useForm();
 
-    const [emailErrorMsg, setEmailErrorMsg]= useState("Required");
-    const [passwordErrorMsg, setPasswordErrorMsg]= useState("Required");
+    const [emailErrorMsg, setEmailErrorMsg]= useState("Required. Enter a valid email address.");
+    const [passwordErrorMsg, setPasswordErrorMsg]= useState("Required. See password requirements below.");
     const [emailsMatch, setEmailsMatch] = useState(true);
     const [passwordsMatch, setPasswordsMatch]= useState(true);
 
@@ -23,6 +23,7 @@ export const Register = ({saveData}) => {
     const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
     const handleShowPassword= () => setShowPassword(!showPassword)
     const handleShowConfirmPassword= () => setShowConfirmPassword(!showConfirmPassword)
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
     const handleRegister = async (data) => {
 
@@ -51,19 +52,27 @@ export const Register = ({saveData}) => {
                         isClosable: true,
                     });
                 }
-                //else, existing account
-                else {
-                    toast ({    
-                        addRole: true,
-                        title: "The email provided is associated with an existing account.",
-                        position: "top", 
-                        status: "info",
-                        isClosable: true,
-                    });
-                }
+                // //else, existing account
+                // else {
+                //     toast ({    
+                //         addRole: true,
+                //         title: "The email provided is associated with an existing account.",
+                //         position: "top", 
+                //         status: "info",
+                //         isClosable: true,
+                //     });
+                // }
                 navigate("/login");
             } catch (error) {
                 console.log(error);
+
+                toast ({    
+                    addRole: true,
+                    title: "The email provided is associated with an existing account.",
+                    position: "top", 
+                    status: "info",
+                    isClosable: true,
+                });
             }
         }        
         else (console.log("passwords or emails do not match"));
@@ -101,16 +110,16 @@ export const Register = ({saveData}) => {
                             <Input 
                                 id='email'
                                 title='register-email'
-                                type='email'
                                 {...register("email", { 
                                     required: true,
+                                    pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                                     validate: (val) => {
                                         if (watch("confirmEmail") != val) {
                                             setEmailErrorMsg("Email addresses do not match.");
                                             setEmailsMatch(false);
                                         } 
                                         else {
-                                            setEmailErrorMsg("Required");
+                                            setEmailErrorMsg("Required. Enter a valid email address.");
                                             setEmailsMatch(true);
                                         }
                                     }
@@ -159,15 +168,16 @@ export const Register = ({saveData}) => {
                                     type={showPassword ? "text" : "password"}
                                     {...register("password", { 
                                         required: true,
+                                        pattern: passwordPattern,//eight char, one upper, one lower, one num
                                         validate: (val) => {
                                             if (watch("confirmPassword") != val) {
                                                 setPasswordErrorMsg("Passwords do not match.");
                                                 setPasswordsMatch(false);
                                             } 
                                             else {
-                                                setPasswordErrorMsg("Required");
+                                                setPasswordErrorMsg("Required. Enter a valid email address.");
                                                 setPasswordsMatch(true);
-                                            } //TODO: error for user , pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/   //eight char, one upper, one lower, one num
+                                            }    
                                         } 
                                     })}
                                 />
@@ -204,6 +214,7 @@ export const Register = ({saveData}) => {
                                     type={showConfirmPassword ? "text" : "password"}
                                     {...register("confirmPassword", { 
                                         required: true,
+                                        pattern: passwordPattern,
                                         validate: (val) => {
                                             if (watch("password") != val) {
                                                 setPasswordErrorMsg("Passwords do not match.");

@@ -159,12 +159,13 @@ export const Contact = ({saveData}) => {
                         </FormControl>
                         <FormControl id='message' isInvalid={!!formState?.errors?.message?.type}>
                             <FormLabel>Message</FormLabel>
-                        <Textarea 
-                            border="tan 2px outset" 
-                            title='contact-message'
-                            id='message'
-                            {...register("message", {required: true, minLength: 5, maxLength:400})}
-                        />
+                            <Textarea 
+                                border="tan 2px outset" 
+                                title='contact-message'
+                                id='message'
+                                {...register("message", {required: true, minLength: 5, maxLength:400})}
+                            />
+                            <FormErrorMessage>Please enter a message. </FormErrorMessage>
                         </FormControl>
 
                         <Flex>

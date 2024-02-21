@@ -7,16 +7,16 @@ import {
 
 const ContactUsList = () => (
     <List>
-        <TextInput source="first_name" />      
-        <TextInput source="last_name" />
-        <TextInput source="email_address" />
-        <TextInput source="phone_number" />
+        <TextInput source="firstName" />      
+        <TextInput source="lastName" />
+        <TextInput source="email" />
+        <TextInput source="phone" />
         <TextInput multiline source="message" />
     </List>
   );
 
 export const ContactUsProps = {
     icon: MdMail,
-    name: "contact_us",
+    name: "contactus",
     list: ContactUsList,
 }

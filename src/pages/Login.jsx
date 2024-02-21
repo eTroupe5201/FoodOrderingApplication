@@ -85,7 +85,7 @@ export const Login = ({saveData}) => {
                                 border="tan 2px outset"
                                 {...register("email", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/})}
                             />
-                            <FormErrorMessage title='emailError'>{"Email address is invalid or does not have an account associated with it"}</FormErrorMessage>
+                            <FormErrorMessage title='emailError'>{"Email is invalid or does not have an account associated with it"}</FormErrorMessage>
                         </FormControl>
 
                         <FormControl id='passwordField' isInvalid={!!formState?.errors?.password?.type}>

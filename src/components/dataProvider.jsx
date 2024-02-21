@@ -178,7 +178,8 @@ export const DataProvider = ({ children }) => {
     return;
   };
 
-  console.log(lines);
+  //causing infinite loop
+  //console.log(lines);
 
   const removeCartItem = async (itemId) => {
     if (!user) return; // make sure user does exist
@@ -282,7 +283,7 @@ const storeContactUsForm = async (formInfo) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  });
 
 
   /** 
