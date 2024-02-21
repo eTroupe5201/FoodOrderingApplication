@@ -3,11 +3,8 @@
 // import { BrowserRouter } from "react-router-dom";
 import { describe, it, expect, vi } from "vitest";
 
-
-// import { useBreakpointValue } from "@chakra-ui/react";
-
 describe("NavBar component", () => {
-    vi.before(() => {
+    beforeEach(() => {
         // Mock useBreakpointValue function
         vi.mock("@chakra-ui/react", () => ({
             useBreakpointValue: () => ({ base: true, sm: true, md: true, lg: false, xl: false }),
@@ -21,15 +18,4 @@ describe("NavBar component", () => {
         expect(mockConsole).toHaveBeenCalledOnce();
         expect(mockConsole).toHaveBeenLastCalledWith("test NavBar log");
     });
-
-    // it("should render NavBar elements correctly", () => {
-    //     render(
-    //         <BrowserRouter>
-    //             <NavBar />
-    //         </BrowserRouter>
-    //     );
-
-    //     const navBar = screen.getByRole("navigation");
-    //     expect(navBar).toBeInTheDocument();
-    // });
-});
+})
