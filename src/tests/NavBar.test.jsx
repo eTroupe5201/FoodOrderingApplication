@@ -1,35 +1,21 @@
-import {describe, it } from "vitest";
+// import { render, screen } from "@testing-library/react";
+// import { NavBar } from "../components/NavBar";
+// import { BrowserRouter } from "react-router-dom";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 
-//TODO: write tests for NavBar component
+describe("NavBar component", () => {
+    beforeEach(() => {
+        // Mock useBreakpointValue function
+        vi.mock("@chakra-ui/react", () => ({
+            useBreakpointValue: () => ({ base: true, sm: true, md: true, lg: false, xl: false }),
+        }));
+    });
 
-describe("NavBar.jsx", () => {
-    it("test the children inside my NavBar Component", () => {
-//         const navBar = TestRenderer.create(<MemoryRouter><NavBar/></MemoryRouter>).toJSON();
-//         console.log(navBar.children);
+    it("should log via the mockConsole", () => {
+        const mockConsole = vi.spyOn(console, "log").mockImplementation(() => undefined);
 
-//         expect(navBar.children.length).toBe(2);
-
-//         expect(navBar.children[0].type).toBe("img");
-//         expect(navBar.children[1].type).toBe("ul");
-
-//         expect(navBar.children[1].children.length).toBe(5);
-
-//         expect(navBar.children[1].children[0].type).toBe("li");
-//         //expect(navBar.children[1].children[1].type).toBe("li");
-//         //expect(navBar.children[1].children[2].type).toBe("li");
-//         expect(navBar.children[1].children[3].type).toBe("li");
-//        //expect(navBar.children[1].children[4].type).toBe("li"); 
-   })
+        console.log("test NavBar log");
+        expect(mockConsole).toHaveBeenCalledOnce();
+        expect(mockConsole).toHaveBeenLastCalledWith("test NavBar log");
+    });
 })
-
-// it("will create a snapshot of NavBar", () => {
-//     const navBar = TestRenderer.create(<MemoryRouter><NavBar/></MemoryRouter>).toJSON();
-//     expect(navBar).toMatchSnapshot();
-// })
-
-// //NOTES
-// //npm test to run
-// //https://www.youtube.com/watch?v=GuW3erPa5Z8 vitest tutorial
-// //it block tells you what the test is doing
-// //describe block tells you what the test is testing
-// //it test is when vitest recognizes the test 

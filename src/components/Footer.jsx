@@ -7,10 +7,10 @@ import { Link } from "react-router-dom"
 export function Footer() {
     return (
      
-        <Box  className="Footer"  bg = "black" color="white" paddingBottom={10}>
+        <Box  role="Navigation" className="Footer"  bg = "black"  paddingBottom={10}>
            <section className="wave"></section>  
             <Container> 
-                <SimpleGrid columns={4} templateColumns={{base:"repeat(1, 1fr)", sm:"repeat(2, 1fr)",lg:"repeat(4, 1fr)" }}>
+                <SimpleGrid  bg = "black" color="white"columns={4} templateColumns={{base:"repeat(1, 1fr)", sm:"repeat(2, 1fr)",lg:"repeat(4, 1fr)" }}>
     
                     <Box colSpan={{base: 1, md:4,  xl: 4}}>
                         <Heading fontSize={{ base: "15px", md: "20px", lg: "30px" }}  fontFamily="'Raleway', sans-serif " mb={5} mt={10}>About Us</Heading>

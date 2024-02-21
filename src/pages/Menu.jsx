@@ -12,23 +12,27 @@ export const Menu = () => {
     return (
         //I set up 3 categories in one line temporarily, can adjust this syntax later
         <Center> 
-            <Box title="menu-grid" className="MenuContainer" mt="30px" maxW="90%" justifyContent="center" p={5}>
+            <Box title="menu-grid" className="MenuContainer" mt="30px" maxW="90%"
+             justifyContent="center" p={5}>
                 {categories.map((category) => ( 
 
-                <Box  className="Menu" key={category.id} p={5} boxShadow="md"  width="100%">
-                    <Box p={2}  borderRadius="md" mb={3}>
-                        <Heading as="h2" fontFamily="'Great Vibes', cursive" padding="15px" fontSize={{ base: "30px", md: "40px", lg: "50px" }} mb={1} >
+                <Box  className="Menu" key={category.id} p={5} boxShadow="md"  border="2px tan solid" width="100%">
+                   <Center> <Box p={2}  borderRadius="md"width="75%" mb={3}>
+                        <Heading as="h2" fontFamily="'Great Vibes', cursive" padding="15px" 
+                        fontSize={{ base: "30px", md: "40px", lg: "50px" }} mb={1} >
                             {category.title}
                         </Heading>
                         {category.description && (
-                            <Text padding="15px"fontSize={{ base: "12px", md: "13px", lg: "14px" }} color="white">
+                            <Text padding="15px"fontSize={{ base: "12px", md: "13px", lg: "14px" }} 
+                            color="white">
                                 {category.description}
                             </Text>
                         )}
-                    </Box>
+                    </Box></Center>
                     
                     {/* <Image src={category.image?.src} objectFit="cover" w="full" h="200px" mb={3} /> */}
-                     <SimpleGrid  templateColumns={{base:"repeat(1, 1fr)", sm:"repeat(2, 1fr)", md:"repeat(2, 1fr)" , lg:"repeat(2, 1fr)" , xl:"repeat(4, 1fr)"}} spacing={10}>  
+                     <SimpleGrid
+                       templateColumns={{base:"repeat(1, 1fr)", sm:"repeat(2, 1fr)", md:"repeat(2, 1fr)" , lg:"repeat(2, 1fr)" , xl:"repeat(4, 1fr)"}} spacing={10}>  
                     {getItemsByCategory(category.id).map((item) => (
                    
             
@@ -42,12 +46,12 @@ export const Menu = () => {
                             justify="space-between"
                             align="center"
                             borderWidth="1px"
-                            borderColor="white"
+                            borderColor="tan"
                             border-radius="25px"
                             padding="15px"
                             maxWidth={{ base: "100%", md: "100%", lg: "100%" }}
                              mb={2}
-                             _hover={{ boxShadow: "0 0 10px 1px linen"}} >
+                             _hover={{ boxShadow: "0 0 10px 1px tan"}} >
                                 <Image src={item.image?.src} borderRadius="25px" 
                                 width={{base:"100%", md:"100%", lg:"100%", xl:"100%"}}
                                 size={{base:"100%"}} 

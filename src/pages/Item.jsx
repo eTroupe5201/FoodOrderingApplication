@@ -125,7 +125,7 @@ export const Item = () => {
            fontSize={{base: "30px",sm: "35px", md:"40px"}}>{item.label}</Text>
                    
                 <Image  
-                border="black 3px outset"
+                border="tan 2px outset"
                 borderRadius="25px"
                 src={item.image?.src} 
                 w={{base: "20em",sm: "20em", md:"20em", lg:"30em"}} 

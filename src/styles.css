@@ -13,6 +13,9 @@
 
 
 /*Combined, just on page refresh*/
+
+  
+ 
 * {
     box-sizing: border-box;
 }
@@ -167,14 +170,13 @@
     margin-bottom: 38%;
     position: absolute;
     z-index: 102;
-    margin-right: 68%;
+ 
 }
 
 .overlayHeading{
     color: white;
     position: absolute;
-    margin-bottom: 30%;
-    margin-right: 58%;
+  
     font-weight: bold;
     font-size: 30pt;
     z-index: 101;
@@ -182,15 +184,16 @@
 
 .overlay {
     color:white;
-    width: 700px;
+    
     position: absolute;
     margin-top: 6.5%;
     text-align: center;
     padding-top: 7%;
-    margin-left: 40%;
+   
     padding-left: 3%;
     padding-right: 3%;
     padding-bottom: 3%;
+    border-radius: 2em;
     background-color: rgba(0, 0, 0, 0.8);
     font-family: 'Raleway', sans-serif;
     z-index: 100;
@@ -251,20 +254,20 @@ body {
     align-items: center;
     margin-bottom: 5%;  
     background-color: black;
-
+    padding-bottom: 10%;
 }
 .OurTeamBox{
     justify-content: center;
     align-items: center;
     padding: 5%;
     height:100%;
-  
     border-radius: 25px;
     border: white 2px solid;
     color: white;
     text-align: center;
     margin: 5%;
     display: grid;
+   
    
 }
 /*this is the fix for full length*/
@@ -300,8 +303,8 @@ body {
 .SliderHeading{
     font-family: 'Great Vibes', cursive;
     text-shadow: 2px 2px 4px #000000;
-    color: tan;
-    margin-left: 10%;
+    color:white;
+    
     text-align: left;
     z-index: 102;
     
