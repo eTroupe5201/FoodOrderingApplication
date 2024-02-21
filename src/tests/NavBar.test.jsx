@@ -1,7 +1,7 @@
 // import { render, screen } from "@testing-library/react";
 // import { NavBar } from "../components/NavBar";
 // import { BrowserRouter } from "react-router-dom";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 
 describe("NavBar component", () => {
     beforeEach(() => {
