@@ -35,7 +35,7 @@ export function Footer() {
                 <li><Link to="/menu"><Text >Order</Text></Link></li>
                 <li><Link to="/login"><Text >Login</Text></Link></li>
                 <li><Link to="/contact"><Text>Contact</Text></Link></li>
-                <li><Link to="/about"><Text>About</Text></Link></li>
+                <li><Link to="/info"><Text>About</Text></Link></li>
                 </ul>
                  
                     </Grid>

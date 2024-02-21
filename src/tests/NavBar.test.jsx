@@ -3,6 +3,7 @@
 // import { BrowserRouter } from "react-router-dom";
 import { describe, it, expect, vi } from "vitest";
 
+
 // import { useBreakpointValue } from "@chakra-ui/react";
 
 describe("NavBar component", () => {

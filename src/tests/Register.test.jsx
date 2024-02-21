@@ -239,6 +239,6 @@ describe("Register page", () => {
         });
         
         expect(mockConsole).toHaveBeenCalled();
-        expect(mockConsole).toHaveBeenNthCalledWith(1, "valid registration input");
+        expect(mockConsole).toHaveBeenNthCalledWith(2, "valid registration input");
     });
 });

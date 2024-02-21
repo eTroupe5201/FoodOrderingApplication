@@ -5,7 +5,6 @@ export function OurTeam() {
     return (
       <><Center position="relative" mb="50px">
         <Box className="OurTeam"  position= "block" mb="2em">
-      
       <SimpleGrid columns={4} p="2%" templateColumns={{base:"repeat(1, 1fr)", sm:"repeat(2, 1fr)",lg:"repeat(4, 1fr)" }}>     
       <Box className="OurTeamBox">
               <Center> <Image className="round-picture" src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/assets/chef1.jpg" alt="logo" /></Center>

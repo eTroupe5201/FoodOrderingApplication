@@ -31,7 +31,7 @@ export function NavBar() {
         fetchCartStatus();
         // Reset the cardChanged state so that the next change can be detected
         setCartChanged(false);
-    }, [user, cartChanged]); //Now this effect depends on two states: user and cartChanged
+    }, [user, cartChanged, checkCartNotEmpty, setCartChanged]); //Now this effect depends on two states: user and cartChanged
 
     const logout = () => {
         getUserInfo(null); 

@@ -3,14 +3,22 @@ import { useDataProvider } from "../components/dataProvider";
 import { useForm } from "react-hook-form";
 
 //page for Contact Us form
-export const Contact = () => {
+export const Contact = ({saveData}) => {
     const { storeContactUsForm } = useDataProvider();
     const { register, handleSubmit, formState, reset} = useForm();
 
     const handleSendForm = async (data) => {  
-        await storeContactUsForm(data);
-        hideFormShowAlert(); 
-        reset();
+        console.log("valid contact form submitted");
+        try {
+            saveData(data);
+        } catch (error) {console.log(error);}
+        
+        try {
+            console.log(data.auth);
+            await storeContactUsForm(data);
+            hideFormShowAlert(); 
+            reset();
+        } catch (error) {console.log(error);}
     }
 
     const contactUsMessage = "All of our hard work here at Divine Delicacies is done with extreme care, " + 
@@ -37,8 +45,10 @@ export const Contact = () => {
                         Welcome to Divine Delicacies! 
                     </Text>
                     <Text 
-                        title='contact-message' 
-                        fontSize={{ base: "12px", md: "13px", lg: "14px" }}  
+
+           title='contact-header-message' 
+                      fontSize={{ base: "12px", md: "13px", lg: "14px" }}   
+
                         maxW='43rem' 
                         whiteSpace="pre-line"
                     > 
@@ -107,8 +117,11 @@ export const Contact = () => {
                     <VStack align='stretch' >
                         <FormControl id='fnameField' isInvalid={!!formState?.errors?.firstName?.type}>
                             <FormLabel>First Name</FormLabel>
-                            <Input  
+  
+                            <Input 
+                                title='contact-first-name'
                                 border="tan 2px outset" 
+
                                 id='firstName'
                                 {...register("firstName", { required: true, pattern:/(^[a-zA-Z,'-][a-zA-Z\s,'-]{0,20}[a-zA-Z]$)/})}
                             />
@@ -116,8 +129,10 @@ export const Contact = () => {
                         </FormControl>
                         <FormControl id='lnameField' isInvalid={!!formState?.errors?.lastName?.type}>
                             <FormLabel>Last Name</FormLabel>
-                            <Input  
+
+                            <Input 
                                 border="tan 2px outset" 
+                                title='contact-last-name'
                                 id='lastName'
                                 {...register("lastName", { required: true, pattern:/(^[a-zA-Z,'-][a-zA-Z\s,'-]{0,20}[a-zA-Z]$)/ })}
                             />
@@ -127,6 +142,7 @@ export const Contact = () => {
                             <FormLabel>Email Address</FormLabel>
                             <Input 
                                 border="tan 2px outset" 
+                                title='contact-email'
                                 id='email'
                                 {...register("email", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/})}
                             />
@@ -136,6 +152,7 @@ export const Contact = () => {
                             <FormLabel>Phone Number (optional)</FormLabel>
                             <Input 
                                  border="tan 2px outset" 
+                                title='contact-phone'
                                 type='tel'
                                 {...register("phone")}
                             />
@@ -144,13 +161,15 @@ export const Contact = () => {
                             <FormLabel>Message</FormLabel>
                         <Textarea 
                             border="tan 2px outset" 
+                            title='contact-message'
                             id='message'
-                            {...register("message", {required: true, maxLength:400})}
+                            {...register("message", {required: true, minLength: 5, maxLength:400})}
                         />
                         </FormControl>
 
                         <Flex>
                             <Box 
+                                title='contact-submit-button'
                                 as='button'  
                                 mt='1rem'
                                 bg='#fff' 

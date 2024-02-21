@@ -31,5 +31,8 @@ describe("Footer.jsx", () => {
         console.log(footer.children);
         expect(footer.children.length).toBe(2);
         expect(footer.children[0].type).toBe("section");
+
 });
 });
+
+

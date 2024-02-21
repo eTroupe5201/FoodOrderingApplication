@@ -27,7 +27,7 @@ export const Login = ({saveData}) => {
     const handleLogin = async (data) => {
         try {
             saveData(data);
-        } catch (error) {console.log("This is a test call - will throw error in dev/prod")} //console.log("This is a test call - will throw error in dev/prod")};
+        } catch (error) {console.log(error);}
 
         try {
             console.log(data);

@@ -23,6 +23,10 @@ export const CartModal = ({ isOpen, onClose }) => {
         fetchItems();
       }, [fetchCartItems,setLines]);
 
+    const close = () => {
+        this.close();
+    }
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">
             <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(-10deg)' />
@@ -123,8 +127,10 @@ export const CartModal = ({ isOpen, onClose }) => {
                             color="white"
                             background="black"
                             border="white solid 1px"
+
                             _hover={{ boxShadow: "0 0 10px 1px tan" }}
                             onClick={() => navigate("/checkout")}
+
                             total={calculateOrderTotal(lines, 10).toFixed(2)}
                         >
                             Checkout

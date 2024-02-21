@@ -35,9 +35,10 @@ export const CheckOut = () => {
                 setValue("phone", data.phone);
                 //...other fields in future
             }
-    
-            fetchAndSetUserProfile();
         };
+
+        fetchAndSetUserProfile();
+        
         /**
          * We used useRef to create an isMounted reference that will remain unchanged throughout the entire lifecycle of the component. 
          * In the cleanup function of useEffect, we set isMounted. current to false. In this way, 
@@ -49,7 +50,7 @@ export const CheckOut = () => {
         return () => {
         isMounted.current = false;
         };
-    }, [restaurantInfo]); 
+    }, [restaurantInfo, fetchUserProfile, setValue]); 
 
 
     const onSubmit = async (data) => {

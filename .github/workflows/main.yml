@@ -12,6 +12,7 @@ jobs:
     permissions:
       contents: write
       actions: write
+      packages: write
 
     steps:
     - uses: actions/checkout@v2
@@ -33,6 +34,28 @@ jobs:
     - name: Run tests
       run: npm test
 
+    - name: Lowercase repo name
+      id: repo_name
+      run: echo "REPO_NAME=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: |
+          ghcr.io/${{ env.REPO_NAME }}/food-ordering-app:latest
+          ghcr.io/${{ env.REPO_NAME }}/food-ordering-app:${{ github.sha }}
+
   deploy-to-firebase:
     needs: build-and-test
     runs-on: ubuntu-latest
@@ -42,7 +65,7 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
     - uses: actions/checkout@v2
-
+  
     # New step to set up Google Credentials
     - name: Set up Google Cloud credentials
       run: |
@@ -50,8 +73,13 @@ jobs:
         echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json" >> $GITHUB_ENV
       shell: bash
   
-
-    - name: Login to Firebase
+    - name: Clear Cache and Reinstall Dependencies
+      run: |
+        cd functions
+        rm -rf node_modules package-lock.json 
+        npm install                           
+  
+    - name: Login to Firebase and Deploy
       uses: w9jds/firebase-action@master
       with:
         args: deploy
