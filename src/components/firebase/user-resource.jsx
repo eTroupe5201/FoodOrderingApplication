@@ -12,10 +12,10 @@ import {
 
 const UserForm = () => {
     <SimpleForm sanitizeEmptyValues>
-        <TextInput source="firstName" validate={required()} fullWidth/>      
-        <TextInput source="lastName" validate={required()} fullWidth/>
-        <TextInput source="email" validate={required()} fullWidth/>
-        <TextInput source="phone" validate={required()} fullWidth/>
+        <TextInput source="firstName"  fullWidth/>      
+        <TextInput source="lastName"  fullWidth/>
+        <TextInput source="email" fullWidth/>
+        <TextInput source="phone"  fullWidth/>
         <PasswordInput source="new_password" fullWidth />
       </SimpleForm>
   }
