@@ -1,6 +1,7 @@
 
 import {
     List,
+    Create,
     Datagrid,
     SimpleForm,
     TextInput,
@@ -9,31 +10,43 @@ import {
   } from "react-admin";
   import { MdContacts } from "react-icons/md";
 
+const UserForm = () => {
+    <SimpleForm sanitizeEmptyValues>
+        <TextInput source="firstName" validate={required()} fullWidth/>      
+        <TextInput source="lastName" validate={required()} fullWidth/>
+        <TextInput source="email" validate={required()} fullWidth/>
+        <TextInput source="phone" validate={required()} fullWidth/>
+        <PasswordInput source="new_password" fullWidth />
+      </SimpleForm>
+  }
+
+  const UserCreate = () => (
+    <Create>
+      <UserCreate />
+    </Create>
+  );
+
 const UserEdit = () => (
     <Edit>
-        <SimpleForm sanitizeEmptyValues />
-        <TextInput source="first_name" />      
-        <TextInput source="last_name" />
-        <TextInput source="email_address" />
-        <TextInput source="phone_number" />
-        <PasswordInput source="password"  fullWidth />
+      <UserForm/>
     </Edit>
 );
 
 const UserList = () => (
-    <List>
+    <List sort={{ field: "lastName", order: "ASC" }}>
       <Datagrid rowClick="edit">
-      <TextInput source="first_name" />      
-        <TextInput source="last_name" />
-        <TextInput source="email_address" />
-        <TextInput source="phone_number" />
+      <TextInput source="firstName" />      
+        <TextInput source="lastName" />
+        <TextInput source="email" />
+        <TextInput source="phone" />
       </Datagrid>
     </List>
   );
 
 export const UserProps = {
     icon: MdContacts,
-    name: "user",
+    name: "users",
     list: UserList,
+    create: UserCreate,
     edit: UserEdit,
 }

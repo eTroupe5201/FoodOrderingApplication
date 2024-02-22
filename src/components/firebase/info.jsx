@@ -22,7 +22,7 @@ export const Info = () => {
 
   useEffect(() => {
     fetchData();
-  });
+  }, []);
 
   if (!defaultValues) return null;
 

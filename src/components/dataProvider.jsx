@@ -20,11 +20,6 @@ const DataProviderContext = createContext({
     checkout: () => Promise.resolve(""),
 });
 
-// export const useDataProviderForEmailCode = () => useContext(DataProviderEmailCodeContext);
-// const DataProviderEmailCodeContext = createContext({
-//     code: [],
-// });
-
 export const useDataProvider = () => useContext(DataProviderContext);
 /**
  * Set up a DataProvider in the React front-end application, which is an intermediate layer between the application and Firebase, 
@@ -42,8 +37,6 @@ export const DataProvider = ({ children }) => {
   const [order, setOrder] = useState();
   const [user, setUser] = useState();
   const [cartChanged, setCartChanged] = useState(false);
-  const [userToken, setUserToken] = useState();
-
 
   //getDoc comes from firebase firestore, it can import automatically and receive the document
   const fetchRestaurantInfo = async () => {
@@ -251,8 +244,6 @@ const registerNewAccount = async (userInfo) => {
   const registerNewAccountCallable = httpsCallable(functions, "registerAccount");
   console.log(userInfo);
 
-  //TODO: change ID to match email - so referencing can be done by email
-
   //2. Calling functions and passing order data
   const { data } = await registerNewAccountCallable({...userInfo})
   console.log("waited for registerNewAccountCallable");
@@ -285,7 +276,7 @@ const storeContactUsForm = async (formInfo) => {
 
   useEffect(() => {
     fetchData();
-  });
+  }, []);
 
 
   /** 
