@@ -42,6 +42,8 @@ export const DataProvider = ({ children }) => {
   const [order, setOrder] = useState();
   const [user, setUser] = useState();
   const [cartChanged, setCartChanged] = useState(false);
+  const [userToken, setUserToken] = useState();
+
 
   //getDoc comes from firebase firestore, it can import automatically and receive the document
   const fetchRestaurantInfo = async () => {
@@ -305,7 +307,7 @@ const storeContactUsForm = async (formInfo) => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-    <DataProviderContext.Provider value={{user, lines, setLines, restaurantInfo, categories, items, cartChanged, setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order}}>
+    <DataProviderContext.Provider value={{ user, lines, setLines, restaurantInfo, categories, items, cartChanged, setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order}}>
       {isReady ? (
         children
       ) : (

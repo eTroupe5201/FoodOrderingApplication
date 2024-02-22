@@ -15,7 +15,7 @@ export const Login = ({saveData}) => {
     // const {setUserAccount} = useDataProvider();
     const toast = useToast();
     const navigate = useNavigate();
-    const { getUserInfo } = useDataProvider();
+    const { getUserInfo, storeUserToken } = useDataProvider();
     const { register, handleSubmit, formState } = useForm();
 
     const [showPassword, setShowPassword] = React.useState(false)
@@ -37,7 +37,7 @@ export const Login = ({saveData}) => {
              * and saves the user session on the client after successful login.
              */
             const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
-    
+
             // Login successful, Firebase automatically handles the session and token
             console.log("Logged in user:", userCredential.user);
 
@@ -45,8 +45,7 @@ export const Login = ({saveData}) => {
 
             // It is possible to obtain a token, but usually not required
             //const token = await userCredential.user.getIdToken();
-            //console.log(token);
-
+ 
             // Show success message and navigate to homepage
             toast({
                 title: "Logged in successfully.",

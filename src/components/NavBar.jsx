@@ -8,11 +8,13 @@ import { useBreakpointValue } from "@chakra-ui/react";
 import {MobileNav} from "./MobileNav";
 import { useDisclosure } from "@chakra-ui/react";   
 import { CartModal } from "../components/CartModal";
+import { auth } from "../utils/firebase" 
+import { signOut } from "firebase/auth";
 
 export function NavBar() {
     const isSmallScreen = useBreakpointValue({ base: true, sm: true, md: true, lg: false, xl: false }); // Define when to show the icon based on screen size
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { user, checkCartNotEmpty, getUserInfo, cartChanged, setCartChanged } = useDataProvider();
+    const { user, getUserInfo, checkCartNotEmpty, cartChanged, setCartChanged } = useDataProvider();
     const navigate = useNavigate();
     const toast = useToast();
     const [hasCartItems, setHasCartItems] = useState(false);
@@ -21,7 +23,7 @@ export function NavBar() {
         const fetchCartStatus = async () => {
             if (user) {
                 const isNotEmpty = await checkCartNotEmpty();
-                console.log("Cart not empty:", isNotEmpty);
+                //console.log("Cart not empty:", isNotEmpty);
                 setHasCartItems(isNotEmpty);
             } else {
                 setHasCartItems(false);
@@ -34,18 +36,21 @@ export function NavBar() {
     }, [user, cartChanged]); //Now this effect depends on two states: user and cartChanged
 
     const logout = () => {
-        getUserInfo(null); 
-    
-        toast({
-            title: "Logged out successfully.",
-            position: "top",
-            status: "success",
-            isClosable: true,
-        });
-    
-        navigate("/");
+        signOut(auth).then(() => {
+            getUserInfo(null); 
+            
+            toast({
+                title: "Logged out successfully.",
+                position: "top",
+                status: "success",
+                isClosable: true,
+            });
+        
+            navigate("/");
+        }).catch((error) => {
+            console.log(error);
+        })
     }
-
 
     return (
         <nav className="nav">      
@@ -75,7 +80,11 @@ export function NavBar() {
                 <li><Link to="/menu"> <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Order </Text></Link></li>
                 <li > 
                     {user ? (
-                        <Box  as="button" onClick={logout} ><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}> Logout</Text> </Box>
+                        <Box as="button" onClick={logout} >
+                            <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}> 
+                                Logout
+                            </Text> 
+                        </Box>
                     ) : (
                         <Link to="/login"> <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Login </Text></Link> 
                     ) }
