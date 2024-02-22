@@ -1,5 +1,5 @@
-import React from "react";
-import { Image, HStack, Box, useToast, Text,Button} from "@chakra-ui/react";
+//import React from "react";
+import { Image, HStack, Box, useToast, Text,Button, Flex } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDataProvider } from "../components/dataProvider"
 import { useState, useEffect } from "react";
@@ -8,20 +8,23 @@ import { useBreakpointValue } from "@chakra-ui/react";
 import {MobileNav} from "./MobileNav";
 import { useDisclosure } from "@chakra-ui/react";   
 import { CartModal } from "../components/CartModal";
+import { auth } from "../utils/firebase" 
+import { signOut } from "firebase/auth";
 
 export function NavBar() {
     const isSmallScreen = useBreakpointValue({ base: true, sm: true, md: true, lg: false, xl: false }); // Define when to show the icon based on screen size
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { user, checkCartNotEmpty, getUserInfo, cartChanged, setCartChanged } = useDataProvider();
+    const { user, getUserInfo, checkCartNotEmpty, cartChanged, setCartChanged, fetchUserProfile } = useDataProvider();
     const navigate = useNavigate();
     const toast = useToast();
     const [hasCartItems, setHasCartItems] = useState(false);
+    const [userProfile, setUserProfile] = useState(null);
 
     useEffect(() => {
         const fetchCartStatus = async () => {
             if (user) {
                 const isNotEmpty = await checkCartNotEmpty();
-                console.log("Cart not empty:", isNotEmpty);
+                //console.log("Cart not empty:", isNotEmpty);
                 setHasCartItems(isNotEmpty);
             } else {
                 setHasCartItems(false);
@@ -38,8 +41,6 @@ export function NavBar() {
         const loadUserProfile = async () => {
             const profile = await fetchUserProfile();
             setUserProfile(profile); 
-           console.log("profile", profile.firstName, profile.lastName, profile.email, profile.phone, profile.address, profile.city, profile.state, profile.zipCode, profile.country, profile.id);
-            
         };
 
         loadUserProfile();
@@ -48,18 +49,21 @@ export function NavBar() {
     
         
     const logout = () => {
-        getUserInfo(null); 
-    
-        toast({
-            title: "Logged out successfully.",
-            position: "top",
-            status: "success",
-            isClosable: true,
-        });
-    
-        navigate("/");
+        signOut(auth).then(() => {
+            getUserInfo(null); 
+            
+            toast({
+                title: "Logged out successfully.",
+                position: "top",
+                status: "success",
+                isClosable: true,
+            });
+        
+            navigate("/");
+        }).catch((error) => {
+            console.log(error);
+        })
     }
-
 
     return (
         <nav className="nav">      
@@ -95,9 +99,14 @@ export function NavBar() {
                     ) }
                 </li>
                 <HStack spacing="1.5rem">
-                    <li > 
+                <li > 
                         {user ? (
-                            <Link to="/profile"> <TiUser  /> </Link>
+                            <Flex align="center">
+                                <Link to="/profile">
+                                    <TiUser />
+                                </Link>
+                                <Text pl={2} fontSize="xl">{userProfile?.firstName}</Text> 
+                            </Flex>
                         ) : (
                             <TiUser style={{visibility: "hidden"}} />
                         ) }

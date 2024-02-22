@@ -3,31 +3,39 @@ import { Link } from "react-router-dom";
 import { useDataProvider } from "../components/dataProvider";
 import { IconButton } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
- import { useDisclosure } from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
-// import { useNavigate } from "react-router-dom";
-// import { useToast } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@chakra-ui/react";
 import { CartModal } from "./CartModal";
+import { auth } from "../utils/firebase" 
+import { signOut } from "firebase/auth";
 
 export function MobileNav() {
   const { lines } = useDataProvider();
   const hasCartItems = lines.length > 0;
-//   const { user, getUserInfo } = useDataProvider();
-//   const navigate = useNavigate();
-//   const toast = useToast();
+  const { user, getUserInfo } = useDataProvider();
+   const navigate = useNavigate();
+   const toast = useToast();
    const { isOpen, onOpen, onClose } = useDisclosure();
-//   const logout = () => {
-//     getUserInfo(null); 
 
-//     toast({
-//         title: "Logged out successfully.",
-//         position: "top",
-//         status: "success",
-//         isClosable: true,
-//     });
+   const logout = () => {
+    signOut(auth).then(() => {
+        getUserInfo(null); 
+        
+        toast({
+            title: "Logged out successfully.",
+            position: "top",
+            status: "success",
+            isClosable: true,
+        });
+    
+        navigate("/");
+    }).catch((error) => {
+        console.log(error);
+    })
+}
 
-//     navigate("/");
-// }
   return (
     <Menu color="black">
       <MenuButton
@@ -40,19 +48,16 @@ export function MobileNav() {
         icon={<HamburgerIcon color="white" />}
       />
       <MenuList border="2px outset tan"bg="black" textAlign="center" fontWeight="bold">
-        <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px",borderColor: "white 2px" }} as="a" href="/" fontSize={{ base: "15px" }}> Home </MenuItem>
-        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" href="/contact" fontSize={{ base: "15px" }}> Contact </MenuItem>
-        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" href="/menu" fontSize={{ base: "15px" }}> Order </MenuItem>
-        <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" href="/login" fontSize={{ base: "15px" }}> Login </MenuItem>
+        <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px",borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/"> Home </Link> </MenuItem>
+        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/contact"> Contact </Link> </MenuItem>
+        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/menu"> Order </Link> </MenuItem>
+        {user ? (
+          //TODO: fix temp solution - Link only added here for formatting 
+          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" onClick={logout} fontSize={{ base: "15px" }}> <Link> Logout </Link> </MenuItem>
+        ) : (
+          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/login"> Login </Link> </MenuItem>  
+        ) }
 
-        {/* {user ? (                 
-        <MenuItem bg="black" onClick={logout}_hover={{ color: "black", bg: "white", borderColor: "white 2px" }}  as="button"fontSize={{ base: "15px" }}> Logout </MenuItem>
-
-    ) : (
-      <MenuItem bg="black" _hover={{ color: "black", bg: "white", borderColor: "white 2px" }} as="a" href="/login" fontSize={{ base: "15px" }}> Login </MenuItem>
-
-    ) } */}
-        
         {hasCartItems ? (
            <MenuItem bg="black" fontWeight="bold" fontSize={{ base: "15px" }} onClick={onOpen} >
             <Text color="white"  _hover={{  borderColor: "white 2px" }} fontSize={{ base: "15px" }}>Cart</Text>
