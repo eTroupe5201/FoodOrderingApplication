@@ -207,7 +207,7 @@ export const registerAccount = onCall(async (request) => {
 
   // Create the user with email and password via Firebase Authentication to host our status
   const userRecord = await admin.auth().createUser({
-    uid: request.data.email,
+    //uid: request.data.email,
     email: request.data.email,
     password: request.data.password
   });
