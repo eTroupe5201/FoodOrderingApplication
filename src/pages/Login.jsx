@@ -3,7 +3,11 @@ import { Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormCont
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { auth } from "../utils/firebase" 
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {GoogleButton} from 'react-google-button'
+//import { signInWithEmailAndPassword } from "firebase/auth";
+
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth"; // Updated import
+
 import { useDataProvider } from "../components/dataProvider"
 
 /* Login page - handle and validate user input, also checking against database for existing account and 
@@ -15,7 +19,8 @@ export const Login = ({saveData}) => {
     // const {setUserAccount} = useDataProvider();
     const toast = useToast();
     const navigate = useNavigate();
-    const { getUserInfo } = useDataProvider();
+    const { getUserInfo, storeUserToken } = useDataProvider();
+    const { checkIfEmailRegistered } = useDataProvider();
     const { register, handleSubmit, formState } = useForm();
 
     const [showPassword, setShowPassword] = React.useState(false)
@@ -24,6 +29,41 @@ export const Login = ({saveData}) => {
     const navigateToRegister = () => {navigate("/register");}
     const navigateToResetPassword = () => {navigate("/forgotpassword");}
 
+    const handleGoogleSignIn = async (e) => {
+      
+        try {
+            const provider = new GoogleAuthProvider();
+            provider.setCustomParameters({ prompt: "select_account" }); // Force account selection prompt
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            
+            const emailRegistered = await checkIfEmailRegistered(user.email);
+
+            if (!emailRegistered) {
+                // Email is not registered, so sign out the user and display an error message
+                await auth.signOut();
+                throw new Error("Email not registered. Please register before signing in with Google.");
+            }
+            getUserInfo(user);
+            navigate("/");
+            // Show success message
+            toast({
+                title: "Logged in successfully.",
+                position: "top",
+                status: "success",
+                isClosable: true,
+            });
+        } catch (error) {
+            // Handle sign-in error
+            console.error("Google Sign-In Error:", error.message);
+            toast({
+                title: "Failed to sign in with Google.",
+                position: "top",
+                status: "error",
+                isClosable: true,
+            });
+        }
+    };
     const handleLogin = async (data) => {
         try {
             saveData(data);
@@ -122,7 +162,7 @@ export const Login = ({saveData}) => {
                             </InputGroup>
                             <FormErrorMessage>{"Incorrect password"}</FormErrorMessage>
                         </FormControl>
-
+                    
                         <Center 
                             title='login-forgot-password'
                             color='#fff'
@@ -138,6 +178,7 @@ export const Login = ({saveData}) => {
                             > 
                             Forgot Password?
                         </Center>
+                          
                         <Box 
                             title='login-login-button'
                             as='button'  
@@ -154,7 +195,7 @@ export const Login = ({saveData}) => {
                             > 
                             CONTINUE
                         </Box>
-                        <Center 
+                          <Center 
                             _hover={{ boxShadow: "0 0 5px 1px linen" }}
                             border="tan 2px outset"
                             title='login-register-button'
@@ -170,6 +211,11 @@ export const Login = ({saveData}) => {
                             > 
                             REGISTER
                         </Center>
+                           {/*Google sigin option*/}
+                        {/* <Box title='login-google-signin-button' as='button' mt="10%" _hover={{ boxShadow: "0 0 5px 1px linen" }} color='white' h='40px' w='70%' fontWeight='bold' fontSize="12px" border="tan 2px outset" bg='black' borderRadius='md' onClick={handleGoogleSignIn}> SIGN IN WITH GOOGLE </Box> */}
+                        <div size="sm" > <GoogleButton size="sm" onClick={handleGoogleSignIn} /></div>
+                       
+                     
                     </VStack>
                 </Box>
             </Flex>

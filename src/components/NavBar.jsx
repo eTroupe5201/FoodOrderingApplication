@@ -31,8 +31,22 @@ export function NavBar() {
         fetchCartStatus();
         // Reset the cardChanged state so that the next change can be detected
         setCartChanged(false);
-    }, [user, cartChanged, checkCartNotEmpty, setCartChanged]); //Now this effect depends on two states: user and cartChanged
+    }, [user, cartChanged]); //Now this effect depends on two states: user and cartChanged
 
+    
+    useEffect(() => {
+        const loadUserProfile = async () => {
+            const profile = await fetchUserProfile();
+            setUserProfile(profile); 
+           console.log("profile", profile.firstName, profile.lastName, profile.email, profile.phone, profile.address, profile.city, profile.state, profile.zipCode, profile.country, profile.id);
+            
+        };
+
+        loadUserProfile();
+    }, [user]); 
+    
+    
+        
     const logout = () => {
         getUserInfo(null); 
     

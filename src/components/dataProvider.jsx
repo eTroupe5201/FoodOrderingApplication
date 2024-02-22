@@ -18,6 +18,7 @@ const DataProviderContext = createContext({
     addToCart: () => {},
     removeCartItem: () => {},
     checkout: () => Promise.resolve(""),
+    checkIfEmailRegistered: () => Promise.resolve(false),
 });
 
 // export const useDataProviderForEmailCode = () => useContext(DataProviderEmailCodeContext);
@@ -42,6 +43,25 @@ export const DataProvider = ({ children }) => {
   const [order, setOrder] = useState();
   const [user, setUser] = useState();
   const [cartChanged, setCartChanged] = useState(false);
+
+  
+// Function to check if an email is registered
+const checkIfEmailRegistered = async (email) => {
+    try {
+        // Get the Firebase Authentication instance
+        const auth = getAuth();
+        
+        // Get the user record by email
+        const userRecord = await getUserByEmail(auth, email);
+
+        // If the user record exists, the email is registered
+        return !!userRecord;
+    } catch (error) {
+        // Handle errors, such as email not found
+        console.error("Error checking email registration:", error);
+        return false;
+    }
+};
 
   //getDoc comes from firebase firestore, it can import automatically and receive the document
   const fetchRestaurantInfo = async () => {
@@ -296,7 +316,7 @@ const storeContactUsForm = async (formInfo) => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-    <DataProviderContext.Provider value={{user, lines, setLines, restaurantInfo, categories, items, cartChanged, setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order}}>
+    <DataProviderContext.Provider value={{ user, lines, setLines, restaurantInfo, categories, items, cartChanged, setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order, checkIfEmailRegistered}}>
       {isReady ? (
         children
       ) : (

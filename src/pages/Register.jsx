@@ -3,6 +3,8 @@ import { Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormCont
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
+import {GoogleButton} from 'react-google-button'
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth"; // Updated import
 
 /* Register page - use React hook Forms for collecting input and validating. Once validated and submitted, send request to Firebase and:
 *   - if account exists with provided email, route to Login page
@@ -24,6 +26,34 @@ export const Register = ({saveData}) => {
     const handleShowPassword= () => setShowPassword(!showPassword)
     const handleShowConfirmPassword= () => setShowConfirmPassword(!showConfirmPassword)
 
+    const handleGoogleRegister = async (e) => {
+      
+        try {
+            const provider = new GoogleAuthProvider();
+            provider.setCustomParameters({ prompt: "select_account" }); // Force account selection prompt
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            
+            getUserInfo(user);
+            navigate("/");
+            // Show success message
+            toast({
+                title: "Logged in successfully.",
+                position: "top",
+                status: "success",
+                isClosable: true,
+            });
+        } catch (error) {
+            // Handle sign-in error
+            console.error("Google Sign-In Error:", error.message);
+            toast({
+                title: "Failed to sign in with Google.",
+                position: "top",
+                status: "error",
+                isClosable: true,
+            });
+        }
+    };
     const handleRegister = async (data) => {
 
         try {
@@ -262,6 +292,7 @@ export const Register = ({saveData}) => {
                             Register
                         </Box>
                     </VStack>
+                    <div size="sm" > <GoogleButton size="sm" onClick={handleGoogleRegister} /></div>
                 </Box>
             </Flex>
         </form></>
