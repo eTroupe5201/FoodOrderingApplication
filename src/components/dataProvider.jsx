@@ -180,6 +180,7 @@ export const DataProvider = ({ children }) => {
     return;
   };
 
+  //causing infinite loop
   //console.log(lines);
 
   const removeCartItem = async (itemId) => {
@@ -284,7 +285,7 @@ const storeContactUsForm = async (formInfo) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  });
 
 
   /** 

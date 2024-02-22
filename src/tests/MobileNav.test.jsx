@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { MobileNav } from "../components/MobileNav";
 import TestRenderer from "react-test-renderer";
 import { MemoryRouter } from "react-router-dom";
-import { render, fireEvent } from "@testing-library/react";
+//import { render, fireEvent } from "@testing-library/react";
 
 describe("MobileNav.jsx", () => {
     // Mock implementation for useDisclosure

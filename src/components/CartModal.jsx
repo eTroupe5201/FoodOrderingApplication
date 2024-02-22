@@ -23,9 +23,9 @@ export const CartModal = ({ isOpen, onClose }) => {
         fetchItems();
       }, [fetchCartItems,setLines]);
 
-    const close = () => {
-        this.close();
-    }
+    // const close = () => {
+    //     this.close();
+    // }
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">

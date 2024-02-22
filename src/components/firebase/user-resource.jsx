@@ -12,18 +12,18 @@ import {
 const UserEdit = () => (
     <Edit>
         <SimpleForm sanitizeEmptyValues />
-        <TextInput source="first_name" fullWidth />      
-        <TextInput source="last_name" fullWidth />
-        <TextInput source="email_address" fullWidth />
-        <TextInput source="phone_number" fullWidth />
-        <PasswordInput source="new_password"  fullWidth />
+        <TextInput source="first_name" />      
+        <TextInput source="last_name" />
+        <TextInput source="email_address" />
+        <TextInput source="phone_number" />
+        <PasswordInput source="password"  fullWidth />
     </Edit>
 );
 
 const UserList = () => (
     <List>
       <Datagrid rowClick="edit">
-        <TextInput source="first_name" />      
+      <TextInput source="first_name" />      
         <TextInput source="last_name" />
         <TextInput source="email_address" />
         <TextInput source="phone_number" />
