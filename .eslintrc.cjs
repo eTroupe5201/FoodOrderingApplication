@@ -18,6 +18,7 @@ module.exports = {
     "linebreak-style": "off",
     "react-hooks/exhaustive-deps": "warn",
     'react-refresh/only-export-components': 'off',
+    "linebreak-style": "off"
     // 'react-refresh/only-export-components': [
     //   'warn',
     //   { allowConstantExport: true },

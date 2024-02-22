@@ -167,25 +167,42 @@ export const DataProvider = ({ children }) => {
     return !querySnapshot.empty; // If snapshot. empty is true, then the shopping cart is empty, otherwise it is not empty
   };
 
-  const addToCart = async (line) => {
+  const addToCart = async (dataWithId) => {
     const uid = user.uid;
     console.log(uid);
     //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
     const placeCartCallable = httpsCallable(functions, "placecart");
 
-    //2. Calling functions and passing order data
-    // const { data } = await placeCartCallable({...line, uid});
-    // setCartChanged(true);
-    // console.log(data);
-    try {
-      const { data } = await placeCartCallable({...line});
-      setCartChanged(true);
-      console.log('Cloud function response:', data); // 打印云函数的响应
+    //we may need to update the cart quantity directly if we have already had this food item
+    //so what we can do can use fetch cart item to loop the cart items
+    try{
+      const cartItems = await fetchCartItems();
+      let itemExists = false;
+
+      for (const cartItem of cartItems) {
+        //if food item exists, update the quantity
+        if(cartItem.id === dataWithId.id){
+
+          cartItem.quantity = dataWithId.quantity;
+          itemExists = true;
+          //and then call the cloud function to update the database
+          const updateCartItemCallable = httpsCallable(functions, "updateCartItem");
+          const { updateData } = await updateCartItemCallable(cartItem);
+          console.log('Cloud function update response:', updateData); 
+
+        }
+      }
+
+      //only when food item definetely doesn't exist, will call this function placeCartCallable(dataWithId);
+      if(!itemExists){
+        const { newData } = await placeCartCallable(dataWithId);
+        console.log('Cloud function response:', newData);
+      }
+      setCartChanged(true); 
     } catch (error) {
-      console.error('Error calling placeCartCallable:', error); // 打印调用云函数时的错误
+      console.error('Error updating cart:', error);
     }
 
-    return;
   };
 
   //causing infinite loop
@@ -293,7 +310,7 @@ const storeContactUsForm = async (formInfo) => {
 
   useEffect(() => {
     fetchData();
-  });
+  },[]);
 
 
   /** 

@@ -129,13 +129,13 @@ export const placecart = onCall(async (request) => {
   }
 
   const uid = request.auth.uid;
-  
+  const itemId = request.data.id; //also parase the itemId
   const line = request.data;
 
   // prepare cart data
   const cartData = {
     ...line, // 包含商品信息
-    createdAt: admin.firestore.FieldValue.serverTimestamp(), // 添加服务器时间戳
+    createdAt: admin.firestore.FieldValue.serverTimestamp(), 
 };
 
 
@@ -143,13 +143,44 @@ export const placecart = onCall(async (request) => {
   // Here, the carts collection is used to store each user's shopping cart. Each user's shopping cart is a document, and the ID of the document is the user's UID. 
   // The product items in each shopping cart are stored in the items subset of the document
   try {
-      const docRef = await admin.firestore().collection('carts').doc(uid).collection('items').add(cartData);
-      console.log('Item added to cart with doc ID:', docRef.id); // 确认已保存的数据和文档ID
-      return { result: "Item added to cart", docId: docRef.id }; // 返回成功信息和文档ID
+      const docRef = await admin.firestore().collection('carts').doc(uid).collection('items').doc(itemId).set(cartData);
+      console.log('Item added to cart with doc ID:', docRef.id); 
+      return { result: "Item added to cart", docId: docRef.id }; 
   } catch (error) {
       throw new functions.https.HttpsError('internal', 'Unable to add item to cart', error);
   }
 });
+
+export const updateCartItem = onCall(async (request) => {
+  if (!request.auth) {
+    throw new HttpsError("failed-precondition", "You are not authorized");
+  }
+
+  const uid = request.auth.uid;
+  const { id, quantity } = request.data; // obtain the foot item id and quantity attributes from request body
+
+  // obtain specific food item  from specfic user's cart
+  const cartItemRef = admin.firestore().collection('carts').doc(uid).collection('items').doc(id);
+
+  try {
+    // obtain food item's information
+    const doc = await cartItemRef.get();
+
+    if (!doc.exists) {
+      throw new HttpsError('not-found', 'The cart item does not exist.');
+    }
+
+    // if cart item does exist, we can add up the quantity 
+    await cartItemRef.update({
+      quantity: admin.firestore.FieldValue.increment(quantity)
+    });
+
+    return { result: "Cart item updated successfully." };
+  } catch (error) {
+    throw new HttpsError('internal', 'Unable to update cart item.', error);
+  }
+});
+
 
 // export const registerAccount = onCall(async (request) => {
 //   //Check if the user calling the function has passed authentication. 
