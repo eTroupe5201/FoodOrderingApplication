@@ -167,13 +167,21 @@ export const DataProvider = ({ children }) => {
 
   const addToCart = async (line) => {
     const uid = user.uid;
+    console.log(uid);
     //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
     const placeCartCallable = httpsCallable(functions, "placecart");
 
     //2. Calling functions and passing order data
-    const { data } = await placeCartCallable({...line, uid});
-    setCartChanged(true);
-    console.log(data);
+    // const { data } = await placeCartCallable({...line, uid});
+    // setCartChanged(true);
+    // console.log(data);
+    try {
+      const { data } = await placeCartCallable({...line});
+      setCartChanged(true);
+      console.log('Cloud function response:', data); // 打印云函数的响应
+    } catch (error) {
+      console.error('Error calling placeCartCallable:', error); // 打印调用云函数时的错误
+    }
 
     return;
   };

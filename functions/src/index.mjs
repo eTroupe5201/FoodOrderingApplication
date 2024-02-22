@@ -143,8 +143,9 @@ export const placecart = onCall(async (request) => {
   // Here, the carts collection is used to store each user's shopping cart. Each user's shopping cart is a document, and the ID of the document is the user's UID. 
   // The product items in each shopping cart are stored in the items subset of the document
   try {
-      await admin.firestore().collection('carts').doc(uid).collection('items').add(cartData);
-      return { result: "Item added to cart" };
+      const docRef = await admin.firestore().collection('carts').doc(uid).collection('items').add(cartData);
+      console.log('Item added to cart with doc ID:', docRef.id); // 确认已保存的数据和文档ID
+      return { result: "Item added to cart", docId: docRef.id }; // 返回成功信息和文档ID
   } catch (error) {
       throw new functions.https.HttpsError('internal', 'Unable to add item to cart', error);
   }
@@ -207,7 +208,7 @@ export const registerAccount = onCall(async (request) => {
 
   // Create the user with email and password via Firebase Authentication to host our status
   const userRecord = await admin.auth().createUser({
-    uid: request.data.email,
+    // uid: request.data.email,
     email: request.data.email,
     password: request.data.password
   });
