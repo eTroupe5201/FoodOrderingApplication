@@ -15,7 +15,7 @@ export const Login = ({saveData}) => {
     // const {setUserAccount} = useDataProvider();
     const toast = useToast();
     const navigate = useNavigate();
-    const { getUserInfo, storeUserToken } = useDataProvider();
+    const { getUserInfo } = useDataProvider();
     const { register, handleSubmit, formState } = useForm();
 
     const [showPassword, setShowPassword] = React.useState(false)

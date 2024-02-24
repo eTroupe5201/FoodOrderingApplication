@@ -48,14 +48,14 @@ export function MobileNav() {
         icon={<HamburgerIcon color="white" />}
       />
       <MenuList border="2px outset tan"bg="black" textAlign="center" fontWeight="bold">
-        <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px",borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/"> Home </Link> </MenuItem>
-        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/contact"> Contact </Link> </MenuItem>
-        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/menu"> Order </Link> </MenuItem>
+        <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px",borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }} to="/"> Home </MenuItem>  
+        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }} to="/contact"> Contact </MenuItem>
+        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }} to="/menu"> Order </MenuItem>
         {user ? (
           //TODO: fix temp solution - Link only added here for formatting 
-          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" onClick={logout} fontSize={{ base: "15px" }}> <Link> Logout </Link> </MenuItem>
+          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" onClick={logout} fontSize={{ base: "15px" }}> Logout </MenuItem>
         ) : (
-          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/menu"> Login </Link> </MenuItem>  
+          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }} to="/menu"> Login </MenuItem>  
         ) }
 
         {hasCartItems ? (

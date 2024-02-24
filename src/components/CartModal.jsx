@@ -54,7 +54,7 @@ export const CartModal = ({ isOpen, onClose }) => {
                     _hover={{ boxShadow: "0 0 10px 1px tan" }}
                 />
                 <ModalBody>
-                    <VStack px={4} py={2} mt={4} font-family="'Raleway', sans-serif">
+                    <VStack px={4} py={2} mt={4} fontFamily="'Raleway', sans-serif">
                         {lines.map((line, index) => (
                             <Flex key={index} justify="space-between" w="100%">
                                 <Heading flex={1} fontSize={16} maxW={50}>
