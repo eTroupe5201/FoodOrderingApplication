@@ -8,46 +8,7 @@ import {
 import React, { useEffect} from "react";
 
 const GratitudeContent = () => {
-    const { order, setOrder, clearCartAfterConfirmation, clearOrderAfterConfirmation, generateOrder, handleOrder  } = useDataProvider();
-
-    // 用于初始化PayPal按钮的函数
-    // useEffect(() => {
-    //     if (!window.paypal || !order?.id || order?.status !== 'pending') {
-    //         console.log('PayPal not loaded or order not in pending status.');
-    //         return;
-    //     }
-    
-    //     window.paypal.Buttons({
-    //         createOrder: (data, actions) => {
-    //             return generateOrder().then(orderId => {
-    //                 return orderId; // 直接返回订单ID
-    //             });
-    //         },
-    //         onApprove: async (data, actions) => {
-    //             // 检查订单状态以避免重复捕获
-    //             if (order.status === 'confirmed') {
-    //                 console.log('Order already confirmed. Skipping capture.');
-    //                 return;
-    //             }
-                
-    //             return actions.order.capture().then(async details => {
-                    
-    //                 try {
-    //                     console.log(`Order captured successfully: ${details.id}`);
-    //                     const updatedOrder = await handleOrder(details.id);
-    //                     setOrder(updatedOrder); // 确保这里正确地更新了订单状态
-    //                     alert("THANKS FOR YOUR ORDER");
-    //                 } catch (error) {
-    //                     console.error('Error updating order after approval:', error);
-    //                 }
-    //             });
-    //         },
-    //         onError: (error) => {
-    //             console.error('Payment error:', error);
-    //             // 这里可以添加用户友好的错误处理逻辑
-    //         }
-    //     }).render('#paypal-button');
-    // }, [order, window.paypal]); // 依赖项调整为直接依赖order对象和window.paypal
+    const { order, setOrder, clearCartAfterConfirmation, generateOrder, handleOrder  } = useDataProvider();
 
     useEffect(() => {
         if (!window.paypal || !order?.id || order?.status !== 'pending') {
@@ -58,17 +19,17 @@ const GratitudeContent = () => {
         window.paypal.Buttons({
             createOrder: (data, actions) => {
                 return generateOrder().then(orderId => {
-                    // 处理错误情况
+                    // handle error situation
                     if (orderId.error) {
                         console.error('Error creating PayPal order:', orderId.error);
-                        // 可以在这里处理错误，比如展示提示信息给用户
-                        return actions.reject(); // 拒绝创建订单
+                        // can handle errors here, such as displaying prompt information to the user
+                        return actions.reject(); // Refuse to create order
                     }
-                    return orderId; // 直接返回订单ID
+                    return orderId; // Directly return the order ID
                 });
             },
             onApprove: async (data, actions) => {
-                // 检查订单状态以避免重复捕获
+                // Check order status to avoid duplicate capture
                 if (order.status === 'confirmed') {
                     console.log('Order already confirmed. Skipping capture.');
                     return;
@@ -77,20 +38,31 @@ const GratitudeContent = () => {
                 const updatedOrder = await handleOrder(data.orderID);
                 if (updatedOrder.error) {
                     console.error('Error handling PayPal order:', updatedOrder.error);
-                    // 可以在这里处理错误，比如展示提示信息给用户
-                    return; // 退出函数，不继续执行
+                    return; // exit the function
                 }
                 console.log(`Order captured successfully: ${updatedOrder.id}`);
-                setOrder(updatedOrder); // 确保这里正确地更新了订单状态
+                setOrder(updatedOrder); // make sure call setOrder promptly
                 alert("THANKS FOR YOUR ORDER");
             },
-            onError: (error) => {
-                console.error('Payment error:', error);
-                // 这里可以添加用户友好的错误处理逻辑
+            // onError: (error) => {
+            //     // Use optional chain operators to securely access the error property
+            //     console.error('Payment error:', error?.message || error);
+
+            //     // User friendly error handling logic can be added here
+            //     alert(`Payment failed: ${error?.message || 'Unknown error'}`);
+            // }
+        }).render('#paypal-button'); // Ensure that the ID matches the elements in the HTML
+
+        // Cleanup function
+        return () => {
+            // Check if the PayPal buttons exist and if so, remove them
+            const paypalButtonContainer = document.getElementById('paypal-button');
+            if (paypalButtonContainer) {
+            paypalButtonContainer.innerHTML = '';
             }
-        }).render('#paypal-button'); // 确保ID与HTML中的元素匹配
+        };
     
-    }, [order?.id, order?.status, window.paypal]); // 删除window.firebase因为我们不再直接使用它
+    }, [order?.id, order?.status, window.paypal]); 
     
 
     if (!order) return null;
@@ -102,12 +74,9 @@ const GratitudeContent = () => {
                 <Icon as={MdHourglassBottom} w={24} h={24} color="gray.700" />
                 <Heading textAlign="center">Waiting for a confirmation</Heading>
                 <Text textAlign="center">
-                    Your order has been placed. Please wait for a confirmation from the
-                    restraunt.
+                    Your order has been placed. Please go to pay the bill.
                 </Text>
-                <div id="paypal-button">
-
-                </div>
+                <div id="paypal-button" style={{ width: '80%', maxWidth: '300px', height: 'auto', display: 'block', margin: '0 auto' }}></div>
             </>
         );
     }
@@ -130,7 +99,8 @@ const GratitudeContent = () => {
         // console.log("order confirmed");
         //when the status is confirmed, call this function to empty the cart and order, meaning that you have paid successfully!!!
         clearCartAfterConfirmation();
-        // clearOrderAfterConfirmation();
+
+        // clearOrderAfterConfirmation(); // don't need to clear up the order. Not in line with business logic, a user can have multiple orders
         //as long as not the status of cancelled or pending, will render confirmed page
         return (
             <>

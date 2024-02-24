@@ -22,7 +22,7 @@ export const CheckOut = () => {
     useEffect(() => {
         const fetchAndSetUserProfile = async () => {
             const data = await fetchUserProfile();
-            console.log(data);
+            // console.log(data);
             if (data) {
                 /*
                     Asynchronous retrieval of user information during component loading, 

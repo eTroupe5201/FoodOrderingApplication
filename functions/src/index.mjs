@@ -17,9 +17,6 @@ import {
 } from "./utils/calculations.mjs";
 
 
-
-
-
 /**
  * background: 
  * Firebase Functions: A serverless execution environment hosted on Google Cloud that allows you to run backend code in response to HTTP requests, database changes, and other events.
@@ -37,7 +34,7 @@ import {
 //Initialize the Firebase Admin SDK, which is a prerequisite for communicating with the Firebase service
 admin.initializeApp();
 
-// 定义PayPal环境配置秘密
+// Define PayPal environment configuration secrets
 const paypalClientId = defineSecret("PAYPAL_CLIENT_ID");
 const paypalSecretKey = defineSecret("PAYPAL_SECRET_KEY");
 
@@ -52,10 +49,6 @@ const transport = createTransport({
   },
 });
 
-
-// 使用Firebase环境配置
-// const clientId = "ATvxwPLNB7YURswAzGKYDa8TJAUx-Co-Z17VUfSBvDJ9cNK8ipeP5r16OBjNoSXHevl8egA6-e7SCYDL"
-// const secretKey = "EAOasMlFOuJv7pkXsEobLEvmdqVngftHc6UbFAdVX6P7hpuC_G9WDBbiRnOwaL5_2MMQ5hJ8hMBPZxsQ"
 
 /*
   A Callable Cloud Function named placeorder has been defined. 
@@ -89,23 +82,60 @@ export const placeorder = onCall(async (request) => {
     createAt: admin.firestore.FieldValue.serverTimestamp(),
   };
 
-  // Check if an order already exists for the user
-  const orderRef = firestore.collection("order").doc(uid);
-  const orderSnapshot = await orderRef.get();
+  //Check for any unfinished orders
+  const ordersRef = firestore.collection("order");
+  const pendingOrderSnapshot = await ordersRef.where("uid", "==", uid).where("status", "==", "pending").get();
 
-  let orderId;
-  if (orderSnapshot.exists) {
-    // Update the existing order
-    await orderRef.update(draft);
-    orderId = uid; // The order ID is the user's UID
-  } else {
-    // Create a new order with the UID as the document ID
-    await orderRef.set(draft);
-    orderId = uid; // The order ID is the user's UID
+  //Process unfinished orders
+  /**
+   * According to the previous logic, if the system always checks for orders in a "pending" state when processing orders, 
+   * and updates them instead of creating new orders if such orders are found, 
+   * theoretically there should not be multiple "pending" orders for the same user at the same time.
+   * 
+   * PendingOrdersnapshot.docs[0]: The document snapshot of the first (or possibly the only) matching "pending" status order. 
+   * Even if the expectation is usually to find an order with a "pending" status, 
+   * the query design still allows for multiple results to be returned
+   */
+  if(!pendingOrderSnapshot.empty){
+    // There are unfinished orders, please update them
+    const existingOrderId = pendingOrderSnapshot.docs[0].id;
+    await ordersRef.doc(existingOrderId).update({
+      ...draft, // Update order details
+    });
+
+    return {
+      success: "Order updated successfully",
+      id: existingOrderId,
+      order: draft,
+      status: "pending-update", // New status indicating updated pending orders
+    };
   }
 
-  //Save the order draft object to the Firestore collection named "order" and wait for the operation to complete
-  // const order = await firestore.collection("order").add(draft);
+  //Check if there are any cancelled orders
+  const cancelledOrderSnapshot = await ordersRef.where("uid", "==", uid).where("status", "==", "cancelled").get();
+  
+  if (!cancelledOrderSnapshot.empty) {
+    // There are cancelled orders, please delete these orders
+    for (const doc of cancelledOrderSnapshot.docs) {
+      await ordersRef.doc(doc.id).delete();
+    }
+
+    // Create a new order after deleting the cancelled order
+    const newOrderRef = ordersRef.doc(); // generate unique id from firebase
+    await newOrderRef.set(draft);
+
+    return {
+      success: "Order placed successfully after cancelling previous orders",
+      id: newOrderRef.id,
+      order: draft,
+      status: "cancelled-update",
+    };
+  }
+
+  // No pending or cancelled orders, continue to create new orders
+  const newOrderRef = ordersRef.doc();
+  await newOrderRef.set(draft);
+  
 
   const email = request.data.email;
   const restaurantDoc = await firestore.doc("restaurant/info").get();
@@ -152,21 +182,21 @@ export const placeorder = onCall(async (request) => {
   }
 
   //After the function is confirmed, return the newly created order ID and order draft object.
-  return {id: orderId, order: draft, restaurant: restaurant};
+  return {status: "order placed", success: "Order placed successfully", id: newOrderRef.id, order: draft, restaurant: restaurant};
 });
 
 
 export const paypalCreateOrder = onCall({ secrets: ["PAYPAL_CLIENT_ID", "PAYPAL_SECRET_KEY"] }, async (request) => {
-  // 检查用户是否已认证
+
   if (!request.auth) {
     throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
   }
 
-  // 使用秘密值初始化PayPal客户端
+  // Initialize PayPal client with secret values
   const environment = new core.SandboxEnvironment(paypalClientId.value(), paypalSecretKey.value());
   const client = new core.PayPalHttpClient(environment);
 
-  // 设置订单请求体
+  // Set order request body
   let requestBody = new orders.OrdersCreateRequest();
   requestBody.requestBody({
     intent: 'CAPTURE',
@@ -179,7 +209,7 @@ export const paypalCreateOrder = onCall({ secrets: ["PAYPAL_CLIENT_ID", "PAYPAL_
   });
 
   try {
-    // 执行创建订单请求
+    // Execute Create Order Request
     const response = await client.execute(requestBody);
     return { id: response.result.id };
   } catch (error) {
@@ -189,36 +219,36 @@ export const paypalCreateOrder = onCall({ secrets: ["PAYPAL_CLIENT_ID", "PAYPAL_
 });
 
 export const paypalHandleOrder = onCall({ secrets: ["PAYPAL_CLIENT_ID", "PAYPAL_SECRET_KEY"] }, async (request) => {
-  // 检查用户是否已认证
+
   if (!request.auth) {
     throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
   }
 
-  const uid = request.auth.uid;
+  const orderId = request.data.orderId;
 
-  // 使用秘密值初始化PayPal客户端
+  // Initialize PayPal client with secret values
   const environment = new core.SandboxEnvironment(paypalClientId.value(), paypalSecretKey.value());
   const client = new core.PayPalHttpClient(environment);
 
-  // 从请求数据中获取订单ID和paypalId
+  // Retrieve order ID and PayPalId from request data
   const paypalId = request.data.paypalId;
   if (!paypalId) {
     throw new HttpsError('invalid-argument', 'paypal id is required.');
   }
 
-  // 设置捕获订单请求体
+  // Set capture order request body
   let requestBody = new orders.OrdersCaptureRequest(paypalId);
   requestBody.requestBody({});
 
   try {
     const response = await client.execute(requestBody);
-    // 订单捕获成功，更新数据库中的订单状态
-    const orderRef = admin.firestore().collection('order').doc(uid);
+    // Order capture successful, update order status in the database
+    const orderRef = admin.firestore().collection('order').doc(orderId);
     await orderRef.update({ status: 'confirmed' });
     return response.result;
   } catch (error) {
-    // 捕获订单失败，更新数据库中的订单状态
-    const orderRef = admin.firestore().collection('order').doc(uid);
+    // Capture order failed, update order status in database
+    const orderRef = admin.firestore().collection('order').doc(orderId);
     await orderRef.update({ status: 'cancelled' });
     console.error(error);
     throw new HttpsError('internal', 'Unable to capture order.');
@@ -240,7 +270,7 @@ export const placecart = onCall(async (request) => {
 
   // prepare cart data
   const cartData = {
-    ...line, // 包含商品信息
+    ...line, // including food item's information
     createdAt: admin.firestore.FieldValue.serverTimestamp(), 
 };
 

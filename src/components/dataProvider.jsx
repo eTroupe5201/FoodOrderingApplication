@@ -122,7 +122,7 @@ export const DataProvider = ({ children }) => {
   };
 
   const fetchOrder = async (userId) => {
-
+    const uid = user.uid;
     if (!uid) {
       console.log("UID is required to fetch order.");
       return null; // if no UID provided, return null
@@ -241,31 +241,28 @@ export const DataProvider = ({ children }) => {
 
   //get the data from the form data of checkout page, we should save this data to the firebase
   const checkout = async (order) => {
-    //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
-    const placeOrderCallable = httpsCallable(functions, "placeorder");
+    try{
+      //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
+      const placeOrderCallable = httpsCallable(functions, "placeorder");
 
-    //2. Calling functions and passing order data
-    const { data } = await placeOrderCallable({...order, lines})
-    console.log(data);
+      //2. Calling functions and passing order data
+      const result = await placeOrderCallable({...order, lines})
+      const data = result.data;
 
-    //3. also set order
-    setOrder({ ...data.order, id: data.id });
+      // Check for errors or success from the cloud function response
+      if (data.status) {
+        alert(data.success); // as usual, regardless of the state, it should enter this if logic body
+        setOrder({ ...data.order, id: data.id }); // update setOrder
+      }else{
+        alert("An unexpected error occurred. Please try again.");
+      }
+      return data.id;
+    }catch (error) {
+      console.error("Order placement error:", error);
+      alert("Failed to place order. Please try again.");
+      return null; // Return null to indicate failure
+    }
     
-    /**
-     * 4. Set up a document listener to monitor changes in specific order documents in the Firestore database. 
-     * For example, if the order status changes from "pending" to "confirmed" or "cancelled", 
-     * we can use this listener to capture this change and update the UI of the client application to notify users of the change in order status
-     * 
-     * 'data. id 'is the order ID returned after calling the' placeOrderCallable 'function in the previous step.
-     *  The 'onsnapshot' method will listen for any updates to this order document.
-     *  When the order document changes, the provided callback function will be triggered, and 'docsnapshot' contains the current data of the document.
-     *  The 'setOrder' function is used to update the status of the React component so that the interface can reflect the latest status of the order
-     */
-    // onSnapshot(doc(db, "order", data.id), (docSnapshot) => {
-    //   setOrder(docSnapshot.data());
-    // });
-
-    return data && data.id ? data.id : null; 
   }
 
   const generateOrder = async () => {
@@ -278,7 +275,7 @@ export const DataProvider = ({ children }) => {
       return response.data.id;
     } catch (error) {
       console.error('Error creating PayPal order:', error);
-      throw error; 
+      return { error: error.message };
     }
   };
 
@@ -286,9 +283,20 @@ export const DataProvider = ({ children }) => {
     try {
       const paypalHandleOrderCallable = httpsCallable(functions, "paypalHandleOrder");
       const response = await paypalHandleOrderCallable({
+        orderId: order.id,
         paypalId: paypalId,
       });
 
+      /**
+       * Set up a document listener to monitor changes in specific order documents in the Firestore database. 
+       * For example, if the order status changes from "pending" to "confirmed" or "cancelled", 
+       * we can use this listener to capture this change and update the UI of the client application to notify users of the change in order status
+       * 
+       * 'data. id 'is the order ID returned after calling the' placeOrderCallable 'function in the previous step.
+       *  The 'onsnapshot' method will listen for any updates to this order document.
+       *  When the order document changes, the provided callback function will be triggered, and 'docsnapshot' contains the current data of the document.
+       *  The 'setOrder' function is used to update the status of the React component so that the interface can reflect the latest status of the order
+      */
       onSnapshot(doc(db, "order", order.id), (docSnapshot) => {
         setOrder(docSnapshot.data());
       });
@@ -300,36 +308,7 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  // useEffect(() => {
-
-  //   if (!order?.id) {
-  //     // 如果order.id未定义或无效，则直接返回
-  //     console.log("Order ID is undefined or invalid, skipping subscription");
-  //     return;
-  //   }
-  
-  //   // 设置监听器，监听订单状态的变化
-  //   const unsubscribe = onSnapshot(doc(db, "order", order.id), (docSnapshot) => {
-  //     if (docSnapshot.exists()) {
-  //       // 如果文档存在，使用文档的数据更新状态
-  //       setOrder(docSnapshot.data());
-  //     } else {
-  //       // 处理不存在的文档情况
-  //       console.error("Document does not exist!");
-  //     }
-  //   }, 
-  //   (error) => {
-  //     // 错误处理
-  //     console.error("Error listening to order updates:", error);
-  //   });
-  
-  //   // 清除监听器
-  //   return () => unsubscribe();
-  // }, [order?.id]); // 依赖于orderId，任何在该 orderId 对应的文档上的变化都会触发监听器
-  
-
-
-  
+ 
   const clearCartAfterConfirmation = async () => {
     if (!user) return; // make sure user exists
     const uid = user.uid;
@@ -351,14 +330,14 @@ export const DataProvider = ({ children }) => {
     setLines([]);
   };
 
+  // Not in line with business logic, a user can have multiple orders
   // const clearOrderAfterConfirmation = async () => {
   //   if (!user) return; // make sure user exists
-  //   const uid = user.uid;
 
-  //   // 如果每个用户只有一个订单，并且你想要删除它
-  //   const orderRef = doc(db, "order", uid); // Locate the subcollection for the order
+  //   // If each user has only one order and you want to delete it
+  //   const orderRef = doc(db, "order", order.id); // Locate the subcollection for the order
 
-  //   // 删除该订单文档
+  //   // Delete the order document
   //   await deleteDoc(orderRef);
 
   //   // Clear the order state after all items have been deleted
