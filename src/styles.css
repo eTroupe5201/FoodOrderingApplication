@@ -353,5 +353,37 @@ body {
  
 }
 
+/* #paypal-button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 300px; 
+    margin: auto;
+}
+
+.paypal-button {
+    background-color: #FFC439; 
+    color: #333; 
+    padding: 10px 20px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.paypal-button.venmo {
+    background-color: #3D93F8; 
+}
+
+.paypal-button.credit-card {
+    background-color: #333; 
+    color: #fff; 
+}
+
+.paypal-button:hover {
+    opacity: 0.8;
+} */
+
 
 

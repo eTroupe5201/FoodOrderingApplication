@@ -6,6 +6,7 @@ import { useDataProvider } from "../components/dataProvider"
 import { calculateOrderTotal, } from "../utils/calculations";
 import { PAYMENT_METHODS } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
+import "../styles.css";
 
 
 export const CheckOut = () => {
@@ -154,10 +155,10 @@ export const CheckOut = () => {
                 </AccordionItem>
             </Accordion>
             <BottomButton color="white" bg="black" border="tan 2px outset"
-                title='checkout-button'
-                label="Place pick up order"
-                total={calculateOrderTotal(lines, 10).toFixed(2)}
-            />
+            title='checkout-button'
+            label="Place pick up order"
+            total={calculateOrderTotal(lines, 10).toFixed(2)}
+            />        
         </form>
         </Container></Center>  
     );

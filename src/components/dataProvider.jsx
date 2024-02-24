@@ -34,9 +34,10 @@ export const DataProvider = ({ children }) => {
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
   const [lines, setLines] = useState([]);
-  const [order, setOrder] = useState();
+  const [order, setOrder] = useState({});
   const [user, setUser] = useState();
   const [cartChanged, setCartChanged] = useState(false);
+  // const [paypalId, setpaypalId] = useState();
 
   //getDoc comes from firebase firestore, it can import automatically and receive the document
   const fetchRestaurantInfo = async () => {
@@ -50,7 +51,7 @@ export const DataProvider = ({ children }) => {
   }
 
   const fetchUserProfile = async () => {
-    console.log("Current user:", user); // Check current user
+
     if (!user || !user.uid) {
       console.log("No user logged in, or missing UID.");
       return null; // If no user login or user doesn't have uid, return null
@@ -63,7 +64,6 @@ export const DataProvider = ({ children }) => {
         return null;
       }
       const userData = userProfileDoc.data();
-      console.log(`User profile fetched for UID ${uid}:`, userData);
       return userData;
     } catch (error) {
       console.error(`Error fetching user profile for UID ${uid}:`, error);
@@ -99,7 +99,8 @@ export const DataProvider = ({ children }) => {
   };
 
   const fetchCartItems = async () => {
-    console.log("Current user:", user); // check current user
+
+
     if (!user || !user.uid) {
       console.log("No user logged in, or missing UID.");
       return []; // if no user login or user doesn't have uid, return null array
@@ -109,9 +110,7 @@ export const DataProvider = ({ children }) => {
     const cartRef = collection(db, "carts", uid, "items");
     try {
       const snapshot = await getDocs(cartRef);
-      if (snapshot.empty) {
-        console.log(`No cart items found for UID: ${uid}`);
-      } else {
+      if (!snapshot.empty) {
         snapshot.forEach(doc => {
           cartItems.push({ id: doc.id, ...doc.data() });
         });
@@ -119,9 +118,39 @@ export const DataProvider = ({ children }) => {
     } catch (error) {
       console.error(`Error fetching cart items for UID ${uid}:`, error);
     }
-    console.log(`Cart items fetched for UID ${uid}:`, cartItems);
     return cartItems;
   };
+
+  const fetchOrder = async (userId) => {
+
+    if (!uid) {
+      console.log("UID is required to fetch order.");
+      return null; // if no UID provided, return null
+    }
+    
+    const orderRef = collection(db, "order"); // reference to the 'order' collection
+    let orderData = null;
+    
+    try {
+      const snapshot = await getDocs(orderRef);
+      if (snapshot.empty) {
+        console.log(`No order found for UID: ${userId}`);
+      } else {
+        snapshot.forEach(doc => {
+          // Check if the order's UID matches the provided UID
+          if (doc.data().uid === userId) {
+            orderData = { id: doc.id, ...doc.data() };
+          }
+        });
+      }
+    } catch (error) {
+      console.error(`Error fetching order for UID ${uid}:`, error);
+    }
+    
+    
+    return orderData;
+  };
+  
   
   
   //because this wil be about internet latency
@@ -162,7 +191,6 @@ export const DataProvider = ({ children }) => {
 
   const addToCart = async (dataWithId) => {
     const uid = user.uid;
-    console.log(uid);
     //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
     const placeCartCallable = httpsCallable(functions, "placecart");
 
@@ -221,7 +249,7 @@ export const DataProvider = ({ children }) => {
     console.log(data);
 
     //3. also set order
-    setOrder(data.order);
+    setOrder({ ...data.order, id: data.id });
     
     /**
      * 4. Set up a document listener to monitor changes in specific order documents in the Firestore database. 
@@ -233,12 +261,74 @@ export const DataProvider = ({ children }) => {
      *  When the order document changes, the provided callback function will be triggered, and 'docsnapshot' contains the current data of the document.
      *  The 'setOrder' function is used to update the status of the React component so that the interface can reflect the latest status of the order
      */
-    onSnapshot(doc(db, "order", data.id), (docSnapshot) => {
-      setOrder(docSnapshot.data());
-    });
+    // onSnapshot(doc(db, "order", data.id), (docSnapshot) => {
+    //   setOrder(docSnapshot.data());
+    // });
 
-    return data.id; 
+    return data && data.id ? data.id : null; 
   }
+
+  const generateOrder = async () => {
+    try {
+      const paypalCreateOrderCallable = httpsCallable(functions, "paypalCreateOrder");
+      const response = await paypalCreateOrderCallable({
+        total: order.total,
+      });
+      // setpaypalId(response.data.id);
+      return response.data.id;
+    } catch (error) {
+      console.error('Error creating PayPal order:', error);
+      throw error; 
+    }
+  };
+
+  const handleOrder = async (paypalId) => {
+    try {
+      const paypalHandleOrderCallable = httpsCallable(functions, "paypalHandleOrder");
+      const response = await paypalHandleOrderCallable({
+        paypalId: paypalId,
+      });
+
+      onSnapshot(doc(db, "order", order.id), (docSnapshot) => {
+        setOrder(docSnapshot.data());
+      });
+
+      return response.data.order;
+    } catch (error) {
+      console.error('Error handling PayPal order:', error);
+      throw error; 
+    }
+  };
+
+  // useEffect(() => {
+
+  //   if (!order?.id) {
+  //     // 如果order.id未定义或无效，则直接返回
+  //     console.log("Order ID is undefined or invalid, skipping subscription");
+  //     return;
+  //   }
+  
+  //   // 设置监听器，监听订单状态的变化
+  //   const unsubscribe = onSnapshot(doc(db, "order", order.id), (docSnapshot) => {
+  //     if (docSnapshot.exists()) {
+  //       // 如果文档存在，使用文档的数据更新状态
+  //       setOrder(docSnapshot.data());
+  //     } else {
+  //       // 处理不存在的文档情况
+  //       console.error("Document does not exist!");
+  //     }
+  //   }, 
+  //   (error) => {
+  //     // 错误处理
+  //     console.error("Error listening to order updates:", error);
+  //   });
+  
+  //   // 清除监听器
+  //   return () => unsubscribe();
+  // }, [order?.id]); // 依赖于orderId，任何在该 orderId 对应的文档上的变化都会触发监听器
+  
+
+
   
   const clearCartAfterConfirmation = async () => {
     if (!user) return; // make sure user exists
@@ -260,6 +350,20 @@ export const DataProvider = ({ children }) => {
     // Clear the lines state after all items have been deleted
     setLines([]);
   };
+
+  // const clearOrderAfterConfirmation = async () => {
+  //   if (!user) return; // make sure user exists
+  //   const uid = user.uid;
+
+  //   // 如果每个用户只有一个订单，并且你想要删除它
+  //   const orderRef = doc(db, "order", uid); // Locate the subcollection for the order
+
+  //   // 删除该订单文档
+  //   await deleteDoc(orderRef);
+
+  //   // Clear the order state after all items have been deleted
+  //   setOrder(null);
+  // };
 
 
 //get data from the form data of register page, save data to firebase
@@ -315,7 +419,7 @@ const storeContactUsForm = async (formInfo) => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-    <DataProviderContext.Provider value={{ user, lines, setLines, restaurantInfo, categories, items, cartChanged, setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order}}>
+    <DataProviderContext.Provider value={{ user, lines, setLines, restaurantInfo, categories, items, cartChanged, setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchOrder, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order, setOrder, generateOrder, handleOrder}}>
       {isReady ? (
         children
       ) : (

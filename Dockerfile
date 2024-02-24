@@ -38,7 +38,7 @@ LABEL description="Food Odering Project"
 LABEL version="1.0"
 
 # Expose the port the app runs on
-EXPOSE 3000
+# EXPOSE 8080
 
 # Define environment variables for Firebase (Replace these placeholders with real values or use Docker run -e option)
 ENV FIREBASE_PROJECT_ID=food-odering-project-3e43f

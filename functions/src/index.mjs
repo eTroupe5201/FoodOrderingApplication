@@ -3,7 +3,10 @@
 //Note: cd to the funtions path, and run "npm run deploy"
 import admin from 'firebase-admin';
 
-import {onCall, HttpsError} from "firebase-functions/v2/https";
+import {onCall, HttpsError } from "firebase-functions/v2/https";
+import { defineSecret } from "firebase-functions/params";
+import pkg from '@paypal/checkout-server-sdk';
+const { core, orders } = pkg;
 
 //https://nodemailer.com/about/
 //https://mailtrap.io/inboxes/2601336/messages
@@ -12,6 +15,9 @@ import {
   calculateOrderSubtotal,
   calculateOrderTotal
 } from "./utils/calculations.mjs";
+
+
+
 
 
 /**
@@ -30,6 +36,11 @@ import {
 
 //Initialize the Firebase Admin SDK, which is a prerequisite for communicating with the Firebase service
 admin.initializeApp();
+
+// 定义PayPal环境配置秘密
+const paypalClientId = defineSecret("PAYPAL_CLIENT_ID");
+const paypalSecretKey = defineSecret("PAYPAL_SECRET_KEY");
+
 //email address hezhihong98@gmail.com 
 //https://nodemailer.com/
 const transport = createTransport({
@@ -40,6 +51,11 @@ const transport = createTransport({
     pass: "e9b9362aaea175",
   },
 });
+
+
+// 使用Firebase环境配置
+// const clientId = "ATvxwPLNB7YURswAzGKYDa8TJAUx-Co-Z17VUfSBvDJ9cNK8ipeP5r16OBjNoSXHevl8egA6-e7SCYDL"
+// const secretKey = "EAOasMlFOuJv7pkXsEobLEvmdqVngftHc6UbFAdVX6P7hpuC_G9WDBbiRnOwaL5_2MMQ5hJ8hMBPZxsQ"
 
 /*
   A Callable Cloud Function named placeorder has been defined. 
@@ -53,6 +69,8 @@ export const placeorder = onCall(async (request) => {
     return new HttpsError("failed-precondition", "You are not authorized");
   }
 
+  const uid = request.auth.uid;
+
   //Create a reference to Firestore for database operations
   const firestore = admin.firestore();
   //Retrieve order field in  database lines [] from the request, which is included in the attributes of the order. 
@@ -61,17 +79,33 @@ export const placeorder = onCall(async (request) => {
 
   const draft = {
     ...request.data, //Copy the data in the request to the draft object
+    uid: uid,
     status: "pending",
     createdBy: request.auth.uid, //Set the createdBy field to the current user's UID (User Identity)
-    total: calculateOrderTotal(lines, 10),
+    total: calculateOrderTotal(lines, 10).toFixed(2),
     subTotal: calculateOrderSubtotal(lines),
     //A special value used by the server to fill in the current timestamp when a document is submitted to the database
     pickupTime: admin.firestore.FieldValue.serverTimestamp(),
     createAt: admin.firestore.FieldValue.serverTimestamp(),
   };
 
+  // Check if an order already exists for the user
+  const orderRef = firestore.collection("order").doc(uid);
+  const orderSnapshot = await orderRef.get();
+
+  let orderId;
+  if (orderSnapshot.exists) {
+    // Update the existing order
+    await orderRef.update(draft);
+    orderId = uid; // The order ID is the user's UID
+  } else {
+    // Create a new order with the UID as the document ID
+    await orderRef.set(draft);
+    orderId = uid; // The order ID is the user's UID
+  }
+
   //Save the order draft object to the Firestore collection named "order" and wait for the operation to complete
-  const order = await firestore.collection("order").add(draft);
+  // const order = await firestore.collection("order").add(draft);
 
   const email = request.data.email;
   const restaurantDoc = await firestore.doc("restaurant/info").get();
@@ -118,8 +152,80 @@ export const placeorder = onCall(async (request) => {
   }
 
   //After the function is confirmed, return the newly created order ID and order draft object.
-  return {id: order.id, order: draft, restaurant: restaurant};
+  return {id: orderId, order: draft, restaurant: restaurant};
 });
+
+
+export const paypalCreateOrder = onCall({ secrets: ["PAYPAL_CLIENT_ID", "PAYPAL_SECRET_KEY"] }, async (request) => {
+  // 检查用户是否已认证
+  if (!request.auth) {
+    throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+  }
+
+  // 使用秘密值初始化PayPal客户端
+  const environment = new core.SandboxEnvironment(paypalClientId.value(), paypalSecretKey.value());
+  const client = new core.PayPalHttpClient(environment);
+
+  // 设置订单请求体
+  let requestBody = new orders.OrdersCreateRequest();
+  requestBody.requestBody({
+    intent: 'CAPTURE',
+    purchase_units: [{
+      amount: {
+        currency_code: 'USD',
+        value: request.data.total
+      }
+    }]
+  });
+
+  try {
+    // 执行创建订单请求
+    const response = await client.execute(requestBody);
+    return { id: response.result.id };
+  } catch (error) {
+    console.error(error);
+    throw new HttpsError('internal', 'Unable to create order.');
+  }
+});
+
+export const paypalHandleOrder = onCall({ secrets: ["PAYPAL_CLIENT_ID", "PAYPAL_SECRET_KEY"] }, async (request) => {
+  // 检查用户是否已认证
+  if (!request.auth) {
+    throw new HttpsError('unauthenticated', 'The function must be called while authenticated.');
+  }
+
+  const uid = request.auth.uid;
+
+  // 使用秘密值初始化PayPal客户端
+  const environment = new core.SandboxEnvironment(paypalClientId.value(), paypalSecretKey.value());
+  const client = new core.PayPalHttpClient(environment);
+
+  // 从请求数据中获取订单ID和paypalId
+  const paypalId = request.data.paypalId;
+  if (!paypalId) {
+    throw new HttpsError('invalid-argument', 'paypal id is required.');
+  }
+
+  // 设置捕获订单请求体
+  let requestBody = new orders.OrdersCaptureRequest(paypalId);
+  requestBody.requestBody({});
+
+  try {
+    const response = await client.execute(requestBody);
+    // 订单捕获成功，更新数据库中的订单状态
+    const orderRef = admin.firestore().collection('order').doc(uid);
+    await orderRef.update({ status: 'confirmed' });
+    return response.result;
+  } catch (error) {
+    // 捕获订单失败，更新数据库中的订单状态
+    const orderRef = admin.firestore().collection('order').doc(uid);
+    await orderRef.update({ status: 'cancelled' });
+    console.error(error);
+    throw new HttpsError('internal', 'Unable to capture order.');
+  }
+});
+
+
 
 export const placecart = onCall(async (request) => {
   //Check if the user calling the function has passed authentication. 
