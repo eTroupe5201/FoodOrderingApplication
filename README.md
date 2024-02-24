@@ -63,6 +63,10 @@ Currently, two official plugins are available:<br/>
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/44902985-ca2c-40f3-88eb-b0b7b4c26f5c)
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/019a3d9d-e237-4a5a-a5e2-47340df5bb5b)
 
+## Third-party payment - PayPal
+![242c85ce93f62b3a18273ea64963315](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/d15bcafa-e80f-4202-8f88-6b4c5762cbc2)
+
+
 ## react-admin
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/f3cdab56-0f1c-442e-8bfe-766e5a9c0df7)
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/695bf014-eb97-4f74-9ab7-1b896a6f046d)
