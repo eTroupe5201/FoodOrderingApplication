@@ -4,15 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
 import { auth } from "../utils/firebase" 
-import { updateProfile, updateEmail, updatePhone } from "firebase/auth";
 import "../styles.css";
 
 //TODO: fix state issue with setValue (cannot change input)
 export const EditProfile = () => {
     const toast = useToast();
     const navigate = useNavigate();
-    const { fetchUserProfile } = useDataProvider();
-    const isMounted = useRef(true); // Used to track the mounting status of components'
+    const { fetchUserProfile, updateUserAccount } = useDataProvider();
+    const isMounted = useRef(false); // Used to track the mounting status of components'
     const { register, handleSubmit, setValue, getValues, formState, watch } = useForm();
 
     const [emailErrorMsg, setEmailErrorMsg]= useState("Required. Enter a valid email address.");
@@ -23,10 +22,11 @@ export const EditProfile = () => {
     const [email, setEmail] = useState();
     
      useEffect(() => {
+        isMounted.current = true;
         const fetchAndSetUserProfile = async () => {
             const data = await fetchUserProfile();
             // console.log(data);
-            if (data) {
+            if (data && isMounted.current) {
                 /*
                     Asynchronous retrieval of user information during component loading, 
                     and updating form fields with setValue after obtaining the data. 
@@ -39,7 +39,9 @@ export const EditProfile = () => {
                 setValue("phone", data.phone);
                 //...other fields in future
                 setFname(data.firstName);
-
+                setLname(data.lastName);
+                setEmail(data.email);
+                setPhone(data.phone);
             }
         };
 
@@ -53,23 +55,22 @@ export const EditProfile = () => {
          * thus avoiding errors in updating the state of uninstalled components.
         */
     
-        return () => {
-        isMounted.current = false;
-        };
-    }, [fetchUserProfile, setValue, setFname]); 
+        return () => {isMounted.current = false;};
+    }, []); 
 
     const handleEditProfile = async (data) => {
-        //if firsts dont match, save new
-        if (getValues("firstName") != fname) {
-            updateProfile(auth.currentUser, {
-                firstName: getValues("firstName")
-            }).then(() => {
-                console.log("first name updated");
-            }).catch((error) => {
-                console.log(error);
-            });
-        };
+        updateUserAccount(data);
+
         //same for last
+        // if (getValues("lastName") != lname) {
+        //     updateProfile(auth.currentUser, {
+        //         lastName: getValues("lastName")
+        //     }).then(() => {
+        //         console.log("last name updated");
+        //     }).catch((error) => {
+        //         console.log(error);
+        //     });
+        // };
         //same for email
         //same for phone
         //nav back to profile with toast about succesful save
