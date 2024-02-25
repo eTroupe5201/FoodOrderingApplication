@@ -317,6 +317,23 @@ export const updateCartItem = onCall(async (request) => {
   }
 });
 
+export const getOrderHistory = onCall (async (request) => {
+  const ordersRef = firestore.collection("order");
+  const nonPendingOrderSnapshot = await getDocs(ordersRef.where("createdBy", "==", auth.uid).where("status", "array-contains-any", ["confirmed", "cancelled"]).get());
+
+  const dbOrders = [];
+
+  if(nonPendingOrderSnapshot.empty){
+    // No confirmed or cancelled orders
+    return null;
+  }
+
+  nonPendingOrderSnapshot.forEach((order) => 
+    dbOrders.push(order.data())
+  );
+
+  return dbOrders;
+});
 
 // export const registerAccount = onCall(async (request) => {
 //   //Check if the user calling the function has passed authentication. 

@@ -60,23 +60,7 @@ export const EditProfile = () => {
 
     const handleEditProfile = async (data) => {
         updateUserAccount(data);
-
-        //same for last
-        // if (getValues("lastName") != lname) {
-        //     updateProfile(auth.currentUser, {
-        //         lastName: getValues("lastName")
-        //     }).then(() => {
-        //         console.log("last name updated");
-        //     }).catch((error) => {
-        //         console.log(error);
-        //     });
-        // };
-        //same for email
-        //same for phone
-        //nav back to profile with toast about succesful save
-
-        //emails and passwords match
-        
+        navigate("/profile");  
     };
 
     return (
@@ -136,6 +120,7 @@ export const EditProfile = () => {
                                 {...register("phone")}
                             />
                         </FormControl>
+                        <Text> Please note: there may be a small delay for any updated information to reflect on your Profile page </Text>
                         <Box 
                             title='edit-profile-save-button'
                             align='center'
