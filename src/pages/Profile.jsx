@@ -15,7 +15,7 @@ import "../styles.css";
 export const Profile = () => {
     const navigate = useNavigate();
     const toast = useToast();
-    const { user, fetchUserProfile, getUserInfo } = useDataProvider();
+    const { user, fetchUserProfile, getUserInfo, getOrderHistory, orderHistory } = useDataProvider();
     const [userProfile, setUserProfile] = useState(null);
 
     useEffect(() => {
@@ -25,6 +25,7 @@ export const Profile = () => {
         };
 
         loadUserProfile();
+        getOrderHistory();
     }, [user, fetchUserProfile]); 
 
     const handleChangePasswordemail = async () => {
@@ -147,6 +148,16 @@ export const Profile = () => {
                 <Center mb='8rem'>
                     <Box title='order-history-box' id='order-history-box' bg='#000000' color='#fff' w={{base:"25em", sm:"30em", md:"35em"}} height='100%' m='2rem' p='1.5rem' borderRadius='md'> 
                         <Text> Order History Goes Here</Text>
+                        {orderHistory.map((order) => (
+                            <HStack>
+                                <Text> {order.id} </Text>
+                                <Text> {order.total} </Text>
+                                <Text> {order.lastUpdate} </Text>
+                                <Text> {order.status} </Text>
+                            </HStack>
+                        ))};
+
+
                     </Box>
                 </Center>
             </SimpleGrid>
