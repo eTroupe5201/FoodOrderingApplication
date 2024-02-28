@@ -51,7 +51,20 @@ Currently, two official plugins are available:<br/>
 1 null delivery information ->2 delivery information ->3 delivery current location ->4 delivery current location and remaining time expect ->5, xxx ->6 Deliveryman has been to destination.<br/>
 
 ## Register situation
-![06b90dd1ddb1f47ee14f01dccaf2748](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/87cc5506-4e38-432a-afbb-1a5c575a9002)
+• <b>1</b> Register Page - Register Button<br/>
+![RUFQG4UWUJK5)8~ K4DT)GM](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/e7cee91c-c8ba-4cfe-81b0-810337587a2c)
+• <b>2</b> Register Page - Verfied Button(waiting to be verfied by the email)<br/>
+![H0US}CVY@(KLAP0WNQ%J@$8](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/f661b3e2-98cd-41bf-a1cb-5ad7686d10a7)
+• <b>3</b> Register Page - Click the verified button if the email is not authenticated<br/>
+![WYV94 (}62}SEIK~0T{3NV7](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/00491a0d-d7c5-48d9-bcd7-a7e0b7d0e3e8)
+• <b>4</b> Go to the email（Gmail as an example) to check the verification information<br/>
+![`{S{7TF@%RN(U$ LI $QHJW](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/7f9c1957-9797-4360-9ada-f348d058808d)
+![3C617TJCVC7$}OH(~%CZBFC](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/59a2dce9-2000-4b93-bbdc-33de9f70d7bd)
+• <b>5</b> Email verification successful, redirect to login page<br/>
+![@MC)II_F6CBB1NZ7OLE2SV9](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/72c356e5-813b-42af-b23a-675d58088a3c)
+• <b>6</b> Save into firebase without password, ensuring security problem<br/>
+![AU}VOPTKHZIHO3JBLKFMSPV](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/0d04f050-d321-42b7-b7e9-ae66082b2e48)
+
 
 ## Login situation
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/29230a52-1ad1-4c45-bc20-b820bbf3911e)
