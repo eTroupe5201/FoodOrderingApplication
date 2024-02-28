@@ -410,6 +410,7 @@ export const registerAccount = onCall(async (request) => {
   const firestore = admin.firestore();
 
   const email = request.data.email;
+  const uid =request.auth.uid;
 
   //check if user with email already exists
   const existingUserDoc = await firestore.collection("users").doc(email).get();
@@ -418,12 +419,19 @@ export const registerAccount = onCall(async (request) => {
     throw new HttpsError('already-exists', 'The email provided is already in use by an existing user.');
   }
 
-  // Create the user with email and password via Firebase Authentication to host our status
-  const userRecord = await admin.auth().createUser({
-    //uid: request.data.email,
-    email: request.data.email,
-    password: request.data.password
-  });
+
+  /**
+   * The client side has successfully created the user using createUserWithEmailAndPassword and sent an email verification (sendEmailVerification),
+   * There is no need to create a user account again in the cloud function. 
+   * The main responsibility becomes to save additional user information in Firestore, 
+   * rather than creating new users in the authentication system
+   * 
+   * const userRecord = await admin.auth().createUser({
+   *  email: request.data.email, 
+   *  password: request.data.password
+   * });
+       
+   */
 
   // Prepare user info without the password
   const userInfoWithoutPassword = {
@@ -431,7 +439,7 @@ export const registerAccount = onCall(async (request) => {
     lastName: request.data.lastName,
     email: request.data.email,
     phone: request.data.phone,
-    createdBy: request.auth.uid,
+    createdBy: uid,
     lastLogin: admin.firestore.FieldValue.serverTimestamp(),
     pickupTime: admin.firestore.FieldValue.serverTimestamp(),
     createAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -439,10 +447,10 @@ export const registerAccount = onCall(async (request) => {
 
 
   // Save the additional user data in Firestore (without the password)
-  await admin.firestore().collection('users').doc(userRecord.uid).set(userInfoWithoutPassword);
+  await admin.firestore().collection('users').doc(uid).set(userInfoWithoutPassword);
 
   // Return success response
-  return { success: true, uid: userRecord.uid, userInfo: userInfoWithoutPassword };
+  return { success: true, uid: uid, userInfo: userInfoWithoutPassword };
 });
 
 export const contactUsSubmit = onCall(async (request) => {

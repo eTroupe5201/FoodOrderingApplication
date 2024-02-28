@@ -163,7 +163,7 @@ export const DataProvider = ({ children }) => {
     await fetchCategories();
     await fetchItems();
     setIsReady(true);
-  }
+  };
 
   const getItemById = (itemId) => {
     return items.find((item) => item.id === itemId);

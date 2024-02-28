@@ -13,8 +13,6 @@ const {
 	VITE_REACT_APP_MESSAGING_SENDER_ID,
 	VITE_REACT_APP_APP_ID,
 	VITE_REACT_APP_MEASUREMENT_ID,
-	// VITE_REACT_APP_PAYPAL_CLIENT_ID,
-	// VITE_REACT_APP_PAYPAL_SECRET_KEY
 } = import.meta.env;
 
 export const firebaseConfig = {
@@ -25,8 +23,6 @@ export const firebaseConfig = {
     messagingSenderId: VITE_REACT_APP_MESSAGING_SENDER_ID,
     appId: VITE_REACT_APP_APP_ID,
     measurementId: VITE_REACT_APP_MEASUREMENT_ID,
-	// paypalClientId: VITE_REACT_APP_PAYPAL_CLIENT_ID,
-	// paypalSecretKey: VITE_REACT_APP_PAYPAL_SECRET_KEY
 }
 
 let analytics;
