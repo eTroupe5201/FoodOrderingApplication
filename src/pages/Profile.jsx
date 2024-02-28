@@ -149,7 +149,7 @@ export const Profile = () => {
                     <Box title='order-history-box' id='order-history-box' bg='#000000' color='#fff' w={{base:"25em", sm:"30em", md:"35em"}} height='100%' m='2rem' p='1.5rem' borderRadius='md'> 
                         <Text> Order History Goes Here</Text>
                         {orderHistory.map((order) => (
-                            <HStack>
+                            <HStack key={order.id}>
                                 <Text> {order.id} </Text>
                                 <Text> {order.total} </Text>
                                 <Text> {order.lastUpdate} </Text>

@@ -319,16 +319,16 @@ export const updateCartItem = onCall(async (request) => {
 
 export const getOrderHistory = onCall (async (request) => {
   const ordersRef = firestore.collection("order");
-  const nonPendingOrderSnapshot = await getDocs(ordersRef.where("createdBy", "==", auth.uid).where("status", "array-contains-any", ["confirmed", "cancelled"]).get());
+  const confirmedOrdersSnapshot = await ordersRef.where("createdBy", "==", request.auth.uid).where("status", "==", "confirmed").get();
 
   const dbOrders = [];
 
-  if(nonPendingOrderSnapshot.empty){
-    // No confirmed or cancelled orders
+  if(confirmedOrdersSnapshot.empty){
+    // No confirmed orders
     return null;
   }
 
-  nonPendingOrderSnapshot.forEach((order) => 
+  confirmedOrdersSnapshot.forEach((order) => 
     dbOrders.push(order.data())
   );
 
@@ -372,7 +372,32 @@ export const getOrderHistory = onCall (async (request) => {
 // });
 
 //We don't need to save the user's password in Firestore because Firebase Authentication already securely handles the password.
+export const updateAccount = onCall(async (request) => {
+  if (!request.auth) {
+    return new HttpsError("failed-precondition", "You are not authorized");
+  }
+
+  const uid = request.auth.uid;
+
+  // obtain reference to user info
+  const userRef = admin.firestore().collection('users').doc(uid);
+
+  try {
+    // if cart item does exist, we can add up the quantity 
+    await userRef.update({
+      firstName: request.data.firstName,
+      lastName: request.data.lastName,
+      email: request.data.email, 
+      phone: request.data.phone
+    });
+    return { result: "User info updated successfully." };
+  } catch (error) {
+    throw new HttpsError('internal', 'Unable to update user', error);
+  }
+});
+
 export const registerAccount = onCall(async (request) => {
+
   if (!request.auth) {
     return new HttpsError("failed-precondition", "You are not authorized");
   }
@@ -414,31 +439,6 @@ export const registerAccount = onCall(async (request) => {
 
   // Return success response
   return { success: true, uid: userRecord.uid, userInfo: userInfoWithoutPassword };
-});
-
-
-export const updateAccount = onCall(async (request) => {
-  if (!request.auth) {
-    return new HttpsError("failed-precondition", "You are not authorized");
-  }
-
-  const uid = request.auth.uid;
-
-  // obtain reference to user info
-  const userRef = admin.firestore().collection('users').doc(uid);
-
-  try {
-    // if cart item does exist, we can add up the quantity 
-    await userRef.update({
-      firstName: request.data.firstName,
-      lastName: request.data.lastName,
-      email: request.data.email, 
-      phone: request.data.phone
-    });
-    return { result: "User info updated successfully." };
-  } catch (error) {
-    throw new HttpsError('internal', 'Unable to update user', error);
-  }
 });
 
 export const contactUsSubmit = onCall(async (request) => {

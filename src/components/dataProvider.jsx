@@ -37,6 +37,7 @@ export const DataProvider = ({ children }) => {
   const [order, setOrder] = useState();
   const [user, setUser] = useState();
   const [cartChanged, setCartChanged] = useState(false);
+  const [orderHistory, setOrderHistory] = useState([]);
 
   //getDoc comes from firebase firestore, it can import automatically and receive the document
   const fetchRestaurantInfo = async () => {
@@ -284,6 +285,14 @@ const storeContactUsForm = async (formInfo) => {
   return data.id; 
 }
 
+const getOrderHistory = async () => {
+  const getOrderHistoryCallable = httpsCallable(functions, "getOrderHistory");
+  const { orderArray } = await getOrderHistoryCallable({});
+  console.log(orderArray);
+
+  setOrderHistory(orderArray);
+}
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -300,8 +309,8 @@ const storeContactUsForm = async (formInfo) => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-    <DataProviderContext.Provider value={{ user, lines, setLines, restaurantInfo, categories, items, cartChanged, order, 
-    setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, getItemsByCategory, getItemById, 
+    <DataProviderContext.Provider value={{ user, lines, setLines, restaurantInfo, categories, items, cartChanged, order, orderHistory,
+    setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, getItemsByCategory, getItemById, getOrderHistory,
     addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, updateUserAccount}}>
       {isReady ? (
         children
