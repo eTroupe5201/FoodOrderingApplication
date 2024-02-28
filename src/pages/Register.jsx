@@ -61,7 +61,7 @@ export const Register = ({saveData}) => {
             const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
             await sendEmailVerification(userCredential.user);
             toast({
-                title: "Registration successful!",
+                title: "Email has sent to be verified!",
                 description: "Please check your email to verify your account.",
                 position: "top",
                 status: "success",
