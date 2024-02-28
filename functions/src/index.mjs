@@ -319,20 +319,24 @@ export const updateCartItem = onCall(async (request) => {
 
 export const getOrderHistory = onCall (async (request) => {
   const ordersRef = firestore.collection("order");
-  const confirmedOrdersSnapshot = await ordersRef.where("createdBy", "==", auth.uid).where("status", "==", "confirmed").get();
+  try { 
+    const confirmedOrdersSnapshot = await ordersRef.where("createdBy", "==", request.auth.uid).where("status", "==", "confirmed").get();
 
-  const dbOrders = [];
-
-  if(confirmedOrdersSnapshot.empty){
-    // No confirmed orders
-    return null;
+    const dbOrders = [];
+  
+    if(confirmedOrdersSnapshot.empty){
+      // No confirmed orders
+      return null;
+    }
+  
+    confirmedOrdersSnapshot.forEach((order) => 
+      dbOrders.push(order.data())
+    );
+  
+    return dbOrders;
+    } catch (error) {
+    throw new HttpsError('internal', 'Unable to pull order history.', error);
   }
-
-  confirmedOrdersSnapshot.forEach((order) => 
-    dbOrders.push(order.data())
-  );
-
-  return dbOrders;
 });
 
 // export const registerAccount = onCall(async (request) => {
