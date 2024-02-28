@@ -54,12 +54,13 @@ Currently, two official plugins are available:<br/>
 • <b>1</b> Register Page - Register Button<br/>
 ![RUFQG4UWUJK5)8~ K4DT)GM](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/e7cee91c-c8ba-4cfe-81b0-810337587a2c)
 • <b>2</b> Register Page - Verfied Button(waiting to be verfied by the email)<br/>
-![H0US}CVY@(KLAP0WNQ%J@$8](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/f661b3e2-98cd-41bf-a1cb-5ad7686d10a7)
+![XM3_44WB7M1 _3$5ZRI$@EN](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/c9775f2d-f5a5-495b-b85b-43f0ce6c6824)
 • <b>3</b> Register Page - Click the verified button if the email is not authenticated<br/>
 ![WYV94 (}62}SEIK~0T{3NV7](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/00491a0d-d7c5-48d9-bcd7-a7e0b7d0e3e8)
 • <b>4</b> Go to the email（Gmail as an example) to check the verification information<br/>
 ![`{S{7TF@%RN(U$ LI $QHJW](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/7f9c1957-9797-4360-9ada-f348d058808d)
 ![3C617TJCVC7$}OH(~%CZBFC](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/59a2dce9-2000-4b93-bbdc-33de9f70d7bd)
+<br/>
 • <b>5</b> Email verification successful, redirect to login page<br/>
 ![@MC)II_F6CBB1NZ7OLE2SV9](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/72c356e5-813b-42af-b23a-675d58088a3c)
 • <b>6</b> Save into firebase without password, ensuring security problem<br/>
