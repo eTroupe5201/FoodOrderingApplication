@@ -34,10 +34,12 @@ export const DataProvider = ({ children }) => {
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
   const [lines, setLines] = useState([]);
-  const [order, setOrder] = useState();
+  const [order, setOrder] = useState({});
   const [user, setUser] = useState();
   const [cartChanged, setCartChanged] = useState(false);
   const [orderHistory, setOrderHistory] = useState([]);
+  // const [paypalId, setpaypalId] = useState();
+
 
   //getDoc comes from firebase firestore, it can import automatically and receive the document
   const fetchRestaurantInfo = async () => {
@@ -51,7 +53,7 @@ export const DataProvider = ({ children }) => {
   }
 
   const fetchUserProfile = async () => {
-    console.log("Current user:", user); // Check current user
+
     if (!user || !user.uid) {
       console.log("No user logged in, or missing UID.");
       return null; // If no user login or user doesn't have uid, return null
@@ -64,7 +66,6 @@ export const DataProvider = ({ children }) => {
         return null;
       }
       const userData = userProfileDoc.data();
-      console.log(`User profile fetched for UID ${uid}:`, userData);
       return userData;
     } catch (error) {
       console.error(`Error fetching user profile for UID ${uid}:`, error);
@@ -100,7 +101,7 @@ export const DataProvider = ({ children }) => {
   };
 
   const fetchCartItems = async () => {
-    //console.log("Current user:", user); // check current user
+
     if (!user || !user.uid) {
       console.log("No user logged in, or missing UID.");
       return []; // if no user login or user doesn't have uid, return null array
@@ -110,9 +111,7 @@ export const DataProvider = ({ children }) => {
     const cartRef = collection(db, "carts", uid, "items");
     try {
       const snapshot = await getDocs(cartRef);
-      if (snapshot.empty) {
-        console.log(`No cart items found for UID: ${uid}`);
-      } else {
+      if (!snapshot.empty) {
         snapshot.forEach(doc => {
           cartItems.push({ id: doc.id, ...doc.data() });
         });
@@ -120,9 +119,42 @@ export const DataProvider = ({ children }) => {
     } catch (error) {
       console.error(`Error fetching cart items for UID ${uid}:`, error);
     }
+
     //console.log(`Cart items fetched for UID ${uid}:`, cartItems);
+
     return cartItems;
   };
+
+  const fetchOrder = async (userId) => {
+    const uid = user.uid;
+    if (!uid) {
+      console.log("UID is required to fetch order.");
+      return null; // if no UID provided, return null
+    }
+    
+    const orderRef = collection(db, "order"); // reference to the 'order' collection
+    let orderData = null;
+    
+    try {
+      const snapshot = await getDocs(orderRef);
+      if (snapshot.empty) {
+        console.log(`No order found for UID: ${userId}`);
+      } else {
+        snapshot.forEach(doc => {
+          // Check if the order's UID matches the provided UID
+          if (doc.data().uid === userId) {
+            orderData = { id: doc.id, ...doc.data() };
+          }
+        });
+      }
+    } catch (error) {
+      console.error(`Error fetching order for UID ${uid}:`, error);
+    }
+    
+    
+    return orderData;
+  };
+  
   
   
   //because this wil be about internet latency
@@ -135,7 +167,7 @@ export const DataProvider = ({ children }) => {
     await fetchCategories();
     await fetchItems();
     setIsReady(true);
-  }
+  };
 
   const getItemById = (itemId) => {
     return items.find((item) => item.id === itemId);
@@ -161,17 +193,41 @@ export const DataProvider = ({ children }) => {
     return !querySnapshot.empty; // If snapshot. empty is true, then the shopping cart is empty, otherwise it is not empty
   };
 
-  const addToCart = async (line) => {
+  const addToCart = async (dataWithId) => {
     const uid = user.uid;
     //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
     const placeCartCallable = httpsCallable(functions, "placecart");
 
-    //2. Calling functions and passing order data
-    const { data } = await placeCartCallable({...line, uid});
-    setCartChanged(true);
-    console.log(data);
+    //we may need to update the cart quantity directly if we have already had this food item
+    //so what we can do can use fetch cart item to loop the cart items
+    try{
+      const cartItems = await fetchCartItems();
+      let itemExists = false;
 
-    return;
+      for (const cartItem of cartItems) {
+        //if food item exists, update the quantity
+        if(cartItem.id === dataWithId.id){
+
+          cartItem.quantity = dataWithId.quantity;
+          itemExists = true;
+          //and then call the cloud function to update the database
+          const updateCartItemCallable = httpsCallable(functions, "updateCartItem");
+          const { updateData } = await updateCartItemCallable(cartItem);
+          console.log('Cloud function update response:', updateData); 
+
+        }
+      }
+
+      //only when food item definetely doesn't exist, will call this function placeCartCallable(dataWithId);
+      if(!itemExists){
+        const { newData } = await placeCartCallable(dataWithId);
+        console.log('Cloud function response:', newData);
+      }
+      setCartChanged(true); 
+    } catch (error) {
+      console.error('Error updating cart:', error);
+    }
+
   };
 
   //causing infinite loop
@@ -189,33 +245,74 @@ export const DataProvider = ({ children }) => {
 
   //get the data from the form data of checkout page, we should save this data to the firebase
   const checkout = async (order) => {
-    //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
-    const placeOrderCallable = httpsCallable(functions, "placeorder");
+    try{
+      //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
+      const placeOrderCallable = httpsCallable(functions, "placeorder");
 
-    //2. Calling functions and passing order data
-    const { data } = await placeOrderCallable({...order, lines})
-    console.log(data);
+      //2. Calling functions and passing order data
+      const result = await placeOrderCallable({...order, lines})
+      const data = result.data;
 
-    //3. also set order
-    setOrder(data.order);
+      // Check for errors or success from the cloud function response
+      if (data.status) {
+        alert(data.success); // as usual, regardless of the state, it should enter this if logic body
+        setOrder({ ...data.order, id: data.id }); // update setOrder
+      }else{
+        alert("An unexpected error occurred. Please try again.");
+      }
+      return data.id;
+    }catch (error) {
+      console.error("Order placement error:", error);
+      alert("Failed to place order. Please try again.");
+      return null; // Return null to indicate failure
+    }
     
-    /**
-     * 4. Set up a document listener to monitor changes in specific order documents in the Firestore database. 
-     * For example, if the order status changes from "pending" to "confirmed" or "cancelled", 
-     * we can use this listener to capture this change and update the UI of the client application to notify users of the change in order status
-     * 
-     * 'data. id 'is the order ID returned after calling the' placeOrderCallable 'function in the previous step.
-     *  The 'onsnapshot' method will listen for any updates to this order document.
-     *  When the order document changes, the provided callback function will be triggered, and 'docsnapshot' contains the current data of the document.
-     *  The 'setOrder' function is used to update the status of the React component so that the interface can reflect the latest status of the order
-     */
-    onSnapshot(doc(db, "order", data.id), (docSnapshot) => {
-      setOrder(docSnapshot.data());
-    });
-
-    return data.id; 
   }
-  
+
+  const generateOrder = async () => {
+    try {
+      const paypalCreateOrderCallable = httpsCallable(functions, "paypalCreateOrder");
+      const response = await paypalCreateOrderCallable({
+        total: order.total,
+      });
+      // setpaypalId(response.data.id);
+      return response.data.id;
+    } catch (error) {
+      console.error('Error creating PayPal order:', error);
+      return { error: error.message };
+    }
+  };
+
+  const handleOrder = async (paypalId) => {
+    try {
+      const paypalHandleOrderCallable = httpsCallable(functions, "paypalHandleOrder");
+      const response = await paypalHandleOrderCallable({
+        orderId: order.id,
+        paypalId: paypalId,
+      });
+
+      /**
+       * Set up a document listener to monitor changes in specific order documents in the Firestore database. 
+       * For example, if the order status changes from "pending" to "confirmed" or "cancelled", 
+       * we can use this listener to capture this change and update the UI of the client application to notify users of the change in order status
+       * 
+       * 'data. id 'is the order ID returned after calling the' placeOrderCallable 'function in the previous step.
+       *  The 'onsnapshot' method will listen for any updates to this order document.
+       *  When the order document changes, the provided callback function will be triggered, and 'docsnapshot' contains the current data of the document.
+       *  The 'setOrder' function is used to update the status of the React component so that the interface can reflect the latest status of the order
+      */
+      onSnapshot(doc(db, "order", order.id), (docSnapshot) => {
+        setOrder(docSnapshot.data());
+      });
+
+      return response.data.order;
+    } catch (error) {
+      console.error('Error handling PayPal order:', error);
+      throw error; 
+    }
+  };
+
+ 
   const clearCartAfterConfirmation = async () => {
     if (!user) return; // make sure user exists
     const uid = user.uid;
@@ -236,6 +333,20 @@ export const DataProvider = ({ children }) => {
     // Clear the lines state after all items have been deleted
     setLines([]);
   };
+
+  // Not in line with business logic, a user can have multiple orders
+  // const clearOrderAfterConfirmation = async () => {
+  //   if (!user) return; // make sure user exists
+
+  //   // If each user has only one order and you want to delete it
+  //   const orderRef = doc(db, "order", order.id); // Locate the subcollection for the order
+
+  //   // Delete the order document
+  //   await deleteDoc(orderRef);
+
+  //   // Clear the order state after all items have been deleted
+  //   setOrder(null);
+  // };
 
 
 //get data from the form data of register page, save data to firebase
@@ -309,9 +420,9 @@ const getOrderHistory = async () => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-    <DataProviderContext.Provider value={{ user, lines, setLines, restaurantInfo, categories, items, cartChanged, order, orderHistory,
-    setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, getItemsByCategory, getItemById, getOrderHistory,
-    addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, updateUserAccount}}>
+
+    <DataProviderContext.Provider value={{ user, lines, setLines, restaurantInfo, categories, items, cartChanged, setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchOrder, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order, setOrder, generateOrder, handleOrder, orderHistory, getOrderHistory}}>
+
       {isReady ? (
         children
       ) : (

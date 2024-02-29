@@ -1,8 +1,10 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, useToast} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
+import { auth } from "../utils/firebase" 
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 
 /* Register page - use React hook Forms for collecting input and validating. Once validated and submitted, send request to Firebase and:
 *   - if account exists with provided email, route to Login page
@@ -19,6 +21,9 @@ export const Register = ({saveData}) => {
     const [emailsMatch, setEmailsMatch] = useState(true);
     const [passwordsMatch, setPasswordsMatch]= useState(true);
 
+    const [formdata, setformData] = useState(null);
+    const [registrationState, setRegistrationState] = useState('initial');
+
     const [showPassword, setShowPassword] = React.useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
     const handleShowPassword= () => setShowPassword(!showPassword)
@@ -27,55 +32,154 @@ export const Register = ({saveData}) => {
 
     const handleRegister = async (data) => {
 
+        setformData(data);
+
         try {
             saveData(data);
         } catch (error) {console.log(error);}
 
-        //emails and passwords match
-        if (data.email === data.confirmEmail && data.password === data.confirmPassword) {
+        // Verify email and password match
+        if (data.email !== data.confirmEmail || data.password !== data.confirmPassword) {
+            toast({
+                title: "Error",
+                description: "Emails or passwords do not match.",
+                position: "top",
+                status: "error",
+                isClosable: true,
+            });
+            return;
+        }
+
+        try {
             /**
-             * When registerNewAccount is called and succeeds, Firebase Authentication SDK will automatically 
-             * manage the user's session and JWT token. So in most cases we don't need to manually handle JWT tokens on the front end 
-             * unless we need to send them to our own server for validation or other processing.
-             */
+             * Create users and send verification emails
+             * In Firebase, the default validity period for email verification links sent to users is 24 hours. 
+             * This means that users have 24 hours after receiving the email to click on the verification link 
+             * to complete their email verification process. If the user does not click on the verification link during this period, 
+             * the link will expire and the user needs to request a new verification email to complete the verification process.
+             */ 
+            const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+            await sendEmailVerification(userCredential.user);
+            toast({
+                title: "Email has sent to be verified!",
+                description: "Please check your email to verify your account.",
+                position: "top",
+                status: "success",
+                isClosable: true,
+            });
+            // Update the status to reflect waiting for email verification. 
+            // When the user first clicks register button and sends an email, the button will change from register to verified status
+            setRegistrationState('waitingForEmailVerification');
+        } catch (error) {
+            console.error('Error registering account:', error);
+            toast({
+                title: "Registration failed",
+                description: error.message,
+                position: "top",
+                status: "error",
+                isClosable: true,
+            });
+        }
+
+    }
+
+    // Logic for handling whether the user has verified their email
+    const handleCheckEmailVerified = async (event) => {
+        // Block default form submission behavior
+        event.preventDefault();
+
+        const user = auth.currentUser;
+        await user.reload(); // Reload user status to obtain the latest email verification status
+
+        if (user.emailVerified) {
+            console.log('Email verified:', user.emailVerified);
             try {
-                console.log("valid registration input");
-                const result = await registerNewAccount(data); 
-                
-                //if result is not blank, means new account created
+                /*
+                We will only call the cloud function to store the user's personal information without password
+                and redirect to the login page when our email authentication is passed
+                */
+                const result = await registerNewAccount(formdata); 
                 if (result.success) {
-                    toast ({    
-                        addRole: true,
-                        title: "Your account was successfully created.",
-                        position: "top", 
+                    toast({
+                        title: "Account created",
+                        description: "Your account has been created successfully.",
+                        position: "top",
                         status: "success",
                         isClosable: true,
                     });
+                    navigate("/login"); 
                 }
-                // //else, existing account
-                // else {
-                //     toast ({    
-                //         addRole: true,
-                //         title: "The email provided is associated with an existing account.",
-                //         position: "top", 
-                //         status: "info",
-                //         isClosable: true,
-                //     });
-                // }
-                navigate("/login");
             } catch (error) {
-                console.log(error);
-
-                toast ({    
-                    addRole: true,
-                    title: "The email provided is associated with an existing account.",
-                    position: "top", 
-                    status: "info",
+                console.error('Error calling registerNewAccount:', error);
+                toast({
+                    title: "Registration failed",
+                    description: error.message,
+                    position: "top",
+                    status: "error",
                     isClosable: true,
                 });
             }
-        }        
-        else (console.log("passwords or emails do not match"));
+        } else {
+            toast({
+                title: "Email not verified",
+                description: "Please verify your email before continuing.",
+                position: "top",
+                status: "warning",
+                isClosable: true,
+            });
+        }
+    };
+
+    /*
+    The default email authentication is sent for form submission, 
+    and the button will change from register to verified waiting for the user's email verification
+    */
+    let buttonContent;
+    if (registrationState === 'initial') {
+        buttonContent = (
+            <Box 
+                title='register-register-button'
+                align='center'
+                as='button' 
+                pt='0.25rem' 
+                mt='0.5rem'
+                bg='black' 
+                color='white'
+                h='40px'
+                w='250px'
+                fontWeight='bold'
+                fontSize="15px"
+                _hover={{ boxShadow: "0 0 5px 1px tan" }}
+                border="outset 2px tan"
+                borderRadius='md'
+                type="submit"
+                > 
+                Register
+            </Box>
+        );
+    } else if (registrationState === 'waitingForEmailVerification') {
+        buttonContent = (
+            <Box 
+                title='register-register-button'
+                align='center'
+                as='button' 
+                pt='0.25rem' 
+                mt='0.5rem'
+                bg='black' 
+                color='white'
+                h='40px'
+                w='250px'
+                fontWeight='bold'
+                fontSize="15px"
+                _hover={{ boxShadow: "0 0 5px 1px tan" }}
+                border="outset 2px tan"
+                borderRadius='md'
+                onClick={handleCheckEmailVerified}
+                type="button" // Distinguished from type=submit, it is just a button event to prevent form submission
+                > 
+                Verfied
+            </Box>
+        );
     }
 
     return (
@@ -254,24 +358,7 @@ export const Register = ({saveData}) => {
                         <Text fontStyle="italic"> 
                             {"Passwords must contain at least 8 characters, one lowercase letter, one uppercase letter, and one number."} 
                         </Text>
-                        <Box 
-                            title='register-register-button'
-                            align='center'
-                            as='button' 
-                            pt='0.25rem' 
-                            mt='0.5rem'
-                            bg='black' 
-                            color='white'
-                            h='40px'
-                            w='250px'
-                            fontWeight='bold'
-                            fontSize="15px"
-                            _hover={{ boxShadow: "0 0 5px 1px tan" }}
-                            border="outset 2px tan"
-                            borderRadius='md'
-                            > 
-                            Register
-                        </Box>
+                        {buttonContent}
                     </VStack>
                 </Box>
             </Flex>

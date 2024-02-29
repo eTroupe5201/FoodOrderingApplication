@@ -39,21 +39,40 @@ export const Login = ({saveData}) => {
             const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
 
             // Login successful, Firebase automatically handles the session and token
-            console.log("Logged in user:", userCredential.user);
+            const userVerfied = userCredential.user;
 
-            getUserInfo(userCredential.user);
+            /**
+             * Email authentication is required in order to log in, as the call to the createUserWithEmailAndPassword function 
+             * will directly store the user's registration information in firebase authentication. 
+             * Therefore, the. emailVerified field is very important to prevent someone from logging out without authentication 
+             * after registering, and the next time they log in directly, they can successfully log in, which will be the outrageous situation.
+             */
+            if (userVerfied.emailVerified) {
+                console.log("Logged in user:", userVerfied);
 
-            // It is possible to obtain a token, but usually not required
-            //const token = await userCredential.user.getIdToken();
- 
-            // Show success message and navigate to homepage
-            toast({
-                title: "Logged in successfully.",
-                position: "top",
-                status: "success",
-                isClosable: true,
-            });
-            navigate("/");
+                getUserInfo(userVerfied);
+
+                // It is possible to obtain a token, but usually not required
+                //const token = await userCredential.user.getIdToken();
+    
+                // Show success message and navigate to homepage
+                toast({
+                    title: "Logged in successfully.",
+                    position: "top",
+                    status: "success",
+                    isClosable: true,
+                });
+                navigate("/");
+
+            }else{
+                toast({
+                    title: "Logged in failed. Please verify your email before logging in.",
+                    position: "top",
+                    status: "error",
+                    isClosable: true,
+                });
+            }
+            
         } catch (error) {
             // Login failed with error message
             toast({

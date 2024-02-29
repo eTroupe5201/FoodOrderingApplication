@@ -1,5 +1,5 @@
 //import React from "react";
-import { Image, HStack, Box, useToast, Text,Button} from "@chakra-ui/react";
+import { Image, HStack, Box, useToast, Text,Button, Flex } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDataProvider } from "../components/dataProvider"
 import { useState, useEffect } from "react";
@@ -14,10 +14,11 @@ import { signOut } from "firebase/auth";
 export function NavBar() {
     const isSmallScreen = useBreakpointValue({ base: true, sm: true, md: true, lg: false, xl: false }); // Define when to show the icon based on screen size
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { user, getUserInfo, checkCartNotEmpty, cartChanged, setCartChanged } = useDataProvider();
+    const { user, getUserInfo, checkCartNotEmpty, cartChanged, setCartChanged, fetchUserProfile } = useDataProvider();
     const navigate = useNavigate();
     const toast = useToast();
     const [hasCartItems, setHasCartItems] = useState(false);
+    const [userProfile, setUserProfile] = useState(null);
 
     useEffect(() => {
         const fetchCartStatus = async () => {
@@ -33,8 +34,20 @@ export function NavBar() {
         fetchCartStatus();
         // Reset the cardChanged state so that the next change can be detected
         setCartChanged(false);
-    }, [user, cartChanged, checkCartNotEmpty, setCartChanged]); //Now this effect depends on two states: user and cartChanged
+    }, [user, cartChanged]); //Now this effect depends on two states: user and cartChanged
 
+    
+    useEffect(() => {
+        const loadUserProfile = async () => {
+            const profile = await fetchUserProfile();
+            setUserProfile(profile); 
+        };
+
+        loadUserProfile();
+    }, [user]); 
+    
+    
+        
     const logout = () => {
         signOut(auth).then(() => {
             getUserInfo(null); 
@@ -92,7 +105,12 @@ export function NavBar() {
                 <HStack spacing="1.5rem">
                     <li > 
                         {user ? (
-                            <Link to="/profile"> <TiUser  /> </Link>
+                            <Flex align="center">
+                                <Link to="/profile">
+                                    <TiUser />
+                                </Link>
+                                <Text pl={2} fontSize="xl">{userProfile?.firstName}</Text> 
+                            </Flex>
                         ) : (
                             <TiUser style={{visibility: "hidden"}} />
                         ) }

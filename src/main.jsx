@@ -19,7 +19,6 @@ import { Register } from "./pages/Register";
 import { Profile } from "./pages/Profile"; 
 import { EditProfile } from "./pages/EditProfile"; 
 import { ForgotPassword } from "./pages/ForgotPassword";
-
 import "./styles.css";
 import { DataProvider } from "./components/dataProvider";
 

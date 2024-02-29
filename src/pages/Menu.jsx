@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 // the HomePage will be our default page after log in
 export const Menu = () => {
     const navigate = useNavigate();
-    const { categories, getItemsByCategory } = useDataProvider();
+    const { categories, getItemsByCategory, user } = useDataProvider();
 
     return (
         //I set up 3 categories in one line temporarily, can adjust this syntax later
@@ -36,9 +36,14 @@ export const Menu = () => {
                     {getItemsByCategory(category.id).map((item) => (
                    
             
-                        <Link key={item.id} onClick={() => navigate(`/item/${item.id}`)} _hover={{ textDecoration: "none" }}>
-                           
-                            
+                        // <Link key={item.id} onClick={() => 
+                        //     navigate(`/item/${item.id}`)
+                        // } _hover={{ textDecoration: "none" }}>
+                        <Link key={item.id} onClick={() => {
+                                console.log(user); // 打印当前的user对象
+                                navigate(`/item/${item.id}`);
+                        }} _hover={{ textDecoration: "none" }}>
+                                                      
                             <Box 
                             
                             colSpan={{base: 1, sm:1,  xl: 4}}
