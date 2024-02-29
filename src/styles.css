@@ -110,7 +110,7 @@
     margin-bottom: 15px;
 }
 
-.Contact, .Login, .Register, .EditProfile {
+.Contact, .Login, .Register, .EditProfile, .Orders{
     font-family: 'Raleway', sans-serif;
     font-weight: bold;
     display: flex;

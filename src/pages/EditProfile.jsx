@@ -3,23 +3,16 @@ import { Box, Text, Flex, VStack, Input, FormControl, FormLabel, FormErrorMessag
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
-import { auth } from "../utils/firebase" 
 import "../styles.css";
 
 //TODO: fix state issue with setValue (cannot change input)
 export const EditProfile = () => {
-    const toast = useToast();
     const navigate = useNavigate();
     const { fetchUserProfile, updateUserAccount } = useDataProvider();
     const isMounted = useRef(false); // Used to track the mounting status of components'
-    const { register, handleSubmit, setValue, getValues, formState, watch } = useForm();
+    const { register, handleSubmit, setValue, formState, watch } = useForm();
 
     const [emailErrorMsg, setEmailErrorMsg]= useState("Required. Enter a valid email address.");
-
-    const [fname, setFname] = useState();
-    const [lname, setLname] = useState();
-    const [phone, setPhone] = useState();
-    const [email, setEmail] = useState();
     
      useEffect(() => {
         isMounted.current = true;
@@ -37,11 +30,6 @@ export const EditProfile = () => {
                 setValue("lastName", data.lastName);
                 setValue("email", data.email);
                 setValue("phone", data.phone);
-                //...other fields in future
-                setFname(data.firstName);
-                setLname(data.lastName);
-                setEmail(data.email);
-                setPhone(data.phone);
             }
         };
 

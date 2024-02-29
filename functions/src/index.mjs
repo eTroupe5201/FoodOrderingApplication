@@ -317,28 +317,35 @@ export const updateCartItem = onCall(async (request) => {
   }
 });
 
-export const getOrderHistory = onCall (async (request) => {
-  const ordersRef = firestore.collection("order");
+// export const getOrderHistory = onCall (async (request) => {
+//   const ordersRef = admin.firestore().collection("order");
 
-  try { 
-    const confirmedOrdersSnapshot = await ordersRef.where("createdBy", "==", request.auth.uid).where("status", "==", "confirmed").get();
 
-    const dbOrders = [];
+//   const dbOrders = [];
+
+//   console.info("getOrderHistory log: uid: " + request.data.id);
+
+//   try { 
+//     const confirmedOrdersSnapshot = await ordersRef.where("createdBy", "==", request.data.id).where("status", "==", "confirmed").get();
+
+//     console.info("getOrderHistory log: Snapshot done");    
   
-    if(confirmedOrdersSnapshot.empty){
-      // No confirmed orders
-      return null;
-    }
+//     if(confirmedOrdersSnapshot.empty){
+//       // No confirmed orders
+//       console.info("getOrderHistory log: no confirmed orders found");
+//       return null;
+//     } 
+
+//     confirmedOrdersSnapshot.forEach((order) => {
+//       console.info("getOrderHistory log: " + order.data());
+//       dbOrders.push(order.data())
+//     });
   
-    confirmedOrdersSnapshot.forEach((order) => 
-      dbOrders.push(order.data())
-    );
-  
-    return dbOrders;
-    } catch (error) {
-    throw new HttpsError('internal', 'Unable to pull order history.', error);
-  }
-});
+//     return dbOrders;
+//     } catch (error) {
+//     throw new HttpsError('internal', 'Unable to pull order history.', error);
+//   }
+// });
 
 // export const registerAccount = onCall(async (request) => {
 //   //Check if the user calling the function has passed authentication. 

@@ -173,6 +173,10 @@ export const DataProvider = ({ children }) => {
     return items.find((item) => item.id === itemId);
   };
 
+const getOrderById = (orderId) => {
+  return orderHistory.find((order) => order.id === orderId);
+}
+
   /*
     category actually is a id of string type when you look at the database
     here I will parase a category id in it and iterate each item's category, 
@@ -397,12 +401,31 @@ const storeContactUsForm = async (formInfo) => {
 }
 
 const getOrderHistory = async () => {
-  const getOrderHistoryCallable = httpsCallable(functions, "getOrderHistory");
-  const { orderArray } = await getOrderHistoryCallable({});
-  console.log(orderArray);
+  const uid = user.uid;
+  
+  const orderRef = collection(db, "order"); // reference to the 'order' collection
+  let orderData = [];
+  
+  try {
+    const snapshot = await getDocs(orderRef);
+    if (snapshot.empty) {
+      console.log(`No orders found for UID: ${uid}`);
+    } else {
 
-  setOrderHistory(orderArray);
-}
+      snapshot.forEach(doc => {
+        // Check if the order's UID matches the provided UID
+        if (doc.data().createdBy === uid && doc.data().status === "confirmed") {
+          orderData.push({ id: doc.id, ...doc.data()});
+        }
+      });
+    }
+  } catch (error) {
+    console.error(`Error fetching order for UID ${uid}:`, error);
+  }
+
+    setOrderHistory(orderData);
+  
+  };
 
   useEffect(() => {
     fetchData();
@@ -421,7 +444,10 @@ const getOrderHistory = async () => {
   */
   return (
 
-    <DataProviderContext.Provider value={{ user, lines, setLines, restaurantInfo, categories, items, cartChanged, setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchOrder, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order, setOrder, generateOrder, handleOrder, orderHistory, getOrderHistory}}>
+    <DataProviderContext.Provider value={{ user, order, lines, setLines, restaurantInfo, categories, items, cartChanged, orderHistory, 
+    checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchOrder, getItemsByCategory, getItemById, addToCart, setCartChanged,
+    removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, setOrder, generateOrder, getOrderById,
+    handleOrder, getOrderHistory, updateUserAccount}}>
 
       {isReady ? (
         children
