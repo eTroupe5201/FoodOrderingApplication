@@ -22,7 +22,7 @@ export const Register = ({saveData}) => {
     const [passwordsMatch, setPasswordsMatch]= useState(true);
 
     const [formdata, setformData] = useState(null);
-    const [registrationState, setRegistrationState] = useState('initial');
+    const [registrationState, setRegistrationState] = useState("initial");
 
     const [showPassword, setShowPassword] = React.useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
@@ -69,9 +69,9 @@ export const Register = ({saveData}) => {
             });
             // Update the status to reflect waiting for email verification. 
             // When the user first clicks register button and sends an email, the button will change from register to verified status
-            setRegistrationState('waitingForEmailVerification');
+            setRegistrationState("waitingForEmailVerification");
         } catch (error) {
-            console.error('Error registering account:', error);
+            console.error("Error registering account:", error);
             toast({
                 title: "Registration failed",
                 description: error.message,
@@ -92,7 +92,7 @@ export const Register = ({saveData}) => {
         await user.reload(); // Reload user status to obtain the latest email verification status
 
         if (user.emailVerified) {
-            console.log('Email verified:', user.emailVerified);
+            console.log("Email verified:", user.emailVerified);
             try {
                 /*
                 We will only call the cloud function to store the user's personal information without password
@@ -110,7 +110,7 @@ export const Register = ({saveData}) => {
                     navigate("/login"); 
                 }
             } catch (error) {
-                console.error('Error calling registerNewAccount:', error);
+                console.error("Error calling registerNewAccount:", error);
                 toast({
                     title: "Registration failed",
                     description: error.message,
@@ -157,7 +157,7 @@ export const Register = ({saveData}) => {
                 Register
             </Box>
         );
-    } else if (registrationState === 'waitingForEmailVerification') {
+    } else if (registrationState === "waitingForEmailVerification") {
         buttonContent = (
             <Box 
                 title='register-register-button'

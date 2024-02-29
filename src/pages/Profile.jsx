@@ -1,10 +1,10 @@
-//TODO: User profile page
-import { VStack, HStack, Center, Box, Heading, Text, useToast, SimpleGrid} from "@chakra-ui/react";
-import  { useEffect,  useState } from "react";
+import { VStack, HStack, Center, Box, Heading, Text, useToast, SimpleGrid, Button} from "@chakra-ui/react"
+import  { useEffect,  useState } from "react"
 import { useDataProvider } from "../components/dataProvider"
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 import { auth } from "../utils/firebase" 
-import { sendPasswordResetEmail, signOut} from "firebase/auth";
+import { TiPlus } from "react-icons/ti";
+import { sendPasswordResetEmail, signOut} from "firebase/auth"
 import "../styles.css";
 
 /* This page contains basic user data, with routes or buttons to reset password, edit other user info, 
@@ -147,20 +147,36 @@ export const Profile = () => {
 
                 <Center mb='8rem'>
                     <Box title='order-history-box' id='order-history-box' bg='#000000' color='#fff' w={{base:"25em", sm:"30em", md:"35em"}} height='100%' m='2rem' p='1.5rem' borderRadius='md'> 
-                        <Text> Order History Goes Here</Text>
-                        {orderHistory.map((order) => (
-                            <HStack key={order.id}>
-                                <Text> {order.id} </Text>
-                                <Text> {order.total} </Text>
-                                <Text> {order.lastUpdate} </Text>
-                                <Text> {order.status} </Text>
+                        <Heading fontSize='25px' pb='1rem' fontFamily="'Raleway', sans-serif" > Order History </Heading>
+                        <Text mb='20px'> To view order details or reorder a previous order, click on the plus sign next to the desired order below. </Text>
+                        
+                        <HStack fontWeight="bold" justifyContent='center'>
+                            <Text w='60px'> Details </Text>
+                            <Text w='200px'> Date/Time </Text>
+                            <Text w='100px'> # of Items </Text>
+                            <Text w='80px' > Total </Text>
+                        </HStack>
+                        
+                        {orderHistory?.map((order) => (
+                            <HStack key={order.id} mt="15px" fontWeight="bold" justifyContent='center'>
+                                <Button  
+                                    w='30px' 
+                                    onClick={()=>{navigate(`/orders/${order.id}`);}} 
+                                    _hover={{ textDecoration: "none" }}
+                                    mr='20px'
+                                > 
+                                    <Center> <TiPlus /> </Center>
+                                </Button>
+                                <Text w='200px'> {(order.pickupTime).toDate().toLocaleString()} </Text>
+                                <Center w='100px'> {order.lines.length} </Center>
+                                <Text w='80px' > ${order.total} </Text>
                             </HStack>
-                        ))};
-
-
+                        ))}
                     </Box>
                 </Center>
             </SimpleGrid>
         </Center></div>
     );
 }
+
+//onClick='navigate(`/orders/${order.id}`)'
