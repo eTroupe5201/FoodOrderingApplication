@@ -110,14 +110,13 @@
     margin-bottom: 15px;
 }
 
-.Contact, .Login, .Register {
+.Contact, .Login, .Register, .EditProfile {
     font-family: 'Raleway', sans-serif;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center; 
     border-radius: 25px;
-   
 }
 
 .Contact, .Login {
@@ -128,7 +127,7 @@
     padding-top: 0.5rem;
 }
 
-.Contact input, .Login input, .Register input {
+.Contact input, .Login input, .Register input, .EditProfile input{
     width: stretch;
     height: 2.5rem;
     font-family: 'Raleway', sans-serif;

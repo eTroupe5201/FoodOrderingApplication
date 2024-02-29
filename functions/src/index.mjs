@@ -319,6 +319,7 @@ export const updateCartItem = onCall(async (request) => {
 
 export const getOrderHistory = onCall (async (request) => {
   const ordersRef = firestore.collection("order");
+
   try { 
     const confirmedOrdersSnapshot = await ordersRef.where("createdBy", "==", request.auth.uid).where("status", "==", "confirmed").get();
 

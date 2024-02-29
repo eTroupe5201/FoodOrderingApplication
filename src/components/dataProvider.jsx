@@ -37,7 +37,9 @@ export const DataProvider = ({ children }) => {
   const [order, setOrder] = useState({});
   const [user, setUser] = useState();
   const [cartChanged, setCartChanged] = useState(false);
+  const [orderHistory, setOrderHistory] = useState([]);
   // const [paypalId, setpaypalId] = useState();
+
 
   //getDoc comes from firebase firestore, it can import automatically and receive the document
   const fetchRestaurantInfo = async () => {
@@ -100,7 +102,6 @@ export const DataProvider = ({ children }) => {
 
   const fetchCartItems = async () => {
 
-
     if (!user || !user.uid) {
       console.log("No user logged in, or missing UID.");
       return []; // if no user login or user doesn't have uid, return null array
@@ -118,6 +119,9 @@ export const DataProvider = ({ children }) => {
     } catch (error) {
       console.error(`Error fetching cart items for UID ${uid}:`, error);
     }
+
+    //console.log(`Cart items fetched for UID ${uid}:`, cartItems);
+
     return cartItems;
   };
 
@@ -185,7 +189,7 @@ export const DataProvider = ({ children }) => {
     const cartRef = collection(db, "carts", uid, "items"); // Using collection to locate the user's shopping cart entry
     // Create a query object and apply limit on it
     const querySnapshot = await getDocs(query(cartRef, limit(1)));
-    console.log("Snapshot empty:", querySnapshot.empty);
+    //console.log("Snapshot empty:", querySnapshot.empty);
     return !querySnapshot.empty; // If snapshot. empty is true, then the shopping cart is empty, otherwise it is not empty
   };
 
@@ -363,6 +367,16 @@ const registerNewAccount = async (userInfo) => {
   return data;
 }
 
+const updateUserAccount = async (userInfo) => {
+  const updateUserAccountCallable = httpsCallable(functions, "updateAccount");
+  const id = user.uid;
+
+  const { data } = await updateUserAccountCallable({...userInfo, id})
+  console.log("waited for updateUserAccountCallable");
+  console.log(data);
+
+  return data;
+}
 
 const getUserInfo = async (userInfo) => {
   setUser(userInfo);
@@ -382,6 +396,14 @@ const storeContactUsForm = async (formInfo) => {
   return data.id; 
 }
 
+const getOrderHistory = async () => {
+  const getOrderHistoryCallable = httpsCallable(functions, "getOrderHistory");
+  const { orderArray } = await getOrderHistoryCallable({});
+  console.log(orderArray);
+
+  setOrderHistory(orderArray);
+}
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -398,7 +420,9 @@ const storeContactUsForm = async (formInfo) => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-    <DataProviderContext.Provider value={{ user, lines, setLines, restaurantInfo, categories, items, cartChanged, setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchOrder, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order, setOrder, generateOrder, handleOrder}}>
+
+    <DataProviderContext.Provider value={{ user, lines, setLines, restaurantInfo, categories, items, cartChanged, setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchOrder, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order, setOrder, generateOrder, handleOrder, orderHistory, getOrderHistory}}>
+
       {isReady ? (
         children
       ) : (
