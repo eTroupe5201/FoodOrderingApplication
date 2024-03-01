@@ -262,6 +262,14 @@ export const Register = ({saveData}) => {
                                 {...register("phone")}
                             />
                         </FormControl>
+                        <FormControl id='addressField' >
+                            <FormLabel>Address (optional)</FormLabel>
+                            <Input 
+                                type='text'
+                                title='register-address'
+                                {...register("address")}
+                            />
+                        </FormControl>
                         
                         <FormControl id='passwordField' isInvalid={!!formState?.errors?.password?.type || !passwordsMatch}>
                             <FormLabel>Password</FormLabel>
