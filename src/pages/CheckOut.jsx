@@ -111,6 +111,16 @@ export const CheckOut = () => {
                                 />
                                 <FormErrorMessage>Required</FormErrorMessage>
                             </FormControl>
+                            <FormControl isInvalid={!!errors?.address?.type}>
+                                <FormLabel>Address</FormLabel>
+                                <Input
+                                    border="outset 2px tan"
+                                    title='checkout-address'
+                                    placeholder="Address"
+                                    {...register("address", { required: true })}
+                                />
+                                <FormErrorMessage>Required</FormErrorMessage>
+                            </FormControl>
                         </VStack>
                     </AccordionPanel>
                 </AccordionItem>
