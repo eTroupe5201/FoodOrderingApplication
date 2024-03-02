@@ -117,144 +117,145 @@ describe("Register page", () => {
         expect(mockSave).not.toBeCalled();
     });
 
-//     it("should not process register if email input is invalid", async () => {
-//         const mockSave = vi.fn();
-//         const {user} = setup(
-//             <BrowserRouter>
-//                 <Register saveData={mockSave}/>
-//             </BrowserRouter>);
+    it("should not process register if email input is invalid", async () => {
+        const mockSave = vi.fn();
+        const {user} = setup(
+            <BrowserRouter>
+                <Register saveData={mockSave}/>
+            </BrowserRouter>);
 
-//         firstNameInput = screen.getByTitle("register-first-name");
-//         lastNameInput = screen.getByTitle("register-last-name");
-//         emailInput = screen.getByTitle("register-email");
-//         confirmEmailInput = screen.getByTitle("register-confirm-email");
-//         passwordInput = screen.getByTitle("register-password");
-//         confirmPasswordInput = screen.getByTitle("register-confirm-password");
+        firstNameInput = screen.getByTitle("register-first-name");
+        lastNameInput = screen.getByTitle("register-last-name");
+        emailInput = screen.getByTitle("register-email");
+        confirmEmailInput = screen.getByTitle("register-confirm-email");
+        passwordInput = screen.getByTitle("register-password");
+        confirmPasswordInput = screen.getByTitle("register-confirm-password");
 
-//         await act(async () => {
-//             await user.type(firstNameInput, "Gordon");
-//             await user.type(lastNameInput, "Ramsey");
-//             await user.type(emailInput, "testingtest.com");
-//             await user.type(confirmEmailInput, "testing@test.gov");
-//             await user.type(passwordInput, "123ValidPw");
-//             await user.type(confirmPasswordInput, "123ValidPw");
-//             await user.click(screen.getByTitle("register-register-button"));
-//         });
+        await act(async () => {
+            await user.type(firstNameInput, "Gordon");
+            await user.type(lastNameInput, "Ramsey");
+            await user.type(emailInput, "testingtest.com");
+            await user.type(confirmEmailInput, "testing@test.gov");
+            await user.type(passwordInput, "123ValidPw");
+            await user.type(confirmPasswordInput, "123ValidPw");
+            await user.click(screen.getByTitle("register-register-button"));
+        });
         
-//         expect(mockSave).not.toBeCalled();
-//     });
+        expect(mockSave).not.toBeCalled();
+    });
 
-//     it("should not process register if password input is invalid", async () => {
-//         const mockSave = vi.fn();
-//         const {user} = setup(
-//             <BrowserRouter>
-//                 <Register saveData={mockSave}/>
-//             </BrowserRouter>);
+    it("should not process register if password input is invalid", async () => {
+        const mockSave = vi.fn();
+        const {user} = setup(
+            <BrowserRouter>
+                <Register saveData={mockSave}/>
+            </BrowserRouter>);
 
-//         firstNameInput = screen.getByTitle("register-first-name");
-//         lastNameInput = screen.getByTitle("register-last-name");
-//         emailInput = screen.getByTitle("register-email");
-//         confirmEmailInput = screen.getByTitle("register-confirm-email");
-//         passwordInput = screen.getByTitle("register-password");
-//         confirmPasswordInput = screen.getByTitle("register-confirm-password");
+        firstNameInput = screen.getByTitle("register-first-name");
+        lastNameInput = screen.getByTitle("register-last-name");
+        emailInput = screen.getByTitle("register-email");
+        confirmEmailInput = screen.getByTitle("register-confirm-email");
+        passwordInput = screen.getByTitle("register-password");
+        confirmPasswordInput = screen.getByTitle("register-confirm-password");
 
-//         await act(async () => {
-//             await user.type(firstNameInput, "Gordon");
-//             await user.type(lastNameInput, "Ramsey");
-//             await user.type(emailInput, "testing@test.com");
-//             await user.type(confirmEmailInput, "testing@test.com");
-//             await user.type(passwordInput, "tooshort");
-//             await user.type(confirmPasswordInput, "tooshort");
-//             await user.click(screen.getByTitle("register-register-button"));
-//         });
+        await act(async () => {
+            await user.type(firstNameInput, "Gordon");
+            await user.type(lastNameInput, "Ramsey");
+            await user.type(emailInput, "testing@test.com");
+            await user.type(confirmEmailInput, "testing@test.com");
+            await user.type(passwordInput, "tooshort");
+            await user.type(confirmPasswordInput, "tooshort");
+            await user.click(screen.getByTitle("register-register-button"));
+        });
         
-//         expect(mockSave).not.toBeCalled();
-//     });
+        expect(mockSave).not.toBeCalled();
+    });
 
-//     it("should not process register if email and confirmEmail do not match", async () => {
-//         const mockConsole = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    it("should not process register if email and confirmEmail do not match", async () => {
+        const mockConsole = vi.spyOn(console, "log").mockImplementation(() => undefined);
 
-//         const {user} = setup(
-//             <BrowserRouter>
-//                 <Register />
-//             </BrowserRouter>);
+        const {user} = setup(
+            <BrowserRouter>
+                <Register />
+            </BrowserRouter>);
 
-//         firstNameInput = screen.getByTitle("register-first-name");
-//         lastNameInput = screen.getByTitle("register-last-name");
-//         emailInput = screen.getByTitle("register-email");
-//         confirmEmailInput = screen.getByTitle("register-confirm-email");
-//         passwordInput = screen.getByTitle("register-password");
-//         confirmPasswordInput = screen.getByTitle("register-confirm-password");
+        firstNameInput = screen.getByTitle("register-first-name");
+        lastNameInput = screen.getByTitle("register-last-name");
+        emailInput = screen.getByTitle("register-email");
+        confirmEmailInput = screen.getByTitle("register-confirm-email");
+        passwordInput = screen.getByTitle("register-password");
+        confirmPasswordInput = screen.getByTitle("register-confirm-password");
 
-//         await act(async () => {
-//             await user.type(firstNameInput, "Gordon");
-//             await user.type(lastNameInput, "Ramsey");
-//             await user.type(emailInput, "testing@test.com");
-//             await user.type(confirmEmailInput, "testing@test.gov");
-//             await user.type(passwordInput, "123ValidPw");
-//             await user.type(confirmPasswordInput, "123ValidPw");
-//             await user.click(screen.getByTitle("register-register-button"));
-//         });
+        await act(async () => {
+            await user.type(firstNameInput, "Gordon");
+            await user.type(lastNameInput, "Ramsey");
+            await user.type(emailInput, "testing@test.com");
+            await user.type(confirmEmailInput, "testing@test.gov");
+            await user.type(passwordInput, "123ValidPw");
+            await user.type(confirmPasswordInput, "123ValidPw");
+            await user.click(screen.getByTitle("register-register-button"));
+        });
         
-//         expect(mockConsole).toHaveBeenCalled();
-//         expect(mockConsole).toHaveBeenLastCalledWith("passwords or emails do not match");
-//     });
+        expect(mockConsole).toHaveBeenCalled();
+        expect(mockConsole).toHaveBeenLastCalledWith("passwords or emails do not match");
+    });
 
-//     it("should not process register if password and confirmPassword do not match", async () => {
-//         const mockConsole = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    it("should not process register if password and confirmPassword do not match", async () => {
+        const mockConsole = vi.spyOn(console, "log").mockImplementation(() => undefined);
 
-//         const {user} = setup(
-//             <BrowserRouter>
-//                 <Register />
-//             </BrowserRouter>);
+        const {user} = setup(
+            <BrowserRouter>
+                <Register />
+            </BrowserRouter>);
 
-//         firstNameInput = screen.getByTitle("register-first-name");
-//         lastNameInput = screen.getByTitle("register-last-name");
-//         emailInput = screen.getByTitle("register-email");
-//         confirmEmailInput = screen.getByTitle("register-confirm-email");
-//         passwordInput = screen.getByTitle("register-password");
-//         confirmPasswordInput = screen.getByTitle("register-confirm-password");
+        firstNameInput = screen.getByTitle("register-first-name");
+        lastNameInput = screen.getByTitle("register-last-name");
+        emailInput = screen.getByTitle("register-email");
+        confirmEmailInput = screen.getByTitle("register-confirm-email");
+        passwordInput = screen.getByTitle("register-password");
+        confirmPasswordInput = screen.getByTitle("register-confirm-password");
 
-//         await act(async () => {
-//             await user.type(firstNameInput, "Gordon");
-//             await user.type(lastNameInput, "Ramsey");
-//             await user.type(emailInput, "testing@test.com");
-//             await user.type(confirmEmailInput, "testing@test.com");
-//             await user.type(passwordInput, "456ValidPw");
-//             await user.type(confirmPasswordInput, "123ValidPw");
-//             await user.click(screen.getByTitle("register-register-button"));
-//         });
+        await act(async () => {
+            await user.type(firstNameInput, "Gordon");
+            await user.type(lastNameInput, "Ramsey");
+            await user.type(emailInput, "testing@test.com");
+            await user.type(confirmEmailInput, "testing@test.com");
+            await user.type(passwordInput, "456ValidPw");
+            await user.type(confirmPasswordInput, "123ValidPw");
+            await user.click(screen.getByTitle("register-register-button"));
+        });
         
-//         expect(mockConsole).toHaveBeenCalled();
-//         expect(mockConsole).toHaveBeenLastCalledWith("passwords or emails do not match");
-//     });
+        expect(mockConsole).toHaveBeenCalled();
+        expect(mockConsole).toHaveBeenLastCalledWith("passwords or emails do not match");
+    });
 
-//     it("should process register if all input is valid and emails and passwords match", async () => {
-//         const mockConsole = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    it("should process register if all input is valid and emails and passwords match", async () => {
+        const mockConsole = vi.spyOn(console, "log").mockImplementation(() => undefined);
 
-//         const {user} = setup(
-//             <BrowserRouter>
-//                 <Register />
-//             </BrowserRouter>);
+        const {user} = setup(
+            <BrowserRouter>
+                <Register />
+            </BrowserRouter>);
 
-//         firstNameInput = screen.getByTitle("register-first-name");
-//         lastNameInput = screen.getByTitle("register-last-name");
-//         emailInput = screen.getByTitle("register-email");
-//         confirmEmailInput = screen.getByTitle("register-confirm-email");
-//         passwordInput = screen.getByTitle("register-password");
-//         confirmPasswordInput = screen.getByTitle("register-confirm-password");
+        firstNameInput = screen.getByTitle("register-first-name");
+        lastNameInput = screen.getByTitle("register-last-name");
+        emailInput = screen.getByTitle("register-email");
+        confirmEmailInput = screen.getByTitle("register-confirm-email");
+        passwordInput = screen.getByTitle("register-password");
+        confirmPasswordInput = screen.getByTitle("register-confirm-password");
 
-//         await act(async () => {
-//             await user.type(firstNameInput, "Gordon");
-//             await user.type(lastNameInput, "Ramsey");
-//             await user.type(emailInput, "testing@test.com");
-//             await user.type(confirmEmailInput, "testing@test.com");
-//             await user.type(passwordInput, "123ValidPw");
-//             await user.type(confirmPasswordInput, "123ValidPw");
-//             await user.click(screen.getByTitle("register-register-button"));
-//         });
+        await act(async () => {
+            await user.type(firstNameInput, "Gordon");
+            await user.type(lastNameInput, "Ramsey");
+            await user.type(emailInput, "testing@test.com");
+            await user.type(confirmEmailInput, "testing@test.com");
+            await user.type(passwordInput, "123ValidPw");
+            await user.type(confirmPasswordInput, "123ValidPw");
+            await user.click(screen.getByTitle("register-register-button"));
+        });
         
-//         expect(mockConsole).toHaveBeenCalled();
-//         expect(mockConsole).toHaveBeenNthCalledWith(2, "valid registration input");
-//     });
+        expect(mockConsole).toHaveBeenCalled();
+        expect(mockConsole).toHaveBeenNthCalledWith(2, "valid registration input");
+    });
+   
 });

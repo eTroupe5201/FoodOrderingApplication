@@ -40,6 +40,7 @@ export const Register = ({saveData}) => {
 
         // Verify email and password match
         if (data.email !== data.confirmEmail || data.password !== data.confirmPassword) {
+            console.log("passwords or emails do not match"); //console log for testing
             toast({
                 title: "Error",
                 description: "Emails or passwords do not match.",
@@ -51,6 +52,7 @@ export const Register = ({saveData}) => {
         }
 
         try {
+            console.log("valid registration input"); //console log for testing
             /**
              * Create users and send verification emails
              * In Firebase, the default validity period for email verification links sent to users is 24 hours. 
@@ -85,6 +87,7 @@ export const Register = ({saveData}) => {
 
     // Logic for handling whether the user has verified their email
     const handleCheckEmailVerified = async (event) => {
+        console.log("checking verification status to store account info"); //console log for testing 
         // Block default form submission behavior
         event.preventDefault();
 
@@ -135,7 +138,7 @@ export const Register = ({saveData}) => {
     and the button will change from register to verified waiting for the user's email verification
     */
     let buttonContent;
-    if (registrationState === 'initial') {
+    if (registrationState === "initial") {
         buttonContent = (
             <Box 
                 title='register-register-button'
@@ -160,7 +163,7 @@ export const Register = ({saveData}) => {
     } else if (registrationState === "waitingForEmailVerification") {
         buttonContent = (
             <Box 
-                title='register-register-button'
+                title='register-verified-button'
                 align='center'
                 as='button' 
                 pt='0.25rem' 

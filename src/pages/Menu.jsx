@@ -1,6 +1,6 @@
-/* eslint-disable no-unused-vars */
+///* eslint-disable no-unused-vars */
 ///* eslint-disable react/jsx-key */
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel,Center, Box, SimpleGrid, Heading, Image, Link, Text } from "@chakra-ui/react";
+import { Center, Box, SimpleGrid, Heading, Image, Link, Text } from "@chakra-ui/react";
 import { useDataProvider } from "../components/dataProvider";
 import { useNavigate } from "react-router-dom";
 
@@ -85,6 +85,7 @@ export const Menu = () => {
 
 
 //(Spare item): accordion design style, suitable for iOS/Android mobile devices
+//import { Accordion, AccordionButton, AccordionItem, AccordionPanel,Center, Box, SimpleGrid, Heading, Image, Link, Text } from "@chakra-ui/react";
 
     // return (
 

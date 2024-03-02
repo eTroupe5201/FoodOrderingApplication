@@ -11,8 +11,8 @@ const GratitudeContent = () => {
     const { order, setOrder, clearCartAfterConfirmation, generateOrder, handleOrder  } = useDataProvider();
 
     useEffect(() => {
-        if (!window.paypal || !order?.id || order?.status !== 'pending') {
-            console.log('PayPal not loaded or order not in pending status.');
+        if (!window.paypal || !order?.id || order?.status !== "pending") {
+            console.log("PayPal not loaded or order not in pending status.");
             return;
         }
 
@@ -21,7 +21,7 @@ const GratitudeContent = () => {
                 return generateOrder().then(orderId => {
                     // handle error situation
                     if (orderId.error) {
-                        console.error('Error creating PayPal order:', orderId.error);
+                        console.error("Error creating PayPal order:", orderId.error);
                         // can handle errors here, such as displaying prompt information to the user
                         return actions.reject(); // Refuse to create order
                     }
@@ -30,14 +30,14 @@ const GratitudeContent = () => {
             },
             onApprove: async (data, actions) => {
                 // Check order status to avoid duplicate capture
-                if (order.status === 'confirmed') {
-                    console.log('Order already confirmed. Skipping capture.');
+                if (order.status === "confirmed") {
+                    console.log("Order already confirmed. Skipping capture.");
                     return;
                 }
                 
                 const updatedOrder = await handleOrder(data.orderID);
                 if (updatedOrder.error) {
-                    console.error('Error handling PayPal order:', updatedOrder.error);
+                    console.error("Error handling PayPal order:", updatedOrder.error);
                     return; // exit the function
                 }
                 console.log(`Order captured successfully: ${updatedOrder.id}`);
@@ -51,14 +51,14 @@ const GratitudeContent = () => {
             //     // User friendly error handling logic can be added here
             //     alert(`Payment failed: ${error?.message || 'Unknown error'}`);
             // }
-        }).render('#paypal-button'); // Ensure that the ID matches the elements in the HTML
+        }).render("#paypal-button"); // Ensure that the ID matches the elements in the HTML
 
         // Cleanup function
         return () => {
             // Check if the PayPal buttons exist and if so, remove them
-            const paypalButtonContainer = document.getElementById('paypal-button');
+            const paypalButtonContainer = document.getElementById("paypal-button");
             if (paypalButtonContainer) {
-            paypalButtonContainer.innerHTML = '';
+            paypalButtonContainer.innerHTML = "";
             }
         };
     
@@ -76,7 +76,7 @@ const GratitudeContent = () => {
                 <Text textAlign="center">
                     Your order has been placed. Please go to pay the bill.
                 </Text>
-                <div id="paypal-button" style={{ width: '80%', maxWidth: '300px', height: 'auto', display: 'block', margin: '0 auto' }}></div>
+                <div id="paypal-button" style={{ width: "80%", maxWidth: "300px", height: "auto", display: "block", margin: "0 auto" }}></div>
             </>
         );
     }

@@ -5,12 +5,9 @@ import { useNavigate } from "react-router-dom"
 import { auth } from "../utils/firebase" 
 import { TiPlus } from "react-icons/ti";
 import { sendPasswordResetEmail, signOut} from "firebase/auth"
-import "../styles.css";
 
 /* This page contains basic user data, with routes or buttons to reset password, edit other user info, 
 *  and view prior order history. 
-*  
-*  TODO: view order history 
 */
 export const Profile = () => {
     const navigate = useNavigate();
@@ -20,12 +17,18 @@ export const Profile = () => {
 
     useEffect(() => {
         const loadUserProfile = async () => {
-            const profile = await fetchUserProfile();
-            setUserProfile(profile); 
+            try {
+                const profile = await fetchUserProfile();
+                setUserProfile(profile); 
+            } catch (error) {console.log(error.message)}
         };
 
         loadUserProfile();
-        getOrderHistory();
+
+        try {
+            getOrderHistory();
+        } catch (error) {console.log(error.message)}
+
     }, [user, fetchUserProfile]); 
 
     const handleChangePasswordemail = async () => {
@@ -71,7 +74,7 @@ export const Profile = () => {
     };
 
     return (
-        <div><Center position="relative" fontFamily="'Raleway', sans-serif">
+        <div><Center title="profile-content" h="100%" position="relative" fontFamily="'Raleway', sans-serif" mb="100px">
             <SimpleGrid mt='4rem' columns={2} templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" , lg: "repeat(2, 1fr)" , xl: "repeat(2, 1fr)" }}>
                 <VStack mt='-2rem' pb='3rem'>
                     <Box title='profile-info-box' id='profile-info-box' bg='#000000' color='#fff' w={{base:"25em", sm:"30em", md:"35em"}} height='100%' m='2rem' p='1.5rem' borderRadius='md'> 
@@ -82,15 +85,15 @@ export const Profile = () => {
                         </HStack>
                         <HStack mt='0.5rem'>
                             <Text fontWeight='bold'> Last Name: </Text>
-                            <Text title='profile-first-name' w='object-fit'> {userProfile?.lastName} </Text>
+                            <Text title='profile-last-name' w='object-fit'> {userProfile?.lastName} </Text>
                         </HStack>
                         <HStack mt='0.5rem'>
                             <Text fontWeight='bold'> Email Address: </Text>
-                            <Text title='profile-first-name' w='object-fit'> {userProfile?.email} </Text>
+                            <Text title='profile-email' w='object-fit'> {userProfile?.email} </Text>
                         </HStack>
                         <HStack mt='0.5rem'>
                             <Text fontWeight='bold'> Phone Number: </Text>
-                            <Text title='profile-first-name' w='object-fit'> {userProfile?.phone} </Text>
+                            <Text title='profile-phone' w='object-fit'> {userProfile?.phone} </Text>
                         </HStack>
                         
                         <Center>

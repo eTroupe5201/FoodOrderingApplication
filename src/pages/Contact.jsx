@@ -2,6 +2,7 @@ import { Flex, Box, Text, VStack, Input, Textarea, SimpleGrid, Center, FormContr
 import { useDataProvider } from "../components/dataProvider";
 import { useForm } from "react-hook-form";
 
+
 //page for Contact Us form
 export const Contact = ({saveData}) => {
     const { storeContactUsForm } = useDataProvider();
@@ -32,7 +33,7 @@ export const Contact = ({saveData}) => {
 
 
     return (
-    <><Center position="relative" mb="100px">
+    <><Center position="relative" mb="50px">
     <form className='Contact' onSubmit={handleSubmit(handleSendForm)} > 
         <SimpleGrid columns={2} templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" , lg: "repeat(2, 1fr)" , xl: "repeat(2, 1fr)" }}>
             <Center>

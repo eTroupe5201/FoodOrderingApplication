@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
-import { Box, Text, Flex, VStack, Input, FormControl, FormLabel, FormErrorMessage, useToast} from "@chakra-ui/react";
+import { Box, Button, Text, Flex, VStack, Input, FormControl, FormLabel, FormErrorMessage} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
@@ -52,12 +52,11 @@ export const EditProfile = () => {
     };
 
     return (
-        <><form className='EditProfile' onSubmit={handleSubmit(handleEditProfile)}> 
-            <Flex  mb="5em" alignContent='center' justifyContent='center'>
+        <> <Flex  mb="5em" alignContent='center' justifyContent='center'>
                 <Box border="outset 2px tan" borderRadius="25px"
                  title='edit-profile-form-box' id='edit-profile-form-box' bg='#000000' 
                  color='#fff' w={{base:"25em", sm:"30em", md:"35em"}} height='100%' m='2rem' p='2rem'> 
-                   
+                    <form className='EditProfile' onSubmit={handleSubmit(handleEditProfile)}>
                     <VStack>
                         <Text fontSize='20px' fontWeight='bold' mb='1rem'> EDIT PROFILE </Text>                        
                         <FormControl id='fnameField' isInvalid={!!formState?.errors?.firstName?.type}>
@@ -126,11 +125,29 @@ export const EditProfile = () => {
                             borderRadius='md'
                         >
                             Save
-                        </Box>
-                    
+                        </Box>                    
                     </VStack>
+                    </form>
+
+                    <Flex justifyContent="center"><Button 
+                        mt="-2rem"
+                        pt='0.25rem' 
+                        bg='black' 
+                        color='white'
+                        h='40px'
+                        w='250px'
+                        fontFamily={"'Raleway', sans-serif"}                     
+                        fontWeight='bold'
+                        fontSize="15px"
+                        _hover={{ boxShadow: "0 0 5px 1px tan" }}
+                        border="outset 2px tan"
+                        borderRadius='md' 
+                        onClick={() => navigate("/profile")}
+                    >
+                        Go Back
+                    </Button></Flex>
                 </Box>
             </Flex>
-        </form></>
+        </>
     );
 };
