@@ -100,6 +100,23 @@ export const DataProvider = ({ children }) => {
     setItems(dbItems);
   };
 
+  const fetchItemImageById = async (id) => {
+    // 假设 `id` 是你想要查询的项目的ID
+    const docRef = doc(db, "item", id); // 创建对特定文档的引用
+    const docSnap = await getDoc(docRef); // 获取文档快照
+  
+    if (docSnap.exists()) {
+      const itemData = docSnap.data(); // 获取文档数据
+      const itemSrc = itemData.image.src; // 假设图片的源地址存储在 'src' 字段
+      // 这里可以根据需要设置图片的src，例如：setItemImageSrc(itemSrc);
+      console.log(itemSrc); // 或处理src的其他逻辑
+      return itemSrc;
+    } else {
+      // doc.data() 为 undefined 表示没有找到文档
+      console.log("No such document!");
+    }
+  };
+  
   const fetchCartItems = async () => {
 
     if (!user || !user.uid) {
@@ -447,7 +464,7 @@ const getOrderHistory = async () => {
     <DataProviderContext.Provider value={{ user, order, lines, setLines, restaurantInfo, categories, items, cartChanged, orderHistory, 
     checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchOrder, getItemsByCategory, getItemById, addToCart, setCartChanged,
     removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, setOrder, generateOrder, getOrderById,
-    handleOrder, getOrderHistory, updateUserAccount}}>
+    handleOrder, getOrderHistory, updateUserAccount, fetchItemImageById}}>
 
       {isReady ? (
         children
