@@ -35,7 +35,7 @@ Currently, two official plugins are available:<br/>
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/31fa8212-c696-4015-89a4-2cc415143279)
 
 ## CheckOut Page
-![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/b28b980a-38eb-493c-81bc-ef5893a6b907)
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/40f07fda-c359-47b1-8dd4-835a84fde31b)
 
 ## Payment Successful Page
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/97028950-664c-4acb-92cc-65062c24519d)
