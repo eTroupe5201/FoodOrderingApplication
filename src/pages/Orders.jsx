@@ -233,7 +233,6 @@ export const Orders = () => {
         <AlertDialog
              isOpen={isOpen}
              leastDestructiveRef={cancelRef}
-             onClose={onClose}
         >
             <AlertDialogOverlay>
             <AlertDialogContent>
