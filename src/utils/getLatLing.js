@@ -1,3 +1,4 @@
+/* global google */
 export const getLatLng = (address) => {
     return new Promise((resolve, reject) => {
         const geocoder = new google.maps.Geocoder();
