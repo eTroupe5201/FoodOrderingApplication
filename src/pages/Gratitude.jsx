@@ -9,7 +9,7 @@ import React, { useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 
 const GratitudeContent = () => {
-    const { order, setOrder, clearCartAfterConfirmation, generateOrder, handleOrder  } = useDataProvider();
+    const { order, setOrder, clearCartAfterConfirmation, generateOrder, handleOrder, findAndAssignDeliveryPerson  } = useDataProvider();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -69,6 +69,19 @@ const GratitudeContent = () => {
 
     if (!order) return null;
 
+    const handleClick = async () => {
+        const response = await findAndAssignDeliveryPerson();
+
+        navigate("/info", {
+            state: {
+                deliveryPersonFirstName: response.deliveryPersonFirstName,
+                deliveryPersonLastName: response.deliveryPersonLastName,
+                estimatedDeliveryTime: response.estimatedDeliveryTime,
+            },
+        });
+
+    };
+
     if (order.status === "pending") {
         // console.log("order pending");
         return (
@@ -113,7 +126,7 @@ const GratitudeContent = () => {
                 </Text>
                 <Button
                     colorScheme="blue"
-                    onClick={() => navigate("/info")}
+                    onClick={handleClick}
                 >
                     View Your Info
                 </Button>

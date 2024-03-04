@@ -37,7 +37,8 @@ const DeliveryPersonForm = () => {
         <TextInput source="lastname" label="Last Name" validate={[required()]} fullWidth />
         <TextInput source="email" validate={[required(), validateEmail]} fullWidth />
         <TextInput source="phone" validate={[required()]} fullWidth />
-        <TextInput source="address" fullWidth />
+        <TextInput source="address" validate={[required()]} fullWidth />
+        <TextInput source="orderId" fullWidth />
         <SelectInput source="status" choices={statusChoices} label="Status" validate={[required()]} fullWidth />
         <SelectInput source="isFree" label="Is Free" choices={[
           { id: true, name: 'Free' },
@@ -68,6 +69,7 @@ const DeliveryPersonList = () => (
         <EmailField source="email" />
         <TextField source="phone" />
         <TextField source="address" />
+        <TextField source="orderId" />
         <FunctionField
           label="Status"
           render={record => {
