@@ -17,7 +17,6 @@ export const Orders = () => {
     const cancelRef = React.useRef()
     const navigate = useNavigate();
     const currOrder = getOrderById(id || "");
-
     const [directions, setDirections] = useState(null);
     const [mapsLoaded, setMapsLoaded] = useState(false);
     const [center, setCenter] = useState(null); // 设置初始中心点为null
@@ -184,84 +183,57 @@ export const Orders = () => {
                     <Text mt='10px' mb='30px'>Placed by: {currOrder.firstName} {currOrder.lastName}</Text>
                     {currOrder?.lines?.map((item) => (
                         <HStack key={item.id} mt='10px' justifyContent='center' fontWeight='bold'>
-                            <Text w='50px'> {item.quantity} </Text>
-                            <Text w='300px'> {item.label} </Text>
-                            <Text w='50px'> ${item.price} </Text>
+                            {itemImagesSrc[item.id] && (
+                                <Image src={itemImagesSrc[item.id]} borderRadius='full' boxSize='50px' objectFit='cover' alt='Item image' />
+                            )}
+                            <Text w='50px'>{item.quantity}</Text>
+                            <Text flex="1">{item.label}</Text>
+                            <Text w='50px'>${item.price}</Text>
                         </HStack>
                     ))}
-                    <HStack mt='15px' justifyContent='center'fontWeight='bold'>
-                        <Text w='350px' align='right'> Total: </Text>
-                        <Text align='right'> ${currOrder.total} </Text>
+                    <HStack mt='15px' justifyContent='center' fontWeight='bold'>
+                        <Text flex="1" textAlign='right'>Total (tax: 10%):</Text>
+                        <Text>${currOrder.total}</Text>
                     </HStack>
                     <Text mt='15px' fontWeight='bold'>Order Comments:</Text>
                     <Text>{currOrder.comments}</Text>
                     <Center mt='30px'>
                         <Stack direction='row' spacing='24px'>
-                            <Button 
-                                bg='black' 
-                                color='white'
-                                h='40px'
-                                fontFamily={"'Raleway', sans-serif"}                     
-                                fontWeight='bold'
-                                fontSize="15px"
-                                _hover={{ boxShadow: "0 0 5px 1px tan" }}
-                                border="outset 2px tan"
-                                borderRadius='md' 
-                                onClick={checkCartNotEmpty ? onOpen : handleReplaceOrder}
-                            >
-                                Copy Order
-                            </Button>
-                            <Button 
-                                bg='black' 
-                                color='white'
-                                h='40px'
-                                fontFamily={"'Raleway', sans-serif"}                     
-                                fontWeight='bold'
-                                fontSize="15px"
-                                _hover={{ boxShadow: "0 0 5px 1px tan" }}
-                                border="outset 2px tan"
-                                borderRadius='md'  
-                                onClick={() => navigate("/profile")}
-                            >
-                                Go Back
-                            </Button>
+                            <Button fontWeight='bold' onClick={checkCartNotEmpty ? onOpen : handleReplaceOrder}>Copy Order</Button>
+                            <Button fontWeight='bold' onClick={() => navigate("/profile")}>Go Back</Button>
                         </Stack>
                     </Center>
-                </Box>    
-        </Flex>
-
-        <AlertDialog
-             isOpen={isOpen}
-             leastDestructiveRef={cancelRef}
-        >
-            <AlertDialogOverlay>
-            <AlertDialogContent>
-                <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                Copy Prior Order
-                </AlertDialogHeader>
+                </Box>
+            </Flex>
     
-                <AlertDialogBody>
-                You have items in your cart already. Copying this previous order will delete your existing cart. Do you want to move forward with deleting the existing cart so you can copy this order?
-                </AlertDialogBody>
+            <AlertDialog
+                isOpen={isOpen}
+                leastDestructiveRef={cancelRef}
+                onClose={onClose}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                            Copy Prior Order
+                        </AlertDialogHeader>
     
-                <AlertDialogFooter>
-                <Button ref={cancelRef} onClick={onClose}>
-                    Cancel
-                </Button>
-                <Button 
-                colorScheme='red'
-                ml={3} 
-                onClick={() => {
-                    clearCartAfterConfirmation(); 
-                    handleReplaceOrder();
-                }} 
-                >
-                    Copy Order
-                </Button>
-                </AlertDialogFooter>
-            </AlertDialogContent>
-            </AlertDialogOverlay>
-        </AlertDialog>
-    </>
+                        <AlertDialogBody>
+                            You have items in your cart already. Copying this previous order will delete your existing cart. Do you want to move forward with deleting the existing cart so you can copy this order?
+                        </AlertDialogBody>
+    
+                        <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={onClose}>Cancel</Button>
+                            <Button colorScheme='red' ml={3} onClick={() => {
+                                clearCartAfterConfirmation();
+                                handleReplaceOrder();
+                            }}>
+                                Copy Order
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
+        </>
     );
+    
 }

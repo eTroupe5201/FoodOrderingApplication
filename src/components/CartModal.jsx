@@ -89,7 +89,7 @@ export const CartModal = ({ isOpen, onClose }) => {
                                         background="black"
                                         border="white solid 1px"
                                         _hover={{ boxShadow: "0 0 10px 1px tan" }}
-                                        onClick={() => removeCartItem(index)}
+                                        onClick={() => removeCartItem(line.id)}
                                         icon={<GrClose />}
                                         aria-label="Remove from cart"
                                     />

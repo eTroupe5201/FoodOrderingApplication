@@ -1,4 +1,4 @@
-import {  Heading, Icon, VStack, Text } from "@chakra-ui/react";
+import {  Heading, Icon, VStack, Text, Button } from "@chakra-ui/react";
 import { useDataProvider } from "../components/dataProvider";
 import {
     MdOutlineCelebration,
@@ -6,9 +6,11 @@ import {
     MdHourglassBottom,
 } from "react-icons/md";
 import React, { useEffect} from "react";
+import { useNavigate } from "react-router-dom";
 
 const GratitudeContent = () => {
     const { order, setOrder, clearCartAfterConfirmation, generateOrder, handleOrder  } = useDataProvider();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!window.paypal || !order?.id || order?.status !== "pending") {
@@ -109,6 +111,12 @@ const GratitudeContent = () => {
                 <Text textAlign="center">
                     See you soon! Your order has been confirmed and will be ready for pickup
                 </Text>
+                <Button
+                    colorScheme="blue"
+                    onClick={() => navigate("/info")}
+                >
+                    View Your Info
+                </Button>
             </>
         );
         

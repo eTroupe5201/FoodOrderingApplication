@@ -323,7 +323,9 @@ const getOrderById = (orderId) => {
        *  The 'setOrder' function is used to update the status of the React component so that the interface can reflect the latest status of the order
       */
       onSnapshot(doc(db, "order", order.id), (docSnapshot) => {
-        setOrder(docSnapshot.data());
+        const data = docSnapshot.data();
+        const pickupTime = data.pickupTime?.toDate().toLocaleString();
+        setOrder({ id: docSnapshot.id, ...data, pickupTime });
       });
 
       return response.data.order;
@@ -462,9 +464,9 @@ const getOrderHistory = async () => {
   return (
 
     <DataProviderContext.Provider value={{ user, order, lines, setLines, restaurantInfo, categories, items, cartChanged, orderHistory, 
-    checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchOrder, getItemsByCategory, getItemById, addToCart, setCartChanged,
+    checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchItemImageById, fetchOrder, getItemsByCategory, getItemById, addToCart, setCartChanged,
     removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, setOrder, generateOrder, getOrderById,
-    handleOrder, getOrderHistory, updateUserAccount, fetchItemImageById}}>
+    handleOrder, getOrderHistory, updateUserAccount}}>
 
       {isReady ? (
         children

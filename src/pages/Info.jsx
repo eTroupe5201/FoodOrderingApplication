@@ -1,8 +1,8 @@
 /* global google */
 import React, { useState, useEffect } from "react";
-import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from "@react-google-maps/api";
+import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from '@react-google-maps/api';
 import { useDataProvider } from "../components/dataProvider";
-import { Flex, Box, Heading, Text, HStack, Image } from "@chakra-ui/react";
+import { Flex, Box, Heading, Text, Button, Center, HStack, Image } from '@chakra-ui/react';
 import { useLocation } from "react-router-dom"
 
 export const Info = () => {
@@ -115,6 +115,7 @@ export const Info = () => {
     const googleMapsApiKey = import.meta.env.VITE_REACT_APP_API_KEY;
 
     return (
+
         <Flex marginLeft={-19} direction={["column", "row"]} align="stretch" justify="center" p={[4, 6]} gap={10} wrap="wrap">
             {/* Map Container */}
             <LoadScriptNext
