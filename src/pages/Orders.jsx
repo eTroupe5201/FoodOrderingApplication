@@ -4,7 +4,8 @@ import { useParams } from "react-router-dom"
 import { useDataProvider } from "../components/dataProvider"
 import { useNavigate, useLocation } from "react-router-dom"
 import React, { useState, useEffect } from "react";
-import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from "@react-google-maps/api";
+import { getLatLng } from "../utils/getLatLing";
+import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from '@react-google-maps/api';
 
 /* This page contains historical order information, allowing the guest to replace the order. The page also
 *  includes Google map functionality to view the address provided with the order, versus the restaurant's 
@@ -12,7 +13,7 @@ import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } fro
 */
 export const Orders = () => {
     const { id } = useParams();
-    const { getOrderById, checkCartNotEmpty, addToCart,clearCartAfterConfirmation, restaurantInfo, fetchItemImageById} = useDataProvider();
+    const { getOrderById, travelTime, checkCartNotEmpty, addToCart,clearCartAfterConfirmation, restaurantInfo, fetchItemImageById, deliveryFirstname, deliveryLastname } = useDataProvider();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = React.useRef()
     const navigate = useNavigate();
@@ -22,7 +23,6 @@ export const Orders = () => {
     const [center, setCenter] = useState(null); // 设置初始中心点为null
     const [showInfoWindow, setShowInfoWindow] = useState(false); // 新状态来控制InfoWindow的显示
     const [infoWindowPosition, setInfoWindowPosition] = useState(null);
-    const [travelTime, setTravelTime] = useState("");
     const [itemImagesSrc, setItemImagesSrc] = useState({});
     const location = useLocation();
 
@@ -42,19 +42,6 @@ export const Orders = () => {
         setMapsLoaded(false); // 重新设置 mapsLoaded 为 false，等待脚本加载
     }, [location.pathname]);
 
-
-    const getLatLng = (address) => {
-        return new Promise((resolve, reject) => {
-            const geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ address }, (results, status) => {
-                if (status === google.maps.GeocoderStatus.OK) {
-                    resolve(results[0].geometry.location);
-                } else {
-                    reject("Geocode was not successful for the following reason: " + status);
-                }
-            });
-        });
-    };
 
     useEffect(() => {
         const fetchDirections = async () => {
@@ -80,7 +67,6 @@ export const Orders = () => {
                             setCenter(result.routes[0].overview_path[0]); // 设定地图中心为起点
                             setShowInfoWindow(true); // 获取路线后显示InfoWindow
                             setInfoWindowPosition(result.routes[0].legs[0].end_location); // 设置InfoWindow的位置
-                            setTravelTime(result.routes[0].legs[0].duration.text); // 设置旅行时间
                         } else {
                             console.error(`Directions request failed due to ${status}`);
                         }
@@ -163,7 +149,7 @@ export const Orders = () => {
                                     {showInfoWindow && (
                                         <InfoWindow position={infoWindowPosition} onCloseClick={() => setShowInfoWindow(false)}>
                                             <div>
-                                                <h4>Estimated Driving Time</h4>
+                                                <h4>Estimated Arrived Time</h4>
                                                 <p>{travelTime}</p>
                                             </div>
                                         </InfoWindow>
@@ -181,6 +167,7 @@ export const Orders = () => {
                     <Text mt='10px'>Order Date/Time: {(currOrder.pickupTime).toDate().toLocaleString()}</Text>
                     <Text mt='10px'>Address: {currOrder.address}</Text>
                     <Text mt='10px' mb='30px'>Placed by: {currOrder.firstName} {currOrder.lastName}</Text>
+                    <Text mt='10px' mb='30px'> Delivered by: {deliveryFirstname} {deliveryLastname}</Text>
                     {currOrder?.lines?.map((item) => (
                         <HStack key={item.id} mt='10px' justifyContent='center' fontWeight='bold'>
                             {itemImagesSrc[item.id] && (
