@@ -4,7 +4,7 @@ import { Box, Center, Image, Text, SimpleGrid } from "@chakra-ui/react";
 export function DiscoverOurMenu() {
     return (
         <Box className="DiscoverOurStory" margin="0"role="DiscoverOurMenu" display="Flex">
-            <Box className="overlay" FlexShrink={3} >
+            <Box className="overlay" flexShrink={3} >
                 <Center>
                     <Text className="overlayCursive"  >
                         Discover

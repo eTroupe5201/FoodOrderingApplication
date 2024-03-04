@@ -117,7 +117,6 @@ export const DataProvider = ({ children }) => {
     }
   };
   
-
   const fetchCartItems = async () => {
 
     if (!user || !user.uid) {
@@ -235,7 +234,7 @@ const getOrderById = (orderId) => {
           //and then call the cloud function to update the database
           const updateCartItemCallable = httpsCallable(functions, "updateCartItem");
           const { updateData } = await updateCartItemCallable(cartItem);
-          console.log('Cloud function update response:', updateData); 
+          console.log("Cloud function update response:", updateData); 
 
         }
       }
@@ -243,11 +242,11 @@ const getOrderById = (orderId) => {
       //only when food item definetely doesn't exist, will call this function placeCartCallable(dataWithId);
       if(!itemExists){
         const { newData } = await placeCartCallable(dataWithId);
-        console.log('Cloud function response:', newData);
+        console.log("Cloud function response:", newData);
       }
       setCartChanged(true); 
     } catch (error) {
-      console.error('Error updating cart:', error);
+      console.error("Error updating cart:", error);
     }
 
   };
@@ -300,7 +299,7 @@ const getOrderById = (orderId) => {
       // setpaypalId(response.data.id);
       return response.data.id;
     } catch (error) {
-      console.error('Error creating PayPal order:', error);
+      console.error("Error creating PayPal order:", error);
       return { error: error.message };
     }
   };
@@ -331,7 +330,7 @@ const getOrderById = (orderId) => {
 
       return response.data.order;
     } catch (error) {
-      console.error('Error handling PayPal order:', error);
+      console.error("Error handling PayPal order:", error);
       throw error; 
     }
   };

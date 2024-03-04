@@ -12,7 +12,7 @@ export const Info = () => {
     const [center, setCenter] = useState(null); // 设置初始中心点为null
     const [showInfoWindow, setShowInfoWindow] = useState(false); // 新状态来控制InfoWindow的显示
     const [infoWindowPosition, setInfoWindowPosition] = useState(null);
-    const [travelTime, setTravelTime] = useState('');
+    const [travelTime, setTravelTime] = useState("");
     const [itemImagesSrc, setItemImagesSrc] = useState({});
     const location = useLocation();
 
@@ -23,7 +23,7 @@ export const Info = () => {
                 if (status === google.maps.GeocoderStatus.OK) {
                     resolve(results[0].geometry.location);
                 } else {
-                    reject('Geocode was not successful for the following reason: ' + status);
+                    reject("Geocode was not successful for the following reason: " + status);
                 }
             });
         });
@@ -115,7 +115,8 @@ export const Info = () => {
     const googleMapsApiKey = import.meta.env.VITE_REACT_APP_API_KEY;
 
     return (
-        <Flex marginLeft={-19} direction={['column', 'row']} align="stretch" justify="center" p={[4, 6]} gap={10} wrap="wrap">
+
+        <Flex marginLeft={-19} direction={["column", "row"]} align="stretch" justify="center" p={[4, 6]} gap={10} wrap="wrap">
             {/* Map Container */}
             <LoadScriptNext
                 googleMapsApiKey={googleMapsApiKey}
@@ -123,7 +124,7 @@ export const Info = () => {
                 onUnmount={() => setMapsLoaded(false)}
             >
                 <GoogleMap
-                    mapContainerStyle={{ width: '35%', height: '350px' }} 
+                    mapContainerStyle={{ width: "35%", height: "350px" }} 
                     center={center}
                     zoom={15}
                 >
@@ -146,7 +147,7 @@ export const Info = () => {
             </LoadScriptNext>
 
             {/* Order Details Box */}
-            <Box title='order-detailed-history-box' id='order-detailed-history-box' fontFamily="'Raleway', sans-serif" bg='#000000' color='#fff' width={['100%', '60%']} w={{base:"20em", sm:"25em", md:"30em"}} maxHeight='350px' p='1.5rem' borderRadius='md' overflowY='auto'> 
+            <Box title='order-detailed-history-box' id='order-detailed-history-box' fontFamily="'Raleway', sans-serif" bg='#000000' color='#fff' width={["100%", "60%"]} w={{base:"20em", sm:"25em", md:"30em"}} maxHeight='350px' p='1.5rem' borderRadius='md' overflowY='auto'> 
                     <Heading fontSize='25px' pb='1rem' fontFamily="'Raleway', sans-serif" > Order Confirmation </Heading>
                     <Text> Confirmation Number / Order ID: {order.id}</Text>
                     <Text mt='10px'> Order Date/Time: {order.pickupTime}</Text>

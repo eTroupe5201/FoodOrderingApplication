@@ -1,27 +1,28 @@
 /* global google */
-import { HStack, Stack, Center, Box, Flex, Heading, Text, Image, Button, SimpleGrid, AlertDialog, AlertDialogOverlay, AlertDialogHeader, AlertDialogContent, AlertDialogBody, AlertDialogFooter, useDisclosure} from "@chakra-ui/react"
+import { HStack, Stack, Center, Box, Flex, Heading, Text, Image, Button, AlertDialog, AlertDialogOverlay, AlertDialogHeader, AlertDialogContent, AlertDialogBody, AlertDialogFooter, useDisclosure} from "@chakra-ui/react"
 import { useParams } from "react-router-dom"
 import { useDataProvider } from "../components/dataProvider"
 import { useNavigate, useLocation } from "react-router-dom"
 import React, { useState, useEffect } from "react";
-import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from "@react-google-maps/api";
 
-/* This page contains historical order information, allowing the guest to replace the order.
+/* This page contains historical order information, allowing the guest to replace the order. The page also
+*  includes Google map functionality to view the address provided with the order, versus the restaurant's 
+*  location.  
 */
 export const Orders = () => {
     const { id } = useParams();
-    const { getOrderById, orderHistory, checkCartNotEmpty, addToCart,clearCartAfterConfirmation, restaurantInfo, fetchItemImageById} = useDataProvider();
+    const { getOrderById, checkCartNotEmpty, addToCart,clearCartAfterConfirmation, restaurantInfo, fetchItemImageById} = useDataProvider();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = React.useRef()
     const navigate = useNavigate();
     const currOrder = getOrderById(id || "");
-
     const [directions, setDirections] = useState(null);
     const [mapsLoaded, setMapsLoaded] = useState(false);
     const [center, setCenter] = useState(null); // 设置初始中心点为null
     const [showInfoWindow, setShowInfoWindow] = useState(false); // 新状态来控制InfoWindow的显示
     const [infoWindowPosition, setInfoWindowPosition] = useState(null);
-    const [travelTime, setTravelTime] = useState('');
+    const [travelTime, setTravelTime] = useState("");
     const [itemImagesSrc, setItemImagesSrc] = useState({});
     const location = useLocation();
 
@@ -49,7 +50,7 @@ export const Orders = () => {
                 if (status === google.maps.GeocoderStatus.OK) {
                     resolve(results[0].geometry.location);
                 } else {
-                    reject('Geocode was not successful for the following reason: ' + status);
+                    reject("Geocode was not successful for the following reason: " + status);
                 }
             });
         });
@@ -137,18 +138,20 @@ export const Orders = () => {
     return (
         <>
             <Flex
-                direction={{ base: 'column', md: 'row' }} 
+                direction={{ base: "column", md: "row" }} 
                 justify="center" 
                 align="center" 
                 p={6} 
                 gap={10} 
-                wrap="wrap" 
+                wrap="wrap"
+                mt="80px"
+                mb="150px"
             >
                 {/* Map Container */}
                 <Box flex="1" minWidth="300px" maxWidth="35%" height="350px">
                     <LoadScriptNext googleMapsApiKey={googleMapsApiKey} onLoad={() => setMapsLoaded(true)} onUnmount={() => setMapsLoaded(false)}>
                         <GoogleMap
-                            mapContainerStyle={{ width: '100%', height: '100%' }}
+                            mapContainerStyle={{ width: "100%", height: "100%" }}
                             center={center}
                             zoom={15}
                         >
@@ -172,7 +175,7 @@ export const Orders = () => {
                 </Box>
     
                 {/* Order Details Box */}
-                <Box title='order-detailed-history-box' id='order-detailed-history-box' fontFamily="'Raleway', sans-serif" bg='#000000' color='#fff' width={['100%', '60%']} w={{base:"20em", sm:"25em", md:"30em"}} maxHeight='350px' p='1.5rem' borderRadius='md' overflowY='auto'>
+                <Box title="order-detailed-history-box" id="order-detailed-history-box" fontFamily="'Raleway', sans-serif" bg='#000000' color='#fff' width={["100%", "60%"]} w={{base:"20em", sm:"25em", md:"30em"}} maxHeight='350px' p='1.5rem' borderRadius='md' overflowY='auto'>
                     <Heading fontSize='25px' pb='1rem'>Order Confirmation</Heading>
                     <Text>Confirmation Number / Order ID: {currOrder.id}</Text>
                     <Text mt='10px'>Order Date/Time: {(currOrder.pickupTime).toDate().toLocaleString()}</Text>

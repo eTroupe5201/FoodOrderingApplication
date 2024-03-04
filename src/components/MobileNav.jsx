@@ -1,12 +1,7 @@
-import { Text } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
 import { useDataProvider } from "../components/dataProvider";
-import { IconButton } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
-import { useDisclosure } from "@chakra-ui/react";
-import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "@chakra-ui/react";
+import { Text, Menu, MenuButton, MenuList, MenuItem, useToast, IconButton, useDisclosure } from "@chakra-ui/react";
+import { useNavigate, Link } from "react-router-dom";
 import { CartModal } from "./CartModal";
 import { auth } from "../utils/firebase" 
 import { signOut } from "firebase/auth";
@@ -48,25 +43,24 @@ export function MobileNav() {
         icon={<HamburgerIcon color="white" />}
       />
       <MenuList border="2px outset tan"bg="black" textAlign="center" fontWeight="bold">
-        <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px",borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }} to="/"> Home </MenuItem>  
-        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }} to="/contact"> Contact </MenuItem>
-        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }} to="/menu"> Order </MenuItem>
+        <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px",borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }} > <Link to="/"> Home </Link></MenuItem>  
+        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }} > <Link to="/contact"> Contact </Link></MenuItem>
+        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }} > <Link to="/menu"> Order </Link></MenuItem>
         {user ? (
-          //TODO: fix temp solution - Link only added here for formatting 
-          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" onClick={logout} fontSize={{ base: "15px" }}> Logout </MenuItem>
+          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" onClick={logout} fontSize={{ base: "15px" }} ml="5px"> Logout </MenuItem>
         ) : (
           <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }} to="/menu"> Login </MenuItem>  
         ) }
 
         {hasCartItems ? (
            <MenuItem bg="black" fontWeight="bold" fontSize={{ base: "15px" }} onClick={onOpen} >
-            <Text color="white"  _hover={{  borderColor: "white 2px" }} fontSize={{ base: "15px" }}>Cart</Text>
+            <Text color="white"  _hover={{  borderColor: "white 2px" }} fontSize={{ base: "16px" }} mt="1px" ml="-4px">Cart</Text>
             <CartModal isOpen={isOpen} onClose={onClose} />
         </MenuItem>
         ) : (
           <MenuItem  fontSize={{ base: "15px" }} bg="black">
-            <Link to="/cart" style={{ opacity: 0.5, cursor: "not-allowed" }}>
-              <Text  _hover={{  borderColor: "white 2px" }} color="white" fontSize={{ base: "0em", sm: "0em" }}>Cart</Text>
+            <Link to="/cart" style={{ opacity: 0.5, cursor: "not-allowed" }} >
+              <Text  _hover={{  borderColor: "white 2px" }} color="white" fontSize={{ base: "0em", sm: "0em" }} >Cart</Text>
             </Link>
           </MenuItem>
         )}

@@ -21,21 +21,23 @@ export const CheckOut = () => {
     
     useEffect(() => {
         const fetchAndSetUserProfile = async () => {
-            const data = await fetchUserProfile();
-            // console.log(data);
-            if (data) {
-                /*
-                    Asynchronous retrieval of user information during component loading, 
-                    and updating form fields with setValue after obtaining the data. 
-                    In this way, the user's personal information will be automatically filled in the form, 
-                    and if the user updates the information, the updated information will also be sent when submitting the form
-                */
-                setValue("firstName", data.firstName);
-                setValue("lastName", data.lastName);
-                setValue("email", data.email);
-                setValue("phone", data.phone);
-                //...other fields in future
-            }
+            try {
+                const data = await fetchUserProfile();
+                // console.log(data);
+                if (data) {
+                    /*
+                        Asynchronous retrieval of user information during component loading, 
+                        and updating form fields with setValue after obtaining the data. 
+                        In this way, the user's personal information will be automatically filled in the form, 
+                        and if the user updates the information, the updated information will also be sent when submitting the form
+                    */
+                    setValue("firstName", data.firstName);
+                    setValue("lastName", data.lastName);
+                    setValue("email", data.email);
+                    setValue("phone", data.phone);
+                    //...other fields in future
+                }
+            } catch (error) {console.log(error.message)}
         };
 
         fetchAndSetUserProfile();
@@ -64,7 +66,7 @@ export const CheckOut = () => {
 
     return (
         <Center><Container margin="5em" mb="5em" >
-        <form  title='checkout-form' onSubmit={handleSubmit(onSubmit)}>
+        <form title="checkout-form" onSubmit={handleSubmit(onSubmit)}>
             <Accordion 
             defaultIndex={[0, 1, 2]} allowMultiple>
 

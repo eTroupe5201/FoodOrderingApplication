@@ -169,6 +169,7 @@ export const placeorder = onCall(async (request) => {
                 </li>
               `).join('')}
             </ul>
+            <p>Comments: ${draft.comments} </p>
             <p>Subtotal: $${draft.subTotal.toFixed(2)}</p>
             <p>Total: $${draft.total.toFixed(2)}</p>
             <p>If you need any assistance, feel free to contact us at ${restaurant.phone}.</p>

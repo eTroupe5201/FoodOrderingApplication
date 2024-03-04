@@ -1,16 +1,16 @@
 # Welcome to Divine Delicacies, a Restaurant ordering website 
 This web application is an ordering website for guests to place orders. It includes login/registration, menu browsing, cart building, and order placement.
 
-# React + Vite
+<!-- # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:<br/>
 
-### Run on our code: http://localhost:5173/
-
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh <br/>
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh <br/> -->
+
+### Run locally on our code: http://localhost:5173/
 
 # Front-end
 

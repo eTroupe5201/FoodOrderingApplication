@@ -6,7 +6,6 @@ import { BottomButton } from "../components/BottomButton";
 import { useNavigate } from "react-router-dom";
 import { calculateOrderSubtotal, calculateOrderTax, calculateOrderTotal } from "../utils/calculations"
 
-//Page for cart management
 export const Cart = () => {
 
     //we change the logic here,we fetch the item data from the database and setlines in cart page, for cancelling item 
@@ -16,9 +15,13 @@ export const Cart = () => {
     useEffect(() => {
         // Define an asynchronous function to retrieve shopping cart items
         const fetchItems = async () => {
-          const items = await fetchCartItems();
-          // Directly use setLines from middleware to update the status of lines
-          setLines(items); // This assumes that setLines is passed from middleware
+          try {
+            const items = await fetchCartItems();
+            // Directly use setLines from middleware to update the status of lines
+            setLines(items); // This assumes that setLines is passed from middleware
+          } catch (error) {
+            console.log(error.message);
+          }
         };
       
         // Calling asynchronous functions
@@ -42,7 +45,7 @@ export const Cart = () => {
                 variant: "spicy"
          * 
          */
-        <VStack px={4} py={2} mt={4} font-family="'Raleway', sans-serif">
+        <VStack title='cart-item-list' px={4} py={2} mt={4} fontFamily="'Raleway', sans-serif">
             {lines.map((line, index) => (
                 <Flex key={index} justify="space-between" w="100%">
                     <Heading flex={1} fontSize={16} maxW={50}>
