@@ -492,6 +492,12 @@ export const contactUsSubmit = onCall(async (request) => {
   return {id: contactForm.id, contactForm: draft};
 });
 
+export const ridersHandler = onCall(async (request) => {
+  return;
+});
+export const updateOrderStatus = onCall(async (request) => {
+  return;
+});
 /**
  * Import function triggers from their respective submodules:
  *
