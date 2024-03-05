@@ -13,7 +13,7 @@ import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } fro
 */
 export const Orders = () => {
     const { id } = useParams();
-    const { getOrderById, travelTime, checkCartNotEmpty, addToCart,clearCartAfterConfirmation, restaurantInfo, fetchItemImageById, deliveryFirstname, deliveryLastname } = useDataProvider();
+    const { getOrderById, travelTime, hasCartItems, addToCart,clearCartAfterConfirmation, restaurantInfo, fetchItemImageById, deliveryFirstname, deliveryLastname } = useDataProvider();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = React.useRef()
     const navigate = useNavigate();
@@ -27,7 +27,10 @@ export const Orders = () => {
     const location = useLocation();
 
     const handleReplaceOrder = async () => {
-        onClose();
+        try {
+            clearCartAfterConfirmation();
+        } catch (error) {console.log(error.message);}
+
         //for each item in currOrder, do addToCart
         currOrder?.lines?.forEach((item) => {
             console.log(item);
@@ -186,7 +189,7 @@ export const Orders = () => {
                     <Text>{currOrder.comments}</Text>
                     <Center mt='30px'>
                         <Stack direction='row' spacing='24px'>
-                            <Button fontWeight='bold' onClick={checkCartNotEmpty ? onOpen : handleReplaceOrder}>Copy Order</Button>
+                            <Button fontWeight='bold' onClick={hasCartItems ? onOpen : handleReplaceOrder}>Copy Order</Button>
                             <Button fontWeight='bold' onClick={() => navigate("/profile")}>Go Back</Button>
                         </Stack>
                     </Center>
@@ -210,10 +213,7 @@ export const Orders = () => {
     
                         <AlertDialogFooter>
                             <Button ref={cancelRef} onClick={onClose}>Cancel</Button>
-                            <Button colorScheme='red' ml={3} onClick={() => {
-                                clearCartAfterConfirmation();
-                                handleReplaceOrder();
-                            }}>
+                            <Button colorScheme='red' ml={3} onClick={ handleReplaceOrder }>
                                 Copy Order
                             </Button>
                         </AlertDialogFooter>
