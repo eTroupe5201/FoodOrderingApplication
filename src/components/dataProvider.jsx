@@ -7,6 +7,8 @@ import { collection, doc, getDoc, getDocs, onSnapshot, deleteDoc, query, limit, 
 import { db, auth, functions } from "../utils/firebase";
 import { signInAnonymously } from "firebase/auth";
 import { httpsCallable } from "firebase/functions";
+// import { getLatLng } from "../utils/getLatLing";
+import { getFirestore,  where } from "firebase/firestore";
 
 
 const DataProviderContext = createContext({ 
@@ -18,7 +20,8 @@ const DataProviderContext = createContext({
     addToCart: () => {},
     removeCartItem: () => {},
     checkout: () => Promise.resolve(""),
-    checkIfEmailRegistered: () => Promise.resolve(false),
+    
+    
 });
 
 // export const useDataProviderForEmailCode = () => useContext(DataProviderEmailCodeContext);
@@ -304,6 +307,29 @@ const storeContactUsForm = async (formInfo) => {
     fetchData();
   }, []);
 
+const isUserInDatabase = async (user) => {
+    
+      const email = user.email;
+      console.log("Email:", email);
+      try {
+        const db = getFirestore();
+        const usersCollectionRef = collection(db, "users"); // Replace "users" with your actual collection name
+        const querySnapshot = await getDocs(query(usersCollectionRef, where("email", "==", email)));
+  
+        if (!querySnapshot.empty) {
+        return true;
+  
+        } else {
+            console.log("User not found");
+           return false;
+        }
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        return false;
+    }
+  }
+
+   
 
   /** 
    * if is ready is false, which means we still fetch nothing from our database, it will show a spin(The pattern of loading items waiting)
@@ -316,7 +342,13 @@ const storeContactUsForm = async (formInfo) => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-    <DataProviderContext.Provider value={{ user, lines, setLines, restaurantInfo, categories, items, cartChanged, setCartChanged, checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, getItemsByCategory, getItemById, addToCart, removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, order, checkIfEmailRegistered}}>
+
+    <DataProviderContext.Provider value={{ user, order, lines, setLines, restaurantInfo, categories, items, cartChanged, orderHistory, 
+    checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchItemImageById, fetchOrder, getItemsByCategory, getItemById, addToCart, setCartChanged,
+    removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, setOrder, generateOrder, getOrderById,
+    handleOrder, getOrderHistory, updateUserAccount, travelTime, setTravelTime, findAndAssignDeliveryPerson, deliveryFirstname, setdeliveryFirstname,
+    deliveryLastname, setdeliveryLastname, isUserInDatabase}}>
+
       {isReady ? (
         children
       ) : (

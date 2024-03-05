@@ -3,6 +3,7 @@
 import { Accordion, AccordionButton, AccordionItem, AccordionPanel,Center, Box, SimpleGrid, Heading, Image, Link, Text } from "@chakra-ui/react";
 import { useDataProvider } from "../components/dataProvider";
 import { useNavigate } from "react-router-dom";
+const MAX_DESCRIPTION_LENGTH = 70; // Set your desired maximum length
 
 // the HomePage will be our default page after log in
 export const Menu = () => {
@@ -49,6 +50,7 @@ export const Menu = () => {
                             borderColor="tan"
                             border-radius="25px"
                             padding="15px"
+                            _active={{transform: "translateY(2px)", bg:"white",boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)"}}
                             maxWidth={{ base: "100%", md: "100%", lg: "100%" }}
                              mb={2}
                              _hover={{ boxShadow: "0 0 10px 1px tan"}} >
@@ -61,6 +63,12 @@ export const Menu = () => {
                                      fontSize={{ base: "12px", sm: "13px", md:"14px", lg: "15px", xl: "15px" }} >
                                         {item.label}
                                     </Heading>
+                                    <Text height="6m" maxHeight="6em" textOverflow="ellipsis" fontFamily="'Raleway', sans-serif"
+                                      fontSize={{ base: "11px", sm: "12px", md:"13px", lg: "14px", xl: "15px" }} 
+                                         fontWeight="bold"> {item.description.length > MAX_DESCRIPTION_LENGTH
+                                            ? `${item.description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
+                                            : item.description} </Text>
+                   
                                 {/* <Text padding="15px" fontSize={{ base: "12px", md: "13px", lg: "14px" }} >{item.description}</Text>
                                  */}
                                 <Text fontSize={14} fontWeight="bold">${item.price.toFixed(2)}</Text>

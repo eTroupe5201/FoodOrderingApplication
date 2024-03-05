@@ -21,6 +21,9 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.7",
+    "@paypal/checkout-server-sdk": "^1.0.3",
+    "@react-google-maps/api": "^2.19.3",
+    "dotenv": "^16.4.5",
     "eslint": "^8.55.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.33.2",
@@ -39,6 +42,10 @@
     "react-google-button": "^0.7.2",
     "react-hook-form": "^7.50.1",
     "react-icons": "^5.0.1",
+    "react-phone-input-2": "^2.15.1",
+    "react-social-login-buttons": "^4.1.0",
+    "react-twitter-login": "^1.5.0",
+    "serializer.ts": "^0.0.12",
     "universal-react-logger": "^1.0.6"
   },
   "devDependencies": {
@@ -48,6 +55,7 @@
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",
+    "cypress": "^13.6.6",
     "eslint": "^8.55.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.33.2",

@@ -14,4 +14,5 @@ describe("Home page", () => {
         const homePage = screen.getByTitle("home-page");
         expect(homePage).toBeInTheDocument();
     })
+   
 });

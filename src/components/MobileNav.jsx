@@ -55,7 +55,7 @@ export function MobileNav() {
           //TODO: fix temp solution - Link only added here for formatting 
           <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" onClick={logout} fontSize={{ base: "15px" }}> <Link> Logout </Link> </MenuItem>
         ) : (
-          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/login"> Login </Link> </MenuItem>  
+          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}><Link to="/login">Login</Link>  </MenuItem>  
         ) }
 
         {hasCartItems ? (

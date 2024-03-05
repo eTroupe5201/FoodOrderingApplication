@@ -32,6 +32,7 @@ import { DataProvider } from "./components/dataProvider";
  * 
  * contact page will be contact with the app developer
 */
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -99,7 +100,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-      <ChakraProvider>
+      <ChakraProvider >
         <DataProvider>
             <RouterProvider router={router} />
         </DataProvider>
