@@ -14,7 +14,6 @@
 
 /*Combined, just on page refresh*/
 
-  
  
 * {
     box-sizing: border-box;
@@ -334,21 +333,46 @@ body {
 
 }
 
+.tab{
+    min-height: 100%;
+}
+
+
 #login-form-box{
     font-family: 'Raleway', sans-serif;
     text-align: center;
     justify-content: center;
     align-items: center;
-    margin-top: 5%;
-    margin-bottom: 20%;
-    border-radius: 25px;
-    border: tan 2px outset;
+   
     color: white;
-    padding: 5%;
+   
     display: grid;
     background-color: black;
  
 }
+.slider {
+    display: flex;
+    overflow: hidden;
+  }
+  
+  .slide {
+    flex: 0 0 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .slide.active {
+    opacity: 1;
+  }
+  
+/* .paypal-button {
+    width: 100%; 
+    height: auto; 
+    max-width: 500px; 
+    display: block; 
+    margin: 0 auto; 
+} */
+
 
 /* .paypal-button {
     width: 100%; 

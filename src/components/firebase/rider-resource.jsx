@@ -19,15 +19,15 @@ import { MdOutlineDeliveryDining } from "react-icons/md";
 
 const validateEmail = (value) => {
     const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-    return regex.test(value) ? undefined : 'Invalid email';
+    return regex.test(value) ? undefined : "Invalid email";
 };
 
 const statusChoices = [
-    { id: 'waiting', name: 'Waiting order' },
-    { id: 'accepted', name: 'Order accepted' },
-    { id: 'delivering', name: 'Delivery in progress' },
-    { id: 'arriving', name: 'Arriving soon' },
-    { id: 'arrived', name: 'Order arrived' },
+    { id: "waiting", name: "Waiting order" },
+    { id: "accepted", name: "Order accepted" },
+    { id: "delivering", name: "Delivery in progress" },
+    { id: "arriving", name: "Arriving soon" },
+    { id: "arrived", name: "Order arrived" },
   ];
 
 const DeliveryPersonForm = () => {
@@ -41,8 +41,8 @@ const DeliveryPersonForm = () => {
         <TextInput source="orderId" fullWidth />
         <SelectInput source="status" choices={statusChoices} label="Status" validate={[required()]} fullWidth />
         <SelectInput source="isFree" label="Is Free" choices={[
-          { id: true, name: 'Free' },
-          { id: false, name: 'Busy' }
+          { id: true, name: "Free" },
+          { id: false, name: "Busy" }
         ]} fullWidth />
       </SimpleForm>
     );
@@ -74,12 +74,12 @@ const DeliveryPersonList = () => (
           label="Status"
           render={record => {
             const status = statusChoices.find(choice => choice.id === record.status);
-            return status ? status.name : '';
+            return status ? status.name : "";
           }}
         />
         <FunctionField
           label="Is Free"
-          render={record => record.isFree ? 'Free' : 'Busy'}
+          render={record => record.isFree ? "Free" : "Busy"}
         />
         <DateField source="createdate" showTime label="Created At" />
         <DateField source="lastupdate" showTime label="Updated At" />

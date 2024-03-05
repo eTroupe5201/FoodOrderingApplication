@@ -1,4 +1,3 @@
- 
 /* eslint-disable no-unused-vars */
  
 import React, { createContext, useContext, useEffect, useState, useRef} from "react";
@@ -7,6 +6,8 @@ import { collection, doc, getDoc, getDocs, onSnapshot, deleteDoc, query, limit, 
 import { db, auth, functions } from "../utils/firebase";
 import { signInAnonymously } from "firebase/auth";
 import { httpsCallable } from "firebase/functions";
+import { getFirestore,  where } from "firebase/firestore";
+
 // import { getLatLng } from "../utils/getLatLing";
 
 
@@ -39,9 +40,9 @@ export const DataProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [cartChanged, setCartChanged] = useState(false);
   const [orderHistory, setOrderHistory] = useState([]);
-  const [travelTime, setTravelTime] = useState('');
-  const [deliveryFirstname, setdeliveryFirstname ] = useState('');
-  const [deliveryLastname, setdeliveryLastname ] = useState('');
+  const [travelTime, setTravelTime] = useState("");
+  const [deliveryFirstname, setdeliveryFirstname ] = useState("");
+  const [deliveryLastname, setdeliveryLastname ] = useState("");
   const toast = useToast();
   // const [paypalId, setpaypalId] = useState();
 
@@ -371,7 +372,7 @@ const getOrderById = (orderId) => {
 
       return response.data;
     } catch (error) {
-      console.error('Error message:', error);
+      console.error("Error message:", error);
       // return { error: error.message };
     }
   }
@@ -490,6 +491,27 @@ const getOrderHistory = async () => {
   useEffect(() => {
     fetchData();
   }, []);
+  const isUserInDatabase = async (user) => {
+    
+    const email = user.email;
+    console.log("Email:", email);
+    try {
+      const db = getFirestore();
+      const usersCollectionRef = collection(db, "users"); // Replace "users" with your actual collection name
+      const querySnapshot = await getDocs(query(usersCollectionRef, where("email", "==", email)));
+
+      if (!querySnapshot.empty) {
+      return true;
+
+      } else {
+          console.log("User not found");
+         return false;
+      }
+  } catch (error) {
+      console.error("Error fetching user:", error);
+      return false;
+  }
+}
 
 
   /** 
@@ -508,7 +530,8 @@ const getOrderHistory = async () => {
     checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchItemImageById, fetchOrder, getItemsByCategory, getItemById, addToCart, setCartChanged,
     removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, setOrder, generateOrder, getOrderById,
     handleOrder, getOrderHistory, updateUserAccount, travelTime, setTravelTime, findAndAssignDeliveryPerson, deliveryFirstname, setdeliveryFirstname,
-    deliveryLastname, setdeliveryLastname}}>
+    deliveryLastname, setdeliveryLastname, isUserInDatabase}}>
+
 
       {isReady ? (
         children
