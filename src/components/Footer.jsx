@@ -15,7 +15,7 @@ export function Footer() {
                     <Box colSpan={{base: 1, md:4,  xl: 4}}>
                         <Heading fontSize={{ base: "15px", md: "20px", lg: "30px" }}  fontFamily="'Raleway', sans-serif " mb={5} mt={10}>About Us</Heading>
                     
-                    <Center><Image height="10"src="src\assets\White-Favicon.png"></Image></Center>
+                    <Center><Image height="10"src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/assets/White-Favicon.png"></Image></Center>
             
                     <Text fontSize={{ base: "12px",md: "15px", lg: "18px"}} mt={5}>
                         Discover culinary excellence at Devine Delicacies. We are passionate about crafting 
@@ -34,8 +34,8 @@ export function Footer() {
                 <li><Link to="/contact"><Text >Contact Us</Text></Link></li>
                 <li><Link to="/menu"><Text >Order</Text></Link></li>
                 <li><Link to="/login"><Text >Login</Text></Link></li>
-                <li><Link to="/contact"><Text>Contact</Text></Link></li>
-                <li><Link to="/info"><Text>About</Text></Link></li>
+                {/* <li><Link to="/contact"><Text>Contact</Text></Link></li> */}
+                {/* <li><Link to="/info"><Text>About</Text></Link></li> */}
                 </ul>
                  
                     </Grid>

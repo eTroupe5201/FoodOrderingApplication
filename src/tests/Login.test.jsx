@@ -5,11 +5,6 @@ import { afterEach, describe, it, expect, vi} from "vitest";
 import { act } from "react-dom/test-utils";
 import userEvent from "@testing-library/user-event";
 
-//Firebase integration tests must be done within functions > test due to firebase/analytics restrictions 
-    //TODO: should navigate Home if Login successful
-    //TODO: should navigate to Register if clicked
-    //TODO: should navigate to ForgotPassword if clicked
-
 describe("Login page", () => {
     let emailInput;
     let passwordInput; 

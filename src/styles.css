@@ -85,7 +85,6 @@
     display: flex; 
     align-items: center; 
     padding: .25rem;
-
 }
 
 .nav button:hover{
@@ -110,14 +109,14 @@
     margin-bottom: 15px;
 }
 
-.Contact, .Login, .Register {
+.Contact, .Login, .Register, .EditProfile, .Profile, .Orders{
     font-family: 'Raleway', sans-serif;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center; 
     border-radius: 25px;
-   
+    margin-bottom: 10%;
 }
 
 .Contact, .Login {
@@ -128,7 +127,7 @@
     padding-top: 0.5rem;
 }
 
-.Contact input, .Login input, .Register input {
+.Contact input, .Login input, .Register input, .EditProfile input{
     width: stretch;
     height: 2.5rem;
     font-family: 'Raleway', sans-serif;
@@ -285,10 +284,6 @@ body {
    border: white 2px solid;
  }
 
-
-
-
-
 .SliderContent{
     font-family: 'Raleway', sans-serif;
     text-align: center;
@@ -337,9 +332,11 @@ body {
    
 
 }
+
 .tab{
     min-height: 100%;
 }
+
 
 #login-form-box{
     font-family: 'Raleway', sans-serif;
@@ -368,6 +365,15 @@ body {
     opacity: 1;
   }
   
+/* .paypal-button {
+    width: 100%; 
+    height: auto; 
+    max-width: 500px; 
+    display: block; 
+    margin: 0 auto; 
+} */
+
+
 /* .paypal-button {
     width: 100%; 
     height: auto; 

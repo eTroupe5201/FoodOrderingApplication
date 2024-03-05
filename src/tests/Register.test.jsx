@@ -23,7 +23,7 @@ describe("Register page", () => {
         };
     }
 
-    afterEach(() => { vi.clearAllMocks;});
+    afterEach(() => { vi.clearAllMocks();});
     
     it ("should log via the mockConsole", () => {
         const mockConsole = vi.spyOn(console, "log").mockImplementation(() => undefined);
@@ -73,13 +73,17 @@ describe("Register page", () => {
         firstNameInput = screen.getByTitle("register-first-name");
         lastNameInput = screen.getByTitle("register-last-name");
         emailInput = screen.getByTitle("register-email");
+        confirmEmailInput = screen.getByTitle("register-confirm-email");
         passwordInput = screen.getByTitle("register-password");
+        confirmPasswordInput = screen.getByTitle("register-confirm-password");
         
         await act(async () => {
-            await user.type(firstNameInput, "  ");
+            await user.type(firstNameInput, " ");
             await user.type(lastNameInput, "Ramsey");
             await user.type(emailInput, "testing@test.com");
-            await user.type(passwordInput, "test123");
+            await user.type(confirmEmailInput, "testing@test.com");
+            await user.type(passwordInput, "123ValidPw");
+            await user.type(confirmPasswordInput, "123ValidPw");
             await user.click(screen.getByTitle("register-register-button"));
         });
         
@@ -96,13 +100,17 @@ describe("Register page", () => {
         firstNameInput = screen.getByTitle("register-first-name");
         lastNameInput = screen.getByTitle("register-last-name");
         emailInput = screen.getByTitle("register-email");
+        confirmEmailInput = screen.getByTitle("register-confirm-email");
         passwordInput = screen.getByTitle("register-password");
-        
+        confirmPasswordInput = screen.getByTitle("register-confirm-password");
+
         await act(async () => {
             await user.type(firstNameInput, "Gordon");
-            await user.type(lastNameInput, " - ");
+            await user.type(lastNameInput, " ");
             await user.type(emailInput, "testing@test.com");
-            await user.type(passwordInput, "test123");
+            await user.type(confirmEmailInput, "testing@test.com");
+            await user.type(passwordInput, "123ValidPw");
+            await user.type(confirmPasswordInput, "123ValidPw");
             await user.click(screen.getByTitle("register-register-button"));
         });
         
@@ -119,13 +127,17 @@ describe("Register page", () => {
         firstNameInput = screen.getByTitle("register-first-name");
         lastNameInput = screen.getByTitle("register-last-name");
         emailInput = screen.getByTitle("register-email");
+        confirmEmailInput = screen.getByTitle("register-confirm-email");
         passwordInput = screen.getByTitle("register-password");
-        
+        confirmPasswordInput = screen.getByTitle("register-confirm-password");
+
         await act(async () => {
             await user.type(firstNameInput, "Gordon");
             await user.type(lastNameInput, "Ramsey");
-            await user.type(emailInput, "testing.com");
-            await user.type(passwordInput, "test123");
+            await user.type(emailInput, "testingtest.com");
+            await user.type(confirmEmailInput, "testing@test.gov");
+            await user.type(passwordInput, "123ValidPw");
+            await user.type(confirmPasswordInput, "123ValidPw");
             await user.click(screen.getByTitle("register-register-button"));
         });
         
@@ -142,13 +154,17 @@ describe("Register page", () => {
         firstNameInput = screen.getByTitle("register-first-name");
         lastNameInput = screen.getByTitle("register-last-name");
         emailInput = screen.getByTitle("register-email");
+        confirmEmailInput = screen.getByTitle("register-confirm-email");
         passwordInput = screen.getByTitle("register-password");
-        
+        confirmPasswordInput = screen.getByTitle("register-confirm-password");
+
         await act(async () => {
             await user.type(firstNameInput, "Gordon");
             await user.type(lastNameInput, "Ramsey");
             await user.type(emailInput, "testing@test.com");
-            await user.type(passwordInput, " ");
+            await user.type(confirmEmailInput, "testing@test.com");
+            await user.type(passwordInput, "tooshort");
+            await user.type(confirmPasswordInput, "tooshort");
             await user.click(screen.getByTitle("register-register-button"));
         });
         
@@ -175,8 +191,8 @@ describe("Register page", () => {
             await user.type(lastNameInput, "Ramsey");
             await user.type(emailInput, "testing@test.com");
             await user.type(confirmEmailInput, "testing@test.gov");
-            await user.type(passwordInput, "test123");
-            await user.type(confirmPasswordInput, "test123");
+            await user.type(passwordInput, "123ValidPw");
+            await user.type(confirmPasswordInput, "123ValidPw");
             await user.click(screen.getByTitle("register-register-button"));
         });
         
@@ -204,8 +220,8 @@ describe("Register page", () => {
             await user.type(lastNameInput, "Ramsey");
             await user.type(emailInput, "testing@test.com");
             await user.type(confirmEmailInput, "testing@test.com");
-            await user.type(passwordInput, "test123");
-            await user.type(confirmPasswordInput, "test456");
+            await user.type(passwordInput, "456ValidPw");
+            await user.type(confirmPasswordInput, "123ValidPw");
             await user.click(screen.getByTitle("register-register-button"));
         });
         
@@ -233,12 +249,13 @@ describe("Register page", () => {
             await user.type(lastNameInput, "Ramsey");
             await user.type(emailInput, "testing@test.com");
             await user.type(confirmEmailInput, "testing@test.com");
-            await user.type(passwordInput, "test123");
-            await user.type(confirmPasswordInput, "test123");
+            await user.type(passwordInput, "123ValidPw");
+            await user.type(confirmPasswordInput, "123ValidPw");
             await user.click(screen.getByTitle("register-register-button"));
         });
         
         expect(mockConsole).toHaveBeenCalled();
         expect(mockConsole).toHaveBeenNthCalledWith(2, "valid registration input");
     });
+   
 });

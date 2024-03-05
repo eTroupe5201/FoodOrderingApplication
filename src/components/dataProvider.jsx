@@ -532,6 +532,7 @@ const getOrderHistory = async () => {
     handleOrder, getOrderHistory, updateUserAccount, travelTime, setTravelTime, findAndAssignDeliveryPerson, deliveryFirstname, setdeliveryFirstname,
     deliveryLastname, setdeliveryLastname, isUserInDatabase}}>
 
+
       {isReady ? (
         children
       ) : (

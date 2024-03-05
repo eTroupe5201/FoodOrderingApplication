@@ -13,9 +13,13 @@ export const CartModal = ({ isOpen, onClose }) => {
     useEffect(() => {
         // Define an asynchronous function to retrieve shopping cart items
         const fetchItems = async () => {
-          const items = await fetchCartItems();
-          // Directly use setLines from middleware to update the status of lines
-          setLines(items); // This assumes that setLines is passed from middleware
+          try {
+            const items = await fetchCartItems();
+            // Directly use setLines from middleware to update the status of lines
+            setLines(items); // This assumes that setLines is passed from middleware
+          } catch (error) {
+            console.log(error.message);
+          }
         };
       
         // Calling asynchronous functions
@@ -27,6 +31,7 @@ export const CartModal = ({ isOpen, onClose }) => {
     // }
 
     return (
+        <div data-testid="cart-modal">
         <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">
             <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(-10deg)' />
             <ModalContent
@@ -45,14 +50,16 @@ export const CartModal = ({ isOpen, onClose }) => {
                 justifyContent="center" // Center content vertically
                 padding="1rem"
             >
-                <ModalHeader>Shopping Cart</ModalHeader>
+                <ModalHeader title="cart-modal-header">Shopping Cart</ModalHeader>
                 <ModalCloseButton
                     color="white"
                     background="black"
                     border="white solid 1px"
                     _hover={{ boxShadow: "0 0 10px 1px tan" }}
+                    title="cart-modal-close-button"
                 />
                 <ModalBody>
+
                 <VStack px={4} py={2} mt={4} font-family="'Raleway', sans-serif">
             {lines.map((line, index) => (
                 <Flex key={index} justify="space-between" w="100%">
@@ -90,10 +97,46 @@ export const CartModal = ({ isOpen, onClose }) => {
                             
                         />
                     </Flex>
+
+                    <VStack title="cart-modal-lines" px={4} py={2} mt={4} fontFamily="'Raleway', sans-serif">
+                        {lines.map((line, index) => (
+                            <Flex key={index} justify="space-between" w="100%">
+                                <Heading flex={1} fontSize={16} maxW={50}>
+                                    {line.quantity}x
+                                </Heading>
+                                <Box flex={5}>
+                                    <Heading fontSize={16}>{line.label}</Heading>
+                                    {line.value?.map((value, valueIndex) => (
+                                        <Text key={valueIndex} color="red">{value.value}</Text>
+                                    ))}
+                                </Box>
+                                <Box flex={1}>
+                                    <Heading fontSize={16} textAlign="right">
+                                        ${line.price.toFixed(2)}
+                                    </Heading>
+                                    {line.value?.map((value, valueIndex) => (
+                                        <Text key={valueIndex} textAlign="right" color="white">
+                                            +${value.price.toFixed(2)}
+                                        </Text>
+                                    ))}
+                                </Box>
+                                <Flex justify="flex-end" flex={1} maxW={10}>
+                                    <IconButton
+                                        size="xs"
+                                        color="white"
+                                        background="black"
+                                        border="white solid 1px"
+                                        _hover={{ boxShadow: "0 0 10px 1px tan" }}
+                                        onClick={() => removeCartItem(line.id)}
+                                        icon={<GrClose />}
+                                        aria-label="Remove from cart"
+                                    />
+                                </Flex>
+
                             </Flex>
                         ))}
                         <Divider />
-                        <VStack w="100%">
+                        <VStack title="cart-modal-costs" w="100%">
                             <Flex w="100%" justify="space-between" color="white">
                                 <Text fontSize={12}>Sub-Total</Text>
                                 <Text fontSize={12}>${calculateOrderSubtotal(lines).toFixed(2)}</Text>
@@ -111,9 +154,10 @@ export const CartModal = ({ isOpen, onClose }) => {
                         </VStack>
                     </VStack>
                 </ModalBody>
-                <ModalFooter>
+                <ModalFooter title="cart-modal-footer">
                     <Link to="/menu">
                         <Button
+                            title="continue-button"
                             mr={3}
                             color="white"
                             background="black"
@@ -143,5 +187,6 @@ export const CartModal = ({ isOpen, onClose }) => {
                 </ModalFooter>
             </ModalContent>
         </Modal>
+        </div>
     );
 };

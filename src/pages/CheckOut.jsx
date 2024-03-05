@@ -6,6 +6,7 @@ import { useDataProvider } from "../components/dataProvider"
 import { calculateOrderTotal, } from "../utils/calculations";
 import { PAYMENT_METHODS } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
+import "../styles.css";
 
 
 export const CheckOut = () => {
@@ -20,21 +21,23 @@ export const CheckOut = () => {
     
     useEffect(() => {
         const fetchAndSetUserProfile = async () => {
-            const data = await fetchUserProfile();
-            console.log(data);
-            if (data) {
-                /*
-                    Asynchronous retrieval of user information during component loading, 
-                    and updating form fields with setValue after obtaining the data. 
-                    In this way, the user's personal information will be automatically filled in the form, 
-                    and if the user updates the information, the updated information will also be sent when submitting the form
-                */
-                setValue("firstName", data.firstName);
-                setValue("lastName", data.lastName);
-                setValue("email", data.email);
-                setValue("phone", data.phone);
-                //...other fields in future
-            }
+            try {
+                const data = await fetchUserProfile();
+                // console.log(data);
+                if (data) {
+                    /*
+                        Asynchronous retrieval of user information during component loading, 
+                        and updating form fields with setValue after obtaining the data. 
+                        In this way, the user's personal information will be automatically filled in the form, 
+                        and if the user updates the information, the updated information will also be sent when submitting the form
+                    */
+                    setValue("firstName", data.firstName);
+                    setValue("lastName", data.lastName);
+                    setValue("email", data.email);
+                    setValue("phone", data.phone);
+                    //...other fields in future
+                }
+            } catch (error) {console.log(error.message)}
         };
 
         fetchAndSetUserProfile();
@@ -63,7 +66,7 @@ export const CheckOut = () => {
 
     return (
         <Center><Container margin="5em" mb="5em" >
-        <form  title='checkout-form' onSubmit={handleSubmit(onSubmit)}>
+        <form title="checkout-form" onSubmit={handleSubmit(onSubmit)}>
             <Accordion 
             defaultIndex={[0, 1, 2]} allowMultiple>
 
@@ -107,6 +110,16 @@ export const CheckOut = () => {
                                     title='checkout-phone'
                                     placeholder="Phone"
                                     {...register("phone", { required: true })}
+                                />
+                                <FormErrorMessage>Required</FormErrorMessage>
+                            </FormControl>
+                            <FormControl isInvalid={!!errors?.address?.type}>
+                                <FormLabel>Address</FormLabel>
+                                <Input
+                                    border="outset 2px tan"
+                                    title='checkout-address'
+                                    placeholder="Address"
+                                    {...register("address", { required: true })}
                                 />
                                 <FormErrorMessage>Required</FormErrorMessage>
                             </FormControl>
@@ -154,10 +167,10 @@ export const CheckOut = () => {
                 </AccordionItem>
             </Accordion>
             <BottomButton color="white" bg="black" border="tan 2px outset"
-                title='checkout-button'
-                label="Place pick up order"
-                total={calculateOrderTotal(lines, 10).toFixed(2)}
-            />
+            title='checkout-button'
+            label="Place pick up order"
+            total={calculateOrderTotal(lines, 10).toFixed(2)}
+            />        
         </form>
         </Container></Center>  
     );

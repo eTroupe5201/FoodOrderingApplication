@@ -1,6 +1,6 @@
-/* eslint-disable no-unused-vars */
+///* eslint-disable no-unused-vars */
 ///* eslint-disable react/jsx-key */
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel,Center, Box, SimpleGrid, Heading, Image, Link, Text } from "@chakra-ui/react";
+import { Center, Box, SimpleGrid, Heading, Image, Link, Text } from "@chakra-ui/react";
 import { useDataProvider } from "../components/dataProvider";
 import { useNavigate } from "react-router-dom";
 const MAX_DESCRIPTION_LENGTH = 70; // Set your desired maximum length
@@ -8,7 +8,7 @@ const MAX_DESCRIPTION_LENGTH = 70; // Set your desired maximum length
 // the HomePage will be our default page after log in
 export const Menu = () => {
     const navigate = useNavigate();
-    const { categories, getItemsByCategory } = useDataProvider();
+    const { categories, getItemsByCategory, user } = useDataProvider();
 
     return (
         //I set up 3 categories in one line temporarily, can adjust this syntax later
@@ -37,9 +37,14 @@ export const Menu = () => {
                     {getItemsByCategory(category.id).map((item) => (
                    
             
-                        <Link key={item.id} onClick={() => navigate(`/item/${item.id}`)} _hover={{ textDecoration: "none" }}>
-                           
-                            
+                        // <Link key={item.id} onClick={() => 
+                        //     navigate(`/item/${item.id}`)
+                        // } _hover={{ textDecoration: "none" }}>
+                        <Link key={item.id} onClick={() => {
+                                console.log(user); // 打印当前的user对象
+                                navigate(`/item/${item.id}`);
+                        }} _hover={{ textDecoration: "none" }}>
+                                                      
                             <Box 
                             
                             colSpan={{base: 1, sm:1,  xl: 4}}
@@ -88,6 +93,7 @@ export const Menu = () => {
 
 
 //(Spare item): accordion design style, suitable for iOS/Android mobile devices
+//import { Accordion, AccordionButton, AccordionItem, AccordionPanel,Center, Box, SimpleGrid, Heading, Image, Link, Text } from "@chakra-ui/react";
 
     // return (
 

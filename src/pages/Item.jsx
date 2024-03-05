@@ -67,7 +67,8 @@ export const Item = () => {
       });
 
     const onSubmit = async (values) => {
-        await addToCart(values);
+        const dataToSubmit = { ...values, id: id };
+        await addToCart(dataToSubmit);
     }
 
     /**

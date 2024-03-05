@@ -93,7 +93,11 @@ export function NavBar() {
                 <li><Link to="/menu"> <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Order </Text></Link></li>
                 <li > 
                     {user ? (
-                        <Box  pt="0.25rem" as="button" onClick={logout} ><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}> Logout</Text> </Box>
+                        <Box as="button" onClick={logout} >
+                            <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}> 
+                                Logout
+                            </Text> 
+                        </Box>
                     ) : (
                         <Link to="/login"> <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Login </Text></Link> 
                     ) }

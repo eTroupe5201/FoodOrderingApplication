@@ -335,7 +335,8 @@ const handleSubmitVerification = () => {
 
             // Login successful, Firebase automatically handles the session and token
             const userVerfied = userCredential.user;
-            console.log("userVerified",userVerfied.emailVerified);
+
+
             /**
              * Email authentication is required in order to log in, as the call to the createUserWithEmailAndPassword function 
              * will directly store the user's registration information in firebase authentication. 
@@ -508,7 +509,9 @@ const handleSubmitVerification = () => {
                                 border="tan 2px outset"
                                 {...register("email", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/})}
                             />
+
                             <FormErrorMessage title="emailError">{"Email address is invalid or does not have an account associated with it"}</FormErrorMessage>
+
                         </FormControl>
 
                         <FormControl id="passwordField" isInvalid={!!formState?.errors?.password?.type}>

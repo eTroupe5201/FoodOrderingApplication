@@ -1,10 +1,13 @@
 import React, {useState, useEffect} from "react";
+
 import {Divider, SimpleGrid, Center, Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, useToast} from "@chakra-ui/react";
+
 import { useNavigate } from "react-router-dom";
 import {  useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
 import { auth } from "../utils/firebase" 
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+
 import {FcGoogle} from "react-icons/fc";
 import { FaTwitter} from "react-icons/fa";
 import { AiFillFacebook,  AiFillYahoo} from "react-icons/ai";
@@ -27,16 +30,15 @@ export const Register = ({saveData}) => {
     const [passwordErrorMsg, setPasswordErrorMsg]= useState("Required. See password requirements below.");
     const [emailsMatch, setEmailsMatch] = useState(true);
     const [passwordsMatch, setPasswordsMatch]= useState(true);
-
     const [fromSocialMedia, setFromSocialMedia] = useState(false);
     const [formdata, setformData] = useState(null);
     const [registrationState, setRegistrationState] = useState("initial");
-
     const [showPassword, setShowPassword] = React.useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
     const handleShowPassword= () => setShowPassword(!showPassword)
     const handleShowConfirmPassword= () => setShowConfirmPassword(!showConfirmPassword)
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
  
     useEffect(() => {
         if (registrationState === "waitingForEmailVerification") {
@@ -78,6 +80,7 @@ export const Register = ({saveData}) => {
          
              }
      }
+
 
     const handleTwitterRegister = async () => {
         setFromSocialMedia(true);
@@ -163,6 +166,7 @@ export const Register = ({saveData}) => {
             const result = await signInWithPopup(auth, provider);
             const userForVerification = result.user;
 
+
               toast({
                   title: "Email has sent to be verified!",
                   description: "Please check your email to verify your account.",
@@ -193,7 +197,7 @@ export const Register = ({saveData}) => {
     const handleRegister = async (data) => {
         setFromSocialMedia(false);
         setformData(data);
-        
+=
         try {
             saveData(data);
         } catch (error) {console.log(error);}
@@ -245,7 +249,7 @@ export const Register = ({saveData}) => {
 
     }
 
-    // Logic for handling whether the user has verified their email
+  // Logic for handling whether the user has verified their email
     const handleCheckEmailVerified = async (event) => {
         console.log("checking verification status to store account info"); //console log for testing 
         // Block default form submission behavior
@@ -319,8 +323,6 @@ export const Register = ({saveData}) => {
             });
         }
     };
-
-    
 
     /*
     The default email authentication is sent for form submission, 

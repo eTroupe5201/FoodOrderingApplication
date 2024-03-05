@@ -17,8 +17,9 @@ import { Admin } from "./pages/Admin";
 import { Login } from "./pages/Login"; 
 import { Register } from "./pages/Register";
 import { Profile } from "./pages/Profile"; 
+import { EditProfile } from "./pages/EditProfile"; 
+import { Orders } from "./pages/Orders"; 
 import { ForgotPassword } from "./pages/ForgotPassword";
-
 import "./styles.css";
 import { DataProvider } from "./components/dataProvider";
 
@@ -85,6 +86,14 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
+      },
+      {
+        path: "editprofile",
+        element: <EditProfile />,
+      },
+      {
+        path: "orders/:id",
+        element: <Orders />,
       },
     ],
   },
