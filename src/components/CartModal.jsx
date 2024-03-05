@@ -97,42 +97,7 @@ export const CartModal = ({ isOpen, onClose }) => {
                             
                         />
                     </Flex>
-
-                    <VStack title="cart-modal-lines" px={4} py={2} mt={4} fontFamily="'Raleway', sans-serif">
-                        {lines.map((line, index) => (
-                            <Flex key={index} justify="space-between" w="100%">
-                                <Heading flex={1} fontSize={16} maxW={50}>
-                                    {line.quantity}x
-                                </Heading>
-                                <Box flex={5}>
-                                    <Heading fontSize={16}>{line.label}</Heading>
-                                    {line.value?.map((value, valueIndex) => (
-                                        <Text key={valueIndex} color="red">{value.value}</Text>
-                                    ))}
-                                </Box>
-                                <Box flex={1}>
-                                    <Heading fontSize={16} textAlign="right">
-                                        ${line.price.toFixed(2)}
-                                    </Heading>
-                                    {line.value?.map((value, valueIndex) => (
-                                        <Text key={valueIndex} textAlign="right" color="white">
-                                            +${value.price.toFixed(2)}
-                                        </Text>
-                                    ))}
-                                </Box>
-                                <Flex justify="flex-end" flex={1} maxW={10}>
-                                    <IconButton
-                                        size="xs"
-                                        color="white"
-                                        background="black"
-                                        border="white solid 1px"
-                                        _hover={{ boxShadow: "0 0 10px 1px tan" }}
-                                        onClick={() => removeCartItem(line.id)}
-                                        icon={<GrClose />}
-                                        aria-label="Remove from cart"
-                                    />
-                                </Flex>
-
+                    
                             </Flex>
                         ))}
                         <Divider />
@@ -187,6 +152,6 @@ export const CartModal = ({ isOpen, onClose }) => {
                 </ModalFooter>
             </ModalContent>
         </Modal>
-        </div>
+    </div>
     );
 };

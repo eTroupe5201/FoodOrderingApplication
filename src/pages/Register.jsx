@@ -197,7 +197,7 @@ export const Register = ({saveData}) => {
     const handleRegister = async (data) => {
         setFromSocialMedia(false);
         setformData(data);
-=
+
         try {
             saveData(data);
         } catch (error) {console.log(error);}
