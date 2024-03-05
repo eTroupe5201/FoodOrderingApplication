@@ -3,7 +3,10 @@
 //Note: cd to the funtions path, and run "npm run deploy"
 import admin from 'firebase-admin';
 
-import {onCall, HttpsError } from "firebase-functions/v2/https";
+import { CloudTasksClient } from '@google-cloud/tasks';
+const client = new CloudTasksClient();
+
+import {onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
 import pkg from '@paypal/checkout-server-sdk';
 const { core, orders } = pkg;
@@ -15,6 +18,7 @@ import {
   calculateOrderSubtotal,
   calculateOrderTotal
 } from "./utils/calculations.mjs";
+import { calculateDistanceTime, getLatLng } from "./utils/mapServices.mjs";
 
 
 /**
@@ -37,6 +41,8 @@ admin.initializeApp();
 // Define PayPal environment configuration secrets
 const paypalClientId = defineSecret("PAYPAL_CLIENT_ID");
 const paypalSecretKey = defineSecret("PAYPAL_SECRET_KEY");
+const googleMapsKey = defineSecret("GOOGLEMAPS_SERVER_KEY");
+
 
 //email address hezhihong98@gmail.com 
 //https://nodemailer.com/
@@ -44,9 +50,94 @@ const transport = createTransport({
   host: "sandbox.smtp.mailtrap.io",
   port: 2525,
   auth: {
-    user: "60e6194ecc7e65",
-    pass: "e9b9362aaea175",
+    user: "264ae0c6cf23c7",
+    pass: "aed0a46367cffc",
   },
+});
+
+
+
+async function createTaskForOrderUpdate(orderId, riderId, delayInSeconds, remainingTime, newStatus) {
+  const project = 'food-odering-project-3e43f';
+  const queue = 'orders';
+  const location = 'us-central1';
+  const url = `https://${location}-${project}.cloudfunctions.net/updateOrderStatus`;
+  const payload = {orderId, riderId, remainingTime, newStatus};
+
+  const parent = client.queuePath(project, location, queue);
+  const scheduleTimeSeconds = Math.round(delayInSeconds + Date.now() / 1000);
+  const task = {
+    httpRequest: {
+      httpMethod: 'POST',
+      url,
+      body: Buffer.from(JSON.stringify(payload)).toString('base64'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+    scheduleTime: {
+      seconds: scheduleTimeSeconds,
+    },
+  };
+
+  await client.createTask({parent, task});
+}
+
+export const updateOrderStatus = onRequest(async (req, res) => {
+  if (req.method === "POST") {
+    try {
+      const { orderId, riderId, remainingTime, newStatus } = req.body;
+      const firestore = admin.firestore();
+
+      // 更新订单状态
+      const orderRef = firestore.collection("order").doc(orderId);
+      await orderRef.update({ orderArriveStatus: newStatus, waitingTime: remainingTime });
+      const orderDoc = await orderRef.get();
+      const orderData = orderDoc.data();
+
+      // 更新骑手状态
+      const riderRef = firestore.collection("deliveryperson").doc(riderId);
+      await riderRef.update({ status: newStatus, estimatedTime: remainingTime });
+      if(remainingTime === 0){
+        await riderRef.update({ isFree: true }); //证明骑手已到达，可以重新接单了
+      }
+      const riderDoc = await riderRef.get();
+      const riderData = riderDoc.data();
+
+      // 获取餐厅信息
+      const restaurantDoc = await firestore.doc("restaurant/info").get();
+      const restaurant = restaurantDoc.data();
+
+      //如果已经送达，就不用显示这句话了
+      let remainingTimeParagraph = remainingTime === 0 ? "" : `<p>Expected delivery in <b> ${remainingTime} </b> minutes</p>`;
+
+      // 发送邮件通知
+      let info = await transport.sendMail({
+        to: orderData.email,
+        subject: `${restaurant.name} - Order Status Update`,
+        html: `
+          <div>
+            <h1>Hi ${orderData.firstName}, your order status has been updated.</h1>
+            <p>Order ID: ${orderId}</p>
+            <p>Your order has been accepted by our food delivery staff: ${riderData.firstname} ${riderData.lastname}</p>
+            <p>Your order status now is: ${newStatus}</p>
+            <p>Delivery rider position: Based on GPS tracking of the rider's real-time position, we cannot achieve such precision because the riders are all samples</p>
+            ${remainingTimeParagraph}
+            <p>If you need any assistance, feel free to contact us at ${restaurant.phone}.</p>
+            <p>And you can also contact our food delivery staff at ${riderData.phone}.</p>
+          </div>
+        `
+      });
+
+      console.log("Message sent: %s", info.messageId);
+      res.status(200).send("Order status updated and email sent.");
+    } catch (error) {
+      console.error("Error: %s", error);
+      res.status(500).send("Internal Server Error");
+    }
+  } else {
+    res.status(405).send("Method Not Allowed");
+  }
 });
 
 
@@ -56,6 +147,7 @@ const transport = createTransport({
   that can be called directly from the front-end application without creating an HTTP request
 */
 export const placeorder = onCall(async (request) => {
+
   //Check if the user calling the function has passed authentication. 
   //If the user is not authenticated, the function returns an error.
   if (!request.auth) {
@@ -135,9 +227,12 @@ export const placeorder = onCall(async (request) => {
   // No pending or cancelled orders, continue to create new orders
   const newOrderRef = ordersRef.doc();
   await newOrderRef.set(draft);
-  
 
-  const email = request.data.email;
+  const userRef = await firestore.collection('users').doc(uid).get();
+  const userData = userRef.data();
+
+  // 获取 'email' 字段的值
+  const email = userData.email;
   const restaurantDoc = await firestore.doc("restaurant/info").get();
   const restaurant = restaurantDoc.data();
   console.log(restaurant);
@@ -154,7 +249,7 @@ export const placeorder = onCall(async (request) => {
         html: `
           <div>
             <h1>Hi ${draft.firstName}, your order is confirmed.</h1>
-            <p>Order ID: ${order.id}</p>
+            <p>Order ID: ${draft.id}</p>
             <h2>Restaurant Information:</h2>
             <p>${restaurant.name}</p>
             <p>${restaurant.address}</p>
@@ -172,6 +267,7 @@ export const placeorder = onCall(async (request) => {
             <p>Comments: ${draft.comments} </p>
             <p>Subtotal: $${draft.subTotal.toFixed(2)}</p>
             <p>Total: $${draft.total.toFixed(2)}</p>
+            <p>please pay your order as soon as possible</p>
             <p>If you need any assistance, feel free to contact us at ${restaurant.phone}.</p>
           </div>
         `,
@@ -318,6 +414,121 @@ export const updateCartItem = onCall(async (request) => {
   }
 });
 
+export const ridersHandler = onCall({ secrets: ["GOOGLEMAPS_SERVER_KEY"] }, async (request) => {
+
+  const firestore = admin.firestore();
+  //获取orderId
+  const orderId = request.data.orderId;
+  //获取餐厅地址
+  const restaurantAddress = request.data.restaurantAddress;
+  //获取用户地址
+  const userAddress = request.data.userAddress;
+
+  //调用函数计算餐厅到用户地址的距离和时间
+  const restaurantHomeInfo = await calculateDistanceTime(restaurantAddress, userAddress, googleMapsKey.value());
+  // const restaurantHomedistance = restaurantHomeInfo.distance;
+  const restaurantHomeTime = restaurantHomeInfo.duration;
+
+  // 获取指定的订单文档引用
+  const orderRef = firestore.collection("order").doc(orderId);
+
+  //寻找空闲的配送员
+  const deliveryPersonsRef = firestore.collection("deliveryperson");
+  const snapshot = await deliveryPersonsRef.where("isFree", "==", true).get();
+
+  //开始实现找到距离最近的配送员
+  let closestDeliveryPerson = null;
+  let shortestDistance = Infinity;
+
+  //循环遍历所有isFree为true的配送员
+  for (const doc of snapshot.docs) { 
+    //先从数据库中拿我们的数据出来
+    const deliveryPerson = doc.data();
+    //餐厅作为起点，外卖员作为终点计算距离
+    const deliveryPersonInfo = await calculateDistanceTime(restaurantAddress, deliveryPerson.address, googleMapsKey.value());
+    const distance = deliveryPersonInfo.distance;
+    //比较距离大小并更新 
+    if (distance < shortestDistance) {
+      shortestDistance = distance;
+      closestDeliveryPerson = doc;
+    }
+  }
+
+  //循环结束，找到最近的外卖员，更新这个外卖员个人信息并返回
+  //包括isFree更新为false以及他的orderId
+  if (closestDeliveryPerson) {
+    const riderId = closestDeliveryPerson.id;
+    // 获取当前时间
+    const now = new Date();
+    // 调用calculateDistance函数获取距离和时间
+    const deliveryPersonInfo = await calculateDistanceTime(restaurantAddress, closestDeliveryPerson.data().address, googleMapsKey.value());
+    // 计算预计到达时间（将分钟转换为毫秒，并加上5分钟的缓冲时间）
+    const bufferTime = 5; // 5分钟的缓冲时间
+    //模拟简单算法，总耗时为：5分钟缓冲时间+外卖员到餐厅的距离+餐厅到用户住址的时间即为总时间
+    const arrivalTimeInMilliseconds = now.getTime() + (deliveryPersonInfo.duration + bufferTime + restaurantHomeTime) * 60000;
+    const arrivalTime = new Date(arrivalTimeInMilliseconds);
+
+    // 使用事务同时更新订单和配送员信息
+    await firestore.runTransaction(async (transaction) => {
+      const orderSnapshot = await transaction.get(orderRef);
+      if (!orderSnapshot.exists) {
+        throw new Error(`Order with ID ${orderId} does not exist.`);
+      }
+      if (orderSnapshot.data().deliveryPersonId) {
+        console.log(`Order ${orderId} is already assigned to a delivery person.`);
+        return; // 如果已分配，直接退出事务
+      }
+
+      transaction.update(orderRef, {
+        deliveryPersonId: closestDeliveryPerson.id,
+        estimatedArrivalTime: arrivalTime,
+        assignedStatus: true,
+      });
+
+      transaction.update(closestDeliveryPerson.ref, {
+        isFree: false,
+        orderId: orderId,
+        estimatedArrivalTime: arrivalTime,
+      });
+    });
+
+    // 使用calculateDistance函数返回的预计配送时间（分钟），加上额外的5分钟
+    const estimatedDeliveryTime = deliveryPersonInfo.duration + bufferTime + restaurantHomeTime;
+
+    // 定义状态更新时间点
+    const totalTimeInSeconds = (deliveryPersonInfo.duration + bufferTime + restaurantHomeTime) * 60;
+
+    const beginUpdateDelay = 120; //2分钟后骑手已接单
+    const beginRemainingTime = Math.round((totalTimeInSeconds - beginUpdateDelay) / 60);
+
+    const firstUpdateDelay = totalTimeInSeconds / 3;
+    const firstRemainingTime = Math.round((totalTimeInSeconds - firstUpdateDelay) / 60);
+
+    const secondUpdateDelay = 2 * totalTimeInSeconds / 3;
+    const secondRemainingTime = Math.round((totalTimeInSeconds - secondUpdateDelay) / 60);
+
+    const finalUpdateDelay = totalTimeInSeconds;
+    const finalRemainingTime = 0;
+
+    // 创建任务
+    await createTaskForOrderUpdate(orderId, riderId, beginUpdateDelay, beginRemainingTime, 'accepted');
+    await createTaskForOrderUpdate(orderId, riderId, firstUpdateDelay, firstRemainingTime, 'delivering');
+    await createTaskForOrderUpdate(orderId, riderId, secondUpdateDelay, secondRemainingTime, 'arriving');
+    await createTaskForOrderUpdate(orderId, riderId, finalUpdateDelay, finalRemainingTime, 'arrived');
+
+    return {
+      deliveryPersonFirstName: closestDeliveryPerson.data().firstname,
+      deliveryPersonLastName: closestDeliveryPerson.data().lastname,
+      estimatedDeliveryTime: estimatedDeliveryTime // 以分钟为单位
+    };
+  } else {
+    // 没有找到可用的配送员
+    throw new Error('No available delivery person found');
+  }
+
+});
+
+
 // export const getOrderHistory = onCall (async (request) => {
 //   const ordersRef = admin.firestore().collection("order");
 
@@ -346,42 +557,6 @@ export const updateCartItem = onCall(async (request) => {
 //     } catch (error) {
 //     throw new HttpsError('internal', 'Unable to pull order history.', error);
 //   }
-// });
-
-// export const registerAccount = onCall(async (request) => {
-//   //Check if the user calling the function has passed authentication. 
-//   //If the user is not authenticated, the function returns an error.
-//   if (!request.auth) {
-//     return new HttpsError("failed-precondition", "You are not authorized");
-//   }
-  
-//   //Create a reference to Firestore for database operations
-//   const firestore = admin.firestore();
-
-//   const email = request.data.email;
-
-//   const draft = {
-//     firstName: request.data.firstName,
-//     lastName: request.data.lastName,
-//     email: request.data.email,
-//     phone: request.data.phone,
-//     password: request.data.password,
-//     createdBy: request.auth.uid, //Set the createdBy field to the current user's UID (User Identity)
-//     lastLogin: admin.firestore.FieldValue.serverTimestamp(),
-//     pickupTime: admin.firestore.FieldValue.serverTimestamp(),
-//     createAt: admin.firestore.FieldValue.serverTimestamp(),
-//   };
-
-//   //if user with email exists already, do not process request 
-//   const existingUserDoc = await firestore.collection("users").doc(email).get();
-//   const existingUser = existingUserDoc.data();
-//   if (existingUser) {return;}
-
-//   //Save the user info to the Firestore collection named "users" and wait for the operation to complete
-//   const userInfo = await firestore.collection("users").doc(email).set(draft);
-
-//   // //After the function is confirmed, return the newly created order ID and order draft object.
-//    return {id: userInfo.id, userInfo: draft};
 // });
 
 //We don't need to save the user's password in Firestore because Firebase Authentication already securely handles the password.
@@ -491,23 +666,3 @@ export const contactUsSubmit = onCall(async (request) => {
   //After the function is confirmed, return the newly created order ID and order draft object.
   return {id: contactForm.id, contactForm: draft};
 });
-
-/**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
-
-// const {onRequest} = require("firebase-functions/v2/https");
-// const logger = require("firebase-functions/logger");
-
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
-
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// })

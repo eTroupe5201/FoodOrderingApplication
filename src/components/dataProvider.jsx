@@ -1,12 +1,13 @@
  
 /* eslint-disable no-unused-vars */
  
-import React, { createContext, useContext, useEffect, useState, } from "react";
-import { Center, Spinner } from "@chakra-ui/react";
+import React, { createContext, useContext, useEffect, useState, useRef} from "react";
+import { Center, Spinner, useToast } from "@chakra-ui/react";
 import { collection, doc, getDoc, getDocs, onSnapshot, deleteDoc, query, limit, writeBatch } from "firebase/firestore";
 import { db, auth, functions } from "../utils/firebase";
 import { signInAnonymously } from "firebase/auth";
 import { httpsCallable } from "firebase/functions";
+// import { getLatLng } from "../utils/getLatLing";
 
 
 const DataProviderContext = createContext({ 
@@ -38,6 +39,10 @@ export const DataProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [cartChanged, setCartChanged] = useState(false);
   const [orderHistory, setOrderHistory] = useState([]);
+  const [travelTime, setTravelTime] = useState('');
+  const [deliveryFirstname, setdeliveryFirstname ] = useState('');
+  const [deliveryLastname, setdeliveryLastname ] = useState('');
+  const toast = useToast();
   // const [paypalId, setpaypalId] = useState();
 
 
@@ -322,18 +327,54 @@ const getOrderById = (orderId) => {
        *  When the order document changes, the provided callback function will be triggered, and 'docsnapshot' contains the current data of the document.
        *  The 'setOrder' function is used to update the status of the React component so that the interface can reflect the latest status of the order
       */
-      onSnapshot(doc(db, "order", order.id), (docSnapshot) => {
+     
+      // let lastStatus = null;
+      onSnapshot(doc(db, "order", order.id), async (docSnapshot) => {
         const data = docSnapshot.data();
         const pickupTime = data.pickupTime?.toDate().toLocaleString();
         setOrder({ id: docSnapshot.id, ...data, pickupTime });
+  
+        // if (data.status === "confirmed" && lastStatus !== "confirmed") {
+        //   // Update the last status
+        //   lastStatus = data.status;
+        //   // Call algorithm to obtain the most appropriate delivery man
+        //   await findAndAssignDeliveryPerson();    
+        //   // // Update the last status
+        //   // lastStatus = data.status;     
+        // }
       });
-
+    
       return response.data.order;
     } catch (error) {
       console.error("Error handling PayPal order:", error);
       throw error; 
     }
   };
+
+  const findAndAssignDeliveryPerson = async () => {
+    try {
+      const preparingRidersCallable = httpsCallable(functions, "ridersHandler");
+      const response = await preparingRidersCallable({
+        restaurantAddress: restaurantInfo.address,
+        userAddress: order.address,
+        orderId: order.id,
+      });
+      console.log(response.data);
+
+      toast({
+        title: "Delivery person assigned. Please pay attention to your email", 
+        description: `Delivery person ID: ${response.data.deliveryPersonId}. Estimated delivery time: ${response.data.estimatedDeliveryTime} minutes.`,
+        position: "top",
+        status: "success", 
+        isClosable: true,
+    });
+
+      return response.data;
+    } catch (error) {
+      console.error('Error message:', error);
+      // return { error: error.message };
+    }
+  }
 
  
   const clearCartAfterConfirmation = async () => {
@@ -466,7 +507,8 @@ const getOrderHistory = async () => {
     <DataProviderContext.Provider value={{ user, order, lines, setLines, restaurantInfo, categories, items, cartChanged, orderHistory, 
     checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchItemImageById, fetchOrder, getItemsByCategory, getItemById, addToCart, setCartChanged,
     removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, setOrder, generateOrder, getOrderById,
-    handleOrder, getOrderHistory, updateUserAccount}}>
+    handleOrder, getOrderHistory, updateUserAccount, travelTime, setTravelTime, findAndAssignDeliveryPerson, deliveryFirstname, setdeliveryFirstname,
+    deliveryLastname, setdeliveryLastname}}>
 
       {isReady ? (
         children

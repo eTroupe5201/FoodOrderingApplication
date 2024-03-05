@@ -4,34 +4,25 @@ import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } fro
 import { useDataProvider } from "../components/dataProvider";
 import { Flex, Box, Heading, Text, Button, Center, HStack, Image } from '@chakra-ui/react';
 import { useLocation } from "react-router-dom"
+import { getLatLng } from "../utils/getLatLing";
 
 export const Info = () => {
-    const { order, restaurantInfo, fetchItemImageById } = useDataProvider();
+    const { order, restaurantInfo, fetchItemImageById, travelTime, setTravelTime, setdeliveryFirstname, setdeliveryLastname  } = useDataProvider();
     const [directions, setDirections] = useState(null);
     const [mapsLoaded, setMapsLoaded] = useState(false);
     const [center, setCenter] = useState(null); // 设置初始中心点为null
     const [showInfoWindow, setShowInfoWindow] = useState(false); // 新状态来控制InfoWindow的显示
     const [infoWindowPosition, setInfoWindowPosition] = useState(null);
-    const [travelTime, setTravelTime] = useState("");
     const [itemImagesSrc, setItemImagesSrc] = useState({});
     const location = useLocation();
+    const { deliveryPersonFirstName, deliveryPersonLastName, estimatedDeliveryTime } = location.state || {};
 
-    const getLatLng = (address) => {
-        return new Promise((resolve, reject) => {
-            const geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ address }, (results, status) => {
-                if (status === google.maps.GeocoderStatus.OK) {
-                    resolve(results[0].geometry.location);
-                } else {
-                    reject("Geocode was not successful for the following reason: " + status);
-                }
-            });
-        });
-    };
 
     // 当路径变化时，重新加载脚本
     useEffect(() => {
         setMapsLoaded(false); // 重新设置 mapsLoaded 为 false，等待脚本加载
+        setdeliveryFirstname(deliveryPersonFirstName);
+        setdeliveryLastname(deliveryPersonLastName);
     }, [location.pathname]);
 
 
@@ -59,7 +50,8 @@ export const Info = () => {
                             setCenter(result.routes[0].overview_path[0]); // 设定地图中心为起点
                             setShowInfoWindow(true); // 获取路线后显示InfoWindow
                             setInfoWindowPosition(result.routes[0].legs[0].end_location); // 设置InfoWindow的位置
-                            setTravelTime(result.routes[0].legs[0].duration.text); // 设置旅行时间
+                            // setTravelTime(result.routes[0].legs[0].duration.text); // 设置旅行时间
+                            setTravelTime(estimatedDeliveryTime);//用最近骑手的预算时间来作为我们的旅行时间
                         } else {
                             console.error(`Directions request failed due to ${status}`);
                         }
@@ -136,7 +128,7 @@ export const Info = () => {
                             {showInfoWindow && (
                                 <InfoWindow position={infoWindowPosition} onCloseClick={() => setShowInfoWindow(false)}>
                                     <div>
-                                        <h4>Estimated Driving Time</h4>
+                                        <h4>Estimated Arrived Time</h4>
                                         <p>{travelTime}</p>
                                     </div>
                                 </InfoWindow>
@@ -153,6 +145,7 @@ export const Info = () => {
                     <Text mt='10px'> Order Date/Time: {order.pickupTime}</Text>
                     <Text mt='10px'> Address: {order.address}</Text>
                     <Text mt='10px' mb='30px'> Placed by: {order.firstName} {order.lastName}</Text>
+                    <Text mt='10px' mb='30px'> Delivered by: {deliveryPersonFirstName} {deliveryPersonLastName}</Text>
                     {order?.lines?.map((item) => (
                         <HStack key={item.id} mt='10px' justifyContent='center' fontWeight='bold'>
                             {itemImagesSrc[item.id] && (
