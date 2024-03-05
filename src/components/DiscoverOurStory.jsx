@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Center, Image, SimpleGrid, Text } from "@chakra-ui/react";
+// import React from "react";
+import { Box, Center, Image, Text } from "@chakra-ui/react";
 
 export function DiscoverOurStory() {
     return (

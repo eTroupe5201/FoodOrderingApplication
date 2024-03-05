@@ -1,4 +1,3 @@
-
 import { Link, useNavigate } from "react-router-dom";
 import { Box, Flex, Heading, IconButton, VStack, Text, Divider } from "@chakra-ui/react";
 import { GrClose } from "react-icons/gr";
@@ -23,9 +22,9 @@ export const CartModal = ({ isOpen, onClose }) => {
         fetchItems();
       }, [fetchCartItems,setLines]);
 
-    const close = () => {
-        this.close();
-    }
+    // const close = () => {
+    //     this.close();
+    // }
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">

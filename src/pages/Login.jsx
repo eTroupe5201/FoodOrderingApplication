@@ -2,16 +2,13 @@ import {Stack, Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, Fo
  import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { auth } from "../utils/firebase" 
-import {GoogleButton} from 'react-google-button'
-//import { signInWithEmailAndPassword } from "firebase/auth";
-
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth"; // Updated import
-
+// import {GoogleButton} from "react-google-button"
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useDataProvider } from "../components/dataProvider"
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react"
-import {FacebookLoginButton, TwitterLoginButton, GoogleLoginButton, YahooLoginButton, PhoneLoginButton} from 'react-social-login-buttons'; //npm i react-social-login-buttons
+import {FacebookLoginButton, TwitterLoginButton, GoogleLoginButton, YahooLoginButton} from "react-social-login-buttons"; //npm i react-social-login-buttons
 import { getAuth, signInWithPhoneNumber, RecaptchaVerifier, signInWithPopup, GoogleAuthProvider ,FacebookAuthProvider, TwitterAuthProvider, OAuthProvider} from "firebase/auth";
 import { MdPhoneAndroid } from "react-icons/md";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button } from "@chakra-ui/react";
@@ -36,19 +33,19 @@ export const Login = ({saveData}) => {
     
     const [isAuthenticationModalOpen, setIsAuthenticationModalOpen] = useState(false);
     const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
-    const [email, setEmail] = useState('');
+    //const [email, setEmail] = useState("");
 const [isVerificationCompleted, setIsVerificationCompleted] = useState(false);
 
 useEffect(() => {
     if (!isVerificationModalOpen && isVerificationCompleted) {
-        setOTP(['', '', '', '', '', '']); // Reset OTP state
+        setOTP(["", "", "", "", "", ""]); // Reset OTP state
         setIsVerificationCompleted(false);
     }
 }, [isVerificationModalOpen, isVerificationCompleted]);
 
-const handleEmail = (e) => {
-    setEmail(e.target.value);
-};
+// const handleEmail = (e) => {
+//     setEmail(e.target.value);
+// };
 
 const handleSubmitVerification = () => {
     verifyOTP();
@@ -61,25 +58,25 @@ const handleSubmitVerification = () => {
   
     const handleCloseAuthenticationModal = () => {
       setIsAuthenticationModalOpen(false);
-      setOTP(['', '', '', '', '', '']); //reset form
-    };
-    const handleOpenVerificationModal = () => {
-        setIsVerificationModalOpen(true);
-      };
+      setOTP(["", "", "", "", "", ""]); // Reset OTP state
+       };
+    // const handleOpenVerificationModal = () => {
+    //     setIsVerificationModalOpen(true);
+    //   };
     
       const handleCloseVerificationModal = () => {
         setIsVerificationModalOpen(false);
       };
 
-    const [phone, setPhone] = useState('');
-    const [otp, setOTP] = useState(['', '', '', '', '','' ]);
+    const [phone, setPhone] = useState("");
+    const [otp, setOTP] = useState(["", "", "", "", "","" ]);
 
   const generateRecaptcha = () => {
-    return new RecaptchaVerifier('recaptcha-container', {
-      'size': 'visible',
-      'type': 'image',
-        'theme': 'dark',
-        'callback': (response) => {
+    return new RecaptchaVerifier("recaptcha-container", {
+      "size": "visible",
+      "type": "image",
+        "theme": "dark",
+        "callback": () => {
             toast({
                 title: "reCAPTCHA solved, allow signInWithPhoneNumber.",
                 position: "top",
@@ -113,7 +110,7 @@ const handleSubmitVerification = () => {
 
   const verifyOTP = () => {
     // Verify OTP entered by the user
-    window.confirmationResult.confirm(otp.join(''))
+    window.confirmationResult.confirm(otp.join(""))
       .then(result => {
         // OTP verification successful
         const user = result.user;
@@ -150,7 +147,7 @@ const handleSubmitVerification = () => {
 
     const handleYahooLogin = async () => {
         const auth = getAuth();
-        const provider = new OAuthProvider('yahoo.com');
+        const provider = new OAuthProvider("yahoo.com");
       
         try {
 
@@ -227,7 +224,12 @@ const handleSubmitVerification = () => {
 
            
         } catch (error) {
-            console.log(error);
+            toast({
+                title: "Account exists with different credentials. Use a different login method.",
+                position: "top",
+                status: "error",
+                isClosable: true,
+            });
         }
     }
     const handleTwitterLogin = async () => {
@@ -314,12 +316,15 @@ const handleSubmitVerification = () => {
             console.log(error);
         }
     }
+
+
     const handleLogin = async (data) => {
         try {
             saveData(data);
         } catch (error) {console.log(error);}
 
         try {
+
             console.log(data);
             /**
              * Logging in with Firebase Authentication automatically handles the generation and management of JWT tokens. 
@@ -327,24 +332,42 @@ const handleSubmitVerification = () => {
              * and saves the user session on the client after successful login.
              */
             const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
-    
+
             // Login successful, Firebase automatically handles the session and token
-            console.log("Logged in user:", userCredential.user);
+            const userVerfied = userCredential.user;
+            console.log("userVerified",userVerfied.emailVerified);
+            /**
+             * Email authentication is required in order to log in, as the call to the createUserWithEmailAndPassword function 
+             * will directly store the user's registration information in firebase authentication. 
+             * Therefore, the. emailVerified field is very important to prevent someone from logging out without authentication 
+             * after registering, and the next time they log in directly, they can successfully log in, which will be the outrageous situation.
+             */
+            if (userVerfied.emailVerified) {
+                console.log("Logged in user:", userVerfied);
 
-            getUserInfo(userCredential.user);
+                getUserInfo(userVerfied);
 
-            // It is possible to obtain a token, but usually not required
-            //const token = await userCredential.user.getIdToken();
-            //console.log(token);
+                // It is possible to obtain a token, but usually not required
+                //const token = await userCredential.user.getIdToken();
+    
+                // Show success message and navigate to homepage
+                toast({
+                    title: "Logged in successfully.",
+                    position: "top",
+                    status: "success",
+                    isClosable: true,
+                });
+                navigate("/");
 
-            // Show success message and navigate to homepage
-            toast({
-                title: "Logged in successfully.",
-                position: "top",
-                status: "success",
-                isClosable: true,
-            });
-            navigate("/");
+            }else{
+                toast({
+                    title: "Logged in failed. Please verify your email before logging in.",
+                    position: "top",
+                    status: "error",
+                    isClosable: true,
+                });
+            }
+            
         } catch (error) {
             // Login failed with error message
             toast({
@@ -364,7 +387,7 @@ const handleSubmitVerification = () => {
         <>    
         
         <div><Modal isOpen={isAuthenticationModalOpen} onClose={handleCloseAuthenticationModal}>
-        <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(-10deg)' />
+        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
         <ModalContent border="3px outset tan" borderRadius="25px" marginTop="10%" bg="black" color="white"   fontFamily="'Raleway', sans-serif ">
           <ModalHeader textAlign="center">One-Time Password Authentication</ModalHeader>
           <ModalCloseButton />
@@ -374,7 +397,7 @@ const handleSubmitVerification = () => {
              
            <Input  fontFamily= "'Times New Roman', Times, serif"
            marginTop="2%" bg="white" color="black" varient="outlined"
-                country={'us'}
+                country={"us"}
                 onChange={(e) => setPhone("+" + e.target.value)}
                  />
                
@@ -395,7 +418,7 @@ const handleSubmitVerification = () => {
       </Modal></div>
 
       <div><Modal isOpen={isVerificationModalOpen} onClose={handleCloseVerificationModal}>
-      <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(-10deg)' />
+      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
         <ModalContent  border="3px outset tan" borderRadius="25px" marginTop="10%" bg="black" color="white"   fontFamily="'Raleway', sans-serif ">
           <ModalHeader  textAlign="center">One-Time Password Verification</ModalHeader>
           <ModalCloseButton />
@@ -463,57 +486,57 @@ const handleSubmitVerification = () => {
         </ModalContent>
       </Modal></div>
         <Center>
-            <Box w={{base:"25em", sm:"30em", md:"35em"}}height='100%'  borderRadius="25px" bg="black" color="white" mt={{base:"7%", sm:"15%", md:"15%", lg:"12%", xl:"8%"}} mb={{base:"40%", sm:"35%", md:"20%", lg:"15%", xl:"10%"}}>
-     <Tabs  borderRadius="25px" className="tab" border="tan 2px outset"  isFitted variant='enclosed' >
+            <Box w={{base:"25em", sm:"30em", md:"35em"}}height="100%"  borderRadius="25px" bg="black" color="white" mt={{base:"7%", sm:"15%", md:"15%", lg:"12%", xl:"8%"}} mb={{base:"40%", sm:"35%", md:"20%", lg:"15%", xl:"10%"}}>
+     <Tabs  borderRadius="25px" className="tab" border="tan 2px outset"  isFitted variant="enclosed" >
     <TabList >
         <Tab borderRightLeftRadius="25px" borderRightRadius="25px" borderTopLeftRadius="25px" _selected={{color:"white", transform: "translateY(-2px)", border:"outset 2px tan"}} color="tan" >SIGN IN</Tab>
         <Tab  borderBottomLeftRadius="25px" borderTopRightRadius="25px" borderTopLeftRadius="25px" _selected={{color:"white", transform: "translateY(-2px)", border:"outset 2px tan"}} color="tan">WITH SOCIAL MEDIA </Tab>
     </TabList>
     <TabPanels>
-        <TabPanel height="35em"><form className='Login' title='login-form-box' onSubmit={handleSubmit(handleLogin)}> 
-            <Flex alignContent='center' justifyContent='center'>
+        <TabPanel height="35em"><form className="Login" title="login-form-box" onSubmit={handleSubmit(handleLogin)}> 
+            <Flex alignContent="center" justifyContent="center">
                     <VStack>
                         <Text fontSize={{ base: "20px", md: "25px"}} 
-                            fontWeight='bold' 
-                            mb='1rem'> SIGN IN </Text>
+                            fontWeight="bold" 
+                            mb="1rem"> SIGN IN </Text>
                         
-                        <FormControl id='emailField' isInvalid={!!formState?.errors?.email?.type}>
+                        <FormControl id="emailField" isInvalid={!!formState?.errors?.email?.type}>
                             <FormLabel>Email Address</FormLabel>
                             <Input 
-                                title='login-email'
-                                id='email'
+                                title="login-email"
+                                id="email"
                                 border="tan 2px outset"
                                 {...register("email", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/})}
                             />
-                            <FormErrorMessage title='emailError'>{"Email address is invalid or does not have an account associated with it"}</FormErrorMessage>
+                            <FormErrorMessage title="emailError">{"Email address is invalid or does not have an account associated with it"}</FormErrorMessage>
                         </FormControl>
 
-                        <FormControl id='passwordField' isInvalid={!!formState?.errors?.password?.type}>
+                        <FormControl id="passwordField" isInvalid={!!formState?.errors?.password?.type}>
                             <FormLabel>Password</FormLabel>
                             <InputGroup>
                                 <Input 
-                                    title='login-password'
+                                    title="login-password"
                                     id="password"
                                     type={showPassword ? "text" : "password"}
                                     border="tan 2px outset"
                                     w={{base:"20em", sm:"26em", md:"27em"}}
                                     {...register("password", { required: true, pattern: /(.|\s)*\S(.|\s)/})} //checks for whitespace
                                 />
-                                <InputRightElement width='4.5rem' h='48px'>
+                                <InputRightElement width="4.5rem" h="48px">
                                     <Box  
-                                        title='login-show-password-button'
-                                        bg='#white' 
-                                        color='black'
-                                        w='3.5rem' 
-                                        h='25px' 
-                                        fontWeight='bold'
+                                        title="login-show-password-button"
+                                        bg="#white" 
+                                        color="black"
+                                        w="3.5rem" 
+                                        h="25px" 
+                                        fontWeight="bold"
                                         fontSize="11px"
-                                        borderRadius='md' 
+                                        borderRadius="md" 
                                         border="tan 2px outset"
                                         _hover={{ boxShadow: "0 0 5px 1px linen",transform: "translateY(-1px)" }}
                                         mb="9px"
-                                        align='center'
-                                        pt='0.25rem' 
+                                        align="center"
+                                        pt="0.25rem" 
                                         onClick={handleShowPassword} 
                                     >
                                         {showPassword ? "Hide" : "Show"}
@@ -524,13 +547,13 @@ const handleSubmitVerification = () => {
                         </FormControl>
                     
                         <Center 
-                            title='login-forgot-password'
-                            color='#fff'
-                            fontWeight='bold'
-                            alignSelf='end'
+                            title="login-forgot-password"
+                            color="#fff"
+                            fontWeight="bold"
+                            alignSelf="end"
                             fontSize="11px"
-                            h='40px'
-                            w='50%'
+                            h="40px"
+                            w="50%"
                             margin="2%"
                             border="tan 2px outset"
                             _hover={{ boxShadow: "0 0 5px 1px linen",transform: "translateY(-2px)" }}
@@ -540,18 +563,18 @@ const handleSubmitVerification = () => {
                         </Center>
                           
                         <Box 
-                            title='login-login-button'
-                            as='button'  
+                            title="login-login-button"
+                            as="button"  
                             mt="10%"
                             _hover={{ boxShadow: "0 0 5px 1px linen",transform: "translateY(-2px)" }}
-                            color='white'
-                            h='40px'
-                            w='70%'
-                            fontWeight='bold'
+                            color="white"
+                            h="40px"
+                            w="70%"
+                            fontWeight="bold"
                             fontSize="12px"
                             border="tan 2px outset"
-                            bg='black'
-                            borderRadius='md'
+                            bg="black"
+                            borderRadius="md"
                             _active={{transform: "translateY(2px)", bg:"white",boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)"}}
               
                             > 
@@ -560,15 +583,15 @@ const handleSubmitVerification = () => {
                         <Center 
                             _hover={{ boxShadow: "0 0 5px 1px linen" , transform: "translateY(-2px)"}} //when hovered over button will glow and move upward
                             border="tan 2px outset"
-                            title='login-register-button'
-                            mt='0.5rem'
-                            color='white'
-                            h='40px'
-                            w='70%'
-                            fontWeight='bold'
-                            fontSize='12px'
-                            borderRadius='md'
-                            bg='black'
+                            title="login-register-button"
+                            mt="0.5rem"
+                            color="white"
+                            h="40px"
+                            w="70%"
+                            fontWeight="bold"
+                            fontSize="12px"
+                            borderRadius="md"
+                            bg="black"
                             _active={{transform: "translateY(2px)", bg:"white",boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)"}}
                             onClick={navigateToRegister} 
                             > 
@@ -581,7 +604,7 @@ const handleSubmitVerification = () => {
         
        </TabPanel>
                                 <TabPanel height="35em">
-                                <Flex alignContent='center' justifyContent='center'>
+                                <Flex alignContent="center" justifyContent="center">
                             <VStack mt="6em" >
                              <Box width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleGoogleLogin} ><GoogleLoginButton  /></Box>
                               <Box width="95%" borderRadius="3px" background= "linear-gradient(to right, tan, white, tan)" height="50px" _hover={{ transform: "translateY(-2px)" }} _active={{ transform: "translateY(2px)" }} onClick={handleOpenAuthenticationModal} as="button" display="flex" paddingLeft="5px" alignItems="center"  fontSize="18px" color="black"> <MdPhoneAndroid color="white" size={33} style={{ marginRight: "1em" }} /> <p>Login With Phone</p></Box>
