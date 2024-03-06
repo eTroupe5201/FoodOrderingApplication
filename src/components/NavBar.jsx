@@ -75,14 +75,15 @@ export function NavBar() {
             w={{ base: "3em", sm: "4em" }}
             maxH={{ base: "3em", sm: "4em"}}
             maxW={{ base: "3em", sm: "4em"}}
-            className="photo" src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/assets/White-Favicon.png" alt="logo" /></Link> 
+            className="photo" src="https://d1zh5cyxaugen.cloudfront.net/assets/WhiteFavicon.png" alt="logo" /></Link> 
 
                 ) : (
                     <Link to="/">  <Image
+                    alt="logo"
                     _hover={{ boxShadow: "0 0 10px 1px tan"}}
                     w={{  md: "18em" }}
                     maxH={{  md: "11em"}}
-                    className="photo" src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/assets/divine-delicacies2.png" /> </Link> 
+                    className="photo" src="https://d1zh5cyxaugen.cloudfront.net/divineDelicacies2Compressed.png" /> </Link> 
                 )}
 
             <ul>

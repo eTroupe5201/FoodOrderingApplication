@@ -13,7 +13,7 @@ describe("DiscoverOurStory.jsx", () => {
             </BrowserRouter>
         );
 
-        const discoverOurStoryElement = screen.getByRole("DiscoverOurStory");
+        const discoverOurStoryElement = screen.getByRole("banner");
         expect(discoverOurStoryElement).toBeInTheDocument();
         console.log("DiscoverOurStory content:", discoverOurStoryElement.textContent);
     });

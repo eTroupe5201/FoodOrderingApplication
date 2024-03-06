@@ -5,7 +5,7 @@ import { Box, Center, Image, Text } from "@chakra-ui/react";
 
 export function DiscoverOurStory() {
     return (
-        <Box className="DiscoverOurStory" role="DiscoverOurStory" >
+        <Box className="DiscoverOurStory" role="banner" >
             <Box className="overlay" 
               
                 marginLeft= {{ base: "20%", sm: "18%", md: "15%", lg: "15%", xl: "20%", "2xl": "20%"}}
@@ -35,7 +35,7 @@ export function DiscoverOurStory() {
             </Box>
             {/* <SimpleGrid columns={{ base: 1, md: 2 }} width="100vw">  */}
                 <Box height="100%" bg="linen" maxHeight="30em">
-                    <Image src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/shutterstock_1505194289.jpg" alt="logo" height="100%" />
+                    <Image src="https://d1zh5cyxaugen.cloudfront.net/WelcomeOpen.jpg" alt="logo" width="100%" height="100%" />
                 </Box>
                 {/* <Box bg="Linen">
                     <Text></Text>

@@ -8,9 +8,10 @@ export function Banner() {
                 <Box padding="20" maxH={{ base: "20em", sm: "50em", md: "70em", lg: "80em", xl: "100em" }} color="white" bg="black">
                     <Center>
                         <Image
-                            src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/assets/FoodLogo.png"
+                            src="https://d1zh5cyxaugen.cloudfront.net/assets/FoodLogo.png"
                             alt="logo"
                             w={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
+                            h={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em"}}
                             maxH={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
                         />
                     </Center>
@@ -33,10 +34,11 @@ export function Banner() {
 
                 <Box padding="20" maxH={{ base: "20em", sm: "50em", md: "70em", lg: "80em", xl: "100em" }} color="white" bg="black">
                     <Center>
-                        <Image
-                            src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/assets/OrderLogo.png"
+                        <Image 
+                            src="https://d1zh5cyxaugen.cloudfront.net/assets/OrderLogo.png"
                             alt="logo"
                             w={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
+                            h={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em"}}
                             maxH={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
                         />
                     </Center>
@@ -60,9 +62,10 @@ export function Banner() {
                 <Box padding="20" maxH={{ base: "20em", sm: "50em", md: "70em", lg: "80em", xl: "100em" }} color="white" bg="black">
                     <Center>
                         <Image
-                            src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/assets/deliveryLogo.png"
+                            src="https://d1zh5cyxaugen.cloudfront.net/assets/deliveryLogo.png"
                             alt="logo"
                             w={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
+                            h={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em"}}
                             maxH={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
                         />
                     </Center>
