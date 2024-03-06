@@ -9,7 +9,7 @@ import  { useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 
 const GratitudeContent = () => {
-    const { order, setOrder, clearCartAfterConfirmation, generateOrder, handleOrder, findAndAssignDeliveryPerson  } = useDataProvider();
+    const { order, setOrder, clearCartAfterConfirmation, generateOrder, handleOrder, findAndAssignDeliveryPerson, setCartChanged  } = useDataProvider();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -114,6 +114,7 @@ const GratitudeContent = () => {
         // console.log("order confirmed");
         //when the status is confirmed, call this function to empty the cart and order, meaning that you have paid successfully!!!
         clearCartAfterConfirmation();
+        setCartChanged(true);
 
         // clearOrderAfterConfirmation(); // don't need to clear up the order. Not in line with business logic, a user can have multiple orders
         //as long as not the status of cancelled or pending, will render confirmed page

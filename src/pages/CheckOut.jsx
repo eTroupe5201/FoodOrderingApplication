@@ -13,7 +13,7 @@ export const CheckOut = () => {
     
     const navigate = useNavigate();
     
-    const { fetchUserProfile, lines, restaurantInfo, checkout } = useDataProvider();
+    const { fetchUserProfile, lines, restaurantInfo, checkout, setCartChanged } = useDataProvider();
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
     const isMounted = useRef(false); // Used to track the mounting status of components
@@ -100,9 +100,9 @@ export const CheckOut = () => {
                                     border="outset 2px tan"
                                     title='checkout-email'
                                     placeholder="Email"
-                                    {...register("email", { required: true })}
+                                    {...register("email", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ })}
                                 />
-                                <FormErrorMessage>Required</FormErrorMessage>
+                                <FormErrorMessage>{"Email address is invalid"}</FormErrorMessage>
                             </FormControl>
                             <FormControl isInvalid={!!errors?.phone?.type}>
                                 <FormLabel>Phone</FormLabel>
