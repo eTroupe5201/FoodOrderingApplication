@@ -1,22 +1,27 @@
 
 import {
     List,
-    TextInput,
+    TextField,
+    Datagrid,
+    DateField
   } from "react-admin";
-  import { MdMail } from "react-icons/md";
+import { MdMail } from "react-icons/md";
 
 const ContactUsList = () => (
-    <List>
-        <TextInput source="first_name" />      
-        <TextInput source="last_name" />
-        <TextInput source="email_address" />
-        <TextInput source="phone_number" />
-        <TextInput multiline source="message" />
+    <List sort={{ field: "createAt", order: "DEC" }}>
+      <Datagrid rowClick="edit">
+        <TextField source="firstName" label="First Name" />      
+        <TextField source="lastName" label="Last Name" />
+        <TextField source="email" label="Email" />
+        <TextField source="phone" label="Phone" />
+        <TextField multiline source="message" />
+        <DateField source="createAt" showTime label="Submitted At" />
+      </Datagrid>
     </List>
   );
 
 export const ContactUsProps = {
     icon: MdMail,
-    name: "contact_us",
+    name: "contactus",
     list: ContactUsList,
-}
+};

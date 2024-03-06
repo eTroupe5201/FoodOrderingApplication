@@ -13,11 +13,13 @@ import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } fro
 */
 export const Orders = () => {
     const { id } = useParams();
-    const { getOrderById, travelTime, checkCartNotEmpty, addToCart,clearCartAfterConfirmation, restaurantInfo, fetchItemImageById, deliveryFirstname, deliveryLastname } = useDataProvider();
+    const { user, getOrderById, checkCartNotEmpty, travelTime, cartChanged, setCartChanged, addToCart, 
+        clearCartAfterConfirmation, restaurantInfo, fetchItemImageById, deliveryFirstname, deliveryLastname } = useDataProvider();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = React.useRef()
     const navigate = useNavigate();
     const currOrder = getOrderById(id || "");
+    const [hasCartItems, setHasCartItems] = useState(false);
     const [directions, setDirections] = useState(null);
     const [mapsLoaded, setMapsLoaded] = useState(false);
     const [center, setCenter] = useState(null); // 设置初始中心点为null
@@ -26,8 +28,23 @@ export const Orders = () => {
     const [itemImagesSrc, setItemImagesSrc] = useState({});
     const location = useLocation();
 
+    useEffect(() => {
+        const fetchCartStatus = async () => {
+            const isNotEmpty = await checkCartNotEmpty();
+            setHasCartItems(isNotEmpty);
+        };
+    
+        fetchCartStatus();
+        // Reset the cardChanged state so that the next change can be detected
+        setCartChanged(false);
+    }, [user, cartChanged]);
+
     const handleReplaceOrder = async () => {
-        onClose();
+        try {
+            onClose();
+            clearCartAfterConfirmation();
+        } catch (error) {console.log(error.message);}
+
         //for each item in currOrder, do addToCart
         currOrder?.lines?.forEach((item) => {
             console.log(item);
@@ -186,7 +203,7 @@ export const Orders = () => {
                     <Text>{currOrder.comments}</Text>
                     <Center mt='30px'>
                         <Stack direction='row' spacing='24px'>
-                            <Button fontWeight='bold' onClick={checkCartNotEmpty ? onOpen : handleReplaceOrder}>Copy Order</Button>
+                            <Button fontWeight='bold' onClick={hasCartItems ? onOpen : handleReplaceOrder}>Copy Order</Button>
                             <Button fontWeight='bold' onClick={() => navigate("/profile")}>Go Back</Button>
                         </Stack>
                     </Center>
@@ -196,7 +213,7 @@ export const Orders = () => {
             <AlertDialog
                 isOpen={isOpen}
                 leastDestructiveRef={cancelRef}
-                onClose={onClose}
+                //onClose={onClose}
             >
                 <AlertDialogOverlay>
                     <AlertDialogContent>
@@ -210,10 +227,7 @@ export const Orders = () => {
     
                         <AlertDialogFooter>
                             <Button ref={cancelRef} onClick={onClose}>Cancel</Button>
-                            <Button colorScheme='red' ml={3} onClick={() => {
-                                clearCartAfterConfirmation();
-                                handleReplaceOrder();
-                            }}>
+                            <Button colorScheme='red' ml={3} onClick={ handleReplaceOrder }>
                                 Copy Order
                             </Button>
                         </AlertDialogFooter>

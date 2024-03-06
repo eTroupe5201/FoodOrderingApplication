@@ -16,15 +16,16 @@ export const CheckOut = () => {
     const { fetchUserProfile, lines, restaurantInfo, checkout } = useDataProvider();
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
-    const isMounted = useRef(true); // Used to track the mounting status of components
+    const isMounted = useRef(false); // Used to track the mounting status of components
 
     
     useEffect(() => {
+        isMounted.current = true;
         const fetchAndSetUserProfile = async () => {
             try {
                 const data = await fetchUserProfile();
                 // console.log(data);
-                if (data) {
+                if (data && isMounted.current) {
                     /*
                         Asynchronous retrieval of user information during component loading, 
                         and updating form fields with setValue after obtaining the data. 
@@ -53,7 +54,7 @@ export const CheckOut = () => {
         return () => {
         isMounted.current = false;
         };
-    }, [restaurantInfo, fetchUserProfile, setValue]); 
+    }, []); 
 
 
     const onSubmit = async (data) => {

@@ -1,5 +1,5 @@
-import { Text, Image, VStack, FormControl, FormLabel, Textarea, Input, Center, FormErrorMessage, CheckboxGroup, Checkbox, RadioGroup, Radio, Box, Flex} from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useToast, Text, Image, VStack, FormControl, FormLabel, Textarea, Input, Center, FormErrorMessage, CheckboxGroup, Checkbox, RadioGroup, Radio, Box, Flex} from "@chakra-ui/react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
 import { useEffect } from "react";
@@ -28,9 +28,11 @@ const Choice = ({ allowMultiple, ...props }) =>
 
 
 export const Item = () => {
-    //here id is from the param of "navigate(`/item/${item.id}`)}""
+    const toast = useToast();
+    const navigate = useNavigate();
+    //here id is from the param of "navigate(`/item/${item.id}`)}""+    
     const { id } = useParams();
-    const { getItemById, addToCart } = useDataProvider();
+    const { getItemById, addToCart, user} = useDataProvider();
     const item = getItemById(id || "");
 
     /**
@@ -67,8 +69,19 @@ export const Item = () => {
       });
 
     const onSubmit = async (values) => {
-        const dataToSubmit = { ...values, id: id };
-        await addToCart(dataToSubmit);
+        if (user) {
+            const dataToSubmit = { ...values, id: id };
+            await addToCart(dataToSubmit);
+        } 
+        else {
+            toast({
+                title: "You must log in before you can start placing an order.", 
+                position: "top",
+                status: "error", 
+                isClosable: true,
+            });
+            navigate("/login");
+        }
     }
 
     /**
