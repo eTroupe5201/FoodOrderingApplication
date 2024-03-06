@@ -103,7 +103,7 @@ export function NavBar() {
                     ) }
                 </li>
                 <HStack spacing="1.5rem">
-                    <li > 
+                <li > 
                         {user ? (
                             <Flex align="center">
                                 <Link to="/profile">

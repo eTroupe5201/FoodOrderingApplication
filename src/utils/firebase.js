@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported as isAnalyticsSupported } from "firebase/analytics"; // Import isSupported
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getFunctions } from "firebase/functions";
@@ -30,11 +30,16 @@ let analytics;
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-if (typeof VITE_REACT_APP_MEASUREMENT_ID === "string") {
+if (typeof VITE_REACT_APP_MEASUREMENT_ID === "string" && isAnalyticsSupported()) { // Check if analytics is supported, fix bug
     analytics = getAnalytics(app);
 }
 
 export { analytics };
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+//connectAuthEmulator(auth, "http://localhost:9099"); // Adjust port if necessary
+
 export const functions = getFunctions(app);
+//connectFunctionsEmulator(functions, "localhost", 5001); // Adjust port if necessary
+
+//connectFirestoreEmulator(db, 'localhost', 8080);

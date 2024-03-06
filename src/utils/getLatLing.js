@@ -6,7 +6,7 @@ export const getLatLng = (address) => {
             if (status === google.maps.GeocoderStatus.OK) {
                 resolve(results[0].geometry.location);
             } else {
-                reject('Geocode was not successful for the following reason: ' + status);
+                reject("Geocode was not successful for the following reason: " + status);
             }
         });
     });
