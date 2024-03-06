@@ -14,7 +14,7 @@ describe("Footer.jsx", () => {
             </BrowserRouter>
         );
 
-        const footer = screen.getByRole("Navigation"); // Change
+        const footer = screen.getByRole("navigation"); // Change
         expect(footer).toBeInTheDocument();
         console.log("Footer Content:", footer.textContent);
     });

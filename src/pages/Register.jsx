@@ -585,7 +585,7 @@ export const Register = ({saveData}) => {
                         <Divider  margin="20px" orientation="horizontal"/>
                    
                         <Center >
-                           <SimpleGrid columns={5}>
+                           <SimpleGrid columns={4}>
                             
                            <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}} bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset"onClick={handleGoogleRegister} ><FcGoogle  size="35px"  /></Box>
                             <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}} bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleFacebookRegister}><AiFillFacebook size="35px" color="#4267B2" /></Box>
