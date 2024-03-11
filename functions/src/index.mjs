@@ -46,16 +46,25 @@ const googleMapsKey = defineSecret("GOOGLEMAPS_SERVER_KEY");
 
 //email address hezhihong98@gmail.com 
 //https://nodemailer.com/
+// const transport = createTransport({
+//   host: "sandbox.smtp.mailtrap.io",
+//   port: 2525,
+//   auth: {
+//     user: "264ae0c6cf23c7",
+//     pass: "aed0a46367cffc",
+//   },
+// });
+
+//email address averyksameshima@gmail.com 
+//https://nodemailer.com/
 const transport = createTransport({
   host: "sandbox.smtp.mailtrap.io",
   port: 2525,
   auth: {
-    user: "264ae0c6cf23c7",
-    pass: "aed0a46367cffc",
-  },
+    user: "9fde1c174cea67",
+    pass: "eef9a389c1ad29"
+  }
 });
-
-
 
 async function createTaskForOrderUpdate(orderId, riderId, delayInSeconds, remainingTime, newStatus) {
   const project = 'food-odering-project-3e43f';
@@ -64,6 +73,8 @@ async function createTaskForOrderUpdate(orderId, riderId, delayInSeconds, remain
   const url = `https://${location}-${project}.cloudfunctions.net/updateOrderStatus`;
   const payload = {orderId, riderId, remainingTime, newStatus};
 
+  console.info(orderId);
+  
   const parent = client.queuePath(project, location, queue);
   const scheduleTimeSeconds = Math.round(delayInSeconds + Date.now() / 1000);
   const task = {
@@ -99,7 +110,7 @@ export const updateOrderStatus = onRequest(async (req, res) => {
       const riderRef = firestore.collection("deliveryperson").doc(riderId);
       await riderRef.update({ status: newStatus, estimatedTime: remainingTime });
       if(remainingTime === 0){
-        await riderRef.update({ isFree: true }); //证明骑手已到达，可以重新接单了
+        await riderRef.update({ isFree: true, status: "waiting" }); //证明骑手已到达，可以重新接单了
       }
       const riderDoc = await riderRef.get();
       const riderData = riderDoc.data();
@@ -117,10 +128,9 @@ export const updateOrderStatus = onRequest(async (req, res) => {
         subject: `${restaurant.name} - Order Status Update`,
         html: `
           <div>
-            <h1>Hi ${orderData.firstName}, your order status has been updated.</h1>
+            <h1>Hi ${orderData.firstName}, your order status is: ${newStatus}</h1>
             <p>Order ID: ${orderId}</p>
             <p>Your order has been accepted by our food delivery staff: ${riderData.firstname} ${riderData.lastname}</p>
-            <p>Your order status now is: ${newStatus}</p>
             <p>Delivery rider position: Based on GPS tracking of the rider's real-time position, we cannot achieve such precision because the riders are all samples</p>
             ${remainingTimeParagraph}
             <p>If you need any assistance, feel free to contact us at ${restaurant.phone}.</p>
@@ -129,7 +139,7 @@ export const updateOrderStatus = onRequest(async (req, res) => {
         `
       });
 
-      console.log("Message sent: %s", info.messageId);
+      console.log("Status message sent: %s", info.messageId);
       res.status(200).send("Order status updated and email sent.");
     } catch (error) {
       console.error("Error: %s", error);
@@ -167,7 +177,7 @@ export const placeorder = onCall(async (request) => {
     uid: uid,
     status: "pending",
     createdBy: request.auth.uid, //Set the createdBy field to the current user's UID (User Identity)
-    total: calculateOrderTotal(lines, 10).toFixed(2),
+    total: parseFloat(calculateOrderTotal(lines, 10).toFixed(2)),
     subTotal: calculateOrderSubtotal(lines),
     //A special value used by the server to fill in the current timestamp when a document is submitted to the database
     pickupTime: admin.firestore.FieldValue.serverTimestamp(),
@@ -248,12 +258,13 @@ export const placeorder = onCall(async (request) => {
         subject: `${restaurant.name} - Order Confirmation`,
         html: `
           <div>
-            <h1>Hi ${draft.firstName}, your order is confirmed.</h1>
-            <p>Order ID: ${draft.id}</p>
+            <h1>Hi ${draft.firstName}, your order is confirmed!</h1>
+            <p>Order ID: ${newOrderRef.id}</p>
             <h2>Restaurant Information:</h2>
             <p>${restaurant.name}</p>
             <p>${restaurant.address}</p>
             <h2>Order Details:</h2>
+            <p> Order Type: ${draft.receiveMethod}</p>
             <ul>
               ${draft.lines.map(line => `
                 <li>
@@ -267,12 +278,11 @@ export const placeorder = onCall(async (request) => {
             <p>Comments: ${draft.comments} </p>
             <p>Subtotal: $${draft.subTotal.toFixed(2)}</p>
             <p>Total: $${draft.total.toFixed(2)}</p>
-            <p>please pay your order as soon as possible</p>
             <p>If you need any assistance, feel free to contact us at ${restaurant.phone}.</p>
           </div>
         `,
       });
-      console.log("Message sent: %s", info.messageId);
+      console.log("Confirmation message sent: %s", info.messageId);
     } catch (error) {
       console.error("Error sending email: %s", error);
     }
@@ -511,14 +521,15 @@ export const ridersHandler = onCall({ secrets: ["GOOGLEMAPS_SERVER_KEY"] }, asyn
     const finalRemainingTime = 0;
 
     // 创建任务
-    await createTaskForOrderUpdate(orderId, riderId, beginUpdateDelay, beginRemainingTime, 'accepted');
-    await createTaskForOrderUpdate(orderId, riderId, firstUpdateDelay, firstRemainingTime, 'delivering');
-    await createTaskForOrderUpdate(orderId, riderId, secondUpdateDelay, secondRemainingTime, 'arriving');
-    await createTaskForOrderUpdate(orderId, riderId, finalUpdateDelay, finalRemainingTime, 'arrived');
+    await createTaskForOrderUpdate(orderId, riderId, beginUpdateDelay, beginRemainingTime, "accepted");
+    await createTaskForOrderUpdate(orderId, riderId, firstUpdateDelay, firstRemainingTime, "delivering");
+    await createTaskForOrderUpdate(orderId, riderId, secondUpdateDelay, secondRemainingTime, "arriving");
+    await createTaskForOrderUpdate(orderId, riderId, finalUpdateDelay, finalRemainingTime, "delivered");
 
     return {
       deliveryPersonFirstName: closestDeliveryPerson.data().firstname,
       deliveryPersonLastName: closestDeliveryPerson.data().lastname,
+      deliveryPersonId: closestDeliveryPerson.data().id,
       estimatedDeliveryTime: estimatedDeliveryTime // 以分钟为单位
     };
   } else {

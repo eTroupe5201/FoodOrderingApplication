@@ -60,7 +60,7 @@ export const CartModal = ({ isOpen, onClose }) => {
                 />
                 <ModalBody>
 
-                <VStack title="cart-modal-lines" px={4} py={2} mt={4} font-family="'Raleway', sans-serif">
+                <VStack title="cart-modal-lines" px={4} py={2} mt={4} fontFamily="'Raleway', sans-serif">
             {lines.map((line, index) => (
                 <Flex key={index} justify="space-between" w="100%">
                     <Heading flex={1} fontSize={16} maxW={50}>
