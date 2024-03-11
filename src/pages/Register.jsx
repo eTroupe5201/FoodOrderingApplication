@@ -35,10 +35,10 @@ export const Register = ({saveData}) => {
     const [registrationState, setRegistrationState] = useState("initial");
     const [showPassword, setShowPassword] = React.useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+
     const handleShowPassword= () => setShowPassword(!showPassword)
     const handleShowConfirmPassword= () => setShowConfirmPassword(!showConfirmPassword)
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-
  
     useEffect(() => {
         if (registrationState === "waitingForEmailVerification") {
@@ -249,6 +249,34 @@ export const Register = ({saveData}) => {
 
     }
 
+    const handleResendVerificationEmail = async (event) => {
+        try {
+            //reload user created with initial authorization attempt 
+            const user = auth.currentUser;
+            await user.reload(); 
+
+            //will throw an error if resent too soon (approx 1 min from previous attempt)
+            await sendEmailVerification(user);
+
+            toast({
+                title: "Email has been resent to be verified!",
+                description: "Please check your email to verify your account.",
+                position: "top",
+                status: "success",
+                isClosable: true,
+            });
+        } catch (error) {
+            console.error("Error registering account:", error);
+            toast({
+                title: "An email is already on the way",
+                description: "Please click the 'Resend Email' button if you did not receive an email after 1-3 minutes." + error.message,
+                position: "top",
+                status: "error",
+                isClosable: true,
+            });
+        }
+    };
+
   // Logic for handling whether the user has verified their email
     const handleCheckEmailVerified = async (event) => {
         console.log("checking verification status to store account info"); //console log for testing 
@@ -360,11 +388,11 @@ export const Register = ({saveData}) => {
                 <ModalHeader textAlign="center">REGISTRATION INSTRUCTIONS</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody  fontWeight="bold"  borderRadius="25px" textAlign="center" padding="20px" border="2px solid tan" pb={6}>
-                    <p>Kindly review your email and proceed by clicking the verification button.</p>
-                   <br></br>
+                    <p>You will receive an email within 1-3 minutes. If you do not receive an email within that time frame, click on Resend Email.</p>
+                    <br></br>
+                    <p> Kindly review your email and proceed by clicking the verification link. To finalize the verification process, click on the Complete Registration button on this webpage.</p>
+                    <br></br>
                     <p> Close this window to continue.</p>
-                  <br></br>
-                    <p> To finalize the verification process, click on the &quoComplete Registration&quo button on the webpage.</p>
                 </ModalBody>
                 <ModalFooter><Button color="white" bg="black" border="2px solid tan" mr={3} onClick={onClose}>
         Close
@@ -391,7 +419,28 @@ export const Register = ({saveData}) => {
                 type="button" // Distinguished from type=submit, it is just a button event to prevent form submission
                 > 
                COMPLETE VERIFICATION
-            </Box></>
+            </Box>
+            <Box 
+                title="resend-verification-email-button"
+                align="center"
+                as="button" 
+                pt="0.25rem" 
+                mt="0.5rem"
+                bg="white" 
+                color="black"
+                h="40px"
+                w="250px"
+                fontWeight="bold"
+                fontSize="15px"
+                _hover={{ boxShadow: "0 0 5px 1px tan" }}
+                border="outset 2px tan"
+                borderRadius="md"
+                _active={{boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)", transform: "translateY(2px)"}}
+                onClick={handleResendVerificationEmail}
+                type="button" // Distinguished from type=submit, it is just a button event to prevent form submission
+            > 
+           RESEND EMAIL
+        </Box></>
         );
       
 

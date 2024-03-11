@@ -6,6 +6,8 @@ import { useNavigate, useLocation } from "react-router-dom"
 import React, { useState, useEffect } from "react";
 import { getLatLng } from "../utils/getLatLing";
 import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from '@react-google-maps/api';
+import { TiHeartFullOutline, TiHeartOutline} from "react-icons/ti";
+
 
 /* This page contains historical order information, allowing the guest to replace the order. The page also
 *  includes Google map functionality to view the address provided with the order, versus the restaurant's 
@@ -13,12 +15,13 @@ import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } fro
 */
 export const Orders = () => {
     const { id } = useParams();
-    const { user, getOrderById, checkCartNotEmpty, travelTime, cartChanged, setCartChanged, addToCart, 
-        clearCartAfterConfirmation, restaurantInfo, fetchItemImageById, deliveryFirstname, deliveryLastname } = useDataProvider();
+    const { user, getOrderById, checkCartNotEmpty, travelTime, cartChanged, setCartChanged, addToCart, clearCartAfterConfirmation,
+        restaurantInfo, fetchItemImageById, deliveryFirstname, deliveryLastname, updateFavoriteStatus } = useDataProvider();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = React.useRef()
     const navigate = useNavigate();
     const currOrder = getOrderById(id || "");
+    const [isFavorite, setIsFavorite] = useState(currOrder.favorite);
     const [hasCartItems, setHasCartItems] = useState(false);
     const [directions, setDirections] = useState(null);
     const [mapsLoaded, setMapsLoaded] = useState(false);
@@ -37,7 +40,9 @@ export const Orders = () => {
         fetchCartStatus();
         // Reset the cardChanged state so that the next change can be detected
         setCartChanged(false);
+
     }, [user, cartChanged]);
+
 
     const handleReplaceOrder = async () => {
         try {
@@ -179,8 +184,37 @@ export const Orders = () => {
     
                 {/* Order Details Box */}
                 <Box title="order-detailed-history-box" id="order-detailed-history-box" fontFamily="'Raleway', sans-serif" bg='#000000' color='#fff' width={["100%", "60%"]} w={{base:"20em", sm:"25em", md:"30em"}} maxHeight='350px' p='1.5rem' borderRadius='md' overflowY='auto'>
-                    <Heading fontSize='25px' pb='1rem'>Order Confirmation</Heading>
+                    <Stack direction='row' alignItems='center'>
+                        <Heading fontSize='25px' pb='1rem'>Order Confirmation</Heading>
+                        <Button mt="-1rem" w="30px"> 
+                            {isFavorite ? (
+                                <div title="Unfavorite this order" style={{backgroundColor: "black"}}>
+                                    <TiHeartFullOutline 
+                                        size="40px" 
+                                        style={{color:"white"}} 
+                                        onClick={() => {
+                                            setIsFavorite(false); 
+                                            updateFavoriteStatus(currOrder.id, false);
+                                        }}
+                                    />
+                                    </div>
+                            ) : (
+                                <div title="Favorite this order" style={{backgroundColor: "black"}}>
+                                    <TiHeartOutline 
+                                        size="40px" 
+                                        style={{color:"white"}} 
+                                        onClick={() => {
+                                            setIsFavorite(true); 
+                                            updateFavoriteStatus(currOrder.id, true);
+                                        }}
+                                    />
+                                </div>
+                            )} 
+                        </Button>
+                    </Stack>
                     <Text>Confirmation Number / Order ID: {currOrder.id}</Text>
+                        
+                    
                     <Text mt='10px'>Order Date/Time: {(currOrder.pickupTime).toDate().toLocaleString()}</Text>
                     <Text mt='10px'>Address: {currOrder.address}</Text>
                     <Text mt='10px' mb='30px'>Placed by: {currOrder.firstName} {currOrder.lastName}</Text>

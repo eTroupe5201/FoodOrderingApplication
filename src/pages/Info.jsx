@@ -25,7 +25,6 @@ export const Info = () => {
         setdeliveryLastname(deliveryPersonLastName);
     }, [location.pathname]);
 
-
     useEffect(() => {
         const fetchDirections = async () => {
 
@@ -106,64 +105,78 @@ export const Info = () => {
 
     const googleMapsApiKey = import.meta.env.VITE_REACT_APP_API_KEY;
 
+    let arrivalTimeMsg = "";
+    let orderRetrievalMsg = ""; 
+    let readyTime = "";
+
+    if (order.receiveMethod === "delivery") {
+        arrivalTimeMsg = "Estimated Delivery Time:";
+        orderRetrievalMsg = `Being delivered by: ${deliveryPersonFirstName} ${deliveryPersonLastName}`;
+        readyTime = travelTime;
+    }
+    else if (order.receiveMethod === "pickup") {
+        arrivalTimeMsg = "Estimated Ready for Pickup:";
+        orderRetrievalMsg = `Pickup your order at ${restaurantInfo.address}`;
+        //hard coded to simulate when an order is ready for pickup
+        readyTime = "10";
+    }
+
     return (
-
         <Flex marginLeft={-19} direction={["column", "row"]} align="stretch" justify="center" p={[4, 6]} gap={10} wrap="wrap">
-            {/* Map Container */}
-            <LoadScriptNext
-                googleMapsApiKey={googleMapsApiKey}
-                onLoad={() => setMapsLoaded(true)} 
-                onUnmount={() => setMapsLoaded(false)}
+        {/* Map Container */}
+        <LoadScriptNext
+            googleMapsApiKey={googleMapsApiKey}
+            onLoad={() => setMapsLoaded(true)} 
+            onUnmount={() => setMapsLoaded(false)}
+        >
+            <GoogleMap
+                mapContainerStyle={{ width: "35%", height: "350px" }} 
+                center={center}
+                zoom={15}
             >
-                <GoogleMap
-                    mapContainerStyle={{ width: "35%", height: "350px" }} 
-                    center={center}
-                    zoom={15}
-                >
-                    {directions && <DirectionsRenderer directions={directions} />}
-                    {directions && (
-                        <>
-                            <Marker position={directions.routes[0].legs[0].start_location} />
-                            <Marker position={directions.routes[0].legs[0].end_location} />
-                            {showInfoWindow && (
-                                <InfoWindow position={infoWindowPosition} onCloseClick={() => setShowInfoWindow(false)}>
-                                    <div>
-                                        <h4>Estimated Arrived Time</h4>
-                                        <p>{travelTime}</p>
-                                    </div>
-                                </InfoWindow>
-                            )}
-                        </>
-                    )}
-                </GoogleMap>
-            </LoadScriptNext>
+                {directions && <DirectionsRenderer directions={directions} />}
+                {directions && (
+                    <>
+                        <Marker position={directions.routes[0].legs[0].start_location} />
+                        <Marker position={directions.routes[0].legs[0].end_location} />
+                        {showInfoWindow && (
+                            <InfoWindow position={infoWindowPosition} onCloseClick={() => setShowInfoWindow(false)}>
+                                <div>
+                                    <h4>{arrivalTimeMsg}</h4>
+                                    <p>{readyTime} minutes</p>
+                                </div>
+                            </InfoWindow>
+                        )}
+                    </>
+                )}
+            </GoogleMap>
+        </LoadScriptNext>
 
-            {/* Order Details Box */}
-            <Box title='order-detailed-history-box' id='order-detailed-history-box' fontFamily="'Raleway', sans-serif" bg='#000000' color='#fff' width={["100%", "60%"]} w={{base:"20em", sm:"25em", md:"30em"}} maxHeight='350px' p='1.5rem' borderRadius='md' overflowY='auto'> 
-                    <Heading fontSize='25px' pb='1rem' fontFamily="'Raleway', sans-serif" > Order Confirmation </Heading>
-                    <Text> Confirmation Number / Order ID: {order.id}</Text>
-                    <Text mt='10px'> Order Date/Time: {order.pickupTime}</Text>
-                    <Text mt='10px'> Address: {order.address}</Text>
-                    <Text mt='10px' mb='30px'> Placed by: {order.firstName} {order.lastName}</Text>
-                    <Text mt='10px' mb='30px'> Delivered by: {deliveryPersonFirstName} {deliveryPersonLastName}</Text>
-                    {order?.lines?.map((item) => (
-                        <HStack key={item.id} mt='10px' justifyContent='center' fontWeight='bold'>
-                            {itemImagesSrc[item.id] && (
-                                <Image src={itemImagesSrc[item.id]} borderRadius='full' boxSize='50px' objectFit='cover' alt='Item image' />
-                            )}
-                            <Text w='50px'> {item.quantity} </Text>
-                            <Text w='300px'> {item.label} </Text>
-                            <Text w='50px'> ${item.price} </Text>
-                        </HStack>
-                    ))}
-                    <HStack mt='15px' justifyContent='center'fontWeight='bold'>
-                        <Text w='350px' align='right'> Total (tax: 10%): </Text>
-                        <Text align='right'> ${order.total} </Text>
+        {/* Order Details Box */}
+        <Box title='order-detailed-history-box' id='order-detailed-history-box' fontFamily="'Raleway', sans-serif" bg='#000000' color='#fff' width={["100%", "60%"]} w={{base:"20em", sm:"25em", md:"30em"}} maxHeight='350px' p='1.5rem' borderRadius='md' overflowY='auto'> 
+                <Heading fontSize='25px' pb='1rem' fontFamily="'Raleway', sans-serif" > Order Confirmation </Heading>
+                <Text> Confirmation Number / Order ID: {order.id}</Text>
+                <Text mt='10px'> Order Date/Time: {order.pickupTime}</Text>
+                <Text mt='10px'> Address: {order.address}</Text>
+                <Text mt='10px' mb='30px'> Placed by: {order.firstName} {order.lastName}</Text>
+                <Text mt='10px' mb='30px'> {orderRetrievalMsg} </Text>
+                {order?.lines?.map((item) => (
+                    <HStack key={item.id} mt='10px' justifyContent='center' fontWeight='bold'>
+                        {itemImagesSrc[item.id] && (
+                            <Image src={itemImagesSrc[item.id]} borderRadius='full' boxSize='50px' objectFit='cover' alt='Item image' />
+                        )}
+                        <Text w='50px'> {item.quantity} </Text>
+                        <Text w='300px'> {item.label} </Text>
+                        <Text w='50px'> ${item.price} </Text>
                     </HStack>
-                    <Text mt='15px' fontWeight='bold'> Order Comments: </Text>
-                    <Text > {order.comments} </Text>
-                </Box>
-
+                ))}
+                <HStack mt='15px' justifyContent='center'fontWeight='bold'>
+                    <Text w='350px' align='right'> Total (tax: 10%): </Text>
+                    <Text align='right'> ${order.total} </Text>
+                </HStack>
+                <Text mt='15px' fontWeight='bold'> Order Comments: </Text>
+                <Text > {order.comments} </Text>
+            </Box>
         </Flex>
         
     );
