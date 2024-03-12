@@ -10,16 +10,18 @@ import { useSortProvider } from "../components/sortProvider";
 import { Sort } from "../components/Sort";
 import { Type } from "../components/Type";
 import { DietaryNeeds } from "../components/DietaryNeeds";
+import { SearchBar } from "../components/SearchBar";
 
 // the HomePage will be our default page after log in
 export const Menu = () => {
     const navigate = useNavigate();
     const { categories, getItemsByCategory, user } = useDataProvider();
     const { selectedFilter} = useSortProvider();
-    console.log(selectedFilter);
+  
     return (
         <> 
        <FilterNavigation  />
+         {selectedFilter === "Search" && <SearchBar/>}
          {selectedFilter === "Sort" && <Sort/> }    
          {selectedFilter === "Type" && <Type/>}
          {selectedFilter === "Dietary" && <DietaryNeeds/>}
