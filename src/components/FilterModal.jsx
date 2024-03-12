@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { VStack, Divider } from "@chakra-ui/react";
 import {
     Button,
@@ -10,7 +10,7 @@ import {
     ModalBody,
     ModalCloseButton,
 } from "@chakra-ui/react";
-import { React, useState } from "react";
+import { useState } from "react";
 import { DietaryModal } from "./DietaryModal";
 import { SortModal } from "./SortModal";
 import { TypeModal } from "./TypeModal";

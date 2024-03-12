@@ -3,29 +3,26 @@
 import { Center, Box, SimpleGrid, Heading, Image, Link, Text } from "@chakra-ui/react";
 import { useDataProvider } from "../components/dataProvider";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 const MAX_DESCRIPTION_LENGTH = 70; // Set your desired maximum length
 import { FilterNavigation } from "../components/FilterNavigation";
-import { useSortProvider } from "../components/sortProvider";
 import { Sort } from "../components/Sort";
 import { Type } from "../components/Type";
 import { DietaryNeeds } from "../components/DietaryNeeds";
-import { SearchBar } from "../components/SearchBar";
+import { Search } from "../components/Search";
 
 // the HomePage will be our default page after log in
 export const Menu = () => {
     const navigate = useNavigate();
-    const { categories, getItemsByCategory, user } = useDataProvider();
-    const { selectedFilter} = useSortProvider();
-  
+    const {query, selectedFilter,categories, getItemsByCategory, user } = useDataProvider();
+    console.log("query in menu", query);
     return (
         <> 
        <FilterNavigation  />
-         {selectedFilter === "Search" && <SearchBar/>}
+         {selectedFilter === "Search" && <Search/>} 
          {selectedFilter === "Sort" && <Sort/> }    
          {selectedFilter === "Type" && <Type/>}
          {selectedFilter === "Dietary" && <DietaryNeeds/>}
-         {selectedFilter === "" &&  
+         {(selectedFilter === "") && 
          ( <Center> 
             <Box title="menu-grid" className="MenuContainer" mt="30px" maxW="90%"
              justifyContent="center" p={5}>

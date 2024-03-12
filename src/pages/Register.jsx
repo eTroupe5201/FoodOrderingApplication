@@ -364,7 +364,7 @@ export const Register = ({saveData}) => {
                    <br></br>
                     <p> Close this window to continue.</p>
                   <br></br>
-                    <p> To finalize the verification process, click on the &quoComplete Registration&quo button on the webpage.</p>
+                    <p> To finalize the verification process, click on the  &quot;Complete Registration &quot; button on the webpage.</p>
                 </ModalBody>
                 <ModalFooter><Button color="white" bg="black" border="2px solid tan" mr={3} onClick={onClose}>
         Close

@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import {VStack,  Divider } from "@chakra-ui/react";
 import { Button, Modal, ModalContent, ModalOverlay, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
-import { useSortProvider} from "../components/sortProvider";
+import { useDataProvider} from "../components/dataProvider";
 
 
 export const DietaryModal = ({ isOpen, onClose }) => {
    
-    const { selectedOption, updateSelectedOption, updateSelectedFilter } = useSortProvider();
+    const { selectedOption, updateSelectedOption, updateSelectedFilter } = useDataProvider();
    
     // Function to handle radio button change
     const handleOptionChange = (event) => {
@@ -68,20 +68,19 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                                 checked={selectedOption === "Organic"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Organic" style={{ flex: '1', paddingLeft: '8px' }} >Organic</label>
+                            <label htmlFor="Organic" style={{ flex: "1", paddingLeft: "8px" }} >Organic</label>
                         </div>
                         <Divider/>
                         <div>
                             <input
                                 type="radio"
-                                id="Ketogenic"
+                                id="Low-Carb/Keto"
                                 name="dietaryNeeds"
-                                value="Ketogenic"
-                                paddingLeft="100px"
-                                checked={selectedOption === "Ketogenic"} // Check if this option is selected
+                                value="Low-Carb/Keto"
+                                checked={selectedOption === "Low-Carb/Keto"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Ketogenic" style={{ flex: '1', paddingLeft: '8px' }}>Ketogenic</label>
+                            <label htmlFor="Low-Carb/Keto" style={{ flex: "1", paddingLeft: "8px" }}>Low-Carb/Keto</label>
                         </div>
                         <Divider/>
                         <div>
@@ -93,7 +92,7 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                                 checked={selectedOption === "Vegetarian"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Vegetarian" style={{ flex: '1', paddingLeft: '8px' }}>Vegetarian</label>
+                            <label htmlFor="Vegetarian" style={{ flex: "1", paddingLeft: "8px" }}>Vegetarian</label>
                         </div>
                         <Divider/>
                     <div>
@@ -105,7 +104,7 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                                 checked={selectedOption === "Paleo"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Paleo" style={{ flex: '1', paddingLeft: '8px' }}>Paleo</label>
+                            <label htmlFor="Paleo" style={{ flex: "1", paddingLeft: "8px" }}>Paleo</label>
                         </div>
                         <Divider/>
                         <div>
@@ -117,7 +116,7 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                                 checked={selectedOption === "Kosher"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Kosher" style={{ flex: '1', paddingLeft: '8px' }}>Kosher</label>
+                            <label htmlFor="Kosher" style={{ flex: "1", paddingLeft: "8px" }}>Kosher</label>
                         </div>
                         <Divider/>
                         <div>
@@ -130,7 +129,7 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                                 checked={selectedOption === "Mediterranean"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Mediterranean" style={{  flex: '1', paddingLeft: '8px' }}>Mediterranean</label>
+                            <label htmlFor="Mediterranean" style={{ flex: "1", paddingLeft: "8px" }}>Mediterranean</label>
                         </div>
                         </div>
                         <Divider/>
@@ -143,7 +142,7 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                                 checked={selectedOption === "Non-GMO"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Non-GMO" style={{ flex: '1', paddingLeft: '8px' }}>Non-GMO</label>
+                            <label htmlFor="Non-GMO" style={{ flex: "1", paddingLeft: "8px" }}>Non-GMO</label>
                         </div>
                     </VStack>
                 </ModalBody>

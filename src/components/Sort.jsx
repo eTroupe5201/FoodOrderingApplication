@@ -1,15 +1,12 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Center, Heading, Link, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { useDataProvider } from "../components/dataProvider";
-import { useSortProvider } from "../components/sortProvider";
 
 const MAX_DESCRIPTION_LENGTH = 70;
 
 export const Sort = () => {
   const navigate = useNavigate();
-  const { categories, getItemsByCategory } = useDataProvider();
-  const { selectedOption } = useSortProvider();
+  const {selectedOption , categories, getItemsByCategory } = useDataProvider();
 
   // Render items based on the selected sorting option
   const renderItems = (category) => {
@@ -40,13 +37,7 @@ export const Sort = () => {
           borderWidth="1px"
           borderColor="tan"
           padding="15px"
-          _active={{
-            transform: "translateY(2px)",
-            bg: "white",
-            boxShadow:
-              "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",
-            backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)",
-          }}
+          _active={{transform: "translateY(2px)", bg:"white",boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)"}}       
           maxWidth={{ base: "100%", md: "100%", lg: "100%" }}
           mb={2}
           _hover={{ boxShadow: "0 0 10px 1px tan" }}

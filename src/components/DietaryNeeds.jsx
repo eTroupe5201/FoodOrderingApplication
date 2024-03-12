@@ -1,14 +1,12 @@
-import React from "react";
 import { Link} from "react-router-dom";
 import { Center, Box, SimpleGrid, Heading, Image, Text } from "@chakra-ui/react";
 const MAX_DESCRIPTION_LENGTH = 70; // Set your desired maximum length
-import { useSortProvider } from "../components/sortProvider";
 import { useDataProvider } from "../components/dataProvider";
 
 export const DietaryNeeds = () => {
 
-    const { categories, getItemsByCategory } = useDataProvider();
-    const { selectedOption } = useSortProvider();
+    const {selectedOption , categories, getItemsByCategory } = useDataProvider();
+
     console.log("Selected option:", selectedOption);
 
     return (
@@ -19,7 +17,7 @@ export const DietaryNeeds = () => {
                         <Center>
                             <Box p={2} borderRadius="md" width="75%" mb={3}>
                                 <Heading as="h2" fontFamily="'Great Vibes', cursive" padding="15px" fontSize={{ base: "30px", md: "40px", lg: "50px" }} mb={1}>
-                                   Results
+                                   {selectedOption} Options
                                 </Heading>
                                 
                             </Box>
@@ -31,7 +29,9 @@ export const DietaryNeeds = () => {
                                 .filter(item => item.dietaryNeeds === selectedOption)
                                 .map((item) => (
                                     <Link key={item.id} to={`/item/${item.id}`} _hover={{ textDecoration: "none" }}>
-                                        <Box colSpan={{ base: 1, sm: 1, xl: 4 }} borderRadius="25px" p={2} justify="space-between" align="center" borderWidth="1px" borderColor="tan" padding="15px" _active={{ transform: "translateY(2px)", bg: "white", boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)" }} maxWidth={{ base: "100%", md: "100%", lg: "100%" }} mb={2} _hover={{ boxShadow: "0 0 10px 1px tan" }}>
+                                        <Box colSpan={{ base: 1, sm: 1, xl: 4 }} borderRadius="25px" p={2} justify="space-between" align="center" borderWidth="1px" borderColor="tan" padding="15px"
+                                            _active={{transform: "translateY(2px)", bg:"white",boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)"}}
+                                            maxWidth={{ base: "100%", md: "100%", lg: "100%" }} mb={2} _hover={{ boxShadow: "0 0 10px 1px tan" }}>
                                             <Image src={item.image?.src} borderRadius="25px" width={{ base: "100%", md: "100%", lg: "100%", xl: "100%" }} size={{ base: "100%" }} objectFit="cover" mr={3} />
 
                                             <Heading fontFamily="'Raleway', sans-serif" padding="20px" as="h3" fontSize={{ base: "12px", sm: "13px", md: "14px", lg: "15px", xl: "15px" }} >

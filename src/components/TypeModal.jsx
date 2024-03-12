@@ -1,11 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {VStack,  Divider } from "@chakra-ui/react";
 import { Button, Modal, ModalContent, ModalOverlay, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
-import { useSortProvider} from "../components/sortProvider";
+import { useDataProvider} from "../components/dataProvider";
 
 export const TypeModal = ({ isOpen, onClose }) => {
    
-    const { selectedOption, updateSelectedOption, updateSelectedFilter } = useSortProvider();
+    const { selectedOption, updateSelectedOption, updateSelectedFilter } = useDataProvider();
     
     //Function to handle radio button change
     const handleOptionChange = (event) => {
@@ -68,7 +68,7 @@ export const TypeModal = ({ isOpen, onClose }) => {
                                 checked={selectedOption === "Appetizers"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Appetizers" style={{ flex: '1', paddingLeft: '8px' }} >Appetizers</label>
+                            <label htmlFor="Appetizers" style={{ flex: "1", paddingLeft: "8px" }}  >Appetizers</label>
                         </div>
                       <Divider />
                       <div>
@@ -80,7 +80,7 @@ export const TypeModal = ({ isOpen, onClose }) => {
                                 checked={selectedOption === "Soups"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Soups" style={{ flex: '1', paddingLeft: '8px' }} >Soups</label>
+                            <label htmlFor="Soups" style={{ flex: "1", paddingLeft: "8px" }} >Soups</label>
                         </div>
                       <Divider />
                       <div>
@@ -92,7 +92,7 @@ export const TypeModal = ({ isOpen, onClose }) => {
                                 checked={selectedOption === "Entrées"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Entrées" style={{ flex: '1', paddingLeft: '8px' }} >Entrées</label>
+                            <label htmlFor="Entrées" style={{ flex: "1", paddingLeft: "8px" }} >Entrées</label>
                         </div>
                       <Divider />
                       <div>
@@ -104,7 +104,7 @@ export const TypeModal = ({ isOpen, onClose }) => {
                                 checked={selectedOption === "Salads"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Salads" style={{ flex: '1', paddingLeft: '8px' }} > Salads</label>
+                            <label htmlFor="Salads" style={{ flex: "1", paddingLeft: "8px" }} > Salads</label>
                         </div>
                       <Divider />
                       <div>
@@ -116,7 +116,7 @@ export const TypeModal = ({ isOpen, onClose }) => {
                                 checked={selectedOption === "Desserts"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Desserts" style={{ flex: '1', paddingLeft: '8px' }} >Desserts</label>
+                            <label htmlFor="Desserts" style={{ flex: "1", paddingLeft: "8px" }} >Desserts</label>
                         </div>
                       <Divider />       <div>
                     <input
@@ -127,7 +127,7 @@ export const TypeModal = ({ isOpen, onClose }) => {
                                 checked={selectedOption === "Beverages"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Beverages" style={{ flex: '1', paddingLeft: '8px' }} >Beverages</label>
+                            <label htmlFor="Beverages" style={{ flex: "1", paddingLeft: "8px" }} >Beverages</label>
                         </div>
                       <Divider />
                     </VStack>

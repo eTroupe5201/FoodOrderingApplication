@@ -5,7 +5,7 @@ import { useDataProvider } from "../components/dataProvider"
 import { useNavigate, useLocation } from "react-router-dom"
 import React, { useState, useEffect } from "react";
 import { getLatLng } from "../utils/getLatLing";
-import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from "@react-google-maps/api";
 
 /* This page contains historical order information, allowing the guest to replace the order. The page also
 *  includes Google map functionality to view the address provided with the order, versus the restaurant's 

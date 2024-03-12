@@ -22,7 +22,6 @@ import { Orders } from "./pages/Orders";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import "./styles.css";
 import { DataProvider } from "./components/dataProvider";
-import { SortProvider } from "./components/sortProvider";
 
 /**
  * default page is homepage, and click oder button will go to menu page of our restaurant
@@ -112,9 +111,7 @@ root.render(
   <React.StrictMode>
       <ChakraProvider >
         <DataProvider>
-          <SortProvider>
             <RouterProvider router={router} />
-          </SortProvider>
         </DataProvider>
       </ChakraProvider>
   </React.StrictMode>

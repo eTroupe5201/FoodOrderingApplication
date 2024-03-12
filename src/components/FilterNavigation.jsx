@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { Divider, Button, HStack } from "@chakra-ui/react";
 import { HiArrowsUpDown } from "react-icons/hi2";
 import { DietaryModal } from "./DietaryModal";

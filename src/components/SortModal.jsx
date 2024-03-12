@@ -1,11 +1,9 @@
 import { Link } from "react-router-dom";
 import { VStack, Divider, Button, Modal, ModalContent, ModalOverlay, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { set } from "react-hook-form";
-import { useSortProvider } from "../components/sortProvider";
+import { useDataProvider } from "../components/dataProvider";
 
 export const SortModal = ({ isOpen, onClose}) => {
-    const { selectedOption, updateSelectedOption, updateSelectedFilter } = useSortProvider();
+    const { selectedOption, updateSelectedOption, updateSelectedFilter } = useDataProvider();
     
     //Function to handle radio button change
     const handleOptionChange = (event) => {
@@ -68,7 +66,7 @@ export const SortModal = ({ isOpen, onClose}) => {
                                     checked={selectedOption === "PriceLowToHigh"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                                 />
-                                <label htmlFor="PriceLowToHigh" style={{ flex: '1', paddingLeft: '8px' }} >Price: low to high</label>
+                                <label htmlFor="PriceLowToHigh" style={{ flex: "1", paddingLeft: "8px" }} >Price: low to high</label>
                             </div>
                             <Divider />
                             <div>
@@ -80,7 +78,7 @@ export const SortModal = ({ isOpen, onClose}) => {
                                     checked={selectedOption === "PriceHighToLow"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                                 />
-                                <label htmlFor="PriceHighToLow" style={{ flex: '1', paddingLeft: '8px' }} >Price: high to low</label>
+                                <label htmlFor="PriceHighToLow" style={{ flex: "1", paddingLeft: "8px" }} >Price: high to low</label>
                             </div>
                         </VStack>
                     </ModalBody>
