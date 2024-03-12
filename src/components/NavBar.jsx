@@ -77,6 +77,7 @@ export function NavBar() {
             maxH={{ base: "3em", sm: "4em"}}
             maxW={{ base: "3em", sm: "4em"}}
             className="photo" src="https://d1zh5cyxaugen.cloudfront.net/assets/WhiteFavicon.png" alt="logo" /></Link> 
+
                 ) : (
                     <Link to="/">  <Image
                     alt="logo"

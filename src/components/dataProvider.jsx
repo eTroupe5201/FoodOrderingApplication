@@ -2,14 +2,13 @@
  
 import React, { createContext, useContext, useEffect, useState, useRef} from "react";
 import { Center, Spinner, useToast } from "@chakra-ui/react";
-import { collection, doc, getDoc, getDocs, onSnapshot, deleteDoc, query, limit, writeBatch } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, onSnapshot, deleteDoc, query, limit, writeBatch, updateDoc } from "firebase/firestore";
 import { db, auth, functions } from "../utils/firebase";
 import { signInAnonymously } from "firebase/auth";
 import { httpsCallable } from "firebase/functions";
 import { getFirestore,  where } from "firebase/firestore";
 
 // import { getLatLng } from "../utils/getLatLing";
-
 
 const DataProviderContext = createContext({ 
     categories: [],
@@ -55,7 +54,6 @@ export const DataProvider = ({ children }) => {
 
   const toast = useToast();
   // const [paypalId, setpaypalId] = useState();
-
 
   //getDoc comes from firebase firestore, it can import automatically and receive the document
   const fetchRestaurantInfo = async () => {
@@ -258,13 +256,13 @@ export const DataProvider = ({ children }) => {
     return items.find((item) => item.id === itemId);
   };
 
-const getOrderById = (orderId) => {
-  return orderHistory.find((order) => order.id === orderId);
-}
+  const getOrderById = (orderId) => {
+    return orderHistory.find((order) => order.id === orderId);
+  }
 
   /*
     category actually is a id of string type when you look at the database
-    here I will parase a category id in it and iterate each item's category, 
+    here I will parse a category id in it and iterate each item's category, 
     which is also a string type bounded with its category type,
     to filter out every items meet in its category correspondily
   */
@@ -319,9 +317,9 @@ const getOrderById = (orderId) => {
 
   };
 
-  //causing infinite loop
-  //console.log(lines);
-
+  /* 
+    Updates Cart in Firebase and UI, triggered by the user clicking the remove button on the Cart or CartModal.
+  */
   const removeCartItem = async (itemId) => {
     if (!user) return; // make sure user does exist
     const uid = user.uid;
@@ -332,13 +330,51 @@ const getOrderById = (orderId) => {
     setCartChanged(true);
   };
 
-  //get the data from the form data of checkout page, we should save this data to the firebase
+  /* 
+    Updates 'Favorite' field on an order to true or false. This is triggered by the user clicking the 
+    heart/favorite icon on the Order page.
+  */
+  const updateFavoriteStatus = async (orderId, newStatus) => {
+    if (!user) return; // make sure user does exist
+
+    const orderRef = doc(db, "order", orderId); // Using doc to locate specific shopping cart entry documents
+
+    //updateDoc field "favorite" to newStatus (true for favorite, false for unfavorite)
+    await updateDoc(orderRef, {favorite: newStatus});
+
+  };
+
+  const setPickupOrderStatus = async () => {
+    if (!user || !order) return; // make sure user and order does exist
+    
+    try {
+      const orderRef = doc(db, "order", order.id); // Using doc to locate order
+      //updateDoc field "status" to confirmed (triggered by 'Pay at Restaurant' button being clicked)
+      await updateDoc(orderRef, {status: "confirmed"});
+
+      //listen for doc changes to update UI
+      onSnapshot(doc(db, "order", order.id), async (docSnapshot) => {
+        const data = docSnapshot.data();
+        const pickupTime = data.pickupTime?.toDate().toLocaleString();
+        setOrder({ id: docSnapshot.id, ...data, pickupTime });
+      });
+    
+      return order;
+    } catch (error) {
+      console.error("Error with setPickupOrderStatus: ", error);
+      throw error; 
+    }
+  };
+
+  /*
+    Gets data from form data of CheckOut page and saves to Firebase.
+  */
   const checkout = async (order) => {
     try{
-      //1. use httpsCallable function to save to the firebase(Create an https Callable reference)
+      // use httpsCallable function to save to the firebase(Create an https Callable reference)
       const placeOrderCallable = httpsCallable(functions, "placeorder");
 
-      //2. Calling functions and passing order data
+      // Calling functions and passing order data
       const result = await placeOrderCallable({...order, lines})
       const data = result.data;
 
@@ -355,7 +391,6 @@ const getOrderById = (orderId) => {
       alert("Failed to place order. Please try again.");
       return null; // Return null to indicate failure
     }
-    
   }
 
   const generateOrder = async () => {
@@ -379,6 +414,9 @@ const getOrderById = (orderId) => {
         orderId: order.id,
         paypalId: paypalId,
       });
+
+      console.log(order.id);
+      console.log(paypalId);
 
       /**
        * Set up a document listener to monitor changes in specific order documents in the Firestore database. 
@@ -553,6 +591,7 @@ const getOrderHistory = async () => {
   useEffect(() => {
     fetchData();
   }, []);
+  
   const isUserInDatabase = async (user) => {
     
     const email = user.email;
@@ -587,13 +626,14 @@ const getOrderHistory = async () => {
    * Furthermore, for example, any component that uses useDataProvider will be able to access the restaurantInfo state.
   */
   return (
-
     <DataProviderContext.Provider value={{ user, order, lines, setLines, restaurantInfo, categories, items, cartChanged, orderHistory, 
     checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchItemImageById, fetchOrder, getItemsByCategory, getItemById, addToCart, setCartChanged,
     removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, setOrder, generateOrder, getOrderById,
     handleOrder, getOrderHistory, updateUserAccount, travelTime, setTravelTime, findAndAssignDeliveryPerson, deliveryFirstname, setdeliveryFirstname,
+
     deliveryLastname, setdeliveryLastname, isUserInDatabase, selectedFilter,updateSelectedFilter,selectedOption,updateSelectedOption,searchedItem,updateSearch
     }}>
+
 
 
       {isReady ? (

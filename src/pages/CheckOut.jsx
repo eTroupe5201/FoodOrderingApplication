@@ -4,7 +4,7 @@ import  { useEffect,  useRef } from "react";
 import { BottomButton } from "../components/BottomButton";
 import { useDataProvider } from "../components/dataProvider"
 import { calculateOrderTotal, } from "../utils/calculations";
-import { PAYMENT_METHODS } from "../utils/constants";
+import { PAYMENT_METHODS, RECEIVE_METHODS } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
 
@@ -13,18 +13,19 @@ export const CheckOut = () => {
     
     const navigate = useNavigate();
     
-    const { fetchUserProfile, lines, restaurantInfo, checkout } = useDataProvider();
+    const { fetchUserProfile, lines, restaurantInfo, checkout, setCartChanged } = useDataProvider();
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
-    const isMounted = useRef(true); // Used to track the mounting status of components
+    const isMounted = useRef(false); // Used to track the mounting status of components
 
     
     useEffect(() => {
+        isMounted.current = true;
         const fetchAndSetUserProfile = async () => {
             try {
                 const data = await fetchUserProfile();
                 // console.log(data);
-                if (data) {
+                if (data && isMounted.current) {
                     /*
                         Asynchronous retrieval of user information during component loading, 
                         and updating form fields with setValue after obtaining the data. 
@@ -53,7 +54,7 @@ export const CheckOut = () => {
         return () => {
         isMounted.current = false;
         };
-    }, [restaurantInfo, fetchUserProfile, setValue]); 
+    }, []); 
 
 
     const onSubmit = async (data) => {
@@ -99,9 +100,9 @@ export const CheckOut = () => {
                                     border="outset 2px tan"
                                     title='checkout-email'
                                     placeholder="Email"
-                                    {...register("email", { required: true })}
+                                    {...register("email", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ })}
                                 />
-                                <FormErrorMessage>Required</FormErrorMessage>
+                                <FormErrorMessage>{"Email address is invalid"}</FormErrorMessage>
                             </FormControl>
                             <FormControl isInvalid={!!errors?.phone?.type}>
                                 <FormLabel>Phone</FormLabel>
@@ -127,7 +128,7 @@ export const CheckOut = () => {
                     </AccordionPanel>
                 </AccordionItem>
 
-                <AccordionItem title='checkout-payment'>
+                {/* <AccordionItem title='checkout-payment'>
                     <AccordionButton bg="black" color="white">PAYMENT METHOD</AccordionButton>
                     <AccordionPanel>
                         <VStack mt={4}>
@@ -151,8 +152,31 @@ export const CheckOut = () => {
                             </FormControl>
                         </VStack>
                     </AccordionPanel>
+                </AccordionItem> */}
+                <AccordionItem title='checkout-receive'>
+                    <AccordionButton bg="black" color="white">PICKUP OR DELIVERY</AccordionButton>
+                    <AccordionPanel>
+                        <VStack mt={4}>
+                            <FormControl isInvalid={!!errors?.receiveMethod?.type}>
+                                <RadioGroup>
+                                    <VStack alignItems="flex-start">
+                                        {restaurantInfo.receiveMethods.map((method, index) => (
+                                            <Radio
+                                            border="outset 2px tan"
+                                                key={index}
+                                                value={method}
+                                                {...register("receiveMethod", { required: true })}
+                                            >
+                                                {RECEIVE_METHODS.find((m) => m.id === method)?.name}
+                                            </Radio>
+                                            ))}
+                                    </VStack>
+                                </RadioGroup>
+                                <FormErrorMessage>Required</FormErrorMessage>
+                            </FormControl>
+                        </VStack>
+                    </AccordionPanel>
                 </AccordionItem>
-
 
                 <AccordionItem title='checkout-comments'>
                     <AccordionButton bg="black" color="white">COMMENTS</AccordionButton>
@@ -168,7 +192,7 @@ export const CheckOut = () => {
             </Accordion>
             <BottomButton color="white" bg="black" border="tan 2px outset"
             title='checkout-button'
-            label="Place pick up order"
+            label="Place Order"
             total={calculateOrderTotal(lines, 10).toFixed(2)}
             />        
         </form>

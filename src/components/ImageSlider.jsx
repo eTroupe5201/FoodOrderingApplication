@@ -81,6 +81,7 @@ export function ImageSlider() {
           </div>
         </div>
 
+
         <Box height={{ base: "70vh", sm: "80vh", md: "80vh", lg: "80vh", xl: "80vh" }} overflow="hidden">
           <Image
             rel="preload"
@@ -93,5 +94,6 @@ export function ImageSlider() {
         </Box>
       </Container>
     </>
+
   );
 }

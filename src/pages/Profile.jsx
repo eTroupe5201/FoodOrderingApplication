@@ -3,7 +3,7 @@ import  { useEffect,  useState } from "react"
 import { useDataProvider } from "../components/dataProvider"
 import { useNavigate } from "react-router-dom"
 import { auth } from "../utils/firebase" 
-import { TiPlus } from "react-icons/ti";
+import { TiPlus, TiHeartFullOutline} from "react-icons/ti";
 import { sendPasswordResetEmail, signOut} from "firebase/auth"
 
 /* This page contains basic user data, with routes or buttons to reset password, edit other user info, 
@@ -14,6 +14,27 @@ export const Profile = () => {
     const toast = useToast();
     const { user, fetchUserProfile, getUserInfo, getOrderHistory, orderHistory } = useDataProvider();
     const [userProfile, setUserProfile] = useState(null);
+
+    //sort orderHistory so Favorites show first in the list
+    try { 
+        orderHistory.sort((a, b) => {
+            const orderA = a.favorite;
+            const orderB = b.favorite;
+            
+            if (orderA && orderB) {
+                if (orderA > orderB) return -1; //a true and b false
+                if (orderB < orderA) return 1; //b false and a true 
+                return 0;
+            }
+            else if (orderA && !orderB) {
+                return -1;
+            }
+            else if (!orderA && orderB) {
+                return 1;
+            }
+            else return 0;
+        })
+    } catch (error) {error.message;}
 
     useEffect(() => {
         const loadUserProfile = async () => {
@@ -77,7 +98,7 @@ export const Profile = () => {
         <div><Center title="profile-content" h="100%" position="relative" fontFamily="'Raleway', sans-serif" mb="100px">
             <SimpleGrid mt='4rem' columns={2} templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" , lg: "repeat(2, 1fr)" , xl: "repeat(2, 1fr)" }}>
                 <VStack mt='-2rem' pb='3rem'>
-                    <Box title='profile-info-box' id='profile-info-box' bg='#000000' color='#fff' w={{base:"25em", sm:"30em", md:"35em"}} height='100%' m='2rem' p='1.5rem' borderRadius='md'> 
+                    <Box title='profile-info-box' id='profile-info-box' bg='#000000' color='#fff' w={{base:"25em", sm:"30em", md:"35em"}} m='2rem' p='1.5rem' borderRadius='md'> 
                         <Heading fontSize='25px' pb='1rem' fontFamily="'Raleway', sans-serif" fontWeight='bold'> Profile Info </Heading>
                         <HStack mt='0.5rem'>
                             <Text fontWeight='bold'> First Name: </Text>
@@ -117,7 +138,7 @@ export const Profile = () => {
                             </Box>
                         </Center>
                     </Box>
-                    <Box title='reset-pw-box' id='reset-pw-box' bg='#000000' color='#fff' w={{base:"25em", sm:"30em", md:"35em"}} height='100%' p='1.5rem' borderRadius='md'> 
+                    <Box title='reset-pw-box' id='reset-pw-box' bg='#000000' color='#fff' w={{base:"25em", sm:"30em", md:"35em"}} p='1.5rem' borderRadius='md'> 
                         <Text fontWeight='bold'>To reset your password, click the button below. You will be logged out and an email will be sent to the above address with instructions. </Text>
                         <Center>
                             <Box 
@@ -153,15 +174,16 @@ export const Profile = () => {
                         <Heading fontSize='25px' pb='1rem' fontFamily="'Raleway', sans-serif" > Order History </Heading>
                         <Text mb='20px'> To view order details or reorder a previous order, click on the plus sign next to the desired order below. </Text>
                         
-                        <HStack fontWeight="bold" justifyContent='center'>
+                        <HStack fontWeight="bold" >
                             <Text w='60px'> Details </Text>
-                            <Text w='200px'> Date/Time </Text>
-                            <Text w='100px'> # of Items </Text>
-                            <Text w='80px' > Total </Text>
+                            <Text w='170px'> Date/Time </Text>
+                            <Center w='80px'> # of Items </Center>
+                            <Center w='70px' > Total </Center>
+                            <Center w='80px' > Favorites </Center>
                         </HStack>
                         
                         {orderHistory?.map((order) => (
-                            <HStack key={order.id} mt="15px" fontWeight="bold" justifyContent='center'>
+                            <HStack key={order.id} mt="15px" fontWeight="bold" >
                                 <Button  
                                     w='30px' 
                                     onClick={()=>{navigate(`/orders/${order.id}`);}} 
@@ -170,9 +192,12 @@ export const Profile = () => {
                                 > 
                                     <Center> <TiPlus /> </Center>
                                 </Button>
-                                <Text w='200px'> {(order.pickupTime).toDate().toLocaleString()} </Text>
-                                <Center w='100px'> {order.lines.length} </Center>
-                                <Text w='80px' > ${order.total} </Text>
+                                <Text w='170px'> {(order.pickupTime).toDate().toLocaleString()} </Text>
+                                <Center w='80px'> {order.lines.length} </Center>
+                                <Center w='70px' > ${order.total} </Center>
+                                {order.favorite ? (
+                                    <Center w='80px'><TiHeartFullOutline size="35px" style={{color:"white"}}/></Center>
+                                ) : (<></>)}
                             </HStack>
                         ))}
                     </Box>

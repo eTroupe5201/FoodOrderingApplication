@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
 import "../styles.css";
 
-//TODO: fix state issue with setValue (cannot change input)
 export const EditProfile = () => {
     const navigate = useNavigate();
     const { fetchUserProfile, updateUserAccount } = useDataProvider();
