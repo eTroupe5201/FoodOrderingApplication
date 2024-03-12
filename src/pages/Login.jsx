@@ -148,7 +148,7 @@ const handleSubmitVerification = () => {
     const handleYahooLogin = async () => {
         const auth = getAuth();
         const provider = new OAuthProvider("yahoo.com");
-      
+        
         try {
 
             const result = await signInWithPopup(auth, provider);
