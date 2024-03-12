@@ -36,6 +36,7 @@ const ItemForm = () => {
         <TextInput source="label" validate={[required()]} fullWidth />
         <NumberInput source="price" validate={[required(), number()]} fullWidth />
         <TextInput source="description" fullWidth />
+        <TextInput source="dietaryNeeds" label="Dietary Needs" fullWidth />
         <ArrayInput source="variants">
             <SimpleFormIterator fullWidth>
                 <TextInput source="type" helperText={false} fullWidth />

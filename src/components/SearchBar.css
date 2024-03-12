@@ -1,0 +1,36 @@
+
+.search-bar {
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap; 
+    background: white;
+    color: black;
+    align-items: right;
+    border: 3px outset tan; /* outset tan makes the border look gold */
+    border-radius: 25px; /* Rounds the corners of the search bar */
+    /* Prevents the input from wrapping to the next line */
+  }
+ 
+  
+  input[type="text"] {
+    padding: 10px 30px; /* Adjust padding to accommodate the icon */
+    border-radius: 25px;
+    font-size: 14px;
+    outline: none;
+    font-weight: bold;
+    
+  }
+  
+  .search-icon{
+    fill:tan;
+    padding: 20%;
+   
+  
+    height: 30px;
+    width: 30px;
+    border: 2px outset tan;
+    border-radius: 50%;
+    
+  }
+  
+

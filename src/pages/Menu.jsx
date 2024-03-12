@@ -4,15 +4,26 @@ import { Center, Box, SimpleGrid, Heading, Image, Link, Text } from "@chakra-ui/
 import { useDataProvider } from "../components/dataProvider";
 import { useNavigate } from "react-router-dom";
 const MAX_DESCRIPTION_LENGTH = 70; // Set your desired maximum length
+import { FilterNavigation } from "../components/FilterNavigation";
+import { Sort } from "../components/Sort";
+import { Type } from "../components/Type";
+import { DietaryNeeds } from "../components/DietaryNeeds";
+import { Search } from "../components/Search";
 
 // the HomePage will be our default page after log in
 export const Menu = () => {
     const navigate = useNavigate();
-    const { categories, getItemsByCategory, user } = useDataProvider();
-
+    const {query, selectedFilter,categories, getItemsByCategory, user } = useDataProvider();
+    console.log("query in menu", query);
     return (
-        //I set up 3 categories in one line temporarily, can adjust this syntax later
-        <Center> 
+        <> 
+       <FilterNavigation  />
+         {selectedFilter === "Search" && <Search/>} 
+         {selectedFilter === "Sort" && <Sort/> }    
+         {selectedFilter === "Type" && <Type/>}
+         {selectedFilter === "Dietary" && <DietaryNeeds/>}
+         {(selectedFilter === "") && 
+         ( <Center> 
             <Box title="menu-grid" className="MenuContainer" mt="30px" maxW="90%"
              justifyContent="center" p={5}>
                 {categories.map((category) => ( 
@@ -86,7 +97,8 @@ export const Menu = () => {
                 </Box>
             ))}  
        
-        </Box> </Center>
+        </Box> </Center>)}
+        </>
     );
     
 };

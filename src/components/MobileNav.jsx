@@ -32,6 +32,8 @@ export function MobileNav() {
 }
 
   return (
+    <>
+    
     <Menu color="black">
       <MenuButton
         as={IconButton}
@@ -43,7 +45,7 @@ export function MobileNav() {
         icon={<HamburgerIcon color="white" />}
       />
       <MenuList border="2px outset tan"bg="black" textAlign="center" fontWeight="bold">
-
+        
         <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px",borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/"> Home </Link> </MenuItem>
         <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/contact"> Contact </Link> </MenuItem>
         <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/menu"> Order </Link> </MenuItem>
@@ -69,5 +71,7 @@ export function MobileNav() {
         )}
       </MenuList>
     </Menu>
+  
+    </>
   );
 }
