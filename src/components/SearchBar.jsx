@@ -6,7 +6,7 @@ import "./SearchBar.css";
 import { useDataProvider } from "../components/dataProvider";
 export function SearchBar() {
   const { updateSelectedFilter, searchedItem, updateSearch } = useDataProvider();
-  const [setShowSearch] = useState(false); // Initialize showSearch state variable
+//sconst [setShowSearch] = useState(false); // Initialize showSearch state variable
   const navigate = useNavigate();
   
   const handleSubmit = (event) => {
@@ -15,10 +15,7 @@ export function SearchBar() {
     if (searchedItem !== "") {
       updateSelectedFilter("Search");
       navigate("/menu");
-      setShowSearch(true); // Set showSearch to true when form is submitted and searchedItem is not empty
-    } else {
-      setShowSearch(false); // Hide the Search component when form is submitted and searchedItem is empty
-    }
+         }
   };
 
   const handleChange = (event) => {

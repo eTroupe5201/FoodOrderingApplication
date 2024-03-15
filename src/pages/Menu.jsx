@@ -67,7 +67,7 @@ export const Menu = () => {
                             height="100%"
                              mb={2}
                              _hover={{ boxShadow: "0 0 10px 1px tan"}} >
-                                <Image data-test={`item-image=${item.image}`} src={item.image?.src} borderRadius="25px" 
+                                <Image alt="menu-image" data-test={`item-image=${item.image}`} src={item.image?.src} borderRadius="25px" 
                                 width={{base:"100%", md:"100%", lg:"100%", xl:"100%"}}
                                 size={{base:"100%"}} 
                                 objectFit="cover" mr={3} />

@@ -387,7 +387,7 @@ const handleSubmitVerification = () => {
     
         <>    
         
-        <div><Modal isOpen={isAuthenticationModalOpen} onClose={handleCloseAuthenticationModal}>
+        <div><Modal  data-test="OTP-Modal" isOpen={isAuthenticationModalOpen} onClose={handleCloseAuthenticationModal}>
         <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
         <ModalContent border="3px outset tan" borderRadius="25px" marginTop="10%" bg="black" color="white"   fontFamily="'Raleway', sans-serif ">
           <ModalHeader textAlign="center">One-Time Password Authentication</ModalHeader>
@@ -399,6 +399,7 @@ const handleSubmitVerification = () => {
            <Input  fontFamily= "'Times New Roman', Times, serif"
            marginTop="2%" bg="white" color="black" varient="outlined"
                 country={"us"}
+                data-test="Phone-Input"
                 onChange={(e) => setPhone("+" + e.target.value)}
                  />
                
@@ -490,11 +491,11 @@ const handleSubmitVerification = () => {
             <Box w={{base:"25em", sm:"30em", md:"35em"}}height="100%"  borderRadius="25px" bg="black" color="white" mt={{base:"7%", sm:"15%", md:"15%", lg:"12%", xl:"8%"}} mb={{base:"40%", sm:"35%", md:"20%", lg:"15%", xl:"10%"}}>
      <Tabs  borderRadius="25px" className="tab" border="tan 2px outset"  isFitted variant="enclosed" >
     <TabList >
-        <Tab borderRightLeftRadius="25px" borderRightRadius="25px" borderTopLeftRadius="25px" _selected={{color:"white", transform: "translateY(-2px)", border:"outset 2px tan"}} color="tan" >SIGN IN</Tab>
-        <Tab  borderBottomLeftRadius="25px" borderTopRightRadius="25px" borderTopLeftRadius="25px" _selected={{color:"white", transform: "translateY(-2px)", border:"outset 2px tan"}} color="tan">WITH SOCIAL MEDIA </Tab>
+        <Tab data-test="Sign-In-Tab" borderRightLeftRadius="25px" borderRightRadius="25px" borderTopLeftRadius="25px" _selected={{color:"white", transform: "translateY(-2px)", border:"outset 2px tan"}} color="tan" >SIGN IN</Tab>
+        <Tab  data-test="Social-Media-Tab" borderBottomLeftRadius="25px" borderTopRightRadius="25px" borderTopLeftRadius="25px" _selected={{color:"white", transform: "translateY(-2px)", border:"outset 2px tan"}} color="tan">WITH SOCIAL MEDIA </Tab>
     </TabList>
     <TabPanels>
-        <TabPanel height="35em"><form className="Login" title="login-form-box" onSubmit={handleSubmit(handleLogin)}> 
+        <TabPanel  height="35em"><form className="Login" title="login-form-box" onSubmit={handleSubmit(handleLogin)}> 
             <Flex alignContent="center" justifyContent="center">
                     <VStack>
                         <Text fontSize={{ base: "20px", md: "25px"}} 
@@ -504,6 +505,7 @@ const handleSubmitVerification = () => {
                         <FormControl id="emailField" isInvalid={!!formState?.errors?.email?.type}>
                             <FormLabel>Email Address</FormLabel>
                             <Input 
+                                data-test="Email-Input" 
                                 title="login-email"
                                 id="email"
                                 border="tan 2px outset"
@@ -518,6 +520,7 @@ const handleSubmitVerification = () => {
                             <FormLabel>Password</FormLabel>
                             <InputGroup>
                                 <Input 
+                                    data-test="Password-Input"
                                     title="login-password"
                                     id="password"
                                     type={showPassword ? "text" : "password"}
@@ -579,8 +582,8 @@ const handleSubmitVerification = () => {
                             bg="black"
                             borderRadius="md"
                             _active={{transform: "translateY(2px)", bg:"white",boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)"}}
-              
-                            > 
+                            data-test="Login-Button"
+                            >   
                             CONTINUE
                         </Box>
                         <Center 
@@ -597,6 +600,7 @@ const handleSubmitVerification = () => {
                             bg="black"
                             _active={{transform: "translateY(2px)", bg:"white",boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)"}}
                             onClick={navigateToRegister} 
+                            data-test="Register-Button"
                             > 
                             REGISTER
                         </Center>  
@@ -606,7 +610,7 @@ const handleSubmitVerification = () => {
         </form>
         
        </TabPanel>
-                                <TabPanel height="35em">
+                                <TabPanel  height="35em">
                                 <Flex alignContent="center" justifyContent="center">
                             <VStack mt="6em" >
                              <Box data-test="Google-Login-Button" width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleGoogleLogin} ><GoogleLoginButton  /></Box>

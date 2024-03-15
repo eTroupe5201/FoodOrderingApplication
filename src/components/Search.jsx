@@ -21,10 +21,13 @@ export const Search = () => {
             const lowerCaseTitle = item.title ? item.title.toLowerCase() : "";
             const lowerCaseDietaryNeeds = item.dietaryNeeds ? item.dietaryNeeds.toLowerCase() : "";
             const lowerCaseDescription = item.description ? item.description.toLowerCase() : "";
+            const lowerCaseCategory = category.title.toLowerCase() ? category.title.toLowerCase() : "";
+
             return (
                 lowerCaseTitle.includes(lowerCaseSearchedItem) ||
                 lowerCaseDietaryNeeds.includes(lowerCaseSearchedItem) ||
-                lowerCaseDescription.includes(lowerCaseSearchedItem)
+                lowerCaseDescription.includes(lowerCaseSearchedItem) ||
+                lowerCaseCategory.includes(lowerCaseSearchedItem)
             );
         })
     );
@@ -57,7 +60,7 @@ export const Search = () => {
                                  maxWidth={{ base: "100%", md: "100%", lg: "100%" }} mb={2} _hover={{ boxShadow: "0 0 10px 1px tan" }}>
                                     <Image  data-test={`search-item-image=${item.image}`}src={item.image?.src} borderRadius="25px" width={{ base: "100%", md: "100%", lg: "100%", xl: "100%" }} size={{ base: "100%" }} objectFit="cover" mr={3} />
 
-                                    <Heading  data-test={`searc-item-label=${item.label}`}fontFamily="'Raleway', sans-serif" padding="20px" as="h3" fontSize={{ base: "12px", sm: "13px", md: "14px", lg: "15px", xl: "15px" }} >
+                                    <Heading  data-test={`search-item-label=${item.label}`}fontFamily="'Raleway', sans-serif" padding="20px" as="h3" fontSize={{ base: "12px", sm: "13px", md: "14px", lg: "15px", xl: "15px" }} >
                                         {item.label}
                                     </Heading>
                                     <Text  data-test={`search-item-description=${item.description}`} height="6m" maxHeight="6em" textOverflow="ellipsis" fontFamily="'Raleway', sans-serif" fontSize={{ base: "11px", sm: "12px", md: "13px", lg: "14px", xl: "15px" }} fontWeight="bold">

@@ -1,5 +1,3 @@
-import { describe, it, cy } from "cypress";
-
 describe("template spec", () => {
   it("Contains correct header text", () => {
     cy.visit("/menu") //base url configured

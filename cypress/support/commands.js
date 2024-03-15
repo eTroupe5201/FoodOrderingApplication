@@ -1,25 +1,18 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
+import "firebase/compat/database";
+import {attachCustomCommands} from "cypress-firebase";
+
+const fbConfig = {
+    apiKey: "AIzaSyC-8t2o5R1Zz0z9oJ5f9t9w9t9w9t9w9t9",
+    authDomain: "foodorderingapplication.firebaseapp.com",
+    projectId: "foodorderingapplication",
+    storageBucket: "foodorderingapplication.appspot.com",
+    messagingSenderId: "1234567890",
+    appId: "1:1234567890:web:1234567890",
+    measurementId: "G-1234567890"
+    };
+    
+firebase.initializeApp(fbConfig);
+attachCustomCommands({ Cypress, cy, firebase });
