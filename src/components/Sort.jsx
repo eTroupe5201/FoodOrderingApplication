@@ -26,15 +26,18 @@ export const Sort = () => {
       // Render each item here
       <Link
         data-test={`sorted-item-id=${item.id}`}
+
         key={item.id}
         onClick={() => navigate(`/item/${item.id}`)}
         _hover={{ textDecoration: "none" }}
       >
         <Box
+
           data-test="Sort-item"
           borderRadius="25px"
           p={2}
           height="100%"
+
           justify="space-between"
           align="center"
           borderWidth="1px"
@@ -46,7 +49,7 @@ export const Sort = () => {
           _hover={{ boxShadow: "0 0 10px 1px tan" }}
         >
           <Image
-             data-test={`sorted-item-image=${item.image}`}
+            data-test={`sorted-item-image=${item.image}`}
             src={item.image?.src}
             borderRadius="25px"
             width={{ base: "100%", md: "100%", lg: "100%", xl: "100%" }}
@@ -76,6 +79,7 @@ export const Sort = () => {
               ? `${item.description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
               : item.description}
           </Text>
+
           <Text data-test={`sorted-item-price=${item.price}`} fontSize={14} fontWeight="bold">
             ${item.price.toFixed(2)}
           </Text>
@@ -116,7 +120,6 @@ export const Sort = () => {
                 >
                   {category.title}
                 </Heading>
-
                 {category.description && (
                   <Text
                     data-test={`sorted-category-title=${category.description}`}

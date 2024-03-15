@@ -27,8 +27,10 @@ export const TypeModal = ({ isOpen, onClose }) => {
     };
 
     return (
+
         <div data-testid="type-modal">
         <Modal data-test="Type-Modal" isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">
+
             <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(-10deg)' />
             <ModalContent
                 borderLeft="2px tan outset"
@@ -49,6 +51,7 @@ export const TypeModal = ({ isOpen, onClose }) => {
                 justifyContent="center" // Center content vertically
                 padding="1rem"
             >
+
                 <ModalHeader data-test="Type-Modal-Header" title="type-modal-header">Type</ModalHeader>
                 <ModalCloseButton
                     color="white"
@@ -56,6 +59,7 @@ export const TypeModal = ({ isOpen, onClose }) => {
                     border="white solid 1px"
                     _hover={{ boxShadow: "0 0 10px 1px tan" }}
                     title="type-modal-close-button"
+
                 />
                 <ModalBody>
                     <VStack spacing={4} align="stretch">
@@ -89,6 +93,7 @@ export const TypeModal = ({ isOpen, onClose }) => {
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
                             <label data-test="Type-Modal-Label-Soups" htmlFor="Soups" style={{ flex: "1", paddingLeft: "8px" }} >Soups</label>
+
                         </div>
                       <Divider />
                       <div>
@@ -143,6 +148,7 @@ export const TypeModal = ({ isOpen, onClose }) => {
                     <input
                                 type="radio"
                                 id="Beverages"
+
                                 name="Beverages"
                                 value="Beverages"
                                 title="Beverages"
@@ -158,7 +164,9 @@ export const TypeModal = ({ isOpen, onClose }) => {
                       <Divider />
                     </VStack>
                 </ModalBody>
+
                 <ModalFooter data-test="Type-Modal-Footer" title="type-modal-footer">
+
                     <Link to="/menu">
                     <Button
                             mr={3}
@@ -166,6 +174,7 @@ export const TypeModal = ({ isOpen, onClose }) => {
                             background="black"
                             border="tan outset 2px"
                             data-test="Type-Modal-Footer-Apply-Button"
+
                             _hover={{ boxShadow: "0 0 10px 1px tan" }}
                             onClick={handleSubmit} // Call handleSubmit function on button click
                         >
@@ -176,6 +185,7 @@ export const TypeModal = ({ isOpen, onClose }) => {
                             background="black"
                             border="tan outset 2px"
                             data-test="Type-Modal-Footer-Cancel-Button"
+
                             _hover={{ boxShadow: "0 0 10px 1px tan" }}
                             onClick={handleCancel} // Close the modal without applying changes
                         >
