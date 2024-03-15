@@ -27,8 +27,8 @@ export const DietaryModal = ({ isOpen, onClose }) => {
         onClose();
     };
     return (
-        <div data-testid="cart-modal">
-        <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">
+        <div data-testid="dietary-modal">
+        <Modal data-test="DietaryNeedsModal" isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">
             <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(-10deg)' />
             <ModalContent
                 borderLeft="2px tan outset"
@@ -49,13 +49,14 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                 justifyContent="center" // Center content vertically
                 padding="1rem"
             >
-                <ModalHeader title="cart-modal-header">Dietary Needs</ModalHeader>
+                <ModalHeader data-test="Dietary-Needs-Modal-Header" title="dietary-modal-header">Dietary Needs</ModalHeader>
                 <ModalCloseButton
                     color="white"
                     background="black"
                     border="white solid 1px"
                     _hover={{ boxShadow: "0 0 10px 1px tan" }}
-                    title="cart-modal-close-button"
+                    title="dietary-modal-close-button"
+                    data-test="Dietary-Needs-Modal-Close-Button"
                 />
                 <ModalBody>
                     <VStack spacing={4} align="stretch">
@@ -63,8 +64,12 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                     <input
                                 type="radio"
                                 id="Organic"
-                                name="dietaryNeeds"
+                                name="Organic"
                                 value="Organic"
+                                title="Organic"
+                                role="radio"
+                                aria-checked={selectedOption === "Organic" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
+                                data-test="Dietary-Needs-Input-Organic"
                                 checked={selectedOption === "Organic"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
@@ -77,6 +82,10 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                                 id="Low-Carb/Keto"
                                 name="dietaryNeeds"
                                 value="Low-Carb/Keto"
+                                title="Low-Carb/Keto"
+                                role="radio"
+                                aria-checked={selectedOption === "Low-Carb/Keto" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
+                                data-test="Dietary-Needs-Input-Low-Carb-Keto"
                                 checked={selectedOption === "Low-Carb/Keto"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
@@ -87,8 +96,12 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                             <input
                                 type="radio"
                                 id="Vegetarian"
-                                name="dietaryNeeds"
+                                name="Vegetarian"
                                 value="Vegetarian"
+                                title="Vegetarian"
+                                role="radio"
+                                data-test="Dietary-Needs-Input-Vegetarian"
+                                aria-checked={selectedOption === "Vegetarian" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
                                 checked={selectedOption === "Vegetarian"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
@@ -99,8 +112,12 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                             <input
                                 type="radio"
                                 id="Paleo"
-                                name="dietaryNeeds"
+                                name="Paleo"
                                 value="Paleo"
+                                title="Paleo"
+                                role="radio"
+                                data-test="Dietary-Needs-Input-Paleo"
+                                aria-checked={selectedOption === "Paleo" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
                                 checked={selectedOption === "Paleo"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
@@ -110,9 +127,14 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                         <div>
                             <input
                                 type="radio"
-                                id="Koser"
-                                name="dietaryNeeds"
+                                id="Kohser"
+                                name="Kosher"
                                 value="Kosher"
+                                title="Kosher"
+                                role="radio"
+                                data-test="Dietary-Needs-Input-Kosher"
+                                aria-checked={selectedOption === "Kosher" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
+                              
                                 checked={selectedOption === "Kosher"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
@@ -124,8 +146,13 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                             <input
                                 type="radio"
                                 id="Mediterranean"
-                                name="dietaryNeeds"
+                                name="Mediterranean"
                                 value="Mediterranean"
+                                title="Mediterranean"
+                                data-test="Dietary-Needs-Input-Mediterranean"
+                                role="radio"
+                                aria-checked={selectedOption === "Mediterranean" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
+                              
                                 checked={selectedOption === "Mediterranean"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
@@ -137,8 +164,13 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                             <input
                                 type="radio"
                                 id="Non-GMO"
-                                name="dietaryNeeds"
+                                name="Non-GMO"
                                 value="Non-GMO"
+                                title="Non-GMO"
+                                data-test="Dietary-Needs-Input-Non-GMO"
+                                role="radio"
+                                aria-checked={selectedOption === "Organic" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
+                              
                                 checked={selectedOption === "Non-GMO"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
@@ -146,13 +178,14 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                         </div>
                     </VStack>
                 </ModalBody>
-                <ModalFooter title="Filter-modal-footer">
+                <ModalFooter data-test="Dietary-Needs-Modal-Footer" title="dietary-modal-footer">
                     <Link to="/menu">
                     <Button
                             mr={3}
                             color="white"
                             background="black"
                             border="white solid 1px"
+                            data-test="Dietary-Needs-Modal-Footer-Submit-Button"
                             _hover={{ boxShadow: "0 0 10px 1px tan" }}
                             onClick={handleSubmit} // Call handleSubmit function on button click
                         >
@@ -162,6 +195,7 @@ export const DietaryModal = ({ isOpen, onClose }) => {
                             color="white"
                             background="black"
                             border="white solid 1px"
+                            data-test="Dietary-Needs-Modal-Footer-Cancel-Button"
                             _hover={{ boxShadow: "0 0 10px 1px tan" }}
                             onClick={handleCancel} // Close the modal without applying changes
                         >

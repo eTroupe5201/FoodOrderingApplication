@@ -25,13 +25,16 @@ export const Sort = () => {
     return sortedItems.map((item) => (
       // Render each item here
       <Link
+        data-test={`sorted-item-id=${item.id}`}
         key={item.id}
         onClick={() => navigate(`/item/${item.id}`)}
         _hover={{ textDecoration: "none" }}
       >
         <Box
+          data-test="Sort-item"
           borderRadius="25px"
           p={2}
+          height="100%"
           justify="space-between"
           align="center"
           borderWidth="1px"
@@ -43,6 +46,7 @@ export const Sort = () => {
           _hover={{ boxShadow: "0 0 10px 1px tan" }}
         >
           <Image
+             data-test={`sorted-item-image=${item.image}`}
             src={item.image?.src}
             borderRadius="25px"
             width={{ base: "100%", md: "100%", lg: "100%", xl: "100%" }}
@@ -51,6 +55,7 @@ export const Sort = () => {
             mr={3}
           />
           <Heading
+            data-test={`sorted-item-label=${item.label}`}
             fontFamily="'Raleway', sans-serif"
             padding="20px"
             as="h3"
@@ -59,6 +64,7 @@ export const Sort = () => {
             {item.label}
           </Heading>
           <Text
+            data-test={`sorted-item-description=${item.description}`}
             height="6m"
             maxHeight="6em"
             textOverflow="ellipsis"
@@ -70,7 +76,7 @@ export const Sort = () => {
               ? `${item.description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
               : item.description}
           </Text>
-          <Text fontSize={14} fontWeight="bold">
+          <Text data-test={`sorted-item-price=${item.price}`} fontSize={14} fontWeight="bold">
             ${item.price.toFixed(2)}
           </Text>
         </Box>
@@ -90,6 +96,7 @@ export const Sort = () => {
       >
         {categories.map((category) => (
           <Box
+            data-test={`sorted-item-category-id=${category.id}`}
             key={category.id}
             className="Menu"
             p={5}
@@ -100,6 +107,7 @@ export const Sort = () => {
             <Center>
               <Box p={2} borderRadius="md" width="75%" mb={3}>
                 <Heading
+                  data-test={`sorted-category-title=${category.title}`}
                   as="h2"
                   fontFamily="'Great Vibes', cursive"
                   padding="15px"
@@ -108,8 +116,10 @@ export const Sort = () => {
                 >
                   {category.title}
                 </Heading>
+
                 {category.description && (
                   <Text
+                    data-test={`sorted-category-title=${category.description}`}
                     padding="15px"
                     fontSize={{ base: "12px", md: "13px", lg: "14px" }}
                     color="white"
