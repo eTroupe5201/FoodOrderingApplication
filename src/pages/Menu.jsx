@@ -14,18 +14,22 @@ import { Search } from "../components/Search";
 // the HomePage will be our default page after log in
 export const Menu = () => {
     const navigate = useNavigate();
+
     const { selectedFilter,categories, getItemsByCategory, user } = useDataProvider();
    
     return (
         <> 
        <FilterNavigation   />
          {selectedFilter === "Search" && <Search />} 
+
          {selectedFilter === "Sort" && <Sort/> }    
          {selectedFilter === "Type" && <Type/>}
          {selectedFilter === "Dietary" && <DietaryNeeds/>}
          {(selectedFilter === "") && 
          ( <Center> 
+
             <Box data-test="MENU" title="menu-grid" className="MenuContainer" mt="30px" maxW="90%"
+
              justifyContent="center" p={5}>
                 {categories.map((category) => ( 
 

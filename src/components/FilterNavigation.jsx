@@ -46,11 +46,13 @@ export function FilterNavigation({ setSortBy }) {
 
   return (
     <>
+
       <HStack data-test="FilterNavigation" margin="2%">
         <Button data-test="FilterButton" className="filter-button" onClick={handleFilterModalOpen}> <HiArrowsUpDown />Filter</Button>
         <Button data-test="DietaryNeeds"className="filter-button" onClick={handleDietaryModalOpen}> Dietary Needs </Button>
         <Button data-test="TypeButton" className="filter-button" onClick={handleTypeModalOpen}>Type</Button>
         <Button data-test="SortButton" className="filter-button" onClick={handleSortModalOpen}>Sort</Button>
+
       </HStack>
 
       <Divider />

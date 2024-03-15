@@ -630,10 +630,9 @@ const getOrderHistory = async () => {
     checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchItemImageById, fetchOrder, getItemsByCategory, getItemById, addToCart, setCartChanged,
     removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, setOrder, generateOrder, getOrderById,
     handleOrder, getOrderHistory, updateUserAccount, travelTime, setTravelTime, findAndAssignDeliveryPerson, deliveryFirstname, setdeliveryFirstname,
-
-    deliveryLastname, setdeliveryLastname, isUserInDatabase, selectedFilter,updateSelectedFilter,selectedOption,updateSelectedOption,searchedItem,updateSearch
+    deliveryLastname, setdeliveryLastname, isUserInDatabase, selectedFilter,updateSelectedFilter,selectedOption,updateSelectedOption,searchedItem,
+    updateSearch, setPickupOrderStatus 
     }}>
-
 
 
       {isReady ? (

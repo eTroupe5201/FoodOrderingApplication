@@ -1,12 +1,15 @@
+
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import "./SearchBar.css";
 import { useDataProvider } from "../components/dataProvider";
+
 export function SearchBar() {
   const { updateSelectedFilter, searchedItem, updateSearch } = useDataProvider();
 //sconst [setShowSearch] = useState(false); // Initialize showSearch state variable
+
   const navigate = useNavigate();
   
   const handleSubmit = (event) => {
@@ -15,8 +18,7 @@ export function SearchBar() {
     if (searchedItem !== "") {
       updateSelectedFilter("Search");
       navigate("/menu");
-         }
-  };
+}};
 
   const handleChange = (event) => {
     updateSearch(event.target.value);
@@ -45,6 +47,7 @@ export function SearchBar() {
           title="Search"
         >
           <FaSearch data-test="Search-Input-Icon" className="search-icon" />
+
         </Button>
       </form>
  

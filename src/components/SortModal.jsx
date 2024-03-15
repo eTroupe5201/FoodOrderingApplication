@@ -25,8 +25,10 @@ export const SortModal = ({ isOpen, onClose}) => {
     };
 
     return (
+
         <div data-testid="sort-modal">
             <Modal data-test="Sort-Modal" isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">
+
                 <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(-10deg)' />
                 <ModalContent
                     borderLeft="2px tan outset"
@@ -47,6 +49,7 @@ export const SortModal = ({ isOpen, onClose}) => {
                     justifyContent="center" // Center content vertically
                     padding="1rem"
                 >
+
                     <ModalHeader data-test="Sort-Modal-Header" fontSize="x-large" title="sort-modal-header">Sort</ModalHeader>
                     <ModalCloseButton
                         color="white"
@@ -54,6 +57,7 @@ export const SortModal = ({ isOpen, onClose}) => {
                         border="white solid 1px"
                         _hover={{ boxShadow: "0 0 10px 1px tan" }}
                         title="sort-modal-close-button"
+
                     />
                     <ModalBody>
                         <VStack spacing={4} align="stretch">
@@ -71,11 +75,13 @@ export const SortModal = ({ isOpen, onClose}) => {
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                                 />
                                 <label data-test="Sort-Modal-Label-PriceLowToHigh" htmlFor="PriceLowToHigh" style={{ flex: "1", paddingLeft: "8px" }} >Price: low to high</label>
+
                             </div>
                             <Divider />
                             <div>
                                 <input
                                     type="radio"
+
                                     data-test="Sort-Modal-Input-PriceHighToLow"
                                     id="PriceHighToLow"
                                     name="PriceHighToLow"
@@ -104,6 +110,7 @@ export const SortModal = ({ isOpen, onClose}) => {
                                 Apply
                             </Button>
                             <Button
+
                                 data-test="Sort-Modal-Footer-Cancel-Button"
                                 color="white"
                                 background="black"
