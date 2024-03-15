@@ -27,8 +27,10 @@ export const TypeModal = ({ isOpen, onClose }) => {
     };
 
     return (
-        <div data-testid="cart-modal">
-        <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">
+
+        <div data-testid="type-modal">
+        <Modal data-test="Type-Modal" isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">
+
             <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(-10deg)' />
             <ModalContent
                 borderLeft="2px tan outset"
@@ -49,13 +51,15 @@ export const TypeModal = ({ isOpen, onClose }) => {
                 justifyContent="center" // Center content vertically
                 padding="1rem"
             >
-                <ModalHeader title="cart-modal-header">Type</ModalHeader>
+
+                <ModalHeader data-test="Type-Modal-Header" title="type-modal-header">Type</ModalHeader>
                 <ModalCloseButton
                     color="white"
                     background="black"
                     border="white solid 1px"
                     _hover={{ boxShadow: "0 0 10px 1px tan" }}
-                    title="cart-modal-close-button"
+                    title="type-modal-close-button"
+
                 />
                 <ModalBody>
                     <VStack spacing={4} align="stretch">
@@ -63,82 +67,114 @@ export const TypeModal = ({ isOpen, onClose }) => {
                     <input
                                 type="radio"
                                 id="Appetizers"
-                                name="dietaryNeeds"
+                                name="Appetizers"
                                 value="Appetizers"
+                                title="Appetizers"
+                                role="radio"
+                                data-test="Type-Modal-Input-Appetizers"
+                                aria-checked={selectedOption === "Appetizers" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
                                 checked={selectedOption === "Appetizers"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Appetizers" style={{ flex: "1", paddingLeft: "8px" }}  >Appetizers</label>
+                            <label data-test="Type-Modal-Label-Appetizers" htmlFor="Appetizers" style={{ flex: "1", paddingLeft: "8px" }}  >Appetizers</label>
                         </div>
                       <Divider />
                       <div>
                     <input
                                 type="radio"
                                 id="Soups"
-                                name="dietaryNeeds"
+                                name="Soups"
                                 value="Soups"
+                                title="Soups"
+                                role="radio"
+                                data-test="Type-Modal-Input-Soups"
+                                aria-checked={selectedOption === "Soups" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
                                 checked={selectedOption === "Soups"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Soups" style={{ flex: "1", paddingLeft: "8px" }} >Soups</label>
+                            <label data-test="Type-Modal-Label-Soups" htmlFor="Soups" style={{ flex: "1", paddingLeft: "8px" }} >Soups</label>
+
                         </div>
                       <Divider />
                       <div>
                     <input
                                 type="radio"
                                 id="Entrées"
-                                name="dietaryNeeds"
+                                name="Entrées"
                                 value="Entrées"
+                                title="Entrées"
+                                role="radio"
+                                data-test="Type-Modal-Input-Entrées"
+                                aria-checked={selectedOption === "Entrées" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
                                 checked={selectedOption === "Entrées"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Entrées" style={{ flex: "1", paddingLeft: "8px" }} >Entrées</label>
+                            <label data-test="Type-Modal-Label-Entrées" htmlFor="Entrées" style={{ flex: "1", paddingLeft: "8px" }} >Entrées</label>
                         </div>
                       <Divider />
                       <div>
                     <input
                                 type="radio"
                                 id="Salads"
-                                name="dietaryNeeds"
+                                name="Salads"
                                 value="Salads"
+                                title="Salads"
+                                role="radio"
+                                data-test="Type-Modal-Input-Salads"
+                                aria-checked={selectedOption === "Salads" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
                                 checked={selectedOption === "Salads"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Salads" style={{ flex: "1", paddingLeft: "8px" }} > Salads</label>
+                            <label  data-test="Type-Modal-Label-Salads" htmlFor="Salads" style={{ flex: "1", paddingLeft: "8px" }} >Salads</label>
                         </div>
                       <Divider />
                       <div>
                     <input
                                 type="radio"
                                 id="Desserts"
-                                name="dietaryNeeds"
+                                name="Desserts"
                                 value="Desserts"
+                                title="Desserts"
+                                role="radio"
+                                data-test="Type-Modal-Input-Desserts"
+                                aria-checked={selectedOption === "Desserts" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
+                           
                                 checked={selectedOption === "Desserts"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Desserts" style={{ flex: "1", paddingLeft: "8px" }} >Desserts</label>
+                            <label data-test="Type-Modal-Label-Desserts" htmlFor="Desserts" style={{ flex: "1", paddingLeft: "8px" }} >Desserts</label>
                         </div>
                       <Divider />       <div>
                     <input
                                 type="radio"
                                 id="Beverages"
-                                name="dietaryNeeds"
+
+                                name="Beverages"
                                 value="Beverages"
+                                title="Beverages"
+                                data-test="Type-Modal-Input-Beverages"
+                                role="radio"
+                                aria-checked={selectedOption === "Beverages" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
+                           
                                 checked={selectedOption === "Beverages"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                             />
-                            <label htmlFor="Beverages" style={{ flex: "1", paddingLeft: "8px" }} >Beverages</label>
+                            <label data-test="Type-Modal-Label-Beverages" htmlFor="Beverages" style={{ flex: "1", paddingLeft: "8px" }} >Beverages</label>
                         </div>
                       <Divider />
                     </VStack>
                 </ModalBody>
-                <ModalFooter title="Filter-modal-footer">
+
+                <ModalFooter data-test="Type-Modal-Footer" title="type-modal-footer">
+
                     <Link to="/menu">
                     <Button
                             mr={3}
                             color="white"
                             background="black"
                             border="tan outset 2px"
+                            data-test="Type-Modal-Footer-Apply-Button"
+
                             _hover={{ boxShadow: "0 0 10px 1px tan" }}
                             onClick={handleSubmit} // Call handleSubmit function on button click
                         >
@@ -148,6 +184,8 @@ export const TypeModal = ({ isOpen, onClose }) => {
                             color="white"
                             background="black"
                             border="tan outset 2px"
+                            data-test="Type-Modal-Footer-Cancel-Button"
+
                             _hover={{ boxShadow: "0 0 10px 1px tan" }}
                             onClick={handleCancel} // Close the modal without applying changes
                         >

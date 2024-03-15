@@ -1,17 +1,13 @@
 import React, {useState, useEffect} from "react";
-
 import {Divider, SimpleGrid, Center, Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, useToast} from "@chakra-ui/react";
-
 import { useNavigate } from "react-router-dom";
 import {  useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
 import { auth } from "../utils/firebase" 
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
-
 import {FcGoogle} from "react-icons/fc";
 import { FaTwitter} from "react-icons/fa";
 import { AiFillFacebook,  AiFillYahoo} from "react-icons/ai";
-// import { MdPhoneAndroid } from "react-icons/md";
 import { getAuth, OAuthProvider, signInWithPopup, GoogleAuthProvider ,FacebookAuthProvider, TwitterAuthProvider } from "firebase/auth";
 import { useDisclosure, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react";
 
@@ -376,13 +372,14 @@ export const Register = ({saveData}) => {
                 borderRadius="md"
                 _active={{transform: "translateY(2px)", bg:"white",boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)"}}
                 type="submit"
+                data-test="register-button"
                 > 
                 Register
             </Box>
         );
     } else if (registrationState === "waitingForEmailVerification") {
         buttonContent = (
-            <>    <Modal  transition="3s" motionPreset="scale" onClose={onClose} isOpen={isOpen} isCentered>
+            <>    <Modal data-test="Instruction-Modal"  transition="3s" motionPreset="scale" onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
               <ModalContent padding="20px" border="2px solid tan" fontFamily="'Raleway', sans-serif" borderRadius="25px" bg="black" color="white" >
                 <ModalHeader textAlign="center">REGISTRATION INSTRUCTIONS</ModalHeader>
@@ -421,7 +418,8 @@ export const Register = ({saveData}) => {
                 _active={{boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)", transform: "translateY(2px)"}}
                 onClick={handleCheckEmailVerified}
                 type="button" // Distinguished from type=submit, it is just a button event to prevent form submission
-                > 
+                data-test="complete-verification-button"
+               > 
                COMPLETE VERIFICATION
             </Box>
             <Box 
@@ -442,7 +440,8 @@ export const Register = ({saveData}) => {
                 _active={{boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)", transform: "translateY(2px)"}}
                 onClick={handleResendVerificationEmail}
                 type="button" // Distinguished from type=submit, it is just a button event to prevent form submission
-            > 
+                data-test="resend-email-button"
+           > 
            RESEND EMAIL
         </Box></>
         );
@@ -462,6 +461,7 @@ export const Register = ({saveData}) => {
                         <FormControl id="fnameField" isInvalid={!!formState?.errors?.firstName?.type}>
                             <FormLabel>First Name</FormLabel>
                             <Input 
+                                data-test="register-first-name"
                                 id="firstName"
                                 title="register-first-name"
                                 {...register("firstName", { required: true, pattern:/(^[a-zA-Z,"-][a-zA-Z\s,"-]{0,20}[a-zA-Z]$)/})}
@@ -471,6 +471,7 @@ export const Register = ({saveData}) => {
                         <FormControl id="lnameField" isInvalid={!!formState?.errors?.lastName?.type}>
                             <FormLabel>Last Name</FormLabel>
                             <Input 
+                                data-test="register-last-name"
                                 id="lastName"
                                 title="register-last-name"
                                 {...register("lastName", { required: true, pattern:/(^[a-zA-Z,"-][a-zA-Z\s,"-]{0,20}[a-zA-Z]$)/ })}
@@ -480,6 +481,7 @@ export const Register = ({saveData}) => {
                         <FormControl id="emailField" isInvalid={!!formState?.errors?.email?.type || !emailsMatch}>
                             <FormLabel >Email Address</FormLabel>
                             <Input 
+                                data-test="register-email"
                                 id="email"
                                 title="register-email"
                                 {...register("email", { 
@@ -502,6 +504,7 @@ export const Register = ({saveData}) => {
                         <FormControl id="confirmEmailField" isInvalid={!!formState?.errors?.confirmEmail?.type || !emailsMatch}>
                         <FormLabel>Confirm Email Address</FormLabel>
                             <Input 
+                                data-test="register-confirm-email"
                                 id="confirmEmail"
                                 title="register-confirm-email"
                                 type="confirmEmail"
@@ -525,6 +528,7 @@ export const Register = ({saveData}) => {
                         <FormControl id="phoneField" >
                             <FormLabel>Phone Number (optional)</FormLabel>
                             <Input 
+                                data-test="register-phone"
                                 type="tel"
                                 title="register-phone"
                                 {...register("phone")}
@@ -533,6 +537,7 @@ export const Register = ({saveData}) => {
                         <FormControl id="addressField" >
                             <FormLabel>Address (optional)</FormLabel>
                             <Input 
+                                data-test="register-address"
                                 type="text"
                                 title="register-address"
                                 {...register("address")}
@@ -543,6 +548,7 @@ export const Register = ({saveData}) => {
                             <FormLabel>Password</FormLabel>
                             <InputGroup>
                                 <Input 
+                                    data-test="register-password"
                                     id="password"
                                     title="register-password"
                                     type={showPassword ? "text" : "password"}
@@ -640,10 +646,10 @@ export const Register = ({saveData}) => {
                         <Center >
                            <SimpleGrid columns={4}>
                             
-                           <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}} bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset"onClick={handleGoogleRegister} ><FcGoogle  size="35px"  /></Box>
-                            <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}} bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleFacebookRegister}><AiFillFacebook size="35px" color="#4267B2" /></Box>
-                            <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleTwitterRegister}><FaTwitter  size="35px" color="#1DA1F2"  /></Box>
-                            <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleYahooRegister}>< AiFillYahoo size="35px" color="#1DA1F2"  /></Box>
+                           <Box  data-test="Google-Register-Button" _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}} bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset"onClick={handleGoogleRegister} ><FcGoogle  size="35px"  /></Box>
+                            <Box data-test="Facebook-Register-Button" _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}} bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleFacebookRegister}><AiFillFacebook size="35px" color="#4267B2" /></Box>
+                            <Box data-test="Twitter-Register-Button" _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleTwitterRegister}><FaTwitter  size="35px" color="#1DA1F2"  /></Box>
+                            <Box data-test="Yahoo-Register-Button" _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleYahooRegister}>< AiFillYahoo size="35px" color="#1DA1F2"  /></Box>
                             {/* <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }} color="black" margin="10px"border="3px tan outset" onClick={handlePhoneLogin} ><MdPhoneAndroid textAlign="center" size={35} /></Box>
                           */}
                            </SimpleGrid> 

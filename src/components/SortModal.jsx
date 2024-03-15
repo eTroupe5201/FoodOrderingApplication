@@ -25,8 +25,10 @@ export const SortModal = ({ isOpen, onClose}) => {
     };
 
     return (
-        <div data-testid="cart-modal">
-            <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">
+
+        <div data-testid="sort-modal">
+            <Modal data-test="Sort-Modal" isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">
+
                 <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(-10deg)' />
                 <ModalContent
                     borderLeft="2px tan outset"
@@ -47,13 +49,15 @@ export const SortModal = ({ isOpen, onClose}) => {
                     justifyContent="center" // Center content vertically
                     padding="1rem"
                 >
-                    <ModalHeader fontSize="x-large" title="cart-modal-header">Sort</ModalHeader>
+
+                    <ModalHeader data-test="Sort-Modal-Header" fontSize="x-large" title="sort-modal-header">Sort</ModalHeader>
                     <ModalCloseButton
                         color="white"
                         background="black"
                         border="white solid 1px"
                         _hover={{ boxShadow: "0 0 10px 1px tan" }}
-                        title="cart-modal-close-button"
+                        title="sort-modal-close-button"
+
                     />
                     <ModalBody>
                         <VStack spacing={4} align="stretch">
@@ -63,28 +67,39 @@ export const SortModal = ({ isOpen, onClose}) => {
                                     id="PriceLowToHigh"
                                     name="PriceLowToHigh"
                                     value="PriceLowToHigh"
+                                    title="PriceLowToHigh"
+                                    data-test="Sort-Modal-Input-PriceLowToHigh"
+                                role="radio"
+                                aria-checked={selectedOption === "PriceLowToHigh" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
                                     checked={selectedOption === "PriceLowToHigh"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                                 />
-                                <label htmlFor="PriceLowToHigh" style={{ flex: "1", paddingLeft: "8px" }} >Price: low to high</label>
+                                <label data-test="Sort-Modal-Label-PriceLowToHigh" htmlFor="PriceLowToHigh" style={{ flex: "1", paddingLeft: "8px" }} >Price: low to high</label>
+
                             </div>
                             <Divider />
                             <div>
                                 <input
                                     type="radio"
+
+                                    data-test="Sort-Modal-Input-PriceHighToLow"
                                     id="PriceHighToLow"
                                     name="PriceHighToLow"
                                     value="PriceHighToLow"
+                                    title="PriceHighToLow"
+                                    role="radio"
+                                    aria-checked={selectedOption === "PriceHighToLow" ? "true" : "false"} // Set aria-checked attribute based on selectedOption state
                                     checked={selectedOption === "PriceHighToLow"} // Check if this option is selected
                                     onChange={handleOptionChange} // Call handleOptionChange function on change
                                 />
-                                <label htmlFor="PriceHighToLow" style={{ flex: "1", paddingLeft: "8px" }} >Price: high to low</label>
+                                <label   data-test="Sort-Modal-Label-PriceHighToLow" htmlFor="PriceHighToLow" style={{ flex: "1", paddingLeft: "8px" }} >Price: high to low</label>
                             </div>
                         </VStack>
                     </ModalBody>
-                    <ModalFooter title="Filter-modal-footer">
+                    <ModalFooter data-test="Sort-Modal-Footer" title="sort-modal-footer">
                         <Link to="/menu">
                             <Button
+                                data-test="Sort-Modal-Footer-Submit-Button"
                                 mr={3}
                                 color="white"
                                 background="black"
@@ -95,6 +110,8 @@ export const SortModal = ({ isOpen, onClose}) => {
                                 Apply
                             </Button>
                             <Button
+
+                                data-test="Sort-Modal-Footer-Cancel-Button"
                                 color="white"
                                 background="black"
                                 border="tan outset 2px"

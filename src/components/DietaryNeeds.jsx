@@ -11,12 +11,16 @@ export const DietaryNeeds = () => {
 
     return (
         <Center>
-            <Box title="menu-grid" className="MenuContainer" mt="30px" maxW="90%" justifyContent="center" p={5}>
+
+            <Box  title="menu-grid" className="MenuContainer" mt="30px" maxW="90%" justifyContent="center" p={5}>
+
               
                     <Box className="Menu" p={5} boxShadow="md" border="2px tan solid" width="100%">
                         <Center>
                             <Box p={2} borderRadius="md" width="75%" mb={3}>
-                                <Heading as="h2" fontFamily="'Great Vibes', cursive" padding="15px" fontSize={{ base: "30px", md: "40px", lg: "50px" }} mb={1}>
+
+                                <Heading data-test="Dietary-Needs-Header" as="h2" fontFamily="'Great Vibes', cursive" padding="15px" fontSize={{ base: "30px", md: "40px", lg: "50px" }} mb={1}>
+
                                    {selectedOption} Options
                                 </Heading>
                                 
@@ -28,21 +32,25 @@ export const DietaryNeeds = () => {
                             getItemsByCategory(category.id)
                                 .filter(item => item.dietaryNeeds === selectedOption)
                                 .map((item) => (
-                                    <Link key={item.id} to={`/item/${item.id}`} _hover={{ textDecoration: "none" }}>
-                                        <Box colSpan={{ base: 1, sm: 1, xl: 4 }} borderRadius="25px" p={2} justify="space-between" align="center" borderWidth="1px" borderColor="tan" padding="15px"
+
+                                    <Link data-test={`Dietary-Needs-item-id=${item.id}`} key={item.id} to={`/item/${item.id}`} _hover={{ textDecoration: "none" }}>
+                                        <Box  height="100%" colSpan={{ base: 1, sm: 1, xl: 4 }} borderRadius="25px" p={2} justify="space-between" align="center" borderWidth="1px" borderColor="tan" padding="15px"
                                             _active={{transform: "translateY(2px)", bg:"white",boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)"}}
                                             maxWidth={{ base: "100%", md: "100%", lg: "100%" }} mb={2} _hover={{ boxShadow: "0 0 10px 1px tan" }}>
-                                            <Image src={item.image?.src} borderRadius="25px" width={{ base: "100%", md: "100%", lg: "100%", xl: "100%" }} size={{ base: "100%" }} objectFit="cover" mr={3} />
+                                            <Image data-test={`Dietary-Needs-item-image=${item.image}`} src={item.image?.src} borderRadius="25px" width={{ base: "100%", md: "100%", lg: "100%", xl: "100%" }} size={{ base: "100%" }} objectFit="cover" mr={3} />
 
-                                            <Heading fontFamily="'Raleway', sans-serif" padding="20px" as="h3" fontSize={{ base: "12px", sm: "13px", md: "14px", lg: "15px", xl: "15px" }} >
+                                            <Heading data-test={`Dietary-Needs-item-label=${item.label}`} fontFamily="'Raleway', sans-serif" padding="20px" as="h3" fontSize={{ base: "12px", sm: "13px", md: "14px", lg: "15px", xl: "15px" }} >
                                                 {item.label}
                                             </Heading>
-                                            <Text height="6m" maxHeight="6em" textOverflow="ellipsis" fontFamily="'Raleway', sans-serif" fontSize={{ base: "11px", sm: "12px", md: "13px", lg: "14px", xl: "15px" }} fontWeight="bold">
+                                            <Text data-test={`Dietary-Needs-item-description=${item.description}`} height="6m" maxHeight="6em" textOverflow="ellipsis" fontFamily="'Raleway', sans-serif" fontSize={{ base: "11px", sm: "12px", md: "13px", lg: "14px", xl: "15px" }} fontWeight="bold">
+
                                                 {item.description.length > MAX_DESCRIPTION_LENGTH
                                                     ? `${item.description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
                                                     : item.description}
                                             </Text>
-                                            <Text fontSize={14} fontWeight="bold">${item.price.toFixed(2)}</Text>
+
+                                            <Text data-test={`Dietary-Needs-item-price=${item.price}`} fontSize={14} fontWeight="bold">${item.price.toFixed(2)}</Text>
+
                                         </Box>
                                     </Link>
                                 ))
