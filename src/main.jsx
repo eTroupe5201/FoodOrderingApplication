@@ -2,7 +2,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ChakraProvider } from "@chakra-ui/react";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Root } from "./pages/Root"; 
 import { Home } from "./pages/Home"; 
@@ -23,6 +22,7 @@ import { ForgotPassword } from "./pages/ForgotPassword";
 import "./styles.css";
 import { DataProvider } from "./components/dataProvider";
 
+
 /**
  * default page is homepage, and click oder button will go to menu page of our restaurant
  * item page is about your choices like (do you add salad, need spicy?), special requirment, and also quantity for the unique food on the menu
@@ -33,7 +33,6 @@ import { DataProvider } from "./components/dataProvider";
  * 
  * contact page will be contact with the app developer
 */
-
 const router = createBrowserRouter([
   {
     path: "/",
