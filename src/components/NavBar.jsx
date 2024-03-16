@@ -85,7 +85,7 @@ export function NavBar() {
                     _hover={{ boxShadow: "0 0 10px 1px tan"}}
                     w={{  md: "18em" }}
                     maxH={{  md: "11em"}}
-                    className="photo" src="https://d1zh5cyxaugen.cloudfront.net/divineDelicaciesResize.png" /> 
+                    className="photo" src="https://d1zh5cyxaugen.cloudfront.net/divineDelicaciesResizedTiny.png" /> 
                     </Link> 
                 )}
 
