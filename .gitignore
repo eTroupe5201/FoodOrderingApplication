@@ -31,6 +31,3 @@ dist-ssr
 .env.production.local
 .env
 
-# local files
-Service_account.json
-cypress.env.json

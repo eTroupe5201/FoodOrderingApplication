@@ -52,10 +52,8 @@ export const FilterModal = ({ isOpen, onClose }) => {
             <DietaryModal isOpen={isDietaryModalOpen} onClose={handleDietaryModalClose} />
             <SortModal isOpen={isSortModalOpen} onClose={handleSortModalClose} />
             <TypeModal isOpen={isTypeModalOpen} onClose={handleTypeModalClose} />
-
-            <div data-testid="filter-modal">
-                <Modal  data-test="filter-Modal" isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">
-
+            <div data-testid="cart-modal">
+                <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInRight">
                     <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
                     <ModalContent
                         borderLeft="2px tan outset"
@@ -75,9 +73,7 @@ export const FilterModal = ({ isOpen, onClose }) => {
                         borderRadius="0"
                         padding="1rem"
                     >
-
-                        <ModalHeader data-test="filter-modal-header" fontSize="x-large" title="filter-modal-header">
-
+                        <ModalHeader fontSize="x-large" title="cart-modal-header">
                             All Filters
                         </ModalHeader>
                         <ModalCloseButton
@@ -85,44 +81,27 @@ export const FilterModal = ({ isOpen, onClose }) => {
                             background="black"
                             border="white solid 1px"
                             _hover={{ boxShadow: "0 0 10px 1px tan" }}
-
-                            title="filter-modal-close-button"
+                            title="cart-modal-close-button"
                         />
                         <ModalBody>
                             <VStack spacing={4} align="stretch">
-                                <Button background="black" 
-                                data-test="Filter-Modal-Dietary-Needs-Button"
-                                  role="button"
-                                  aria-label="Dietary Needs"
-                                name="Dietary Needs" 
-                                border="tan outset 2px" 
-                                color="white"
-                                title="Dietary Needs"
-                                onClick={handleDietaryModalOpen}>
+                                <Button background="black" border="tan outset 2px" color="white" onClick={handleDietaryModalOpen}>
                                     Dietary Needs
                                 </Button>
                                 <Divider />
-                                <Button 
-                                data-test="Filter-Modal-Type-Button"
-                                  role="button"
-                                  aria-label="Type"
-                                title="Type" background="black" name="Type" border="tan outset 2px" color="white" onClick={handleTypeModalOpen}>
+                                <Button background="black" border="tan outset 2px" color="white" onClick={handleTypeModalOpen}>
                                     Type
                                 </Button>
                                 <Divider />
-                                <Button data-test="Filter-Modal-Sort-Button" title="Sort" background="black" name="Sort" border="tan outset 2px" color="white" onClick={handleSortModalOpen}>
-
+                                <Button background="black" border="tan outset 2px" color="white" onClick={handleSortModalOpen}>
                                     Sort
                                 </Button>
                                 <Divider />
                             </VStack>
                         </ModalBody>
-
-                        <ModalFooter data-test="Filter-Modal-Footer" title="filter-modal-footer">
+                        <ModalFooter title="Filter-modal-footer">
                             <Link to="/menu">
                                 <Button
-                                    data-test="Filter-Modal-Cancel-Button"
-
                                     color="white"
                                     background="black"
                                     border="tan outset 2px"
