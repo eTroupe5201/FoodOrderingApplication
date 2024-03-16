@@ -391,6 +391,10 @@ export const Register = ({saveData}) => {
                     <p> Kindly review your email and proceed by clicking the verification link. To finalize the verification process, click on the Complete Registration button on this webpage.</p>
                     <br></br>
                     <p> Close this window to continue.</p>
+
+                  <br></br>
+                    <p> To finalize the verification process, click on the  &quot;Complete Registration &quot; button on the webpage.</p>
+
                 </ModalBody>
                 <ModalFooter><Button color="white" bg="black" border="2px solid tan" mr={3} onClick={onClose}>
         Close
@@ -632,7 +636,7 @@ export const Register = ({saveData}) => {
                         <Divider  margin="20px" orientation="horizontal"/>
                    
                         <Center >
-                           <SimpleGrid columns={5}>
+                           <SimpleGrid columns={4}>
                             
                            <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}} bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset"onClick={handleGoogleRegister} ><FcGoogle  size="35px"  /></Box>
                             <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}} bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleFacebookRegister}><AiFillFacebook size="35px" color="#4267B2" /></Box>

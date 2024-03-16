@@ -147,6 +147,7 @@ export const Item = () => {
                 
                 <VStack gap={4}  p={4} w="100%">
                     <Text fontFamily="'Raleway', sans-serif" fontWeight="bold"> {item.description} </Text>
+                    <Text textAlign="left" fontFamily="'Raleway', sans-serif" fontWeight="bold"> Dietary Needs: {item.dietaryNeeds} </Text>
                     {item.variants.map((variant, index) => (
                         <FormControl key={variant.type + index}>
                             <FormLabel >

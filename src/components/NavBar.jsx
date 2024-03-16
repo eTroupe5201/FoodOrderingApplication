@@ -10,9 +10,10 @@ import { useDisclosure } from "@chakra-ui/react";
 import { CartModal } from "../components/CartModal";
 import { auth } from "../utils/firebase" 
 import { signOut } from "firebase/auth";
-
+import {SearchBar} from "../components/SearchBar";
 export function NavBar() {
     const isSmallScreen = useBreakpointValue({ base: true, sm: true, md: true, lg: false, xl: false }); // Define when to show the icon based on screen size
+    
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { user, getUserInfo, checkCartNotEmpty, cartChanged, setCartChanged, fetchUserProfile } = useDataProvider();
     const navigate = useNavigate();
@@ -68,29 +69,35 @@ export function NavBar() {
     return (
         <nav className="nav">      
 {isSmallScreen ? (
-
+    
             <Link to="/">  
             <Image    
             _hover={{ boxShadow: "0 0 10px 1px tan"}}                     
             w={{ base: "3em", sm: "4em" }}
             maxH={{ base: "3em", sm: "4em"}}
             maxW={{ base: "3em", sm: "4em"}}
-            className="photo" src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/assets/White-Favicon.png" alt="logo" /></Link> 
+            className="photo" src="https://d1zh5cyxaugen.cloudfront.net/assets/WhiteFavicon.png" alt="logo" /></Link> 
 
                 ) : (
-                    <Link to="/">  <Image
+                    <Link to="/">  
+                    <Image
+                    alt="logo"
                     _hover={{ boxShadow: "0 0 10px 1px tan"}}
                     w={{  md: "18em" }}
                     maxH={{  md: "11em"}}
-                    className="photo" src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/assets/divine-delicacies2.png" /> </Link> 
+                    className="photo" src="https://d1zh5cyxaugen.cloudfront.net/divineDelicaciesResize.png" /> 
+                    </Link> 
                 )}
 
             <ul>
+         
+           
+            <li>{!isSmallScreen&& <SearchBar />}</li>
             <li><Link to="/"><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Home</Text></Link></li>
      
                 {/* <li><Link to="/item"> Menu </Link></li> */}
                 <li><Link to="/contact"><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}> Contact Us</Text> </Link></li>
-                <li><Link to="/menu"> <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Order </Text></Link></li>
+                <li><Link to="/menu"> <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Order </Text></Link> </li>
                 <li > 
                     {user ? (
                         <Box as="button" onClick={logout} >
@@ -129,7 +136,8 @@ export function NavBar() {
                             <TiShoppingCart style={{ opacity: 0.5, cursor: "not-allowed" }} />
                         )}
                     </li>
-                    <li>{isSmallScreen && <MobileNav />}</li>
+                    <li>{isSmallScreen&& <MobileNav />}</li>
+                    
                 </HStack>
                 {/* <li><Link to="/info"> OurInfo </Link></li> */}
             </ul>

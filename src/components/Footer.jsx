@@ -7,7 +7,7 @@ import { Link } from "react-router-dom"
 export function Footer() {
     return (
      
-        <Box  role="Navigation" className="Footer"  bg = "black"  paddingBottom={10}>
+        <Box  role="navigation" className="Footer"  bg = "black"  paddingBottom={10}>
            <section className="wave"></section>  
             <Container> 
                 <SimpleGrid  bg = "black" color="white"columns={4} templateColumns={{base:"repeat(1, 1fr)", sm:"repeat(2, 1fr)",lg:"repeat(4, 1fr)" }}>
@@ -15,7 +15,7 @@ export function Footer() {
                     <Box colSpan={{base: 1, md:4,  xl: 4}}>
                         <Heading fontSize={{ base: "15px", md: "20px", lg: "30px" }}  fontFamily="'Raleway', sans-serif " mb={5} mt={10}>About Us</Heading>
                     
-                    <Center><Image height="10"src="https://groupprojectdepaul.s3.us-east-2.amazonaws.com/assets/White-Favicon.png"></Image></Center>
+                    <Center><Image width={{base:"50px"}} alt= "Favicon" height={{base:"50px"}}src="https://d1zh5cyxaugen.cloudfront.net/assets/WhiteFavicon.png"></Image></Center>
             
                     <Text fontSize={{ base: "12px",md: "15px", lg: "18px"}} mt={5}>
                         Discover culinary excellence at Devine Delicacies. We are passionate about crafting 
@@ -30,7 +30,7 @@ export function Footer() {
                     
                     <Grid fontSize={{ base: "12px",md: "15px", lg: "18px" }}>
                 <ul>
-                    <li><Link to="/"><Text>Home</Text></Link></li>
+                <li><Link to="/"><Text>Home</Text></Link></li>
                 <li><Link to="/contact"><Text >Contact Us</Text></Link></li>
                 <li><Link to="/menu"><Text >Order</Text></Link></li>
                 <li><Link to="/login"><Text >Login</Text></Link></li>

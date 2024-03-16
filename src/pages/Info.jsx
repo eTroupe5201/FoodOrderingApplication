@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from "@react-google-maps/api";
 import { useDataProvider } from "../components/dataProvider";
-import { Flex, Box, Heading, Text, Button, Center, HStack, Image } from "@chakra-ui/react";
+import { Flex, Box, Heading, Text, HStack, Image } from '@chakra-ui/react';
 import { useLocation } from "react-router-dom"
 import { getLatLng } from "../utils/getLatLing";
 import logtail from "../logger";

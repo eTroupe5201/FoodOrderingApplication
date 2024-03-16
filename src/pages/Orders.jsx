@@ -5,6 +5,7 @@ import { useDataProvider } from "../components/dataProvider"
 import { useNavigate, useLocation } from "react-router-dom"
 import React, { useState, useEffect } from "react";
 import { getLatLng } from "../utils/getLatLing";
+
 import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from '@react-google-maps/api';
 import { TiHeartFullOutline, TiHeartOutline} from "react-icons/ti";
 import logtail from "../logger.js";

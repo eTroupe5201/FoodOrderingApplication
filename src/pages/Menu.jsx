@@ -4,15 +4,35 @@ import { Center, Box, SimpleGrid, Heading, Image, Link, Text } from "@chakra-ui/
 import { useDataProvider } from "../components/dataProvider";
 import { useNavigate } from "react-router-dom";
 const MAX_DESCRIPTION_LENGTH = 70; // Set your desired maximum length
+import { FilterNavigation } from "../components/FilterNavigation";
+import { Sort } from "../components/Sort";
+import { Type } from "../components/Type";
+import { DietaryNeeds } from "../components/DietaryNeeds";
+import { Search } from "../components/Search";
+import { Helmet} from "react-helmet";
 
 // the HomePage will be our default page after log in
 export const Menu = () => {
     const navigate = useNavigate();
-    const { categories, getItemsByCategory, user } = useDataProvider();
-
+    const {query, selectedFilter,categories, getItemsByCategory, user } = useDataProvider();
+    console.log("query in menu", query);
     return (
-        //I set up 3 categories in one line temporarily, can adjust this syntax later
-        <Center> 
+        <Box maxW="100% " mx="auto"> {/* Container with fixed width and centered */}
+        <Helmet>
+            <meta
+                name="description"
+                content="Welcome to our food ordering application. Browse through our menu and place your order online. Enjoy delicious meals delivered right to your doorstep."
+            />
+        </Helmet>
+
+       <FilterNavigation   />
+         {selectedFilter === "Search" && <Search />} 
+
+         {selectedFilter === "Sort" && <Sort/> }    
+         {selectedFilter === "Type" && <Type/>}
+         {selectedFilter === "Dietary" && <DietaryNeeds/>}
+         {(selectedFilter === "") && 
+         ( <Center> 
             <Box title="menu-grid" className="MenuContainer" mt="30px" maxW="90%"
              justifyContent="center" p={5}>
                 {categories.map((category) => ( 
@@ -24,7 +44,7 @@ export const Menu = () => {
                             {category.title}
                         </Heading>
                         {category.description && (
-                            <Text padding="15px"fontSize={{ base: "12px", md: "13px", lg: "14px" }} 
+                            <Text alt="category-description" padding="15px"fontSize={{ base: "12px", md: "13px", lg: "14px" }} 
                             color="white">
                                 {category.description}
                             </Text>
@@ -33,20 +53,17 @@ export const Menu = () => {
                     
                     {/* <Image src={category.image?.src} objectFit="cover" w="full" h="200px" mb={3} /> */}
                      <SimpleGrid
-                       templateColumns={{base:"repeat(1, 1fr)", sm:"repeat(2, 1fr)", md:"repeat(2, 1fr)" , lg:"repeat(2, 1fr)" , xl:"repeat(4, 1fr)"}} spacing={10}>  
+                       templateColumns={{base:"repeat(1, 1fr)", sm:"repeat(2, 1fr)", md:"repeat(2, 1fr)" , lg:"repeat(3, 1fr)" , xl:"repeat(4, 1fr)"}} spacing={10}>  
                     {getItemsByCategory(category.id).map((item) => (
-                   
-            
-                        // <Link key={item.id} onClick={() => 
-                        //     navigate(`/item/${item.id}`)
-                        // } _hover={{ textDecoration: "none" }}>
-                        <Link key={item.id} onClick={() => {
+                  
+                        <Link alt="menu-link"  key={item.id} data-test={`items-link=${item.id}`} href={`/item/${item.id}`} onClick={(e) => {
+                                e.preventDefault();
                                 console.log(user); // 打印当前的user对象
                                 navigate(`/item/${item.id}`);
                         }} _hover={{ textDecoration: "none" }}>
                                                       
                             <Box 
-                            
+                            alt="menu-item"
                             colSpan={{base: 1, sm:1,  xl: 4}}
                             borderRadius="25px"  p={2}
                             justify="space-between"
@@ -59,10 +76,13 @@ export const Menu = () => {
                             maxWidth={{ base: "100%", md: "100%", lg: "100%" }}
                              mb={2}
                              _hover={{ boxShadow: "0 0 10px 1px tan"}} >
-                                <Image src={item.image?.src} borderRadius="25px" 
-                                width={{base:"100%", md:"100%", lg:"100%", xl:"100%"}}
-                                size={{base:"100%"}} 
-                                objectFit="cover" mr={3} />
+                                <a href={`/item/${item.id}`}>
+                                    <Image alt="menu-image" data-test={`item-image=${item.image}`} src={item.image?.src} borderRadius="25px" 
+                                    width="100%"
+                                    height="auto"
+                                    size={{base:"100%"}} 
+                                    objectFit="cover" mr={3} />
+                                </a>
                                 
                                     <Heading    fontFamily="'Raleway', sans-serif" padding="20px" as="h3"
                                      fontSize={{ base: "12px", sm: "13px", md:"14px", lg: "15px", xl: "15px" }} >
@@ -86,86 +106,8 @@ export const Menu = () => {
                 </Box>
             ))}  
        
-        </Box> </Center>
+        </Box> </Center>)}
+       </Box>
     );
     
 };
-
-
-//(Spare item): accordion design style, suitable for iOS/Android mobile devices
-//import { Accordion, AccordionButton, AccordionItem, AccordionPanel,Center, Box, SimpleGrid, Heading, Image, Link, Text } from "@chakra-ui/react";
-
-    // return (
-
-    //     /**
-    //      * The accordion component allows users to click on the title to expand and collapse the content area. 
-    //      * When clicking on the AccordionButton, the associated AccordionPanel will expand or collapse, displaying or hiding its content. 
-    //      * By default, the setting of defaultIndex={[0]} means that the first accordion item (with index 0) will expand by default when loaded. 
-    //      * The allowMultiple property allows users to expand multiple accordion items simultaneously. If this attribute is not present, 
-    //      * expanding a new accordion item will automatically collapse the previously expanded item.
-    //      */
-
-    //     //In JavaScript_ It is a placeholder that indicates not caring about the value of the element being iterated, while index is the index of the element being iterated.
-    //     //Here, I passed an array containing all possible indexes through defaultIndex, which tells the<Accordion>component to expand the accordion items corresponding to these indexes by default.
-    //     <Accordion defaultIndex={categories.map((_, index) => index)} allowMultiple>
-    //         {categories.map((category) => (
-    //             <AccordionItem key={category.id}>
-    //                 <AccordionButton bg="orange.100" color="gray.700" _hover={{ bg: "orange.300", color: "white" }}>
-    //                     <Box as="span" flex="1" textAlign="left">
-    //                         <Heading as="h2" size="lg" my={2}>
-    //                             {category.title}
-    //                         </Heading>
-    //                         {category.description && (
-    //                             <Text color="gray.700" mb={4}>
-    //                                 {category.description}
-    //                             </Text>
-    //                         )}
-    //                     </Box>
-    //                 </AccordionButton>
-    //                 <AccordionPanel pb={4}>
-                                
-    //                     <Image
-    //                         src={category.image?.src}
-    //                         objectFit="cover"
-    //                         w="100%"
-    //                         maxH="200px"
-    //                         loading="lazy"
-    //                     />
-
-    //                     {getItemsByCategory(category.id).map((item) => (
-    //                         <Link
-    //                             key={item.id}
-    //                             onClick={() => navigate(`/item/${item.id}`)}
-    //                             _hover={{ textDecoration: "none" }}
-    //                         >
-    //                             <Flex
-    //                                 px={4}
-    //                                 py={2}
-    //                                 justify="space-between"
-    //                                 borderBottom="1px solid"
-    //                                 borderColor="gray.100"
-    //                                 _hover={{ backgroundColor: "gray.100" }}
-    //                             >
-    //                                 <Flex gap={2}>
-    //                                     <Image
-    //                                         width="40px"
-    //                                         height="40px"
-    //                                         objectFit="cover"
-    //                                         src={item.image?.src}
-    //                                     />
-    //                                     <Box>
-    //                                         <Heading as="h3" fontSize="14px" color="gray.800">
-    //                                             {item.label}
-    //                                         </Heading>
-    //                                         <Text>{item.description}</Text>
-    //                                     </Box>
-    //                                 </Flex>
-    //                                 <Text>${item.price.toFixed(2)}</Text>
-    //                             </Flex>
-    //                         </Link>
-    //                     ))}
-    //                 </AccordionPanel>
-    //             </AccordionItem>
-    //         ))}
-    //     </Accordion>
-    // );

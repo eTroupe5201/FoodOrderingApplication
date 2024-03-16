@@ -20,6 +20,12 @@ const DataProviderContext = createContext({
     addToCart: () => {},
     removeCartItem: () => {},
     checkout: () => Promise.resolve(""),
+    selectedOption: "",
+    updateSelectedOption: () => {},
+    selectedFilter: "",
+    updateSelectedFilter: () => {},
+    searchedItem: "",
+    updateSearch: () => {},
 });
 
 export const useDataProvider = () => useContext(DataProviderContext);
@@ -43,6 +49,10 @@ export const DataProvider = ({ children }) => {
   const [travelTime, setTravelTime] = useState("");
   const [deliveryFirstname, setdeliveryFirstname ] = useState("");
   const [deliveryLastname, setdeliveryLastname ] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState("");
+  const [searchedItem, setSearch] = useState(""); // [1
+
   const toast = useToast();
   // const [paypalId, setpaypalId] = useState();
 
@@ -77,6 +87,38 @@ export const DataProvider = ({ children }) => {
       return null;
     }
   };
+  const fetchSelectedSearch = async () => {
+    try {
+      // Simulate fetching data asynchronously
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      return ""; // Return selected option after resolving Promise
+    } catch (error) {
+      console.error("Error fetching selected option:", error);
+      return ""; // Return empty string if error occurs
+    }
+  };
+    // Simulated asynchronous operation to fetch selected option
+    const fetchSelectedOption = async () => {
+      try {
+        // Simulate fetching data asynchronously
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        return ""; // Return selected option after resolving Promise
+      } catch (error) {
+        console.error("Error fetching selected option:", error);
+        return ""; // Return empty string if error occurs
+      }
+    };
+      // Simulated asynchronous operation to fetch selected option
+      const fetchSelectedFilter = async () => {
+        try {
+          // Simulate fetching data asynchronously
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          return ""; // Return selected option after resolving Promise
+        } catch (error) {
+          console.error("Error fetching selected option:", error);
+          return ""; // Return empty string if error occurs
+        }
+      };
   
 
   const fetchCategories = async () => {
@@ -188,9 +230,29 @@ export const DataProvider = ({ children }) => {
     await fetchRestaurantInfo();
     await fetchCategories();
     await fetchItems();
+    const data = await fetchSelectedOption();
+    const filter = await fetchSelectedFilter();
+    const search = await fetchSelectedSearch();
+    console.log("Fetched data:", data);
+    setSelectedOption(data);
+    setSelectedFilter(filter);
+    setSearch(search);
     setIsReady(true);
+
+  };
+  const updateSelectedFilter = (filter) => {
+    setSelectedFilter(filter);
   };
 
+  const updateSelectedOption = (option) => {
+    console.log("Selected option:", option);
+    setSelectedOption(option);
+  };
+
+  const updateSearch = (searchItem) => {
+    console.log("Selected query:", searchItem);
+    setSearch(searchItem);
+  }
   const getItemById = (itemId) => {
     return items.find((item) => item.id === itemId);
   };
@@ -564,8 +626,9 @@ const getOrderHistory = async () => {
     checkCartNotEmpty, getUserInfo, fetchUserProfile, fetchCartItems, fetchItemImageById, fetchOrder, getItemsByCategory, getItemById, addToCart, setCartChanged,
     removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, setOrder, generateOrder, getOrderById,
     handleOrder, getOrderHistory, updateUserAccount, travelTime, setTravelTime, findAndAssignDeliveryPerson, deliveryFirstname, setdeliveryFirstname,
-    deliveryLastname, setdeliveryLastname, isUserInDatabase, updateFavoriteStatus, setPickupOrderStatus}}>
-
+    deliveryLastname, setdeliveryLastname, isUserInDatabase, selectedFilter,updateSelectedFilter,selectedOption,updateSelectedOption,searchedItem,
+    updateSearch, setPickupOrderStatus 
+    }}>
 
       {isReady ? (
         children
