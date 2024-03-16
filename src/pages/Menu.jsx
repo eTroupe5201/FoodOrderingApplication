@@ -1,7 +1,6 @@
 ///* eslint-disable no-unused-vars */
 ///* eslint-disable react/jsx-key */
 import React from "react";
-
 import { Center, Box, SimpleGrid, Heading, Image, Link, Text } from "@chakra-ui/react";
 import { useDataProvider } from "../components/dataProvider";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +19,6 @@ export const Menu = () => {
    
     return (
         <> 
-
        <FilterNavigation   />
          {selectedFilter === "Search" && <Search />} 
 
