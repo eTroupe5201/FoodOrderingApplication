@@ -10,6 +10,7 @@ import { Sort } from "../components/Sort";
 import { Type } from "../components/Type";
 import { DietaryNeeds } from "../components/DietaryNeeds";
 import { Search } from "../components/Search";
+import { Helmet} from "react-helmet";
 
 // the HomePage will be our default page after log in
 export const Menu = () => {
@@ -18,7 +19,14 @@ export const Menu = () => {
     const { selectedFilter,categories, getItemsByCategory, user } = useDataProvider();
    
     return (
-        <> 
+        <Box maxW="100% " mx="auto"> {/* Container with fixed width and centered */}
+        <Helmet>
+            <meta
+                name="description"
+                content="Welcome to our food ordering application. Browse through our menu and place your order online. Enjoy delicious meals delivered right to your doorstep."
+            />
+        </Helmet>
+
        <FilterNavigation   />
          {selectedFilter === "Search" && <Search />} 
 
@@ -40,7 +48,7 @@ export const Menu = () => {
                             {category.title}
                         </Heading>
                         {category.description && (
-                            <Text padding="15px"fontSize={{ base: "12px", md: "13px", lg: "14px" }} 
+                            <Text alt="category-description" padding="15px"fontSize={{ base: "12px", md: "13px", lg: "14px" }} 
                             color="white">
                                 {category.description}
                             </Text>
@@ -49,15 +57,17 @@ export const Menu = () => {
                     
                     {/* <Image src={category.image?.src} objectFit="cover" w="full" h="200px" mb={3} /> */}
                      <SimpleGrid
-                       templateColumns={{base:"repeat(1, 1fr)", sm:"repeat(2, 1fr)", md:"repeat(2, 1fr)" , lg:"repeat(2, 1fr)" , xl:"repeat(4, 1fr)"}} spacing={10}>  
+                       templateColumns={{base:"repeat(1, 1fr)", sm:"repeat(2, 1fr)", md:"repeat(2, 1fr)" , lg:"repeat(3, 1fr)" , xl:"repeat(4, 1fr)"}} spacing={10}>  
                     {getItemsByCategory(category.id).map((item) => (
                   
-                        <Link key={item.id} data-test={`items-link=${item.id}`} onClick={() => {
+                        <Link alt="menu-link"  key={item.id} data-test={`items-link=${item.id}`} href={`/item/${item.id}`} onClick={(e) => {
+                                e.preventDefault();
                                 console.log(user); // 打印当前的user对象
                                 navigate(`/item/${item.id}`);
                         }} _hover={{ textDecoration: "none" }}>
                                                       
                             <Box 
+                            alt="menu-item"
                             colSpan={{base: 1, sm:1,  xl: 4}}
                             borderRadius="25px"  p={2}
                             justify="space-between"
@@ -71,10 +81,13 @@ export const Menu = () => {
                             height="100%"
                              mb={2}
                              _hover={{ boxShadow: "0 0 10px 1px tan"}} >
-                                <Image alt="menu-image" data-test={`item-image=${item.image}`} src={item.image?.src} borderRadius="25px" 
-                                width={{base:"100%", md:"100%", lg:"100%", xl:"100%"}}
-                                size={{base:"100%"}} 
-                                objectFit="cover" mr={3} />
+                                <a href={`/item/${item.id}`}>
+                                    <Image alt="menu-image" data-test={`item-image=${item.image}`} src={item.image?.src} borderRadius="25px" 
+                                    width="100%"
+                                    height="auto"
+                                    size={{base:"100%"}} 
+                                    objectFit="cover" mr={3} />
+                                </a>
                                 
                                     <Heading  data-test={`item-label=${item.label}`}  fontFamily="'Raleway', sans-serif" padding="20px" as="h3"
                                      fontSize={{ base: "12px", sm: "13px", md:"14px", lg: "15px", xl: "15px" }} >
@@ -99,8 +112,7 @@ export const Menu = () => {
             ))}  
        
         </Box> </Center>)}
-        </>
+       </Box>
     );
     
 };
-
