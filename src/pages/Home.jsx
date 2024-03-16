@@ -3,10 +3,9 @@ import { ImageSlider} from "../components/ImageSlider";
 import { DiscoverOurStory} from "../components/DiscoverOurStory";
 import { OurTeam} from "../components/OurTeam";
 
-
 export function Home(){
 
- return (
+return (
     <div title="home-page">
         <ImageSlider />
         <Banner />

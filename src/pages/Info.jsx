@@ -1,10 +1,11 @@
 /* global google */
 import React, { useState, useEffect } from "react";
-import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from "@react-google-maps/api";
 import { useDataProvider } from "../components/dataProvider";
-import { Flex, Box, Heading, Text, Button, Center, HStack, Image } from '@chakra-ui/react';
+import { Flex, Box, Heading, Text, Button, Center, HStack, Image } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom"
 import { getLatLng } from "../utils/getLatLing";
+import logtail from "../logger";
 
 export const Info = () => {
     const { order, restaurantInfo, fetchItemImageById, travelTime, setTravelTime, setdeliveryFirstname, setdeliveryLastname  } = useDataProvider();
@@ -29,7 +30,7 @@ export const Info = () => {
         const fetchDirections = async () => {
 
             if (!window.google || !window.google.maps || !mapsLoaded) {
-                console.error("Google Maps API script not loaded yet.");
+                logtail.error(`[ORDER:${order.id}] Google Maps API script not loaded yet.`);
                 return;
             }
 
@@ -52,11 +53,11 @@ export const Info = () => {
                             // setTravelTime(result.routes[0].legs[0].duration.text); // 设置旅行时间
                             setTravelTime(estimatedDeliveryTime);//用最近骑手的预算时间来作为我们的旅行时间
                         } else {
-                            console.error(`Directions request failed due to ${status}`);
+                            logtail.error(`[ORDER:${order.id}] Directions request failed due to ${status}`);
                         }
                     });
                 } catch (error) {
-                    console.error(error);
+                    logtail.error(`[ORDER:${order.id}] ${error.message}`);
                 }
             }
         };

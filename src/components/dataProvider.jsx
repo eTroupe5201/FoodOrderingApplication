@@ -7,6 +7,7 @@ import { db, auth, functions } from "../utils/firebase";
 import { signInAnonymously } from "firebase/auth";
 import { httpsCallable } from "firebase/functions";
 import { getFirestore,  where } from "firebase/firestore";
+import logtail from "../logger";
 
 // import { getLatLng } from "../utils/getLatLing";
 
@@ -460,8 +461,7 @@ const registerNewAccount = async (userInfo) => {
   console.log(userInfo);
 
   //2. Calling functions and passing order data
-  const { data } = await registerNewAccountCallable({...userInfo})
-  console.log("waited for registerNewAccountCallable");
+  const { data } = await registerNewAccountCallable({...userInfo});
   console.log(data);
 
   //3. also set user
@@ -474,11 +474,9 @@ const updateUserAccount = async (userInfo) => {
   const updateUserAccountCallable = httpsCallable(functions, "updateAccount");
   const id = user.uid;
 
-  const { data } = await updateUserAccountCallable({...userInfo, id})
-  console.log("waited for updateUserAccountCallable");
-  console.log(data);
+  const { data } = await updateUserAccountCallable({...userInfo, id});
 
-  return data;
+  return data.uid;
 }
 
 const getUserInfo = async (userInfo) => {
@@ -494,8 +492,6 @@ const storeContactUsForm = async (formInfo) => {
   const { data } = await sendContactUsRequestCallable({...formInfo})
   console.log(data);
 
-  //3. also set user
-  //setUser(data.credentials);
   return data.id; 
 }
 
