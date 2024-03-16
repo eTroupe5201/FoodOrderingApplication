@@ -7,6 +7,7 @@ import {
 } from "react-icons/md";
 import  { useEffect} from "react";
 import { useNavigate } from "react-router-dom";
+import logtail from "../logger";
 
 const GratitudeContent = () => {
     const { order, setOrder, setPickupOrderStatus, clearCartAfterConfirmation, generateOrder, handleOrder, findAndAssignDeliveryPerson, setCartChanged  } = useDataProvider();
@@ -14,7 +15,7 @@ const GratitudeContent = () => {
 
     useEffect(() => {
         if (!window.paypal || !order?.id || order?.status !== "pending") {
-            console.log("PayPal not loaded or order not in pending status.");
+            console.log("PayPal not loaded or order not in pending status");
             return;
         }
 
@@ -23,7 +24,7 @@ const GratitudeContent = () => {
                 return generateOrder().then(orderId => {
                     // handle error situation
                     if (orderId.error) {
-                        console.error("Error creating PayPal order:", orderId.error);
+                        console.log(`[ORDER:${orderId}] - Error creating PayPal order:`, orderId.error);
                         // can handle errors here, such as displaying prompt information to the user
                         return actions.reject(); // Refuse to create order
                     }
@@ -33,16 +34,16 @@ const GratitudeContent = () => {
             onApprove: async (data, actions) => {
                 // Check order status to avoid duplicate capture
                 if (order.status === "confirmed") {
-                    console.log("Order already confirmed. Skipping capture.");
+                    console.log(`[ORDER:${order.id}] Order already confirmed. Skipping capture.`);
                     return;
                 }
                 
                 const updatedOrder = await handleOrder(data.orderID);
                 if (updatedOrder.error) {
-                    console.error("Error handling PayPal order:", updatedOrder.error);
+                    console.log(`[ORDER:${order.id}] Error handling PayPal order:`, updatedOrder.error);
                     return; // exit the function
                 }
-                console.log(`Order captured successfully: ${updatedOrder.id}`);
+                console.log(`[ORDER: ${updatedOrder.id}] Order captured successfully`);
                 setOrder(updatedOrder); // make sure call setOrder promptly
                 alert("THANKS FOR YOUR ORDER");
             },
@@ -66,7 +67,7 @@ const GratitudeContent = () => {
             } catch (error) {error.message}
         };
     
-    }, [order?.id, order?.status, window.paypal]); 
+    }, [order?.id, order?.status, window.paypal, logtail]); 
     
     if (!order) { return null; }
 
@@ -89,18 +90,18 @@ const GratitudeContent = () => {
 
     const handlePayAtRestaurant = async () => {
         if (order.status === "confirmed") {
-            console.log("Order already confirmed. Skipping capture.");
+            logtail.info(`[ORDER:${order.id}] Order already confirmed. Skipping capture.`);
             return;
         }        
 
         const updatedOrder = await setPickupOrderStatus();
 
         if (updatedOrder.error) {
-            console.error("Error with setPickupOrderStatus:", updatedOrder.error);
+            logtail.error(`[ORDER:${order.id}] Error with setPickupOrderStatus: `, updatedOrder.error);
             return; // exit the function
         }
 
-        console.log(`Order captured successfully: ${updatedOrder.id}`);
+        logtail.info(`[ORDER:${updatedOrder.id}] Order captured successfully`);
         setOrder(updatedOrder); // make sure call setOrder promptly
     };
 
@@ -148,7 +149,7 @@ const GratitudeContent = () => {
     }
 
     if (order.status === "cancelled") {
-        console.log("order cancelled");
+        //logtail.log("order cancelled");
         return (
             <>
                 <Icon as={MdCancel} w={24} h={24} color="gray.700" />
@@ -183,6 +184,7 @@ const GratitudeContent = () => {
                 <Heading textAlign="center">Order Confirmed</Heading>
                 <Text textAlign="center"> {confirmMsg} </Text>
                 <Button
+                    title="Order Confirmed"
                     colorScheme="blue"
                     onClick={handleClick}
                 >
