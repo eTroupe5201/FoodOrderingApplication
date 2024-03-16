@@ -73,12 +73,18 @@ export const Menu = () => {
                             padding="15px"
                             _active={{transform: "translateY(2px)", bg:"white",boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)"}}
                             maxWidth={{ base: "100%", md: "100%", lg: "100%" }}
+                            width="100%"
+                            height="auto"
+                            minHeight="100%"
                              mb={2}
                              _hover={{ boxShadow: "0 0 10px 1px tan"}} >
                                 <a href={`/item/${item.id}`}>
-                                    <Image alt="menu-image" data-test={`item-image=${item.image}`} src={item.image?.src} borderRadius="25px" 
+                                    <Image alt="menu-image" data-test={`item-image=${item.image}`} 
+                                    //src={item.image?.src} 
+                                   src={`https://d1zh5cyxaugen.cloudfront.net/resizedImages/${decodeURIComponent(item.label).replace(/%C3%A8/g, 'e').replace(/[\d.%]/g, '').replace(/\s+/g, '')}.jpg`}
+                                    borderRadius="25px" 
                                     width="100%"
-                                    height="auto"
+                                    
                                     size={{base:"100%"}} 
                                     objectFit="cover" mr={3} />
                                 </a>
