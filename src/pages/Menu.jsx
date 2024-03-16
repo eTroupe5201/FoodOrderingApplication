@@ -27,19 +27,18 @@ export const Menu = () => {
 
        <FilterNavigation   />
          {selectedFilter === "Search" && <Search />} 
-
          {selectedFilter === "Sort" && <Sort/> }    
          {selectedFilter === "Type" && <Type/>}
          {selectedFilter === "Dietary" && <DietaryNeeds/>}
          {(selectedFilter === "") && 
          ( <Center> 
-            <Box title="menu-grid" className="MenuContainer" mt="30px" maxW="90%"
+            <Box data-test="MENU" title="menu-grid" className="MenuContainer" mt="30px" maxW="90%"
              justifyContent="center" p={5}>
                 {categories.map((category) => ( 
 
-                <Box  className="Menu" key={category.id} p={5} boxShadow="md"  border="2px tan solid" width="100%">
+                <Box  data-test={`menu-items=${category.id}`} className="Menu" key={category.id} p={5} boxShadow="md"  border="2px tan solid" width="100%">
                    <Center> <Box p={2}  borderRadius="md"width="75%" mb={3}>
-                        <Heading as="h2" fontFamily="'Great Vibes', cursive" padding="15px" 
+                        <Heading data-test={`map-item=${category.title}`} as="h2" fontFamily="'Great Vibes', cursive" padding="15px" 
                         fontSize={{ base: "30px", md: "40px", lg: "50px" }} mb={1} >
                             {category.title}
                         </Heading>
@@ -84,11 +83,11 @@ export const Menu = () => {
                                     objectFit="cover" mr={3} />
                                 </a>
                                 
-                                    <Heading    fontFamily="'Raleway', sans-serif" padding="20px" as="h3"
+                                    <Heading data-test={`item-label=${item.label}`}    fontFamily="'Raleway', sans-serif" padding="20px" as="h3"
                                      fontSize={{ base: "12px", sm: "13px", md:"14px", lg: "15px", xl: "15px" }} >
                                         {item.label}
                                     </Heading>
-                                    <Text height="6m" maxHeight="6em" textOverflow="ellipsis" fontFamily="'Raleway', sans-serif"
+                                    <Text data-test={`item-description=${item.description}`} height="6m" maxHeight="6em" textOverflow="ellipsis" fontFamily="'Raleway', sans-serif"
                                       fontSize={{ base: "11px", sm: "12px", md:"13px", lg: "14px", xl: "15px" }} 
                                          fontWeight="bold"> {item.description.length > MAX_DESCRIPTION_LENGTH
                                             ? `${item.description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
@@ -96,7 +95,7 @@ export const Menu = () => {
                    
                                 {/* <Text padding="15px" fontSize={{ base: "12px", md: "13px", lg: "14px" }} >{item.description}</Text>
                                  */}
-                                <Text fontSize={14} fontWeight="bold">${item.price.toFixed(2)}</Text>
+                                <Text data-test={`menu-items=${item.price}`} fontSize={14} fontWeight="bold">${item.price.toFixed(2)}</Text>
                                 </Box>
                           
                          
