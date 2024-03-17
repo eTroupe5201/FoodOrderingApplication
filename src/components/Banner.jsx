@@ -8,7 +8,7 @@ export function Banner() {
                 <Box padding="20" maxH={{ base: "20em", sm: "50em", md: "70em", lg: "80em", xl: "100em" }} color="white" bg="black">
                     <Center>
                         <Image
-                            src="https://d1zh5cyxaugen.cloudfront.net/assets/FoodLogo.png"
+                            src="https://d1zh5cyxaugen.cloudfront.net/FoodLogo.png"
                             alt="logo"
                             w={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
                             h={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em"}}
@@ -35,7 +35,7 @@ export function Banner() {
                 <Box padding="20" maxH={{ base: "20em", sm: "50em", md: "70em", lg: "80em", xl: "100em" }} color="white" bg="black">
                     <Center>
                         <Image 
-                            src="https://d1zh5cyxaugen.cloudfront.net/assets/OrderLogo.png"
+                            src="https://d1zh5cyxaugen.cloudfront.net/OrderLogo.png"
                             alt="logo"
                             w={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
                             h={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em"}}
@@ -62,7 +62,7 @@ export function Banner() {
                 <Box padding="20" maxH={{ base: "20em", sm: "50em", md: "70em", lg: "80em", xl: "100em" }} color="white" bg="black">
                     <Center>
                         <Image
-                            src="https://d1zh5cyxaugen.cloudfront.net/assets/deliveryLogo.png"
+                            src="https://d1zh5cyxaugen.cloudfront.net/deliveryLogo.png"
                             alt="logo"
                             w={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em" }}
                             h={{ base: "3em", sm: "4em", md: "5em", lg: "6em", xl: "7em"}}

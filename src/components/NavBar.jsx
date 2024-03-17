@@ -70,6 +70,7 @@ export function NavBar() {
     }
 
     return (
+        <div className="NavDiv">
         <nav className="nav">      
 {isSmallScreen ? (
     
@@ -79,7 +80,7 @@ export function NavBar() {
             w={{ base: "3em", sm: "4em" }}
             maxH={{ base: "3em", sm: "4em"}}
             maxW={{ base: "3em", sm: "4em"}}
-            className="photo" src="https://d1zh5cyxaugen.cloudfront.net/assets/WhiteFavicon.png" alt="logo" /></Link> 
+            className="photo" src="https://d1zh5cyxaugen.cloudfront.net/Favicon.webp" alt="logo" /></Link> 
 
                 ) : (
                     <Link to="/">  
@@ -88,13 +89,11 @@ export function NavBar() {
                     _hover={{ boxShadow: "0 0 10px 1px tan"}}
                     w={{  md: "18em" }}
                     maxH={{  md: "11em"}}
-                    className="photo" src="https://d1zh5cyxaugen.cloudfront.net/divineDelicaciesResize.png" /> 
+                    className="photo" src="https://d1zh5cyxaugen.cloudfront.net/divineDelicaciesResizedTiny.png" /> 
                     </Link> 
                 )}
 
-            <ul>
-         
-           
+            <ul display="block">
             <li>{!isSmallScreen&& <SearchBar />}</li>
             <li><Link to="/"><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Home</Text></Link></li>
      
@@ -145,6 +144,7 @@ export function NavBar() {
                 {/* <li><Link to="/info"> OurInfo </Link></li> */}
             </ul>
         </nav>
+        </div>
     );
 }
 //redo this

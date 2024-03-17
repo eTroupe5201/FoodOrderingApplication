@@ -512,6 +512,7 @@ const handleSubmitVerification = () => {
                         <FormControl id="emailField" isInvalid={!!formState?.errors?.email?.type}>
                             <FormLabel>Email Address</FormLabel>
                             <Input 
+                                data-test="email-input"   
                                 title="login-email"
                                 id="email"
                                 border="tan 2px outset"
@@ -526,6 +527,7 @@ const handleSubmitVerification = () => {
                             <FormLabel>Password</FormLabel>
                             <InputGroup>
                                 <Input 
+                                    data-test="password-input"
                                     title="login-password"
                                     id="password"
                                     type={showPassword ? "text" : "password"}
@@ -587,7 +589,7 @@ const handleSubmitVerification = () => {
                             bg="black"
                             borderRadius="md"
                             _active={{transform: "translateY(2px)", bg:"white",boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)"}}
-              
+                            data-test="submit"
                             > 
                             CONTINUE
                         </Box>
@@ -605,6 +607,7 @@ const handleSubmitVerification = () => {
                             bg="black"
                             _active={{transform: "translateY(2px)", bg:"white",boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)"}}
                             onClick={navigateToRegister} 
+                            data-test="register-button"
                             > 
                             REGISTER
                         </Center>  
@@ -617,11 +620,11 @@ const handleSubmitVerification = () => {
                                 <TabPanel height="35em">
                                 <Flex alignContent="center" justifyContent="center">
                             <VStack mt="6em" >
-                             <Box width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleGoogleLogin} ><GoogleLoginButton  /></Box>
-                              <Box width="95%" borderRadius="3px" background= "linear-gradient(to right, tan, white, tan)" height="50px" _hover={{ transform: "translateY(-2px)" }} _active={{ transform: "translateY(2px)" }} onClick={handleOpenAuthenticationModal} as="button" display="flex" paddingLeft="5px" alignItems="center"  fontSize="18px" color="black"> <MdPhoneAndroid color="white" size={33} style={{ marginRight: "1em" }} /> <p>Login With Phone</p></Box>
-                             <Box  width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleFacebookLogin}><FacebookLoginButton  /></Box>
-                             <Box width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleYahooLogin} ><YahooLoginButton  /></Box>
-                                   <Box width="100%" _hover={{ transform: "translateY(-2px)"}}_active={{transform: "translateY(2px)"}} onClick={handleTwitterLogin}><TwitterLoginButton    /></Box>
+                             <Box width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}} data-test="google-login-button"   onClick={handleGoogleLogin} ><GoogleLoginButton  /></Box>
+                              <Box data-test="OTP-Button" width="95%" borderRadius="3px" background= "linear-gradient(to right, tan, white, tan)" height="50px" _hover={{ transform: "translateY(-2px)" }} _active={{ transform: "translateY(2px)" }} onClick={handleOpenAuthenticationModal} as="button" display="flex" paddingLeft="5px" alignItems="center"  fontSize="18px" color="black"> <MdPhoneAndroid color="white" size={33} style={{ marginRight: "1em" }} /> <p>Login With Phone</p></Box>
+                             <Box data-test="Facebook-login-button"  width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleFacebookLogin}><FacebookLoginButton  /></Box>
+                             <Box data-test="Yahoo-login-button" width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleYahooLogin} ><YahooLoginButton  /></Box>
+                                   <Box data-test="Twitter-login-button" width="100%" _hover={{ transform: "translateY(-2px)"}}_active={{transform: "translateY(2px)"}} onClick={handleTwitterLogin}><TwitterLoginButton    /></Box>
                           
                                     </VStack>
                                </Flex> </TabPanel>
