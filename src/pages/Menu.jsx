@@ -76,13 +76,15 @@ export const Menu = () => {
                             maxWidth={{ base: "100%", md: "100%", lg: "100%" }}
                              mb={2}
                              _hover={{ boxShadow: "0 0 10px 1px tan"}} >
-                                <a href={`/item/${item.id}`}>
+                                {/* <a href={`/item/${item.id}`}> */}
+                                <Link to={`/item/${item.id}`}>
                                     <Image alt="menu-image" data-test={`item-image=${item.image}`} src={item.image?.src} borderRadius="25px" 
                                     width="100%"
                                     height="auto"
                                     size={{base:"100%"}} 
                                     objectFit="cover" mr={3} />
-                                </a>
+                                </Link>
+                                {/* </a> */}
                                 
                                     <Heading    fontFamily="'Raleway', sans-serif" padding="20px" as="h3"
                                      fontSize={{ base: "12px", sm: "13px", md:"14px", lg: "15px", xl: "15px" }} >

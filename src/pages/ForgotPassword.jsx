@@ -25,8 +25,8 @@ export const ForgotPassword = ({saveData}) => {
         
         //check email field is empty or not
         if (!email) {
-            console.log("ForgotPassword - Invalid email - empty string or only whitespace");
-            logtail.info("ForgotPassword - Invalid email - empty string or only whitespace");
+            console.log("ForgotPassword - Invalid email - empty string or only whitespace"); // log for testing
+            logtail.info("Invalid ForgotPassword email content of empty string or only whitespace"); //, {fbUser: auth.currentUser.uid});
             toast({
                 title: "Please enter your email address.",
                 status: "warning",
@@ -40,7 +40,7 @@ export const ForgotPassword = ({saveData}) => {
         //if not empty, we will call this firebase function directly and then we can go to our email box to rest the password
         sendPasswordResetEmail(auth, email)
             .then(() => {
-                logtail.log("ForgotPassword - Success - password email sent");
+                logtail.info("ForgotPassword email sent", {fbUser: auth.currentUser.uid, email: email});
                 toast({
                     title: "Password reset email sent.",
                     description: "Check your email for the password reset instructions.",
@@ -52,7 +52,7 @@ export const ForgotPassword = ({saveData}) => {
                 navigate("/login");
             })
             .catch((error) => {
-                logtail.log("ForgotPassword - " + error.message);
+                logtail.error(`ForgotPassword email error: ${error.message}`, {fbUser: auth.currentUser.uid, email: email});
                 toast({
                     title: "An error occurred.",
                     description: "Invalid email address", //error.message, custom message for user friendliness

@@ -11,6 +11,9 @@ import { CartModal } from "../components/CartModal";
 import { auth } from "../utils/firebase" 
 import { signOut } from "firebase/auth";
 import {SearchBar} from "../components/SearchBar";
+import logtail from "../logger";
+
+
 export function NavBar() {
     const isSmallScreen = useBreakpointValue({ base: true, sm: true, md: true, lg: false, xl: false }); // Define when to show the icon based on screen size
     
@@ -62,7 +65,7 @@ export function NavBar() {
         
             navigate("/");
         }).catch((error) => {
-            console.log(error);
+            logtail.error(`Logout error: ${error.message}`, {fbUser: user.uid, email: user.email});
         })
     }
 

@@ -92,20 +92,19 @@ const handleSubmitVerification = () => {
   }
 
   const sendOTP = () => {
-    logtail.info(`[PHONE:${phone}] Sending OTP to this number`);
-  
+      
     const appVerifier = generateRecaptcha();
     // Send OTP to the provided phone number
     signInWithPhoneNumber(auth, phone, appVerifier)
       .then(confirmResult => {
-        logtail.info(`[PHONE:${phone}] OTP sent successfully`);
+        logtail.info("OTP sent successfully", {fbUser: auth.currentUser.uid, phone: phone});
         setIsAuthenticationModalOpen(false);
         setIsVerificationModalOpen(true);
 
         window.confirmationResult = confirmResult;
       }).catch(error => {
         // Handle error
-        logtail.error(`[PHONE:${phone}] ${error.message}`);
+        logtail.error(`Phone user OTP error: ${error.message}`, {fbUser: auth.currentUser.uid, phone: phone});
       });
   }
 
@@ -124,27 +123,28 @@ const handleSubmitVerification = () => {
                 status: "success",
                 isClosable: true,
             });
-        
+            logtail.info("Yahoo login successful", {fbUser: user.uid, phone: phone});
             navigate("/");
            
         }else{
                 toast({
-                    title: "User not registered. Please register or Verify email.",
+                    title: "User not registered. Please register or Verify phone.",
                     position: "top",
                     status: "error",
                     isClosable: true,
                 });
+                logtail.info("Phone user not registered. Registration and verification required.", {fbUser: user.uid, phone: phone});
             }
 }
         // Handle successful authentication
       ).catch(error => {
         // OTP verification failed
-        logtail.error(error.message);
+        logtail.error(`Phone user login error: ${error.message}`, {fbUser: auth.currentUser.uid, phone: phone});
+
         // Handle failed authentication
       });
   }
   
-
 
     const handleYahooLogin = async () => {
         const auth = getAuth();
@@ -164,9 +164,8 @@ const handleSubmitVerification = () => {
                 position: "top",
                 status: "error",
                 isClosable: true,
-             
             });
-
+            logtail.info("Yahoo user not registered. Registration and verification required.", {fbUser: user.uid, email: user.email});
         }else{
      
             if(user.emailVerified){
@@ -178,7 +177,8 @@ const handleSubmitVerification = () => {
                 status: "success",
                 isClosable: true,
             });
-        
+            logtail.info("Yahoo login successful", {fbUser: user.uid, email: user.email});
+
             navigate("/");
            
         }else{
@@ -188,10 +188,12 @@ const handleSubmitVerification = () => {
                     status: "error",
                     isClosable: true,
                 });
+                logtail.info("Yahoo user not registered. Registration and verification required.", {fbUser: user.uid, email: user.email});
+
             }
 }
         } catch (error) {
-            logtail.log(error.message);
+            logtail.error(`Yahoo user login error: ${error.message}`, {fbUser: auth.currentUser.uid});
         }
     }
 
@@ -212,6 +214,8 @@ const handleSubmitVerification = () => {
                 status: "success",
                 isClosable: true,
             });
+            logtail.info("Facebook login successful", {fbUser: user.uid, email: user.email});
+
             navigate("/");
            
         }else{
@@ -221,9 +225,8 @@ const handleSubmitVerification = () => {
                     status: "error",
                     isClosable: true,
                 });
+                logtail.info("Facebook user not registered. Registration and verification required.", {fbUser: user.uid, email: user.email});
             }
-
-           
         } catch (error) {
             toast({
                 title: "Account exists with different credentials. Use a different login method.",
@@ -231,8 +234,10 @@ const handleSubmitVerification = () => {
                 status: "error",
                 isClosable: true,
             });
+            logtail.error(`Facebook user login error: ${error.message}`, {fbUser: auth.currentUser.uid});
         }
     }
+
     const handleTwitterLogin = async () => {
         const auth = getAuth();
         const provider = new TwitterAuthProvider();
@@ -250,6 +255,7 @@ const handleSubmitVerification = () => {
                 status: "success",
                 isClosable: true,
             });
+            logtail.info("Twitter login successful", {fbUser: user.uid, email: user.email});
             navigate("/");
            
         }else{
@@ -259,6 +265,7 @@ const handleSubmitVerification = () => {
                     status: "error",
                     isClosable: true,
                 });
+                logtail.info("Twitter user not registered. Registration and verification required.", {fbUser: user.uid, email: user.email});
             }
          
         } catch (error) {
@@ -268,8 +275,10 @@ const handleSubmitVerification = () => {
                 status: "error",
                 isClosable: true,
             });
+            logtail.error(`Twitter user login error: ${error.message}`, {fbUser: auth.currentUser.uid});
         }
     }
+
     const handleGoogleLogin = async () => {
         const auth = getAuth();
         const provider = new GoogleAuthProvider();
@@ -291,6 +300,7 @@ const handleSubmitVerification = () => {
                 isClosable: true,
              
             });
+            logtail.info("Google user not registered. Registration and verification required.", {fbUser: user.uid, email: user.email});
 
         }else{
             if(user.emailVerified){
@@ -302,6 +312,7 @@ const handleSubmitVerification = () => {
                 status: "success",
                 isClosable: true,
             });
+            logtail.info("Google login successful", {fbUser: user.uid, email: user.email});
             navigate("/");
         
         }else{
@@ -311,10 +322,12 @@ const handleSubmitVerification = () => {
                     status: "error",
                     isClosable: true,
                 });
+                logtail.info("Google login failed. Account verification required.", {fbUser: user.uid, email: user.email});
+
             }
         }
         } catch (error) {
-            logtail.log(error.message);
+            logtail.error(`Google user login error: ${error.message}`, {fbUser: auth.currentUser.uid});
         }
     }
 
@@ -322,7 +335,7 @@ const handleSubmitVerification = () => {
     const handleLogin = async (data) => {
         try {
             saveData(data);
-        } catch (error) {console.log(error.message);}
+        } catch (error) {console.log(error.message);} //log for testing
 
         try {
             /**
@@ -354,7 +367,7 @@ const handleSubmitVerification = () => {
                     status: "success",
                     isClosable: true,
                 });
-                logtail.info(`[USER:${userVerfied.uid}] Login - successful`);
+                logtail.info("Email login successful", {fbUser: userVerfied.uid, email: userVerfied.email}); 
                 navigate("/");
 
             }else{
@@ -364,6 +377,7 @@ const handleSubmitVerification = () => {
                     status: "error",
                     isClosable: true,
                 });
+                logtail.info("Email login failed. Account verification required.", {fbUser: userVerfied.uid, email: userVerfied.email});
             }
             
         } catch (error) {
@@ -378,10 +392,7 @@ const handleSubmitVerification = () => {
         }
     };
 
- 
-        
     return ( 
-    
         <>    
         
         <div><Modal isOpen={isAuthenticationModalOpen} onClose={handleCloseAuthenticationModal}>
@@ -487,7 +498,7 @@ const handleSubmitVerification = () => {
             <Box w={{base:"25em", sm:"30em", md:"35em"}}height="100%"  borderRadius="25px" bg="black" color="white" mt={{base:"7%", sm:"15%", md:"15%", lg:"12%", xl:"8%"}} mb={{base:"40%", sm:"35%", md:"20%", lg:"15%", xl:"10%"}}>
      <Tabs  borderRadius="25px" className="tab" border="tan 2px outset"  isFitted variant="enclosed" >
     <TabList >
-        <Tab borderRightLeftRadius="25px" borderRightRadius="25px" borderTopLeftRadius="25px" _selected={{color:"white", transform: "translateY(-2px)", border:"outset 2px tan"}} color="tan" >SIGN IN</Tab>
+        <Tab borderRightRadius="25px" borderTopLeftRadius="25px" _selected={{color:"white", transform: "translateY(-2px)", border:"outset 2px tan"}} color="tan" >SIGN IN</Tab>
         <Tab  borderBottomLeftRadius="25px" borderTopRightRadius="25px" borderTopLeftRadius="25px" _selected={{color:"white", transform: "translateY(-2px)", border:"outset 2px tan"}} color="tan">WITH SOCIAL MEDIA </Tab>
     </TabList>
     <TabPanels>

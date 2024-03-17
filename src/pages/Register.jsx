@@ -1,19 +1,22 @@
 import React, {useState, useEffect} from "react";
 
-import {Divider, SimpleGrid, Center, Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, useToast} from "@chakra-ui/react";
+import {Divider, SimpleGrid, Button, Center, Box, Text, Flex, VStack, useToast, 
+    FormControl, FormLabel, FormErrorMessage, InputGroup, Input, InputRightElement, useDisclosure,
+    Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter
+} from "@chakra-ui/react";
 
 import { useNavigate } from "react-router-dom";
 import {  useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
 import { auth } from "../utils/firebase" 
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { getAuth, OAuthProvider, signInWithPopup, GoogleAuthProvider ,FacebookAuthProvider, 
+    TwitterAuthProvider, createUserWithEmailAndPassword, sendEmailVerification 
+} from "firebase/auth";
 
 import {FcGoogle} from "react-icons/fc";
 import { FaTwitter} from "react-icons/fa";
 import { AiFillFacebook,  AiFillYahoo} from "react-icons/ai";
 // import { MdPhoneAndroid } from "react-icons/md";
-import { getAuth, OAuthProvider, signInWithPopup, GoogleAuthProvider ,FacebookAuthProvider, TwitterAuthProvider } from "firebase/auth";
-import { useDisclosure, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react";
 import logtail from "../logger.js";
 
 /* Register page - use React hook Forms for collecting input and validating. Once validated and submitted, send request to Firebase and:
@@ -49,115 +52,115 @@ export const Register = ({saveData}) => {
    
     const handleYahooRegister = async () => {
         setFromSocialMedia(true);
-           try{  
-           const auth = getAuth();
-         
-           const provider = new OAuthProvider("yahoo.com");
+        try{  
+            const auth = getAuth();
+            
+            const provider = new OAuthProvider("yahoo.com");
     
-             const result = await signInWithPopup(auth, provider);
-             const userForVerification = result.user;
- 
-               toast({
-                   title: "Email has sent to be verified!",
-                   description: "Please check your email to verify your account.",
-                   position: "top",
-                   status: "success",
-                   isClosable: true,
-               });
+            const result = await signInWithPopup(auth, provider);
+            const userForVerification = result.user;
+
+            toast({
+                title: "Email has sent to be verified!",
+                description: "Please check your email to verify your account.",
+                position: "top",
+                status: "success",
+                isClosable: true,
+            });
                 
-        await sendEmailVerification(userForVerification);
-        setRegistrationState("waitingForEmailVerification");   
-        
-                 }  catch (error) {
-                    //console.log("Error registering yahoo account:", error);
-                     toast({
-                         title: "Registration for yahoo user failed",
-                         description: error.message,
-                         position: "top",
-                         status: "error",
-                         isClosable: true,
-                     });
-         
-             }
+            await sendEmailVerification(userForVerification);
+            setRegistrationState("waitingForEmailVerification");   
+            logtail.info("Yahoo registration email sent", {fbUser: userForVerification.uid, email: userForVerification.email});
+
+        }  catch (error) {
+            toast({
+                title: "Registration for yahoo user failed",
+                description: error.message,
+                position: "top",
+                status: "error",
+                isClosable: true,
+            });
+            logtail.error(`Yahoo user registration error: ${error.message}`, {fbUser: auth.currentUser.uid});
+        }
      }
 
 
     const handleTwitterRegister = async () => {
         setFromSocialMedia(true);
-           try{  
-           const auth = getAuth();
+        try{  
+            const auth = getAuth();
          
-             const provider = new TwitterAuthProvider();
-             provider.setCustomParameters({
-             "display": "popup"
-             });
-             const result = await signInWithPopup(auth, provider);
-             const userForVerification = result.user;
+            const provider = new TwitterAuthProvider();
+            provider.setCustomParameters({
+            "display": "popup"
+            });
+            const result = await signInWithPopup(auth, provider);
+            const userForVerification = result.user;
  
-               toast({
-                   title: "Email has sent to be verified!",
-                   description: "Please check your email to verify your account.",
-                   position: "top",
-                   status: "success",
-                   isClosable: true,
-               });
+            toast({
+                title: "Email has sent to be verified!",
+                description: "Please check your email to verify your account.",
+                position: "top",
+                status: "success",
+                isClosable: true,
+            });
                 
-        await sendEmailVerification(userForVerification);
-        setRegistrationState("waitingForEmailVerification");   
-        
-                 }  catch (error) {
-                    //console.log("Error registering twitter account:", error);
-                     toast({
-                         title: "Registration for twitter user failed",
-                         description: error.message,
-                         position: "top",
-                         status: "error",
-                         isClosable: true,
-                     });
-         
-             }
+            await sendEmailVerification(userForVerification);
+            setRegistrationState("waitingForEmailVerification");   
+            logtail.info("Twitter registration email sent", {fbUser: userForVerification.uid, email: userForVerification.email});
+
+        } catch (error) {
+            toast({
+                title: "Registration for twitter user failed",
+                description: error.message,
+                position: "top",
+                status: "error",
+                isClosable: true,
+            });
+            logtail.error(`Twitter user registration error: ${error.message}`, {fbUser: auth.currentUser.uid});
+        }
      }
         
     const handleGoogleRegister = async () => {
         setFromSocialMedia(true);
-           try{  
+        try{  
            const auth = getAuth();
          
-             const provider = new GoogleAuthProvider();
+            const provider = new GoogleAuthProvider();
              
-             provider.setCustomParameters({ prompt: "select_account" }); // Force account selection prompt
-   
-             const result = await signInWithPopup(auth, provider);
-             const userForVerification = result.user;
- 
-               toast({
-                   title: "Email has sent to be verified!",
-                   description: "Please check your email to verify your account.",
-                   position: "top",
-                   status: "success",
-                   isClosable: true,
-               });
+            provider.setCustomParameters({ prompt: "select_account" }); // Force account selection prompt
+
+            const result = await signInWithPopup(auth, provider);
+            const userForVerification = result.user;
+
+            toast({
+                title: "Email has sent to be verified!",
+                description: "Please check your email to verify your account.",
+                position: "top",
+                status: "success",
+                isClosable: true,
+            });
                 
-        await sendEmailVerification(userForVerification);
-        setRegistrationState("waitingForEmailVerification");      
+            await sendEmailVerification(userForVerification);
+            setRegistrationState("waitingForEmailVerification");  
+            logtail.info("Google registration email sent", {fbUser: userForVerification.uid, email: userForVerification.email});
         
-                 }  catch (error) {
-                    //console.log("Error registering google account:", error);
-                     toast({
-                         title: "Registration for google user failed",
-                         description: error.message,
-                         position: "top",
-                         status: "error",
-                         isClosable: true,
-                     });
-         
-             }
+        }  catch (error) {
+            toast({
+                title: "Registration for google user failed",
+                description: error.message,
+                position: "top",
+                status: "error",
+                isClosable: true,
+            });
+            logtail.error(`Google user registration error: ${error.message}`, {fbUser: auth.currentUser.uid});
+        }
      }
 
     const handleFacebookRegister = async () => {
-       setFromSocialMedia(true);
-          try{  
-          const auth = getAuth();
+        setFromSocialMedia(true);
+        try{  
+            const auth = getAuth();
         
             const provider = new FacebookAuthProvider();
             provider.setCustomParameters({
@@ -166,33 +169,28 @@ export const Register = ({saveData}) => {
             const result = await signInWithPopup(auth, provider);
             const userForVerification = result.user;
 
-
-              toast({
-                  title: "Email has sent to be verified!",
-                  description: "Please check your email to verify your account.",
-                  position: "top",
-                  status: "success",
-                  isClosable: true,
-              });
-               
-       await sendEmailVerification(userForVerification);
-       setRegistrationState("waitingForEmailVerification");   
-                   
-       
-                }  catch (error) {
-                    //console.log("Error registering facebook account:", error);
-                    toast({
-                        title: "Registration for facebook user failed",
-                        description: error.message,
-                        position: "top",
-                        status: "error",
-                        isClosable: true,
-                    });
-        
-            }
+            toast({
+                title: "Email has sent to be verified!",
+                description: "Please check your email to verify your account.",
+                position: "top",
+                status: "success",
+                isClosable: true,
+            });
+            
+            await sendEmailVerification(userForVerification);
+            setRegistrationState("waitingForEmailVerification");   
+            logtail.info("Facebook registration email sent", {fbUser: userForVerification.uid, email: userForVerification.email});       
+        }  catch (error) {
+            toast({
+                title: "Registration for facebook user failed",
+                description: error.message,
+                position: "top",
+                status: "error",
+                isClosable: true,
+            });
+            logtail.error(`Facebook user registration error: ${error.message}`, {fbUser: auth.currentUser.uid});
+        }
     }
-
- 
 
     const handleRegister = async (data) => {
         setFromSocialMedia(false);
@@ -233,8 +231,7 @@ export const Register = ({saveData}) => {
                 status: "success",
                 isClosable: true,
             });
-
-            logtail.info(`[${userCredential.user.email}] Register verification email sent`);
+            logtail.info("Email registration email sent", {fbUser: userCredential.user.uid, email: data.email});       
 
             // Update the status to reflect waiting for email verification. 
             // When the user first clicks register button and sends an email, the button will change from register to verified status
@@ -247,6 +244,7 @@ export const Register = ({saveData}) => {
                 status: "error",
                 isClosable: true,
             });
+            logtail.error(`Email user registration error: ${error.message}`, {fbUser: auth.currentUser.uid, email: data.email});
         }
 
     }
@@ -267,6 +265,7 @@ export const Register = ({saveData}) => {
                 status: "success",
                 isClosable: true,
             });
+            logtail.info("Registration email resent", {fbUser: user.id, email: user.email});       
         } catch (error) {
             toast({
                 title: "An email is already on the way",
@@ -275,10 +274,11 @@ export const Register = ({saveData}) => {
                 status: "error",
                 isClosable: true,
             });
+            logtail.error(`Registration email resend error: ${error.message}`, {fbUser: auth.currentUser.uid});       
         }
     };
 
-  // Logic for handling whether the user has verified their email
+    // Logic for handling whether the user has verified their email
     const handleCheckEmailVerified = async (event) => {
         //logtail.info("checking verification status to store account info"); //console log for testing 
         // Block default form submission behavior
@@ -288,37 +288,22 @@ export const Register = ({saveData}) => {
         await user.reload(); // Reload user status to obtain the latest email verification status
       
         if (user.emailVerified) {
-            logtail.info(`[${user.email}] Email verified`);
+            logtail.info("Email verified", {fbUser: user.uid, email: user.email});       
             try {
               if(fromSocialMedia){
-            //  console.log("social media user:", socialMediaUser);
+                //  console.log("social media user:", socialMediaUser);
                 // Extract necessary user information
-        const { email, displayName, phoneNumber } = user;
-        const [firstName, lastName] = displayName.split(" ");
+                const { email, displayName, phoneNumber } = user;
+                const [firstName, lastName] = displayName.split(" ");
         
-        const socialMediaUser = {  email: email,
-            firstName: firstName,
-            lastName: lastName,
-            phone: phoneNumber}
+                const socialMediaUser = {  email: email,
+                    firstName: firstName,
+                    lastName: lastName,
+                    phone: phoneNumber}
 
-        // Call the Cloud Function and pass user data
-        const result = await registerNewAccount(socialMediaUser);
-        //const result = await registerNewAccount(socialMediaUser);
-             if (result.success) {
-                toast({
-                    title: "Account created",
-                    description: "Your account has been created successfully.",
-                    position: "top",
-                    status: "success",
-                    isClosable: true,
-                });
-                navigate("/login"); 
-              }}else{
-                /*
-                We will only call the cloud function to store the user"s personal information without password
-                and redirect to the login page when our email authentication is passed
-                */
-                const result = await registerNewAccount(formdata); 
+                // Call the Cloud Function and pass user data
+                const result = await registerNewAccount(socialMediaUser);
+                //const result = await registerNewAccount(socialMediaUser);
                 if (result.success) {
                     toast({
                         title: "Account created",
@@ -327,10 +312,28 @@ export const Register = ({saveData}) => {
                         status: "success",
                         isClosable: true,
                     });
+                    logtail.info("Social Media account created successfully", {fbUser: result.id, email: result.email});       
                     navigate("/login"); 
-                
                 }
-            } }catch (error) {
+              }else{
+                    /*
+                    We will only call the cloud function to store the user"s personal information without password
+                    and redirect to the login page when our email authentication is passed
+                    */
+                    const result = await registerNewAccount(formdata); 
+                    if (result.success) {
+                        toast({
+                            title: "Account created",
+                            description: "Your account has been created successfully.",
+                            position: "top",
+                            status: "success",
+                            isClosable: true,
+                        });
+                        logtail.info("Account created successfully", {fbUser: result.id, email: result.email});       
+                        navigate("/login"); 
+                    }
+              }
+            } catch (error) {
                 toast({
                     title: "Registration failed",
                     description: error.message,
@@ -338,6 +341,7 @@ export const Register = ({saveData}) => {
                     status: "error",
                     isClosable: true,
                 });
+                logtail.error(`Registration error: ${error.message}`, {fbUser: user.id, email: user.email});       
             }
         } else {
             toast({
@@ -347,6 +351,7 @@ export const Register = ({saveData}) => {
                 status: "warning",
                 isClosable: true,
             });
+            logtail.error("Email not verified. Validation required.", {fbUser: auth.currentUser.uid, email: user.email});       
         }
     };
 

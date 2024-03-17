@@ -3,6 +3,7 @@ import { Box, Button, Text, Flex, VStack, Input, FormControl, FormLabel, FormErr
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
+import { auth } from "../utils/firebase" 
 import "../styles.css";
 import logtail from "../logger";
 
@@ -32,7 +33,7 @@ export const EditProfile = () => {
                     setValue("email", data.email);
                     setValue("phone", data.phone);
                 }
-            } catch (error) {logtail.error(error.message)}
+            } catch (error) {logtail.error(`Edit profile error: ${error.message}`, {fbUser: auth.currentUser.uid})}
         };
 
         fetchAndSetUserProfile();
@@ -50,7 +51,7 @@ export const EditProfile = () => {
 
     const handleEditProfile = async (data) => {
         const userId = await updateUserAccount(data);
-        logtail.info(`[USER:${userId}] Profile edits saved`);
+        logtail.info("Profile edits saved", {fbUser: userId});
         navigate("/profile");  
     };
 
