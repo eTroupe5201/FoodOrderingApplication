@@ -22,7 +22,7 @@ export function OurTeam() {
               <Text>James is a dedicated server who is passionate about providing exceptional service. He believes in creating a warm, welcoming atmosphere for guests and ensuring that every dining experience is memorable.</Text>
             </Box>
             <Box className="OurTeamBox" >
-              <Center> <Image className="round-picture" src="https://d1zh5cyxaugen.cloudfront.net/teamSmall.jpg" alt="logo" /></Center>
+              <Center> <Image className="round-picture" src="https://d1zh5cyxaugen.cloudfront.net/TeamMembers.jpg" alt="logo" /></Center>
               <Text className="team-text">Our Team</Text>
               <Text>Our team is committed to providing an exceptional dining experience for every guest. From the kitchen to the dining room, we work together to create a warm, welcoming atmosphere and ensure that every guest feels at home.</Text>
             </Box>
