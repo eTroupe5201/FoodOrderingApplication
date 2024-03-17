@@ -7,21 +7,21 @@ import { Helmet } from "react-helmet";
 export function ImageSlider() {
   const images = [
     {
-      url: "https://d1zh5cyxaugen.cloudfront.net/TableSetting.webp",
+      url: "https://d1zh5cyxaugen.cloudfront.net/SettingForGuest.webp",
       heading: "Welcome to Divine Delicacies!",
       content: "Indulge Your Senses: A Gastronomic Journey through Our Culinary Creations! From savory starters to delectable desserts, every slide invites you to savor the flavors of Divine Delicacies. Bon appétit!",
       button: "Order Now",
       link: "/login"
     },
     {
-      url: "https://d1zh5cyxaugen.cloudfront.net/ServingFood.webp",
+      url: "https://d1zh5cyxaugen.cloudfront.net/WaiterServing.webp",
       heading: "Discover Our Exquisite Menu!",
       content: "From tantalizing appetizers to mouthwatering mains and indulgent desserts, each dish at Divine Delicacies is a culinary masterpiece, meticulously crafted to delight your senses. Join us and experience a symphony of flavors that will leave you craving more.",
       button: "Explore Menu",
       link: "/Menu"
     },
     {
-      url: "https://d1zh5cyxaugen.cloudfront.net/FoodLayout.webp",
+      url: "https://d1zh5cyxaugen.cloudfront.net/TableLayout.webp",
       heading: "Satisfy Your Cravings!",
       content: "Ready to tantalize your taste buds? Place your order now and embark on a culinary journey with us! Whether you are craving savory classics, indulgent treats, or something in between, we have you covered. Click below to satisfy your cravings and experience a world of flavor delivered straight to your door.",
       button: "Order Here",

@@ -376,6 +376,7 @@ export const Register = ({saveData}) => {
                 borderRadius="md"
                 _active={{transform: "translateY(2px)", bg:"white",boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)",backgroundImage: "linear-gradient(rgb(0 0 0/90%) 0 0)"}}
                 type="submit"
+                data-test="register"
                 > 
                 Register
             </Box>
@@ -398,7 +399,7 @@ export const Register = ({saveData}) => {
                     <p> To finalize the verification process, click on the  &quot;Complete Registration &quot; button on the webpage.</p>
 
                 </ModalBody>
-                <ModalFooter><Button color="white" bg="black" border="2px solid tan" mr={3} onClick={onClose}>
+                <ModalFooter><Button data-test="Close-Instructions-Button" color="white" bg="black" border="2px solid tan" mr={3} onClick={onClose}>
         Close
       </Button>  </ModalFooter>
         </ModalContent>
@@ -421,6 +422,7 @@ export const Register = ({saveData}) => {
                 _active={{boxShadow: "inset  1px 1px 5px 2px rgba(210, 180, 140, 0.9)", transform: "translateY(2px)"}}
                 onClick={handleCheckEmailVerified}
                 type="button" // Distinguished from type=submit, it is just a button event to prevent form submission
+                data-test="complete-verification"
                 > 
                COMPLETE VERIFICATION
             </Box>
@@ -462,6 +464,7 @@ export const Register = ({saveData}) => {
                         <FormControl id="fnameField" isInvalid={!!formState?.errors?.firstName?.type}>
                             <FormLabel>First Name</FormLabel>
                             <Input 
+                                data-test="first-name-input"
                                 id="firstName"
                                 title="register-first-name"
                                 {...register("firstName", { required: true, pattern:/(^[a-zA-Z,"-][a-zA-Z\s,"-]{0,20}[a-zA-Z]$)/})}
@@ -471,6 +474,7 @@ export const Register = ({saveData}) => {
                         <FormControl id="lnameField" isInvalid={!!formState?.errors?.lastName?.type}>
                             <FormLabel>Last Name</FormLabel>
                             <Input 
+                                data-test="last-name-input"
                                 id="lastName"
                                 title="register-last-name"
                                 {...register("lastName", { required: true, pattern:/(^[a-zA-Z,"-][a-zA-Z\s,"-]{0,20}[a-zA-Z]$)/ })}
@@ -480,6 +484,7 @@ export const Register = ({saveData}) => {
                         <FormControl id="emailField" isInvalid={!!formState?.errors?.email?.type || !emailsMatch}>
                             <FormLabel >Email Address</FormLabel>
                             <Input 
+                                data-test="email-input"
                                 id="email"
                                 title="register-email"
                                 {...register("email", { 
@@ -502,6 +507,7 @@ export const Register = ({saveData}) => {
                         <FormControl id="confirmEmailField" isInvalid={!!formState?.errors?.confirmEmail?.type || !emailsMatch}>
                         <FormLabel>Confirm Email Address</FormLabel>
                             <Input 
+                                data-test="confirm-email-input"
                                 id="confirmEmail"
                                 title="register-confirm-email"
                                 type="confirmEmail"
@@ -525,6 +531,7 @@ export const Register = ({saveData}) => {
                         <FormControl id="phoneField" >
                             <FormLabel>Phone Number (optional)</FormLabel>
                             <Input 
+                                data-test="phone-input"
                                 type="tel"
                                 title="register-phone"
                                 {...register("phone")}
@@ -532,7 +539,8 @@ export const Register = ({saveData}) => {
                         </FormControl>
                         <FormControl id="addressField" >
                             <FormLabel>Address (optional)</FormLabel>
-                            <Input 
+                            <Input
+                                data-test="address-input" 
                                 type="text"
                                 title="register-address"
                                 {...register("address")}
@@ -543,6 +551,7 @@ export const Register = ({saveData}) => {
                             <FormLabel>Password</FormLabel>
                             <InputGroup>
                                 <Input 
+                                    data-test="password-input"
                                     id="password"
                                     title="register-password"
                                     type={showPassword ? "text" : "password"}
@@ -589,6 +598,7 @@ export const Register = ({saveData}) => {
                             <FormLabel>Confirm Password</FormLabel>
                             <InputGroup>
                                 <Input 
+                                    data-test="confirm-password-input"
                                     id="confirmPassword"
                                     title="register-confirm-password"
                                     type={showConfirmPassword ? "text" : "password"}
