@@ -100,6 +100,7 @@ export const Menu = () => {
                     </Box>
                 </Center>)}
         </Box>
+
     );
 
 };

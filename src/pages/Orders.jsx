@@ -8,7 +8,7 @@ import { getLatLng } from "../utils/getLatLing";
 
 import { GoogleMap, LoadScriptNext, DirectionsRenderer, Marker, InfoWindow } from '@react-google-maps/api';
 import { TiHeartFullOutline, TiHeartOutline} from "react-icons/ti";
-
+import logtail from "../logger.js";
 
 /* This page contains historical order information, allowing the guest to replace the order. The page also
 *  includes Google map functionality to view the address provided with the order, versus the restaurant's 
@@ -70,7 +70,7 @@ export const Orders = () => {
         const fetchDirections = async () => {
 
             if (!window.google || !window.google.maps || !mapsLoaded) {
-                console.error("Google Maps API script not loaded yet.");
+                console.error(`[ORDER:${currOrder.id} Google Maps API script not loaded yet`);
                 return;
             }
 
@@ -91,11 +91,11 @@ export const Orders = () => {
                             setShowInfoWindow(true); // 获取路线后显示InfoWindow
                             setInfoWindowPosition(result.routes[0].legs[0].end_location); // 设置InfoWindow的位置
                         } else {
-                            console.error(`Directions request failed due to ${status}`);
+                            console.error(`[ORDER:${currOrder.id} Directions request failed due to ${status}`);
                         }
                     });
                 } catch (error) {
-                    console.error(error);
+                    logtail.error(`[ORDER:${currOrder.id} ${error.message}`);
                 }
             }
         };
@@ -238,8 +238,8 @@ export const Orders = () => {
                     <Text>{currOrder.comments}</Text>
                     <Center mt='30px'>
                         <Stack direction='row' spacing='24px'>
-                            <Button fontWeight='bold' onClick={hasCartItems ? onOpen : handleReplaceOrder}>Copy Order</Button>
-                            <Button fontWeight='bold' onClick={() => navigate("/profile")}>Go Back</Button>
+                            <Button title="Copy Order" fontWeight='bold' onClick={hasCartItems ? onOpen : handleReplaceOrder}>Copy Order</Button>
+                            <Button title="Go Back" fontWeight='bold' onClick={() => navigate("/profile")}>Go Back</Button>
                         </Stack>
                     </Center>
                 </Box>

@@ -589,7 +589,7 @@ export const updateAccount = onCall(async (request) => {
       email: request.data.email, 
       phone: request.data.phone
     });
-    return { result: "User info updated successfully." };
+    return {uid};
   } catch (error) {
     throw new HttpsError('internal', 'Unable to update user', error);
   }

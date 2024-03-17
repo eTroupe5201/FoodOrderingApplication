@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom"
 import { auth } from "../utils/firebase" 
 import { TiPlus, TiHeartFullOutline} from "react-icons/ti";
 import { sendPasswordResetEmail, signOut} from "firebase/auth"
+import logtail from "../logger.js";
+
 
 /* This page contains basic user data, with routes or buttons to reset password, edit other user info, 
 *  and view prior order history. 
@@ -34,7 +36,7 @@ export const Profile = () => {
             }
             else return 0;
         })
-    } catch (error) {error.message;}
+    } catch (error) {console.log(error.message);}
 
     useEffect(() => {
         const loadUserProfile = async () => {
@@ -56,7 +58,6 @@ export const Profile = () => {
         //if not empty, we will call this firebase function directly and then we can go to our email box to rest the password
         sendPasswordResetEmail(auth, userProfile?.email)
         .then(() => {
-            console.log("Success - password email sent");
             toast({
                 title: "Password reset email sent.",
                 description: "You have been logged out. Check your email for the password reset instructions.",
@@ -69,7 +70,7 @@ export const Profile = () => {
             logout();
         })
         .catch((error) => {
-            console.log(error);
+            logtail.error(`[USER:${user.id} ${error.message}`);
             toast({
                 title: "An error occurred.",
                 description: error.message, 
@@ -90,7 +91,7 @@ export const Profile = () => {
             getUserInfo(null); 
             navigate("/login");
         }).catch((error) => {
-            console.log(error);
+            logtail.error(`[USER:${user.id} ${error.message}`);
         })
     };
 
