@@ -20,13 +20,13 @@ Currently, two official plugins are available:<br/>
 • <b>Status management:</b> Use Redux to manage application status, such as user login and shopping cart.<br/>
 • <b>Routing:</b> Utilize React Router to handle front-end routing.<br/>
 
+## Homepage
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/bf41b496-81d0-4f49-a545-073f2a95a5d7)
+
 ## Login Page/Register Page
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/67bc014d-6c61-425b-8233-c038e4c12de2)
 
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/1491591f-c9cf-4271-aecf-2012926a15d2)
-
-## Homepage
-![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/bf41b496-81d0-4f49-a545-073f2a95a5d7)
 
 ## Order Page
 ![0070ccd6332b67b7c0aa417716ad80b](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/fd4cc85d-1783-4a9a-9015-7943bfeb1762)
@@ -50,24 +50,24 @@ Currently, two official plugins are available:<br/>
 • <b>Authentication:</b> Use Firebase tokens to manage sessions and maintain user status.<br/>
 • <b>Business logic:</b> Use React admin as a front-end and back-end interaction to process orders, payments, and user management.And integrate third-party payment APIs such as Stripe or PayPal to handle payments and refunds.<br/>
 • <b>Introducing Google Maps</b><br/>
-• <b>notification WebSocket：</b>achieve bidirectional link communication, push messages to the front-end consumer, and the message format may be similar to {order information, delivery information}. <br/>Integrate Google Cloud Tasks as a fully hosted service for executing, scheduling, and delaying the execution of backend tasks. It can efficiently perform asynchronous processing and time-consuming tasks, especially suitable for sending emails or other operations that require delayed execution. Cloud Tasks provide a queue for tasks, ensuring that they are reliably executed and retried without affecting the user experience due to front-end system load. <br/>
+• <b>Notification WebSocket：</b>achieve bidirectional link communication, push messages to the front-end consumer, and the message format may be similar to {order information, delivery information}. <br/>Integrate Google Cloud Tasks as a fully hosted service for executing, scheduling, and delaying the execution of backend tasks. It can efficiently perform asynchronous processing and time-consuming tasks, especially suitable for sending emails or other operations that require delayed execution. Cloud Tasks provide a queue for tasks, ensuring that they are reliably executed and retried without affecting the user experience due to front-end system load. <br/>
 
-1 null delivery information ->2 delivery information ->3 delivery current location ->4 delivery current location and remaining time expect ->5, xxx ->6 Deliveryman has been to destination.<br/>
+1 null delivery information -> 2 delivery information -> 3 delivery current location -> 4 delivery current location and remaining time expect -> 5, delivery arriving -> 6 Deliveryman has been to destination.<br/>
 
 ## Register situation
 • <b>1</b> Register Page - Register Button<br/>
 ![RUFQG4UWUJK5)8~ K4DT)GM](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/e7cee91c-c8ba-4cfe-81b0-810337587a2c)
-• <b>2</b> Register Page - Verfied Button(waiting to be verfied by the email)<br/>
+• <b>2</b> Register Page - Verified Button(waiting to be verified in Firebase, via email)<br/>
 ![XM3_44WB7M1 _3$5ZRI$@EN](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/c9775f2d-f5a5-495b-b85b-43f0ce6c6824)
 • <b>3</b> Register Page - Click the verified button if the email is not authenticated<br/>
 ![WYV94 (}62}SEIK~0T{3NV7](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/00491a0d-d7c5-48d9-bcd7-a7e0b7d0e3e8)
-• <b>4</b> Go to the email（Gmail as an example) to check the verification information<br/>
+• <b>4</b> Go to the email（Gmail as an example) to check the verification information. Once verified, click 'Verified' on the registration page. <br/>
 ![`{S{7TF@%RN(U$ LI $QHJW](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/7f9c1957-9797-4360-9ada-f348d058808d)
 ![3C617TJCVC7$}OH(~%CZBFC](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/59a2dce9-2000-4b93-bbdc-33de9f70d7bd)
 <br/>
 • <b>5</b> Email verification successful, redirect to login page<br/>
 ![@MC)II_F6CBB1NZ7OLE2SV9](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/72c356e5-813b-42af-b23a-675d58088a3c)
-• <b>6</b> Save into firebase without password, ensuring security problem<br/>
+• <b>6</b> Save into firebase without password, ensuring secure account creation<br/>
 ![AU}VOPTKHZIHO3JBLKFMSPV](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/0d04f050-d321-42b7-b7e9-ae66082b2e48)
 
 
@@ -101,8 +101,8 @@ Currently, two official plugins are available:<br/>
 # Database
 ## • firebase
 ![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/3e43dc01-9265-43a7-a2fa-86d233aefc88)
-## • redis(TBD)
-![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/00a05552-65b7-462b-8611-75ff4dd53592)
+<!-- ## • redis(TBD)
+![image](https://github.com/eTroupe5201/FoodOrderingApplication/assets/129224800/00a05552-65b7-462b-8611-75ff4dd53592) -->
 
 # Devops
 

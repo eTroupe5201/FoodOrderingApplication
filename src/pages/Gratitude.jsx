@@ -90,18 +90,18 @@ const GratitudeContent = () => {
 
     const handlePayAtRestaurant = async () => {
         if (order.status === "confirmed") {
-            logtail.info(`[ORDER:${order.id}] Order already confirmed. Skipping capture.`);
+            logtail.info("Order already confirmed. Skipping capture.", {orderId: order.id});
             return;
         }        
 
         const updatedOrder = await setPickupOrderStatus();
 
         if (updatedOrder.error) {
-            logtail.error(`[ORDER:${order.id}] Error with setPickupOrderStatus: `, updatedOrder.error);
+            logtail.error(`Error with setPickupOrderStatus: ${updatedOrder.error.message}`, {orderId: order.id});
             return; // exit the function
         }
 
-        logtail.info(`[ORDER:${updatedOrder.id}] Order captured successfully`);
+        logtail.info("Pay later order captured successfully", {orderId: order.id});
         setOrder(updatedOrder); // make sure call setOrder promptly
     };
 
@@ -149,7 +149,6 @@ const GratitudeContent = () => {
     }
 
     if (order.status === "cancelled") {
-        //logtail.log("order cancelled");
         return (
             <>
                 <Icon as={MdCancel} w={24} h={24} color="gray.700" />

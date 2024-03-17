@@ -5,6 +5,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { CartModal } from "./CartModal";
 import { auth } from "../utils/firebase" 
 import { signOut } from "firebase/auth";
+import logtail from "../logger";
+
 
 export function MobileNav() {
   const { lines } = useDataProvider();
@@ -27,7 +29,7 @@ export function MobileNav() {
     
         navigate("/");
     }).catch((error) => {
-        console.log(error);
+      logtail.error(`Logout error: ${error.message}`, {fbUser: user.uid, email: user.email});
     })
 }
 
@@ -46,14 +48,14 @@ export function MobileNav() {
       />
       <MenuList border="2px outset tan"bg="black" textAlign="center" fontWeight="bold">
         
-        <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px",borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/"> Home </Link> </MenuItem>
-        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/contact"> Contact </Link> </MenuItem>
-        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}> <Link to="/menu"> Order </Link> </MenuItem>
+        <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px",borderColor: "white 2px" }} fontSize={{ base: "15px" }}> <Link to="/"> Home </Link> </MenuItem>
+        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} fontSize={{ base: "15px" }}> <Link to="/contact"> Contact </Link> </MenuItem>
+        <MenuItem bg="black" _hover={{  textShadow:"#fff 0px 2px 5px", borderColor: "white 2px" }} fontSize={{ base: "15px" }}> <Link to="/menu"> Order </Link> </MenuItem>
         {user ? (
           //TODO: fix temp solution - Link only added here for formatting 
-          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" onClick={logout} fontSize={{ base: "15px" }}> <Link> Logout </Link> </MenuItem>
+          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} onClick={logout} fontSize={{ base: "15px" }}> <Link> Logout </Link> </MenuItem>
         ) : (
-          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} as="a" fontSize={{ base: "15px" }}><Link to="/login">Login</Link>  </MenuItem>  
+          <MenuItem bg="black" _hover={{ textShadow:"#fff 0px 2px 5px" ,borderColor: "white 2px" }} fontSize={{ base: "15px" }}><Link to="/login">Login</Link>  </MenuItem>  
 
         ) }
 

@@ -8,7 +8,7 @@ import { getLatLng } from "../utils/getLatLing";
 import logtail from "../logger";
 
 export const Info = () => {
-    const { order, restaurantInfo, fetchItemImageById, travelTime, setTravelTime, setdeliveryFirstname, setdeliveryLastname  } = useDataProvider();
+    const { user, order, restaurantInfo, fetchItemImageById, travelTime, setTravelTime, setdeliveryFirstname, setdeliveryLastname  } = useDataProvider();
     const [directions, setDirections] = useState(null);
     const [mapsLoaded, setMapsLoaded] = useState(false);
     const [center, setCenter] = useState(null); // 设置初始中心点为null
@@ -30,7 +30,7 @@ export const Info = () => {
         const fetchDirections = async () => {
 
             if (!window.google || !window.google.maps || !mapsLoaded) {
-                logtail.error(`[ORDER:${order.id}] Google Maps API script not loaded yet.`);
+                logtail.error("Google Maps API script not loaded yet", {fbUser: user.uid, orderId: order.id} );
                 return;
             }
 
@@ -53,11 +53,11 @@ export const Info = () => {
                             // setTravelTime(result.routes[0].legs[0].duration.text); // 设置旅行时间
                             setTravelTime(estimatedDeliveryTime);//用最近骑手的预算时间来作为我们的旅行时间
                         } else {
-                            logtail.error(`[ORDER:${order.id}] Directions request failed due to ${status}`);
+                            logtail.error(`Directions request failed due to ${status}`, {fbUser: user.uid, orderId: order.id} );
                         }
                     });
                 } catch (error) {
-                    logtail.error(`[ORDER:${order.id}] ${error.message}`);
+                    logtail.error(`Google Maps error: ${error.message}`, {fbUser: user.uid, orderId: order.id});
                 }
             }
         };
@@ -118,8 +118,7 @@ export const Info = () => {
     else if (order.receiveMethod === "pickup") {
         arrivalTimeMsg = "Estimated Ready for Pickup:";
         orderRetrievalMsg = `Pickup your order at ${restaurantInfo.address}`;
-        //hard coded to simulate when an order is ready for pickup
-        readyTime = "10";
+        readyTime = "10"; //hard coded to simulate when an order is ready for pickup
     }
 
     return (
