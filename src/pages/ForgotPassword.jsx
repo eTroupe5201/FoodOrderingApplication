@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../utils/firebase" 
 import { sendPasswordResetEmail } from "firebase/auth";
-
+import logtail from "../logger";
 
 /* Firebase Authentication provides a function to reset a user's password, which  
 *  involves sending a password reset link to the user's registered email address.
@@ -25,7 +25,8 @@ export const ForgotPassword = ({saveData}) => {
         
         //check email field is empty or not
         if (!email) {
-            console.log("invalid email - empty string or only whitespace");
+            console.log("ForgotPassword - Invalid email - empty string or only whitespace");
+            logtail.info("ForgotPassword - Invalid email - empty string or only whitespace");
             toast({
                 title: "Please enter your email address.",
                 status: "warning",
@@ -39,7 +40,7 @@ export const ForgotPassword = ({saveData}) => {
         //if not empty, we will call this firebase function directly and then we can go to our email box to rest the password
         sendPasswordResetEmail(auth, email)
             .then(() => {
-                console.log("Success - password email sent");
+                logtail.log("ForgotPassword - Success - password email sent");
                 toast({
                     title: "Password reset email sent.",
                     description: "Check your email for the password reset instructions.",
@@ -51,7 +52,7 @@ export const ForgotPassword = ({saveData}) => {
                 navigate("/login");
             })
             .catch((error) => {
-                console.log(error);
+                logtail.log("ForgotPassword - " + error.message);
                 toast({
                     title: "An error occurred.",
                     description: "Invalid email address", //error.message, custom message for user friendliness

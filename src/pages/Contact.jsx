@@ -1,7 +1,7 @@
 import { Flex, Box, Text, VStack, Input, Textarea, SimpleGrid, Center, FormControl, FormLabel, FormErrorMessage} from "@chakra-ui/react"
 import { useDataProvider } from "../components/dataProvider";
 import { useForm } from "react-hook-form";
-
+import logtail from "../logger.js";
 
 //page for Contact Us form
 export const Contact = ({saveData}) => {
@@ -9,14 +9,15 @@ export const Contact = ({saveData}) => {
     const { register, handleSubmit, formState, reset} = useForm();
 
     const handleSendForm = async (data) => {  
-        console.log("valid contact form submitted");
         try {
             saveData(data);
-        } catch (error) {console.log(error);}
+        } catch (error) {console.log(error)}
         
         try {
-            console.log(data.auth);
-            await storeContactUsForm(data);
+            const formId = await storeContactUsForm(data);
+            console.log("valid contact form submitted");
+            logtail.info("[FORM: " + formId + "] Contact - submitted");
+
             hideFormShowAlert(); 
             reset();
         } catch (error) {console.log(error);}

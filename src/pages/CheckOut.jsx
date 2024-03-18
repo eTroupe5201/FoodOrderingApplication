@@ -4,8 +4,9 @@ import  { useEffect,  useRef } from "react";
 import { BottomButton } from "../components/BottomButton";
 import { useDataProvider } from "../components/dataProvider"
 import { calculateOrderTotal, } from "../utils/calculations";
-import { PAYMENT_METHODS, RECEIVE_METHODS } from "../utils/constants";
+import { RECEIVE_METHODS } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
+import logtail from "../logger.js";
 import "../styles.css";
 
 
@@ -13,7 +14,7 @@ export const CheckOut = () => {
     
     const navigate = useNavigate();
     
-    const { fetchUserProfile, lines, restaurantInfo, checkout, setCartChanged } = useDataProvider();
+    const { order, fetchUserProfile, lines, restaurantInfo, checkout, setCartChanged } = useDataProvider();
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
     const isMounted = useRef(false); // Used to track the mounting status of components
@@ -38,7 +39,7 @@ export const CheckOut = () => {
                     setValue("phone", data.phone);
                     //...other fields in future
                 }
-            } catch (error) {console.log(error.message)}
+            } catch (error) {logtail.error(error.message)}
         };
 
         fetchAndSetUserProfile();

@@ -8,15 +8,11 @@ import {sendEmailVerification } from "firebase/auth";
 import {FcGoogle} from "react-icons/fc";
 import { FaTwitter} from "react-icons/fa";
 import { AiFillFacebook,  AiFillYahoo} from "react-icons/ai";
-import { InstructionsModal } from "../components/InstructionsModal";
-import { RegisterYahooUser } from "../components/RegisterYahooUser";
-import { RegisterTwitterUser } from "../components/RegisterTwitterUser";
-import { RegisterGoogleUser } from "../components/RegisterGoogleUser";
-import { RegisterFacebookUser } from "../components/RegisterFacebookUser";
-import { RegisterEmailAndPasswordUser } from "../components/RegisterEmailAndPasswordUser";
-//import { MdPhoneAndroid } from "react-icons/md";
-//import { signInWithPhoneNumber, RecaptchaVerifier} from "firebase/auth";
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react";
+// import { MdPhoneAndroid } from "react-icons/md";
+import { getAuth, OAuthProvider, signInWithPopup, GoogleAuthProvider ,FacebookAuthProvider, TwitterAuthProvider } from "firebase/auth";
+import { useDisclosure, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react";
+import logtail from "../logger.js";
+
 /* Register page - use React hook Forms for collecting input and validating. Once validated and submitted, send request to Firebase and:
 *   - if account exists with provided email, route to Login page
 *   - if no account exists with provided email, create account and store user info in DB. Upon return, route back to Home page
@@ -56,139 +52,208 @@ export const Register = ({saveData}) => {
     };
 
     const handleYahooRegister = async () => {
-        setFromOTP(false);
-        RegisterYahooUser(setFromOTP, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
-        handleInstructionsModalOpen();
+        setFromSocialMedia(true);
+           try{  
+           const auth = getAuth();
+         
+           const provider = new OAuthProvider("yahoo.com");
+    
+             const result = await signInWithPopup(auth, provider);
+             const userForVerification = result.user;
+ 
+               toast({
+                   title: "Email has sent to be verified!",
+                   description: "Please check your email to verify your account.",
+                   position: "top",
+                   status: "success",
+                   isClosable: true,
+               });
+                
+        await sendEmailVerification(userForVerification);
+        setRegistrationState("waitingForEmailVerification");   
+        
+                 }  catch (error) {
+                    //console.log("Error registering yahoo account:", error);
+                     toast({
+                         title: "Registration for yahoo user failed",
+                         description: error.message,
+                         position: "top",
+                         status: "error",
+                         isClosable: true,
+                     });
+         
+             }
      }
 
+
     const handleTwitterRegister = async () => {
-        setFromOTP(false);
-        RegisterTwitterUser(setFromOTP, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
-        handleInstructionsModalOpen();
+        setFromSocialMedia(true);
+           try{  
+           const auth = getAuth();
+         
+             const provider = new TwitterAuthProvider();
+             provider.setCustomParameters({
+             "display": "popup"
+             });
+             const result = await signInWithPopup(auth, provider);
+             const userForVerification = result.user;
+ 
+               toast({
+                   title: "Email has sent to be verified!",
+                   description: "Please check your email to verify your account.",
+                   position: "top",
+                   status: "success",
+                   isClosable: true,
+               });
+                
+        await sendEmailVerification(userForVerification);
+        setRegistrationState("waitingForEmailVerification");   
+        
+                 }  catch (error) {
+                    //console.log("Error registering twitter account:", error);
+                     toast({
+                         title: "Registration for twitter user failed",
+                         description: error.message,
+                         position: "top",
+                         status: "error",
+                         isClosable: true,
+                     });
+         
+             }
      }
 
     const handleGoogleRegister = async () => {
-        setFromOTP(false);
-        RegisterGoogleUser(setFromOTP, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
-        handleInstructionsModalOpen();
+        setFromSocialMedia(true);
+           try{  
+           const auth = getAuth();
+         
+             const provider = new GoogleAuthProvider();
+             
+             provider.setCustomParameters({ prompt: "select_account" }); // Force account selection prompt
+   
+             const result = await signInWithPopup(auth, provider);
+             const userForVerification = result.user;
+ 
+               toast({
+                   title: "Email has sent to be verified!",
+                   description: "Please check your email to verify your account.",
+                   position: "top",
+                   status: "success",
+                   isClosable: true,
+               });
+                
+        await sendEmailVerification(userForVerification);
+        setRegistrationState("waitingForEmailVerification");      
+        
+                 }  catch (error) {
+                    //console.log("Error registering google account:", error);
+                     toast({
+                         title: "Registration for google user failed",
+                         description: error.message,
+                         position: "top",
+                         status: "error",
+                         isClosable: true,
+                     });
+         
+             }
      }
 
     const handleFacebookRegister = async () => {
-        RegisterFacebookUser(setFromOTP, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
-        handleInstructionsModalOpen();     
-    }
+       setFromSocialMedia(true);
+          try{  
+          const auth = getAuth();
+        
+            const provider = new FacebookAuthProvider();
+            provider.setCustomParameters({
+            "display": "  "
+            });
+            const result = await signInWithPopup(auth, provider);
+            const userForVerification = result.user;
 
-    const handleRegister = async (data) => {
-        RegisterEmailAndPasswordUser(setFromOTP, saveData, setformData, data, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
-        handleInstructionsModalOpen();
+
+              toast({
+                  title: "Email has sent to be verified!",
+                  description: "Please check your email to verify your account.",
+                  position: "top",
+                  status: "success",
+                  isClosable: true,
+              });
+               
+       await sendEmailVerification(userForVerification);
+       setRegistrationState("waitingForEmailVerification");   
+                   
+       
+                }  catch (error) {
+                    //console.log("Error registering facebook account:", error);
+                    toast({
+                        title: "Registration for facebook user failed",
+                        description: error.message,
+                        position: "top",
+                        status: "error",
+                        isClosable: true,
+                    });
+        
+            }
     }
 
  
-useEffect(() => {
-    if (!isVerificationModalOpen && isVerificationCompleted) {
-        setOTP(["", "", "", "", "", ""]); // Reset OTP state
-        setIsVerificationCompleted(false);
-    }
-}, [isVerificationModalOpen, isVerificationCompleted]);
 
-const handleEmail = (e) => {
-    setOTPEmail(e.target.value);
-};
+    const handleRegister = async (data) => {
+        setFromSocialMedia(false);
+        setformData(data);
 
-const handleSubmitVerification = () => {
-    setFromOTP(true);
-    setFromSocialMedia(false);
-    verifyOTP();
-    setIsVerificationCompleted(true);
-    sendEmailVerification(OTPemail);
-    handleCloseVerificationModal();
-};
-    const handleOpenAuthenticationModal = () => {
-      setIsAuthenticationModalOpen(true);
-    };
-  
-    const handleCloseAuthenticationModal = () => {
-      setIsAuthenticationModalOpen(false);
-      setOTP(["", "", "", "", "", ""]); // Reset OTP state
-       };
-       
-      const handleCloseVerificationModal = () => {
-        setIsVerificationModalOpen(false);
-      };
+        try {
+            saveData(data);
+        } catch (error) {console.log(error)}
 
-
-  const generateRecaptcha = () => {
-    return new RecaptchaVerifier("recaptcha-container", {
-      "size": "visible",
-      "type": "image",
-        "theme": "dark",
-        "callback": () => {
+        // Verify email and password match
+        if (data.email !== data.confirmEmail || data.password !== data.confirmPassword) {
+            console.log("passwords or emails do not match"); //log for tests
             toast({
                 title: "reCAPTCHA solved, allow signInWithPhoneNumber.",
                 position: "top",
                 status: "success",
                 isClosable: true,
             });
-            console.log("reCAPTCHA solved, allow signInWithPhoneNumber.");
-            sendOTP();
+            return;
         }
-    }, auth);
-  }
 
-  const sendOTP = () => {
-    console.log("phone", OTPphoneNumber);
-  
-    const appVerifier = generateRecaptcha();
-    console.log("in send Otp");
-    // Send OTP to the provided phone number
-    signInWithPhoneNumber(auth,OTPphoneNumber, appVerifier)
-      .then(confirmResult => {
-        console.log("OTP sent successfully");
-        setIsAuthenticationModalOpen(false);
-        setIsVerificationModalOpen(true);
-
-        window.confirmationResult = confirmResult;
-      }).catch(error => {
-        // Handle error
-        console.error(error);
-      });
-  }
-
-  const verifyOTP = () => {
-    // Verify OTP entered by the user
-    window.confirmationResult.confirm(otp.join(""))
-      .then(result => {
-        // OTP verification successful
-        const user = result.user;
-        if(user.emailVerified){
-            getUserInfo(user);
-               // Show success message and navigate to homepage
-               toast({
-                title: "OTP Login Successful.",
+        try {
+            console.log("valid registration input"); //log for tests
+            /**
+             * Create users and send verification emails
+             * In Firebase, the default validity period for email verification links sent to users is 24 hours. 
+             * This means that users have 24 hours after receiving the email to click on the verification link 
+             * to complete their email verification process. If the user does not click on the verification link during this period, 
+             * the link will expire and the user needs to request a new verification email to complete the verification process.
+             */ 
+            const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+            await sendEmailVerification(userCredential.user);
+            toast({
+                title: "Email has sent to be verified!",
+                description: "Please check your email to verify your account.",
                 position: "top",
                 status: "success",
                 isClosable: true,
             });
-        
-            navigate("/");
-           
-        }else{
-                toast({
-                    title: "User not registered. Please register or Verify email.",
-                    position: "top",
-                    status: "error",
-                    isClosable: true,
-                });
-            }
-}
-        // Handle successful authentication
-      ).catch(error => {
-        // OTP verification failed
-        console.error(error);
-        // Handle failed authentication
-      });
-  }
-  
+
+            logtail.info(`[${userCredential.user.email}] Register verification email sent`);
+
+            // Update the status to reflect waiting for email verification. 
+            // When the user first clicks register button and sends an email, the button will change from register to verified status
+            setRegistrationState("waitingForEmailVerification");
+        } catch (error) {
+            toast({
+                title: "Registration failed",
+                description: error.message,
+                position: "top",
+                status: "error",
+                isClosable: true,
+            });
+        }
+
+    }
+
     const handleResendVerificationEmail = async (event) => {
         try {
             //reload user created with initial authorization attempt 
@@ -206,7 +271,6 @@ const handleSubmitVerification = () => {
                 isClosable: true,
             });
         } catch (error) {
-            console.error("Error registering account:", error);
             toast({
                 title: "An email is already on the way",
                 description: "Please click the 'Resend Email' button if you did not receive an email after 1-3 minutes." + error.message,
@@ -219,17 +283,15 @@ const handleSubmitVerification = () => {
 
   // Logic for handling whether the user has verified their email
     const handleCheckEmailVerified = async (event) => {
-        console.log("checking verification status to store account info"); //console log for testing 
+        //logtail.info("checking verification status to store account info"); //console log for testing 
         // Block default form submission behavior
         event.preventDefault();
 
         const user = auth.currentUser;
         await user.reload(); // Reload user status to obtain the latest email verification status
-        console.log("user in handleCheckEmailVerified: ", user)
-
-        
+      
         if (user.emailVerified) {
-            console.log("Email verified:", user.emailVerified);
+            logtail.info(`[${user.email}] Email verified`);
             try {
               if(fromSocialMedia){
             //  console.log("social media user:", socialMediaUser);
@@ -301,7 +363,6 @@ const handleSubmitVerification = () => {
                 
                 }
             } }catch (error) {
-                console.error("Error calling registerNewAccount:", error);
                 toast({
                     title: "Registration failed",
                     description: error.message,

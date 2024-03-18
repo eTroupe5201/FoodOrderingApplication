@@ -12,13 +12,15 @@ import {FacebookLoginButton, TwitterLoginButton, GoogleLoginButton, YahooLoginBu
 import { getAuth, signInWithPhoneNumber, RecaptchaVerifier, signInWithPopup, GoogleAuthProvider ,FacebookAuthProvider, TwitterAuthProvider, OAuthProvider} from "firebase/auth";
 //import { MdPhoneAndroid } from "react-icons/md";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button } from "@chakra-ui/react";
+import logtail from "../logger.js";
+
 /* Login page - handle and validate user input, also checking against database for existing account and 
 *              correct credentials. 
 * Route to Register page if button is clicked
 * Route to ForgotPassword page if button is clicked
 */
-
 export const Login = ({saveData}) => {
+   
     // const {setUserAccount} = useDataProvider();
     const toast = useToast();
     const navigate = useNavigate();
@@ -90,21 +92,20 @@ const handleSubmitVerification = () => {
   }
 
   const sendOTP = () => {
-    console.log("phone", phone);
+    logtail.info(`[PHONE:${phone}] Sending OTP to this number`);
   
     const appVerifier = generateRecaptcha();
-    console.log("in send Otp");
     // Send OTP to the provided phone number
     signInWithPhoneNumber(auth, phone, appVerifier)
       .then(confirmResult => {
-        console.log("OTP sent successfully");
+        logtail.info(`[PHONE:${phone}] OTP sent successfully`);
         setIsAuthenticationModalOpen(false);
         setIsVerificationModalOpen(true);
 
         window.confirmationResult = confirmResult;
       }).catch(error => {
         // Handle error
-        console.error(error);
+        logtail.error(`[PHONE:${phone}] ${error.message}`);
       });
   }
 
@@ -138,7 +139,7 @@ const handleSubmitVerification = () => {
         // Handle successful authentication
       ).catch(error => {
         // OTP verification failed
-        console.error(error);
+        logtail.error(error.message);
         // Handle failed authentication
       });
   }
@@ -190,7 +191,7 @@ const handleSubmitVerification = () => {
             }
 }
         } catch (error) {
-            console.log(error);
+            logtail.log(error.message);
         }
     }
 
@@ -313,7 +314,7 @@ const handleSubmitVerification = () => {
             }
         }
         } catch (error) {
-            console.log(error);
+            logtail.log(error.message);
         }
     }
 
@@ -321,11 +322,9 @@ const handleSubmitVerification = () => {
     const handleLogin = async (data) => {
         try {
             saveData(data);
-        } catch (error) {console.log(error);}
+        } catch (error) {console.log(error.message);}
 
         try {
-
-            console.log(data);
             /**
              * Logging in with Firebase Authentication automatically handles the generation and management of JWT tokens. 
              * When the signInWithEmailAndPassword function is called, this function automatically handles token generation and management, 
@@ -344,10 +343,7 @@ const handleSubmitVerification = () => {
              * after registering, and the next time they log in directly, they can successfully log in, which will be the outrageous situation.
              */
             if (userVerfied.emailVerified) {
-                console.log("Logged in user:", userVerfied);
-
                 getUserInfo(userVerfied);
-
                 // It is possible to obtain a token, but usually not required
                 //const token = await userCredential.user.getIdToken();
     
@@ -358,6 +354,7 @@ const handleSubmitVerification = () => {
                     status: "success",
                     isClosable: true,
                 });
+                logtail.info(`[USER:${userVerfied.uid}] Login - successful`);
                 navigate("/");
 
             }else{
@@ -377,7 +374,7 @@ const handleSubmitVerification = () => {
                 status: "error", 
                 isClosable: true,
             });
-            console.log("Failed login");
+            console.log(error.message);
         }
     };
 
