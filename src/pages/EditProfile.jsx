@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
 import "../styles.css";
+import logtail from "../logger";
 
 export const EditProfile = () => {
     const navigate = useNavigate();
@@ -16,20 +17,22 @@ export const EditProfile = () => {
      useEffect(() => {
         isMounted.current = true;
         const fetchAndSetUserProfile = async () => {
-            const data = await fetchUserProfile();
-            // console.log(data);
-            if (data && isMounted.current) {
-                /*
-                    Asynchronous retrieval of user information during component loading, 
-                    and updating form fields with setValue after obtaining the data. 
-                    In this way, the user's personal information will be automatically filled in the form, 
-                    and if the user updates the information, the updated information will also be sent when submitting the form
-                */
-                setValue("firstName", data.firstName);
-                setValue("lastName", data.lastName);
-                setValue("email", data.email);
-                setValue("phone", data.phone);
-            }
+            try {
+                const data = await fetchUserProfile();
+                // console.log(data);
+                if (data && isMounted.current) {
+                    /*
+                        Asynchronous retrieval of user information during component loading, 
+                        and updating form fields with setValue after obtaining the data. 
+                        In this way, the user's personal information will be automatically filled in the form, 
+                        and if the user updates the information, the updated information will also be sent when submitting the form
+                    */
+                    setValue("firstName", data.firstName);
+                    setValue("lastName", data.lastName);
+                    setValue("email", data.email);
+                    setValue("phone", data.phone);
+                }
+            } catch (error) {logtail.error(error.message)}
         };
 
         fetchAndSetUserProfile();
@@ -46,7 +49,8 @@ export const EditProfile = () => {
     }, []); 
 
     const handleEditProfile = async (data) => {
-        updateUserAccount(data);
+        const userId = await updateUserAccount(data);
+        logtail.info(`[USER:${userId}] Profile edits saved`);
         navigate("/profile");  
     };
 

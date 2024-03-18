@@ -8,9 +8,10 @@ import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/
 import {FcGoogle} from "react-icons/fc";
 import { FaTwitter} from "react-icons/fa";
 import { AiFillFacebook,  AiFillYahoo} from "react-icons/ai";
+// import { MdPhoneAndroid } from "react-icons/md";
 import { getAuth, OAuthProvider, signInWithPopup, GoogleAuthProvider ,FacebookAuthProvider, TwitterAuthProvider } from "firebase/auth";
 import { useDisclosure, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react";
-
+import logtail from "../logger.js";
 
 /* Register page - use React hook Forms for collecting input and validating. Once validated and submitted, send request to Firebase and:
 *   - if account exists with provided email, route to Login page
@@ -65,9 +66,9 @@ export const Register = ({saveData}) => {
         setRegistrationState("waitingForEmailVerification");   
         
                  }  catch (error) {
-                     console.error("Error registering facebook account:", error);
+                    //console.log("Error registering yahoo account:", error);
                      toast({
-                         title: "Registration for facebook user failed",
+                         title: "Registration for yahoo user failed",
                          description: error.message,
                          position: "top",
                          status: "error",
@@ -102,7 +103,7 @@ export const Register = ({saveData}) => {
         setRegistrationState("waitingForEmailVerification");   
         
                  }  catch (error) {
-                     console.error("Error registering twitter account:", error);
+                    //console.log("Error registering twitter account:", error);
                      toast({
                          title: "Registration for twitter user failed",
                          description: error.message,
@@ -138,7 +139,7 @@ export const Register = ({saveData}) => {
         setRegistrationState("waitingForEmailVerification");      
         
                  }  catch (error) {
-                     console.error("Error registering facebook account:", error);
+                    //console.log("Error registering google account:", error);
                      toast({
                          title: "Registration for google user failed",
                          description: error.message,
@@ -176,7 +177,7 @@ export const Register = ({saveData}) => {
                    
        
                 }  catch (error) {
-                    console.error("Error registering facebook account:", error);
+                    //console.log("Error registering facebook account:", error);
                     toast({
                         title: "Registration for facebook user failed",
                         description: error.message,
@@ -196,11 +197,11 @@ export const Register = ({saveData}) => {
 
         try {
             saveData(data);
-        } catch (error) {console.log(error);}
+        } catch (error) {console.log(error)}
 
         // Verify email and password match
         if (data.email !== data.confirmEmail || data.password !== data.confirmPassword) {
-            console.log("passwords or emails do not match"); //console log for testing
+            console.log("passwords or emails do not match"); //log for tests
             toast({
                 title: "Error",
                 description: "Emails or passwords do not match.",
@@ -212,7 +213,7 @@ export const Register = ({saveData}) => {
         }
 
         try {
-            console.log("valid registration input"); //console log for testing
+            console.log("valid registration input"); //log for tests
             /**
              * Create users and send verification emails
              * In Firebase, the default validity period for email verification links sent to users is 24 hours. 
@@ -229,11 +230,13 @@ export const Register = ({saveData}) => {
                 status: "success",
                 isClosable: true,
             });
+
+            logtail.info(`[${userCredential.user.email}] Register verification email sent`);
+
             // Update the status to reflect waiting for email verification. 
             // When the user first clicks register button and sends an email, the button will change from register to verified status
             setRegistrationState("waitingForEmailVerification");
         } catch (error) {
-            console.error("Error registering account:", error);
             toast({
                 title: "Registration failed",
                 description: error.message,
@@ -262,7 +265,6 @@ export const Register = ({saveData}) => {
                 isClosable: true,
             });
         } catch (error) {
-            console.error("Error registering account:", error);
             toast({
                 title: "An email is already on the way",
                 description: "Please click the 'Resend Email' button if you did not receive an email after 1-3 minutes." + error.message,
@@ -275,17 +277,15 @@ export const Register = ({saveData}) => {
 
   // Logic for handling whether the user has verified their email
     const handleCheckEmailVerified = async (event) => {
-        console.log("checking verification status to store account info"); //console log for testing 
+        //logtail.info("checking verification status to store account info"); //console log for testing 
         // Block default form submission behavior
         event.preventDefault();
 
         const user = auth.currentUser;
         await user.reload(); // Reload user status to obtain the latest email verification status
-        console.log("user in handleCheckEmailVerified: ", user)
-
       
         if (user.emailVerified) {
-            console.log("Email verified:", user.emailVerified);
+            logtail.info(`[${user.email}] Email verified`);
             try {
               if(fromSocialMedia){
             //  console.log("social media user:", socialMediaUser);
@@ -328,7 +328,6 @@ export const Register = ({saveData}) => {
                 
                 }
             } }catch (error) {
-                console.error("Error calling registerNewAccount:", error);
                 toast({
                     title: "Registration failed",
                     description: error.message,
