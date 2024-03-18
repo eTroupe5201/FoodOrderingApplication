@@ -10,7 +10,7 @@ import { useDataProvider } from "../components/dataProvider"
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react"
 import {FacebookLoginButton, TwitterLoginButton, GoogleLoginButton, YahooLoginButton} from "react-social-login-buttons"; //npm i react-social-login-buttons
 import { getAuth, signInWithPhoneNumber, RecaptchaVerifier, signInWithPopup, GoogleAuthProvider ,FacebookAuthProvider, TwitterAuthProvider, OAuthProvider} from "firebase/auth";
-import { MdPhoneAndroid } from "react-icons/md";
+//import { MdPhoneAndroid } from "react-icons/md";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button } from "@chakra-ui/react";
 /* Login page - handle and validate user input, also checking against database for existing account and 
 *              correct credentials. 
@@ -389,7 +389,7 @@ const handleSubmitVerification = () => {
         
         <div><Modal isOpen={isAuthenticationModalOpen} onClose={handleCloseAuthenticationModal}>
         <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
-        <ModalContent border="3px outset tan" borderRadius="25px" marginTop="10%" bg="black" color="white"   fontFamily="'Raleway', sans-serif ">
+        <ModalContent border="3px outset tan" marginTop="10%" bg="black" color="white"   fontFamily="'Raleway', sans-serif ">
           <ModalHeader textAlign="center">One-Time Password Authentication</ModalHeader>
           <ModalCloseButton />
           <ModalBody   pb={6}>
@@ -420,7 +420,7 @@ const handleSubmitVerification = () => {
 
       <div><Modal isOpen={isVerificationModalOpen} onClose={handleCloseVerificationModal}>
       <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
-        <ModalContent  border="3px outset tan" borderRadius="25px" marginTop="10%" bg="black" color="white"   fontFamily="'Raleway', sans-serif ">
+        <ModalContent border="3px outset tan" borderRadius="25px" marginTop="10%" bg="black" color="white"   fontFamily="'Raleway', sans-serif ">
           <ModalHeader  textAlign="center">One-Time Password Verification</ModalHeader>
           <ModalCloseButton />
           <ModalBody   pb={6}>
@@ -435,18 +435,15 @@ const handleSubmitVerification = () => {
                                     <Input
                                         key={index}
                                         type="text"
-                                        fontWeight="bold"
+                                        color="black"
                                         value={digit}
                                         maxLength={1}
-                                        height="2em"
-                                        width="2em"
-                                        fontSize="2em"
-                                        color="black"
+                                        height="5em"
+                                       fontSize="2em"
                                         bg="white"
                                         border="2.5px outset tan"
                                         marginTop="5%"
-                                        fontFamily= "'Times New Roman', Times, serif"
-                                       
+                                     
                                         onChange={(e) => {
                                             setOTP((prevOTP) => {
                                                 const newOTP = [...prevOTP];
@@ -563,6 +560,7 @@ const handleSubmitVerification = () => {
                             border="tan 2px outset"
                             _hover={{ boxShadow: "0 0 5px 1px linen",transform: "translateY(-2px)" }}
                             onClick={navigateToResetPassword} 
+                            data-test="forgot-password"
                             > 
                             Forgot Password?
                         </Center>
@@ -613,7 +611,7 @@ const handleSubmitVerification = () => {
                                 <Flex alignContent="center" justifyContent="center">
                             <VStack mt="6em" >
                              <Box width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}} data-test="google-login-button"   onClick={handleGoogleLogin} ><GoogleLoginButton  /></Box>
-                              <Box data-test="OTP-Button" width="95%" borderRadius="3px" background= "linear-gradient(to right, tan, white, tan)" height="50px" _hover={{ transform: "translateY(-2px)" }} _active={{ transform: "translateY(2px)" }} onClick={handleOpenAuthenticationModal} as="button" display="flex" paddingLeft="5px" alignItems="center"  fontSize="18px" color="black"> <MdPhoneAndroid color="white" size={33} style={{ marginRight: "1em" }} /> <p>Login With Phone</p></Box>
+                              {/* <Box data-test="OTP-Button" width="95%" borderRadius="3px" background= "linear-gradient(to right, tan, white, tan)" height="50px" _hover={{ transform: "translateY(-2px)" }} _active={{ transform: "translateY(2px)" }} onClick={handleOpenAuthenticationModal} as="button" display="flex" paddingLeft="5px" alignItems="center"  fontSize="18px" color="black"> <MdPhoneAndroid color="white" size={33} style={{ marginRight: "1em" }} /> <p>Login With Phone</p></Box> */}
                              <Box data-test="Facebook-login-button"  width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleFacebookLogin}><FacebookLoginButton  /></Box>
                              <Box data-test="Yahoo-login-button" width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleYahooLogin} ><YahooLoginButton  /></Box>
                                    <Box data-test="Twitter-login-button" width="100%" _hover={{ transform: "translateY(-2px)"}}_active={{transform: "translateY(2px)"}} onClick={handleTwitterLogin}><TwitterLoginButton    /></Box>

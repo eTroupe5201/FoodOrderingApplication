@@ -14,7 +14,6 @@ import { Search } from "../components/Search";
 // Define the maximum length for item descriptions
 const MAX_DESCRIPTION_LENGTH = 70;
 
-// Define fixed dimensions for the item image
 const itemImageWidth = "260px";
 const itemImageHeight = "173x";
 
@@ -29,7 +28,7 @@ export const Menu = () => {
         <Box maxW="100%" mx="auto"> {/* Container with fixed width and centered */}
             <Helmet>
                 <meta
-                    name="description"
+                    name="Description"
                     content="Welcome to our food ordering application. Browse through our menu and place your order online. Enjoy delicious meals delivered right to your doorstep."
                 />
             </Helmet>
