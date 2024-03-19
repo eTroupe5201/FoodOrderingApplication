@@ -1,6 +1,7 @@
 import { Flex, Box, Text, VStack, Input, Textarea, SimpleGrid, Center, FormControl, FormLabel, FormErrorMessage} from "@chakra-ui/react"
 import { useDataProvider } from "../components/dataProvider";
 import { useForm } from "react-hook-form";
+import { auth } from "../utils/firebase" 
 import logtail from "../logger.js";
 
 //page for Contact Us form
@@ -11,16 +12,18 @@ export const Contact = ({saveData}) => {
     const handleSendForm = async (data) => {  
         try {
             saveData(data);
-        } catch (error) {console.log(error)}
+        } catch (error) {console.log(error)} //log for testing
         
         try {
             const formId = await storeContactUsForm(data);
-            console.log("valid contact form submitted");
-            logtail.info("[FORM: " + formId + "] Contact - submitted");
+            console.log("valid contact form submitted"); //log for testing
+            logtail.info("Contact Us form submitted", {fbUser: auth.currentUser.uid, formId: formId});
 
             hideFormShowAlert(); 
             reset();
-        } catch (error) {console.log(error);}
+        } catch (error) {
+            logtail.error(`Contact Us form error: ${error.message}`);//, {fbUser: auth.currentUser.uid});}
+        } 
     }
 
     const contactUsMessage = "All of our hard work here at Divine Delicacies is done with extreme care, " + 

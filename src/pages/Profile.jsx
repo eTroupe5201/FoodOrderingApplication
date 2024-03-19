@@ -66,11 +66,11 @@ export const Profile = () => {
                 duration: 9000,
                 isClosable: true,
             });
-
+            logtail.info("ForgotPassword email sent", {fbUser: user.uid, email: userProfile?.email});
             logout();
         })
         .catch((error) => {
-            logtail.error(`[USER:${user.id} ${error.message}`);
+            logtail.error(`ForgotPassword email error: ${error.message}`, {fbUser: auth.currentUser.uid, email: userProfile?.email});
             toast({
                 title: "An error occurred.",
                 description: error.message, 
@@ -91,7 +91,7 @@ export const Profile = () => {
             getUserInfo(null); 
             navigate("/login");
         }).catch((error) => {
-            logtail.error(`[USER:${user.id} ${error.message}`);
+            logtail.error(`Logout error: ${error.message}`, {fbUser: auth.currentUser.uid, email: userProfile?.email});
         })
     };
 
@@ -207,5 +207,3 @@ export const Profile = () => {
         </Center></div>
     );
 }
-
-//onClick='navigate(`/orders/${order.id}`)'

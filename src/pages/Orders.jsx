@@ -1,8 +1,7 @@
 /* global google */
 import { HStack, Stack, Center, Box, Flex, Heading, Text, Image, Button, AlertDialog, AlertDialogOverlay, AlertDialogHeader, AlertDialogContent, AlertDialogBody, AlertDialogFooter, useDisclosure} from "@chakra-ui/react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate, useLocation } from "react-router-dom"
 import { useDataProvider } from "../components/dataProvider"
-import { useNavigate, useLocation } from "react-router-dom"
 import React, { useState, useEffect } from "react";
 import { getLatLng } from "../utils/getLatLing";
 
@@ -16,7 +15,7 @@ import logtail from "../logger.js";
 */
 export const Orders = () => {
     const { id } = useParams();
-    const { user, getOrderById, checkCartNotEmpty, travelTime, cartChanged, setCartChanged, addToCart, clearCartAfterConfirmation,
+    const { user, order, getOrderById, checkCartNotEmpty, travelTime, cartChanged, setCartChanged, addToCart, clearCartAfterConfirmation,
         restaurantInfo, fetchItemImageById, deliveryFirstname, deliveryLastname, updateFavoriteStatus } = useDataProvider();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = React.useRef()
@@ -31,7 +30,7 @@ export const Orders = () => {
     const [infoWindowPosition, setInfoWindowPosition] = useState(null);
     const [itemImagesSrc, setItemImagesSrc] = useState({});
     const location = useLocation();
-
+   
     useEffect(() => {
         const fetchCartStatus = async () => {
             const isNotEmpty = await checkCartNotEmpty();
@@ -49,14 +48,15 @@ export const Orders = () => {
         try {
             onClose();
             clearCartAfterConfirmation();
-        } catch (error) {console.log(error.message);}
+        } catch (error) {logtail.error(`Error replacing cart: ${error.message}`, {fbUser: user.uid, toCopyOrderId: currOrder.id});}
 
         //for each item in currOrder, do addToCart
         currOrder?.lines?.forEach((item) => {
-            console.log(item);
+            //console.log(item);
             addToCart(item);
         });
 
+        logtail.info("Cart replaced successfully", {fbUser: user.uid, copiedOrderId: currOrder.id});
         return;
     }
 
@@ -70,10 +70,10 @@ export const Orders = () => {
         const fetchDirections = async () => {
 
             if (!window.google || !window.google.maps || !mapsLoaded) {
-                console.error(`[ORDER:${currOrder.id} Google Maps API script not loaded yet`);
+                logtail.error("Google Maps API script not loaded yet", {fbUser: user.uid, orderId: currOrder.id} );
                 return;
             }
-
+           
             if (mapsLoaded) {
                 try {
                     const originLatLng = await getLatLng(currOrder.address);
@@ -91,11 +91,11 @@ export const Orders = () => {
                             setShowInfoWindow(true); // 获取路线后显示InfoWindow
                             setInfoWindowPosition(result.routes[0].legs[0].end_location); // 设置InfoWindow的位置
                         } else {
-                            console.error(`[ORDER:${currOrder.id} Directions request failed due to ${status}`);
+                            logtail.error(`Directions request failed due to ${status}`, {fbUser: user.uid, orderId: currOrder.id} );
                         }
                     });
                 } catch (error) {
-                    logtail.error(`[ORDER:${currOrder.id} ${error.message}`);
+                    logtail.error(`Google Maps error: ${error.message}`, {fbUser: user.uid, orderId: currOrder.id});
                 }
             }
         };

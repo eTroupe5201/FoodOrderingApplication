@@ -39,7 +39,7 @@ export const CheckOut = () => {
                     setValue("phone", data.phone);
                     //...other fields in future
                 }
-            } catch (error) {logtail.error(error.message)}
+            } catch (error) {logtail.error(`Checkout user error: ${error.message}`);}//, {orderId: order.id})}
         };
 
         fetchAndSetUserProfile();

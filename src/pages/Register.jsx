@@ -122,6 +122,7 @@ export const Register = ({saveData}) => {
 
         
         if (user.emailVerified) {
+            logtail.info("Email verified", {fbUser: user.uid, email: user.email});  
             console.log("Email verified:", user.emailVerified);
             try {
               if(fromSocialMedia){

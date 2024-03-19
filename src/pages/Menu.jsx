@@ -23,6 +23,7 @@ export const Menu = () => {
     const navigate = useNavigate();
     const { selectedFilter, categories, getItemsByCategory, user } = useDataProvider();
 
+
     // Render the Menu component
     return (
         <Box maxW="100%" mx="auto"> {/* Container with fixed width and centered */}
@@ -99,6 +100,7 @@ export const Menu = () => {
                     </Box>
                 </Center>)}
         </Box>
+
 
     );
 
