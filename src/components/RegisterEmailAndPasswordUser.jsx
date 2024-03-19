@@ -1,8 +1,9 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../utils/firebase" 
 import { sendEmailVerification } from "firebase/auth"
-
-export const RegisterEmailAndPasswordUser = async (saveData, setformData, data, setFromSocialMedia, setRegistrationState, toast) => {
+import logtail from "../logger.js";
+                 
+export const RegisterEmailAndPasswordUser = async (setFromOTP, saveData, setformData, data, setFromSocialMedia, setRegistrationState, toast) => {
     setFromSocialMedia(false);
     setformData(data);
 
@@ -33,13 +34,7 @@ export const RegisterEmailAndPasswordUser = async (saveData, setformData, data, 
          * the link will expire and the user needs to request a new verification email to complete the verification process.
          */ 
         const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
-        console.log("userCredential:", userCredential);
-        console.log("userCredential.user:", userCredential.user);
-        console.log("userCredential.user.emailVerified:", userCredential.user.emailVerified);
-        console.log("userCredential.user.email:", userCredential.user.email);
-        console.log("userCredential.user.displayName:", userCredential.user.displayName);
-        console.log("userCredential.user.photoURL:", userCredential.user.photoURL);
-        
+  
         await sendEmailVerification(userCredential.user);
         toast({
             title: "Email has sent to be verified!",
@@ -48,9 +43,11 @@ export const RegisterEmailAndPasswordUser = async (saveData, setformData, data, 
             status: "success",
             isClosable: true,
         });
+        logtail.info("Email registration email sent", {fbUser: userCredential.user.uid, email: data.email});       
         // Update the status to reflect waiting for email verification. 
         // When the user first clicks register button and sends an email, the button will change from register to verified status
         setRegistrationState("waitingForEmailVerification");
+
     } catch (error) {
         console.error("Error registering account:", error);
         toast({
@@ -60,6 +57,8 @@ export const RegisterEmailAndPasswordUser = async (saveData, setformData, data, 
             status: "error",
             isClosable: true,
         });
+        logtail.error(`Email user registration error: ${error.message}`, {fbUser: auth.currentUser.uid, email: data.email});
+    
     }
 
 };

@@ -1,7 +1,10 @@
 import { getAuth, signInWithPopup } from "firebase/auth";
 import { OAuthProvider } from "firebase/auth";
 import { sendEmailVerification } from "firebase/auth"
-export const RegisterYahooUser = async (setFromSocialMedia, setRegistrationState, toast) => {
+import logtail from "../logger.js";
+
+export const RegisterYahooUser = async (setFromOTP,setFromSocialMedia, setRegistrationState, toast) => {
+    setFromOTP(false);
     setFromSocialMedia(true);
     try {
         const auth = getAuth();
@@ -19,6 +22,8 @@ export const RegisterYahooUser = async (setFromSocialMedia, setRegistrationState
 
         await sendEmailVerification(userForVerification);
         setRegistrationState("waitingForEmailVerification");
+        logtail.info("Yahoo registration email sent", {fbUser: userForVerification.uid, email: userForVerification.email});
+
     } catch (error) {
         console.error("Error registering yahoo account:", error);
         toast({
@@ -28,6 +33,8 @@ export const RegisterYahooUser = async (setFromSocialMedia, setRegistrationState
             status: "error",
             isClosable: true,
         });
+        logtail.error(`Yahoo user registration error: ${error.message}`, {fbUser: auth.currentUser.uid});
+
     }
 };
 

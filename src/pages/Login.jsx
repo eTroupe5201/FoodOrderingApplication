@@ -10,7 +10,7 @@ import { useDataProvider } from "../components/dataProvider"
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react"
 import {FacebookLoginButton, TwitterLoginButton, GoogleLoginButton, YahooLoginButton} from "react-social-login-buttons"; //npm i react-social-login-buttons
 import { getAuth, signInWithPhoneNumber, RecaptchaVerifier, signInWithPopup, GoogleAuthProvider ,FacebookAuthProvider, TwitterAuthProvider, OAuthProvider} from "firebase/auth";
-//import { MdPhoneAndroid } from "react-icons/md";
+import { MdPhoneAndroid } from "react-icons/md";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button } from "@chakra-ui/react";
 import logtail from "../logger.js";
 
@@ -35,19 +35,18 @@ export const Login = ({saveData}) => {
     
     const [isAuthenticationModalOpen, setIsAuthenticationModalOpen] = useState(false);
     const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
-    //const [email, setEmail] = useState("");
-const [isVerificationCompleted, setIsVerificationCompleted] = useState(false);
+    const [phone, setPhone] = useState("");
+    const [otp, setOTP] = useState(["", "", "", "", "","" ]);
+
+    const [isVerificationCompleted, setIsVerificationCompleted] = useState(false);
 
 useEffect(() => {
     if (!isVerificationModalOpen && isVerificationCompleted) {
-        setOTP(["", "", "", "", "", ""]); // Reset OTP state
+   //     setOTP(["", "", "", "", "", ""]); // Reset OTP state
         setIsVerificationCompleted(false);
     }
 }, [isVerificationModalOpen, isVerificationCompleted]);
 
-// const handleEmail = (e) => {
-//     setEmail(e.target.value);
-// };
 
 const handleSubmitVerification = () => {
     verifyOTP();
@@ -60,19 +59,14 @@ const handleSubmitVerification = () => {
   
     const handleCloseAuthenticationModal = () => {
       setIsAuthenticationModalOpen(false);
-      setOTP(["", "", "", "", "", ""]); // Reset OTP state
+    //  setOTP(["", "", "", "", "", ""]); // Reset OTP state
        };
-    // const handleOpenVerificationModal = () => {
-    //     setIsVerificationModalOpen(true);
-    //   };
     
       const handleCloseVerificationModal = () => {
         setIsVerificationModalOpen(false);
       };
 
-    const [phone, setPhone] = useState("");
-    const [otp, setOTP] = useState(["", "", "", "", "","" ]);
-
+ 
   const generateRecaptcha = () => {
     return new RecaptchaVerifier("recaptcha-container", {
       "size": "visible",
@@ -90,7 +84,7 @@ const handleSubmitVerification = () => {
         }
     }, auth);
   }
-
+ 
   const sendOTP = () => {
     logtail.info(`[PHONE:${phone}] Sending OTP to this number`);
   
@@ -110,7 +104,7 @@ const handleSubmitVerification = () => {
   }
 
   const verifyOTP = () => {
-    // Verify OTP entered by the user
+    console.log(otp.join(""));
     window.confirmationResult.confirm(otp.join(""))
       .then(result => {
         // OTP verification successful
@@ -396,7 +390,7 @@ const handleSubmitVerification = () => {
            <Input  fontFamily= "'Times New Roman', Times, serif"
            marginTop="2%" bg="white" color="black" varient="outlined"
                 country={"us"}
-                onChange={(e) => setPhone("+" + e.target.value)}
+                onChange={(e) => setPhone("+1" + e.target.value)}
                  />
                
                   <Button _hover={{ transform: "translateY(-2px)"}} 
@@ -415,9 +409,10 @@ const handleSubmitVerification = () => {
         </ModalContent>
       </Modal></div>
 
-      <div><Modal isOpen={isVerificationModalOpen} onClose={handleCloseVerificationModal}>
+      <div>
+    <Modal size="xl" isOpen={isVerificationModalOpen} onClose={handleCloseVerificationModal}>
       <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
-        <ModalContent border="3px outset tan" borderRadius="25px" marginTop="10%" bg="black" color="white"   fontFamily="'Raleway', sans-serif ">
+        <ModalContent bg="black" borderRadius="25px" border="2.5px outset tan" color="white" fontFamily="Raleway, sans sarif"   >
           <ModalHeader  textAlign="center">One-Time Password Verification</ModalHeader>
           <ModalCloseButton />
           <ModalBody   pb={6}>
@@ -427,43 +422,49 @@ const handleSubmitVerification = () => {
               onChange={(e) => setOtp(e.target.value)}
            varient="outlined" placeholder="Enter OTP" /> */}
             
-                            <Stack direction="horizontal" spacing={4}>
-                                {otp.map((digit, index) => (
-                                    <Input
-                                        key={index}
-                                        type="text"
-                                        color="black"
-                                        value={digit}
-                                        maxLength={1}
-                                        height="5em"
-                                       fontSize="2em"
-                                        bg="white"
-                                        border="2.5px outset tan"
-                                        marginTop="5%"
-                                     
-                                        onChange={(e) => {
-                                            setOTP((prevOTP) => {
-                                                const newOTP = [...prevOTP];
-                                                newOTP[index] = e.target.value;
-                                                return newOTP;
-                                            });
-                                            if (e.target.value && index < otp.length - 1) {
-                                                const nextInput = document.querySelector(`#otp-input-${index + 1}`);
-                                                if (nextInput) {
-                                                    nextInput.focus();
-                                                }
-                                            }else if (!e.target.value && index > 0) {
-                                                const prevInput = document.querySelector(`#otp-input-${index - 1}`);
-                                                if (prevInput) {
-                                                    prevInput.focus();
-                                                }
-                                            }
-                                        }}
-                                        id={`otp-input-${index}`}
-                                        
-                                    />
-                                ))}
-                            </Stack>
+            <Flex direction="row"  >
+    {otp.map((digit, index) => (
+        <Input
+            key={index}
+            type="text"
+            color="black"
+            bg="white"
+            value={digit}
+            maxLength={1}
+            width="100px"
+            height="5em"
+            margin="5px"
+            padding="0"
+            fontWeight="bold"
+            fontSize="12px"
+            fontFamily="Arial, sans-serif" // Alternative font: Arial"
+            border="2.5px outset tan"
+            marginTop="5%"
+           
+            onChange={(e) => {
+                const value = e.target.value;
+                console.log(value);
+                setOTP((prevOTP) => {
+                    const newOTP = [...prevOTP];
+                    newOTP[index] = value;
+                    return newOTP;
+                });
+                if (value && index < otp.length - 1) {
+                    const nextInput = document.querySelector(`#otp-input-${index + 1}`);
+                    if (nextInput) {
+                        nextInput.focus();
+                    }
+                } else if (!value && index > 0) {
+                    const prevInput = document.querySelector(`#otp-input-${index - 1}`);
+                    if (prevInput) {
+                        prevInput.focus();
+                    }
+                }
+            }}
+            id={`otp-input-${index}`}
+        />
+    ))}
+</Flex>
                 
           <Button marginTop="10%"
            _hover={{ transform: "translateY(-2px)"}} 
@@ -608,7 +609,7 @@ const handleSubmitVerification = () => {
                                 <Flex alignContent="center" justifyContent="center">
                             <VStack mt="6em" >
                              <Box width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}} data-test="google-login-button"   onClick={handleGoogleLogin} ><GoogleLoginButton  /></Box>
-                              {/* <Box data-test="OTP-Button" width="95%" borderRadius="3px" background= "linear-gradient(to right, tan, white, tan)" height="50px" _hover={{ transform: "translateY(-2px)" }} _active={{ transform: "translateY(2px)" }} onClick={handleOpenAuthenticationModal} as="button" display="flex" paddingLeft="5px" alignItems="center"  fontSize="18px" color="black"> <MdPhoneAndroid color="white" size={33} style={{ marginRight: "1em" }} /> <p>Login With Phone</p></Box> */}
+                              <Box data-test="OTP-Button" width="95%" borderRadius="3px" background= "linear-gradient(to right, tan, white, tan)" height="50px" _hover={{ transform: "translateY(-2px)" }} _active={{ transform: "translateY(2px)" }} onClick={handleOpenAuthenticationModal} as="button" display="flex" paddingLeft="5px" alignItems="center"  fontSize="18px" color="black"> <MdPhoneAndroid color="white" size={33} style={{ marginRight: "1em" }} /> <p>Login With Phone</p></Box>
                              <Box data-test="Facebook-login-button"  width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleFacebookLogin}><FacebookLoginButton  /></Box>
                              <Box data-test="Yahoo-login-button" width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleYahooLogin} ><YahooLoginButton  /></Box>
                                    <Box data-test="Twitter-login-button" width="100%" _hover={{ transform: "translateY(-2px)"}}_active={{transform: "translateY(2px)"}} onClick={handleTwitterLogin}><TwitterLoginButton    /></Box>

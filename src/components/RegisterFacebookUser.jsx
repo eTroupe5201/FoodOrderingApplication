@@ -1,7 +1,10 @@
 import { getAuth, signInWithPopup } from "firebase/auth";
 import { sendEmailVerification } from "firebase/auth"
+import { FacebookAuthProvider } from "firebase/auth";
+import logtail from "../logger.js";
 
-export const RegisterFacebookUser = async (setFromSocialMedia, setRegistrationState, toast) => {
+export const RegisterFacebookUser = async (setFromOTP, setFromSocialMedia, setRegistrationState, toast) => {
+    setFromOTP(false);
     setFromSocialMedia(true);
     try{  
     const auth = getAuth();
@@ -24,7 +27,7 @@ export const RegisterFacebookUser = async (setFromSocialMedia, setRegistrationSt
          
  await sendEmailVerification(userForVerification);
  setRegistrationState("waitingForEmailVerification");   
-             
+ logtail.info("Facebook registration email sent", {fbUser: userForVerification.uid, email: userForVerification.email});                  
  
           }  catch (error) {
               console.error("Error registering facebook account:", error);
@@ -35,6 +38,6 @@ export const RegisterFacebookUser = async (setFromSocialMedia, setRegistrationSt
                   status: "error",
                   isClosable: true,
               });
-  
+              logtail.error(`Facebook user registration error: ${error.message}`, {fbUser: auth.currentUser.uid});
       }
 };

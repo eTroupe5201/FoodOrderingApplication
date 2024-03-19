@@ -4,15 +4,19 @@ import { useNavigate } from "react-router-dom";
 import {  set, useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
 import { auth } from "../utils/firebase" 
-import {sendEmailVerification } from "firebase/auth";
+import {sendEmailVerification, signInWithPhoneNumber } from "firebase/auth";
 import {FcGoogle} from "react-icons/fc";
 import { FaTwitter} from "react-icons/fa";
 import { AiFillFacebook,  AiFillYahoo} from "react-icons/ai";
-// import { MdPhoneAndroid } from "react-icons/md";
-import { getAuth, OAuthProvider, signInWithPopup, GoogleAuthProvider ,FacebookAuthProvider, TwitterAuthProvider } from "firebase/auth";
-import { useDisclosure, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react";
-import logtail from "../logger.js";
-
+import { InstructionsModal } from "../components/InstructionsModal";
+import { RegisterYahooUser } from "../components/RegisterYahooUser";
+import { RegisterTwitterUser } from "../components/RegisterTwitterUser";
+import { RegisterGoogleUser } from "../components/RegisterGoogleUser";
+import { RegisterFacebookUser } from "../components/RegisterFacebookUser";
+import { RegisterEmailAndPasswordUser } from "../components/RegisterEmailAndPasswordUser";
+import { MdPhoneAndroid } from "react-icons/md";
+import { RecaptchaVerifier } from "firebase/auth";
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react";
 /* Register page - use React hook Forms for collecting input and validating. Once validated and submitted, send request to Firebase and:
 *   - if account exists with provided email, route to Login page
 *   - if no account exists with provided email, create account and store user info in DB. Upon return, route back to Home page
@@ -42,7 +46,18 @@ export const Register = ({saveData}) => {
     const [isVerificationCompleted, setIsVerificationCompleted] = useState(false);
     const [OTPphoneNumber, setOTPPhoneNumber] = useState("");
     const [otp, setOTP] = useState(["", "", "", "", "","" ]);
-
+    
+    useEffect(() => {
+        if (!isVerificationModalOpen && isVerificationCompleted) {
+            setOTP(["", "", "", "", "", ""]); // Reset OTP state
+            setIsVerificationCompleted(false);
+        }
+    }, [isVerificationModalOpen, isVerificationCompleted]);
+    
+    const handleEmail = (e) => {
+        setOTPEmail(e.target.value);
+    };
+    
     const handleInstructionsModalOpen = () => {
       setInstructionsModalOpen(true);
     };
@@ -52,208 +67,130 @@ export const Register = ({saveData}) => {
     };
 
     const handleYahooRegister = async () => {
-        setFromSocialMedia(true);
-           try{  
-           const auth = getAuth();
-         
-           const provider = new OAuthProvider("yahoo.com");
-    
-             const result = await signInWithPopup(auth, provider);
-             const userForVerification = result.user;
- 
-               toast({
-                   title: "Email has sent to be verified!",
-                   description: "Please check your email to verify your account.",
-                   position: "top",
-                   status: "success",
-                   isClosable: true,
-               });
-                
-        await sendEmailVerification(userForVerification);
-        setRegistrationState("waitingForEmailVerification");   
-        
-                 }  catch (error) {
-                    //console.log("Error registering yahoo account:", error);
-                     toast({
-                         title: "Registration for yahoo user failed",
-                         description: error.message,
-                         position: "top",
-                         status: "error",
-                         isClosable: true,
-                     });
-         
-             }
+        setFromOTP(false);
+        RegisterYahooUser(setFromOTP, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
+        handleInstructionsModalOpen();
      }
 
-
     const handleTwitterRegister = async () => {
-        setFromSocialMedia(true);
-           try{  
-           const auth = getAuth();
-         
-             const provider = new TwitterAuthProvider();
-             provider.setCustomParameters({
-             "display": "popup"
-             });
-             const result = await signInWithPopup(auth, provider);
-             const userForVerification = result.user;
- 
-               toast({
-                   title: "Email has sent to be verified!",
-                   description: "Please check your email to verify your account.",
-                   position: "top",
-                   status: "success",
-                   isClosable: true,
-               });
-                
-        await sendEmailVerification(userForVerification);
-        setRegistrationState("waitingForEmailVerification");   
-        
-                 }  catch (error) {
-                    //console.log("Error registering twitter account:", error);
-                     toast({
-                         title: "Registration for twitter user failed",
-                         description: error.message,
-                         position: "top",
-                         status: "error",
-                         isClosable: true,
-                     });
-         
-             }
+        setFromOTP(false);
+        RegisterTwitterUser(setFromOTP, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
+        handleInstructionsModalOpen();
      }
 
     const handleGoogleRegister = async () => {
-        setFromSocialMedia(true);
-           try{  
-           const auth = getAuth();
-         
-             const provider = new GoogleAuthProvider();
-             
-             provider.setCustomParameters({ prompt: "select_account" }); // Force account selection prompt
-   
-             const result = await signInWithPopup(auth, provider);
-             const userForVerification = result.user;
- 
-               toast({
-                   title: "Email has sent to be verified!",
-                   description: "Please check your email to verify your account.",
-                   position: "top",
-                   status: "success",
-                   isClosable: true,
-               });
-                
-        await sendEmailVerification(userForVerification);
-        setRegistrationState("waitingForEmailVerification");      
-        
-                 }  catch (error) {
-                    //console.log("Error registering google account:", error);
-                     toast({
-                         title: "Registration for google user failed",
-                         description: error.message,
-                         position: "top",
-                         status: "error",
-                         isClosable: true,
-                     });
-         
-             }
+        setFromOTP(false);
+        RegisterGoogleUser(setFromOTP, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
+        handleInstructionsModalOpen();
      }
 
     const handleFacebookRegister = async () => {
-       setFromSocialMedia(true);
-          try{  
-          const auth = getAuth();
-        
-            const provider = new FacebookAuthProvider();
-            provider.setCustomParameters({
-            "display": "  "
-            });
-            const result = await signInWithPopup(auth, provider);
-            const userForVerification = result.user;
+        RegisterFacebookUser(setFromOTP, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
+        handleInstructionsModalOpen();     
+    }
 
-
-              toast({
-                  title: "Email has sent to be verified!",
-                  description: "Please check your email to verify your account.",
-                  position: "top",
-                  status: "success",
-                  isClosable: true,
-              });
-               
-       await sendEmailVerification(userForVerification);
-       setRegistrationState("waitingForEmailVerification");   
-                   
-       
-                }  catch (error) {
-                    //console.log("Error registering facebook account:", error);
-                    toast({
-                        title: "Registration for facebook user failed",
-                        description: error.message,
-                        position: "top",
-                        status: "error",
-                        isClosable: true,
-                    });
-        
-            }
+    const handleRegister = async (data) => {
+        RegisterEmailAndPasswordUser(setFromOTP, saveData, setformData, data, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
+        handleInstructionsModalOpen();
     }
 
  
 
-    const handleRegister = async (data) => {
-        setFromSocialMedia(false);
-        setformData(data);
+const handleSubmitVerification = () => {
+    setFromOTP(true);
+    setFromSocialMedia(false);
+    verifyOTP();
+    setIsVerificationCompleted(true);
+    handleCloseVerificationModal();
+};
+    const handleOpenAuthenticationModal = () => {
+      setIsAuthenticationModalOpen(true);
+    };
+  
+    const handleCloseAuthenticationModal = () => {
+      setIsAuthenticationModalOpen(false);
+      setOTP(["", "", "", "", "", ""]); // Reset OTP state
+       };
+       
+      const handleCloseVerificationModal = () => {
+        setIsVerificationModalOpen(false);
+      };
 
-        try {
-            saveData(data);
-        } catch (error) {console.log(error)}
 
-        // Verify email and password match
-        if (data.email !== data.confirmEmail || data.password !== data.confirmPassword) {
-            console.log("passwords or emails do not match"); //log for tests
+  const generateRecaptcha = () => {
+    return new RecaptchaVerifier("recaptcha-container", {
+      "size": "visible",
+      "type": "image",
+        "theme": "dark",
+        "callback": () => {
             toast({
                 title: "reCAPTCHA solved, allow signInWithPhoneNumber.",
                 position: "top",
                 status: "success",
                 isClosable: true,
             });
-            return;
+            console.log("reCAPTCHA solved, allow signInWithPhoneNumber.");
+            sendOTP();
         }
+    }, auth);
+  }
 
-        try {
-            console.log("valid registration input"); //log for tests
-            /**
-             * Create users and send verification emails
-             * In Firebase, the default validity period for email verification links sent to users is 24 hours. 
-             * This means that users have 24 hours after receiving the email to click on the verification link 
-             * to complete their email verification process. If the user does not click on the verification link during this period, 
-             * the link will expire and the user needs to request a new verification email to complete the verification process.
-             */ 
-            const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
-            await sendEmailVerification(userCredential.user);
-            toast({
-                title: "Email has sent to be verified!",
-                description: "Please check your email to verify your account.",
-                position: "top",
-                status: "success",
-                isClosable: true,
-            });
 
-            logtail.info(`[${userCredential.user.email}] Register verification email sent`);
 
-            // Update the status to reflect waiting for email verification. 
-            // When the user first clicks register button and sends an email, the button will change from register to verified status
-            setRegistrationState("waitingForEmailVerification");
-        } catch (error) {
-            toast({
-                title: "Registration failed",
-                description: error.message,
-                position: "top",
-                status: "error",
-                isClosable: true,
-            });
-        }
 
-    }
+  const sendOTP = () => {
+    console.log("phone", OTPphoneNumber);
+    
+    const appVerifier = generateRecaptcha();
+    console.log("in send Otp");
+    // Send OTP to the provided phone number
+  signInWithPhoneNumber(auth, OTPphoneNumber, appVerifier)
+  .then((confirmationResult) => {
+    user = confirmationResult;
+    user.email = OTPemail;
+    
+    window.confirmationResult = confirmationResult;
+    toast({
+        title: "OTP sent successfully.",
+        position: "top",
+        status: "success",
+        isClosable: true,
+    });
+    setIsAuthenticationModalOpen(false);
+    setIsVerificationModalOpen(true); 
+      
+  })}
 
+
+const handleOTP_User = async (user) => {
+    console.log("user in handleOtpUser: ", user);
+    await sendEmailVerification(user)
+    setRegistrationState("waitingForEmailVerification");
+    handleInstructionsModalOpen();
+}
+  const verifyOTP = async () => {
+    // Verify OTP entered by the user
+    window.confirmationResult.confirm(otp.join(""))
+      .then(result => {
+       if(result){
+        handleOTP_User(user);
+        console.log("OTP verified successfully:", result);
+        toast({
+            title: "OTP verified successfully.",
+            position: "top",
+            status: "success",
+            isClosable: true,
+        });
+       }
+      }
+        // Handle successful authentication
+      ).catch(error => {
+        // OTP verification failed
+        console.error(error);
+        // Handle failed authentication
+      });
+  }
+  
     const handleResendVerificationEmail = async (event) => {
         try {
             //reload user created with initial authorization attempt 
@@ -271,6 +208,7 @@ export const Register = ({saveData}) => {
                 isClosable: true,
             });
         } catch (error) {
+            console.error("Error registering account:", error);
             toast({
                 title: "An email is already on the way",
                 description: "Please click the 'Resend Email' button if you did not receive an email after 1-3 minutes." + error.message,
@@ -283,15 +221,17 @@ export const Register = ({saveData}) => {
 
   // Logic for handling whether the user has verified their email
     const handleCheckEmailVerified = async (event) => {
-        //logtail.info("checking verification status to store account info"); //console log for testing 
+        console.log("checking verification status to store account info"); //console log for testing 
         // Block default form submission behavior
         event.preventDefault();
 
         const user = auth.currentUser;
         await user.reload(); // Reload user status to obtain the latest email verification status
-      
+        console.log("user in handleCheckEmailVerified: ", user)
+
+        
         if (user.emailVerified) {
-            logtail.info(`[${user.email}] Email verified`);
+            console.log("Email verified:", user.emailVerified);
             try {
               if(fromSocialMedia){
             //  console.log("social media user:", socialMediaUser);
@@ -318,14 +258,14 @@ export const Register = ({saveData}) => {
                 navigate("/login"); 
               }}
               else if(fromOTP){
-            
-                const OTPuser = {  
-                    email: OTPemail,
+                const { email, OTPphoneNumber } = user;
+                const OTP_user = {  
+                    email: email,
                     firstName: "",
                     lastName: "",
                     phone: OTPphoneNumber}
 
-                const result = await registerNewAccount(OTPuser); 
+                const result = await registerNewAccount(OTP_user); 
                 if (result.success) {
                     toast({
                         title: "Account created",
@@ -363,6 +303,7 @@ export const Register = ({saveData}) => {
                 
                 }
             } }catch (error) {
+                console.error("Error calling registerNewAccount:", error);
                 toast({
                     title: "Registration failed",
                     description: error.message,
@@ -473,13 +414,13 @@ export const Register = ({saveData}) => {
           <ModalBody   pb={6}>
             <FormControl  > 
             <FormLabel fontFamily="'Times New Roman', Times, serif" marginTop="2%" textAlign="center"> Please Enter Email Address</FormLabel>
-            <Input fontFamily="'Times New Roman', Times, serif" marginTop="2%" bg="white" color="black" varient="outlined" onChange={handleEmail} />
+            <Input fontFamily="'Times New Roman', Times, serif" marginTop="2%" bg="white" color="black" varient="outlined" onChange={(e) => setOTPEmail(e.target.value)}/>
               <FormLabel fontFamily= "'Times New Roman', Times, serif" marginTop="2%"  textAlign="center"> Please Enter Phone Number</FormLabel>
              
            <Input  fontFamily= "'Times New Roman', Times, serif"
            marginTop="2%" bg="white" color="black" varient="outlined"
                 country={"us"}
-                onChange={(e) => setOTPPhoneNumber("+" + e.target.value)}
+                onChange={(e) => setOTPPhoneNumber("+1" + e.target.value)}
                  />
                
                   <Button _hover={{ transform: "translateY(-2px)"}} 
@@ -498,7 +439,7 @@ export const Register = ({saveData}) => {
         </ModalContent>
       </Modal></div>
 
-      <div><Modal isOpen={isVerificationModalOpen} onClose={handleCloseVerificationModal}>
+      <div><Modal size="xl" isOpen={isVerificationModalOpen} onClose={handleCloseVerificationModal}>
       <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
         <ModalContent  border="3px outset tan" borderRadius="25px" marginTop="10%" bg="black" color="white"   fontFamily="'Raleway', sans-serif ">
           <ModalHeader  textAlign="center">One-Time Password Verification</ModalHeader>
@@ -509,47 +450,49 @@ export const Register = ({saveData}) => {
           {/* <Input border="2px outset tan"marginTop="5%" fontWeight="bold" value={otp}
               onChange={(e) => setOtp(e.target.value)}
            varient="outlined" placeholder="Enter OTP" /> */}
-            
-                            <Stack direction="horizontal" spacing={4}>
-                                {otp.map((digit, index) => (
-                                    <Input
-                                        key={index}
-                                        type="text"
-                                        fontWeight="bold"
-                                        value={digit}
-                                        maxLength={1}
-                                        height="2em"
-                                        width="2em"
-                                        fontSize="2em"
-                                        color="black"
-                                        bg="white"
-                                        border="2.5px outset tan"
-                                        marginTop="5%"
-                                        fontFamily= "'Times New Roman', Times, serif"
-                                       
-                                        onChange={(e) => {
-                                            setOTP((prevOTP) => {
-                                                const newOTP = [...prevOTP];
-                                                newOTP[index] = e.target.value;
-                                                return newOTP;
-                                            });
-                                            if (e.target.value && index < otp.length - 1) {
-                                                const nextInput = document.querySelector(`#otp-input-${index + 1}`);
-                                                if (nextInput) {
-                                                    nextInput.focus();
-                                                }
-                                            }else if (!e.target.value && index > 0) {
-                                                const prevInput = document.querySelector(`#otp-input-${index - 1}`);
-                                                if (prevInput) {
-                                                    prevInput.focus();
-                                                }
-                                            }
-                                        }}
-                                        id={`otp-input-${index}`}
-                                        
-                                    />
-                                ))}
-                            </Stack>
+        <Flex direction="row"  >
+    {otp.map((digit, index) => (
+        <Input
+            key={index}
+            type="text"
+            color="black"
+            bg="white"
+            value={digit}
+            maxLength={1}
+            width="100px"
+            height="5em"
+            margin="5px"
+            padding="0"
+            fontWeight="bold"
+            fontSize="12px"
+            fontFamily="Arial, sans-serif" // Alternative font: Arial"
+            border="2.5px outset tan"
+            marginTop="5%"
+           
+            onChange={(e) => {
+                const value = e.target.value;
+                console.log(value);
+                setOTP((prevOTP) => {
+                    const newOTP = [...prevOTP];
+                    newOTP[index] = value;
+                    return newOTP;
+                });
+                if (value && index < otp.length - 1) {
+                    const nextInput = document.querySelector(`#otp-input-${index + 1}`);
+                    if (nextInput) {
+                        nextInput.focus();
+                    }
+                } else if (!value && index > 0) {
+                    const prevInput = document.querySelector(`#otp-input-${index - 1}`);
+                    if (prevInput) {
+                        prevInput.focus();
+                    }
+                }
+            }}
+            id={`otp-input-${index}`}
+        />
+    ))}
+</Flex>
                 
           <Button marginTop="10%"
            _hover={{ transform: "translateY(-2px)"}} 
@@ -767,8 +710,8 @@ export const Register = ({saveData}) => {
                             <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}} bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleFacebookRegister}><AiFillFacebook size="35px" color="#4267B2" /></Box>
                             <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleTwitterRegister}><FaTwitter  size="35px" color="#1DA1F2"  /></Box>
                             <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleYahooRegister}>< AiFillYahoo size="35px" color="#1DA1F2"  /></Box>
-                             {/* <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }} color="black" margin="10px"border="3px tan outset" onClick={handleOpenAuthenticationModal} ><MdPhoneAndroid textAlign="center" size={35} /></Box>
-                           */}
+                             <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }} color="black" margin="10px"border="3px tan outset" onClick={handleOpenAuthenticationModal} ><MdPhoneAndroid textAlign="center" size={35} /></Box>
+                          
                            </SimpleGrid> 
                             </Center>
                     </VStack>
