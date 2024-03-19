@@ -84,6 +84,7 @@ export const ForgotPassword = ({saveData}) => {
                         color='#000000'
                         height='3rem'
                         placeholder="enter email address"
+                        data-test="forgot-password-email-input"
                     />
                     <Box 
                         as='button'  
@@ -100,6 +101,7 @@ export const ForgotPassword = ({saveData}) => {
                         border="tan 2px outset"
                         _hover={{ boxShadow: "0 0 5px 1px linen" }}
                         onClick={handleForgotPasswordEmail} 
+                        data-test="send-reset-email-button"
                     > 
                         Send Reset Email
                     </Box>

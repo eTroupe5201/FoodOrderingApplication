@@ -16,5 +16,6 @@ const fbConfig = {
     measurementId: "G-1234567890"
     };
     
+    
 firebase.initializeApp(fbConfig);
 attachCustomCommands({ Cypress, cy, firebase });
