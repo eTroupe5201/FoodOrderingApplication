@@ -14,6 +14,7 @@ import { RegisterTwitterUser } from "../components/RegisterTwitterUser";
 import { RegisterGoogleUser } from "../components/RegisterGoogleUser";
 import { RegisterFacebookUser } from "../components/RegisterFacebookUser";
 import { RegisterEmailAndPasswordUser } from "../components/RegisterEmailAndPasswordUser";
+import logtail from "../logger.js";
 
 /* Register page - use React hook Forms for collecting input and validating. Once validated and submitted, send request to Firebase and:
 *   - if account exists with provided email, route to Login page
@@ -122,6 +123,7 @@ export const Register = ({saveData}) => {
 
         
         if (user.emailVerified) {
+            logtail.info("Email verified", {fbUser: user.uid, email: user.email});  
             console.log("Email verified:", user.emailVerified);
             try {
               if(fromSocialMedia){
