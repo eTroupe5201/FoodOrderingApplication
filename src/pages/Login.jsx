@@ -32,8 +32,6 @@ export const Login = ({saveData}) => {
     const navigateToResetPassword = () => {navigate("/forgotpassword");}
     
 
-
-
     const handleYahooLogin = async () => {
         const auth = getAuth();
         const provider = new OAuthProvider("yahoo.com");
@@ -52,9 +50,8 @@ export const Login = ({saveData}) => {
                 position: "top",
                 status: "error",
                 isClosable: true,
-             
             });
-
+            logtail.info("Yahoo user not registered. Registration and verification required.", {fbUser: user.uid, email: user.email});
         }else{
      
             if(user.emailVerified){
@@ -66,7 +63,8 @@ export const Login = ({saveData}) => {
                 status: "success",
                 isClosable: true,
             });
-        
+            logtail.info("Yahoo login successful", {fbUser: user.uid, email: user.email});
+
             navigate("/");
            
         }else{
@@ -76,10 +74,12 @@ export const Login = ({saveData}) => {
                     status: "error",
                     isClosable: true,
                 });
+                logtail.info("Yahoo user not registered. Registration and verification required.", {fbUser: user.uid, email: user.email});
+
             }
 }
         } catch (error) {
-            logtail.log(error.message);
+            logtail.error(`Yahoo user login error: ${error.message}`, {fbUser: auth.currentUser.uid});
         }
     }
 
@@ -100,6 +100,8 @@ export const Login = ({saveData}) => {
                 status: "success",
                 isClosable: true,
             });
+            logtail.info("Facebook login successful", {fbUser: user.uid, email: user.email});
+
             navigate("/");
            
         }else{
@@ -109,9 +111,8 @@ export const Login = ({saveData}) => {
                     status: "error",
                     isClosable: true,
                 });
+                logtail.info("Facebook user not registered. Registration and verification required.", {fbUser: user.uid, email: user.email});
             }
-
-           
         } catch (error) {
             toast({
                 title: "Account exists with different credentials. Use a different login method.",
@@ -119,8 +120,10 @@ export const Login = ({saveData}) => {
                 status: "error",
                 isClosable: true,
             });
+            logtail.error(`Facebook user login error: ${error.message}`, {fbUser: auth.currentUser.uid});
         }
     }
+
     const handleTwitterLogin = async () => {
         const auth = getAuth();
         const provider = new TwitterAuthProvider();
@@ -138,6 +141,7 @@ export const Login = ({saveData}) => {
                 status: "success",
                 isClosable: true,
             });
+            logtail.info("Twitter login successful", {fbUser: user.uid, email: user.email});
             navigate("/");
            
         }else{
@@ -147,6 +151,7 @@ export const Login = ({saveData}) => {
                     status: "error",
                     isClosable: true,
                 });
+                logtail.info("Twitter user not registered. Registration and verification required.", {fbUser: user.uid, email: user.email});
             }
          
         } catch (error) {
@@ -156,8 +161,10 @@ export const Login = ({saveData}) => {
                 status: "error",
                 isClosable: true,
             });
+            logtail.error(`Twitter user login error: ${error.message}`, {fbUser: auth.currentUser.uid});
         }
     }
+
     const handleGoogleLogin = async () => {
         const auth = getAuth();
         const provider = new GoogleAuthProvider();
@@ -179,6 +186,7 @@ export const Login = ({saveData}) => {
                 isClosable: true,
              
             });
+            logtail.info("Google user not registered. Registration and verification required.", {fbUser: user.uid, email: user.email});
 
         }else{
             if(user.emailVerified){
@@ -190,6 +198,7 @@ export const Login = ({saveData}) => {
                 status: "success",
                 isClosable: true,
             });
+            logtail.info("Google login successful", {fbUser: user.uid, email: user.email});
             navigate("/");
         
         }else{
@@ -199,10 +208,12 @@ export const Login = ({saveData}) => {
                     status: "error",
                     isClosable: true,
                 });
+                logtail.info("Google login failed. Account verification required.", {fbUser: user.uid, email: user.email});
+
             }
         }
         } catch (error) {
-            logtail.log(error.message);
+            logtail.error(`Google user login error: ${error.message}`, {fbUser: auth.currentUser.uid});
         }
     }
 
@@ -210,7 +221,7 @@ export const Login = ({saveData}) => {
     const handleLogin = async (data) => {
         try {
             saveData(data);
-        } catch (error) {console.log(error.message);}
+        } catch (error) {console.log(error.message);} //log for testing
 
         try {
             /**
@@ -242,7 +253,7 @@ export const Login = ({saveData}) => {
                     status: "success",
                     isClosable: true,
                 });
-                logtail.info(`[USER:${userVerfied.uid}] Login - successful`);
+                logtail.info("Email login successful", {fbUser: userVerfied.uid, email: userVerfied.email}); 
                 navigate("/");
 
             }else{
@@ -252,6 +263,7 @@ export const Login = ({saveData}) => {
                     status: "error",
                     isClosable: true,
                 });
+                logtail.info("Email login failed. Account verification required.", {fbUser: userVerfied.uid, email: userVerfied.email});
             }
             
         } catch (error) {
@@ -266,17 +278,14 @@ export const Login = ({saveData}) => {
         }
     };
 
- 
-        
     return ( 
-    
         <>    
 
         <Center>
             <Box w={{base:"25em", sm:"30em", md:"35em"}}height="100%"  borderRadius="25px" bg="black" color="white" mt={{base:"7%", sm:"15%", md:"15%", lg:"12%", xl:"8%"}} mb={{base:"40%", sm:"35%", md:"20%", lg:"15%", xl:"10%"}}>
      <Tabs  borderRadius="25px" className="tab" border="tan 2px outset"  isFitted variant="enclosed" >
     <TabList >
-        <Tab borderRightLeftRadius="25px" borderRightRadius="25px" borderTopLeftRadius="25px" _selected={{color:"white", transform: "translateY(-2px)", border:"outset 2px tan"}} color="tan" >SIGN IN</Tab>
+        <Tab borderRightRadius="25px" borderTopLeftRadius="25px" _selected={{color:"white", transform: "translateY(-2px)", border:"outset 2px tan"}} color="tan" >SIGN IN</Tab>
         <Tab  borderBottomLeftRadius="25px" borderTopRightRadius="25px" borderTopLeftRadius="25px" _selected={{color:"white", transform: "translateY(-2px)", border:"outset 2px tan"}} color="tan">WITH SOCIAL MEDIA </Tab>
     </TabList>
     <TabPanels>
@@ -400,10 +409,12 @@ export const Login = ({saveData}) => {
                                 <Flex alignContent="center" justifyContent="center">
                             <VStack mt="6em" >
                              <Box width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}} data-test="google-login-button"   onClick={handleGoogleLogin} ><GoogleLoginButton  /></Box>
+
                               {/* <Box data-test="OTP-Button" width="95%" borderRadius="3px" background= "linear-gradient(to right, tan, white, tan)" height="50px" _hover={{ transform: "translateY(-2px)" }} _active={{ transform: "translateY(2px)" }} onClick={handleOpenAuthenticationModal} as="button" display="flex" paddingLeft="5px" alignItems="center"  fontSize="18px" color="black"> <MdPhoneAndroid color="white" size={33} style={{ marginRight: "1em" }} /> <p>Login With Phone</p></Box> */}
                              <Box data-test="Facebook-login-button"  width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleFacebookLogin}><FacebookLoginButton  /></Box>
                              <Box data-test="Yahoo-login-button" width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleYahooLogin} ><YahooLoginButton  /></Box>
                             <Box data-test="Twitter-login-button" width="100%" _hover={{ transform: "translateY(-2px)"}}_active={{transform: "translateY(2px)"}} onClick={handleTwitterLogin}><TwitterLoginButton    /></Box>
+
                           
                                     </VStack>
                                </Flex> </TabPanel>

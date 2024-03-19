@@ -302,7 +302,7 @@ export const DataProvider = ({ children }) => {
           const updateCartItemCallable = httpsCallable(functions, "updateCartItem");
           const { updateData } = await updateCartItemCallable(cartItem);
           console.log("Cloud function update response:", updateData); 
-
+          logtail.info("Item quantity updated in cart", {fbUser: uid, itemId: cartItem.id, qty: cartItem.quantity})
         }
       }
 
@@ -310,10 +310,12 @@ export const DataProvider = ({ children }) => {
       if(!itemExists){
         const { newData } = await placeCartCallable(dataWithId);
         console.log("Cloud function response:", newData);
+        logtail.info("Item added to cart", {fbUser: uid, itemId: dataWithId.id})
       }
       setCartChanged(true); 
     } catch (error) {
-      console.error("Error updating cart:", error);
+      //console.error("Error updating cart:", error);
+      logtail.error(`Error updating cart ${error.message}`, {fbUser: uid, itemId: dataWithId.id});
     }
 
   };
@@ -388,7 +390,8 @@ export const DataProvider = ({ children }) => {
       }
       return data.id;
     }catch (error) {
-      console.error("Order placement error:", error);
+      //console.error("Order placement error:", error);
+      logtail.error(`Order placement error ${error.message}`, {user: user.uid})
       alert("Failed to place order. Please try again.");
       return null; // Return null to indicate failure
     }
@@ -436,6 +439,7 @@ export const DataProvider = ({ children }) => {
         const pickupTime = data.pickupTime?.toDate().toLocaleString();
         setOrder({ id: docSnapshot.id, ...data, pickupTime });
   
+        logtail.info("Paypal order captured successfully", {orderId: docSnapshot.id});
         // if (data.status === "confirmed" && lastStatus !== "confirmed") {
         //   // Update the last status
         //   lastStatus = data.status;
@@ -446,9 +450,11 @@ export const DataProvider = ({ children }) => {
         // }
       });
     
+
       return response.data.order;
     } catch (error) {
-      console.error("Error handling PayPal order:", error);
+      //console.error("Error handling PayPal order:", error);
+      logtail.error(`Error handling PayPal order: ${error.message}`, {user: user.uid});
       throw error; 
     }
   };
@@ -627,7 +633,7 @@ const getOrderHistory = async () => {
     removeCartItem, checkout, registerNewAccount, storeContactUsForm, clearCartAfterConfirmation, setOrder, generateOrder, getOrderById,
     handleOrder, getOrderHistory, updateUserAccount, travelTime, setTravelTime, findAndAssignDeliveryPerson, deliveryFirstname, setdeliveryFirstname,
     deliveryLastname, setdeliveryLastname, isUserInDatabase, selectedFilter,updateSelectedFilter,selectedOption,updateSelectedOption,searchedItem,
-    updateSearch, setPickupOrderStatus 
+    updateSearch, setPickupOrderStatus, updateFavoriteStatus 
     }}>
 
       {isReady ? (

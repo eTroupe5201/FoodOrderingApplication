@@ -6,6 +6,7 @@ export default defineConfig({
 
       env: {
         MAILOSAUR_API_KEY: "gK7uaNDH5wWN41T9PDwDyh2baiPVmIjE",
+
    
       },
   },
