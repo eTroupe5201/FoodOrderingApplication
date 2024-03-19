@@ -1,23 +1,19 @@
-import React, {useState, useEffect} from "react";
-
-import {Divider, SimpleGrid, Button, Center, Box, Text, Flex, VStack, useToast, 
-    FormControl, FormLabel, FormErrorMessage, InputGroup, Input, InputRightElement, useDisclosure,
-    Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter
-} from "@chakra-ui/react";
-
+import React, {useState, } from "react";
+import {Divider, SimpleGrid, Center, Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, useToast} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import {  useForm } from "react-hook-form";
+import {  set, useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
-import { auth } from "../utils/firebase" 
-import { getAuth, OAuthProvider, signInWithPopup, GoogleAuthProvider ,FacebookAuthProvider, 
-    TwitterAuthProvider, createUserWithEmailAndPassword, sendEmailVerification 
-} from "firebase/auth";
-
+import { auth } from "../utils/firebase"   
+import { sendEmailVerification} from "firebase/auth";
 import {FcGoogle} from "react-icons/fc";
 import { FaTwitter} from "react-icons/fa";
 import { AiFillFacebook,  AiFillYahoo} from "react-icons/ai";
-// import { MdPhoneAndroid } from "react-icons/md";
-import logtail from "../logger.js";
+import { InstructionsModal } from "../components/InstructionsModal";
+import { RegisterYahooUser } from "../components/RegisterYahooUser";
+import { RegisterTwitterUser } from "../components/RegisterTwitterUser";
+import { RegisterGoogleUser } from "../components/RegisterGoogleUser";
+import { RegisterFacebookUser } from "../components/RegisterFacebookUser";
+import { RegisterEmailAndPasswordUser } from "../components/RegisterEmailAndPasswordUser";
 
 /* Register page - use React hook Forms for collecting input and validating. Once validated and submitted, send request to Firebase and:
 *   - if account exists with provided email, route to Login page
@@ -28,226 +24,63 @@ export const Register = ({saveData}) => {
     const navigate = useNavigate();
     const { registerNewAccount } = useDataProvider();
     const { register, handleSubmit, formState, watch } = useForm();
-    const { isOpen, onOpen, onClose } = useDisclosure();
     const [emailErrorMsg, setEmailErrorMsg]= useState("Required. Enter a valid email address.");
     const [passwordErrorMsg, setPasswordErrorMsg]= useState("Required. See password requirements below.");
     const [emailsMatch, setEmailsMatch] = useState(true);
     const [passwordsMatch, setPasswordsMatch]= useState(true);
     const [fromSocialMedia, setFromSocialMedia] = useState(false);
     const [formdata, setformData] = useState(null);
+    const [fromOTP, setFromOTP] = useState(false);
     const [registrationState, setRegistrationState] = useState("initial");
     const [showPassword, setShowPassword] = React.useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-
     const handleShowPassword= () => setShowPassword(!showPassword)
     const handleShowConfirmPassword= () => setShowConfirmPassword(!showConfirmPassword)
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    const [isInstructionsModalOpen, setInstructionsModalOpen] = React.useState(false);
  
-    useEffect(() => {
-        if (registrationState === "waitingForEmailVerification") {
-            onOpen();
-        }
-    }, [registrationState, onOpen]);
-    
-   
+    const handleInstructionsModalOpen = () => {
+      setInstructionsModalOpen(true);
+    };
+
+    const handleInstructionsModalClose = () => {
+      setInstructionsModalOpen(false);
+    };
+
     const handleYahooRegister = async () => {
-        setFromSocialMedia(true);
-        try{  
-            const auth = getAuth();
-            
-            const provider = new OAuthProvider("yahoo.com");
-    
-            const result = await signInWithPopup(auth, provider);
-            const userForVerification = result.user;
-
-            toast({
-                title: "Email has sent to be verified!",
-                description: "Please check your email to verify your account.",
-                position: "top",
-                status: "success",
-                isClosable: true,
-            });
-                
-            await sendEmailVerification(userForVerification);
-            setRegistrationState("waitingForEmailVerification");   
-            logtail.info("Yahoo registration email sent", {fbUser: userForVerification.uid, email: userForVerification.email});
-
-        }  catch (error) {
-            toast({
-                title: "Registration for yahoo user failed",
-                description: error.message,
-                position: "top",
-                status: "error",
-                isClosable: true,
-            });
-            logtail.error(`Yahoo user registration error: ${error.message}`, {fbUser: auth.currentUser.uid});
-        }
+        setFromOTP(false);
+        RegisterYahooUser(setFromOTP, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
+        handleInstructionsModalOpen();
      }
-
 
     const handleTwitterRegister = async () => {
-        setFromSocialMedia(true);
-        try{  
-            const auth = getAuth();
-         
-            const provider = new TwitterAuthProvider();
-            provider.setCustomParameters({
-            "display": "popup"
-            });
-            const result = await signInWithPopup(auth, provider);
-            const userForVerification = result.user;
- 
-            toast({
-                title: "Email has sent to be verified!",
-                description: "Please check your email to verify your account.",
-                position: "top",
-                status: "success",
-                isClosable: true,
-            });
-                
-            await sendEmailVerification(userForVerification);
-            setRegistrationState("waitingForEmailVerification");   
-            logtail.info("Twitter registration email sent", {fbUser: userForVerification.uid, email: userForVerification.email});
-
-        } catch (error) {
-            toast({
-                title: "Registration for twitter user failed",
-                description: error.message,
-                position: "top",
-                status: "error",
-                isClosable: true,
-            });
-            logtail.error(`Twitter user registration error: ${error.message}`, {fbUser: auth.currentUser.uid});
-        }
+        setFromOTP(false);
+        RegisterTwitterUser(setFromOTP, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
+        handleInstructionsModalOpen();
      }
-        
+
     const handleGoogleRegister = async () => {
-        setFromSocialMedia(true);
-        try{  
-           const auth = getAuth();
-         
-            const provider = new GoogleAuthProvider();
-             
-            provider.setCustomParameters({ prompt: "select_account" }); // Force account selection prompt
-
-            const result = await signInWithPopup(auth, provider);
-            const userForVerification = result.user;
-
-            toast({
-                title: "Email has sent to be verified!",
-                description: "Please check your email to verify your account.",
-                position: "top",
-                status: "success",
-                isClosable: true,
-            });
-                
-            await sendEmailVerification(userForVerification);
-            setRegistrationState("waitingForEmailVerification");  
-            logtail.info("Google registration email sent", {fbUser: userForVerification.uid, email: userForVerification.email});
-        
-        }  catch (error) {
-            toast({
-                title: "Registration for google user failed",
-                description: error.message,
-                position: "top",
-                status: "error",
-                isClosable: true,
-            });
-            logtail.error(`Google user registration error: ${error.message}`, {fbUser: auth.currentUser.uid});
-        }
+        setFromOTP(false);
+        RegisterGoogleUser(setFromOTP, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
+        handleInstructionsModalOpen();
      }
 
     const handleFacebookRegister = async () => {
-        setFromSocialMedia(true);
-        try{  
-            const auth = getAuth();
-        
-            const provider = new FacebookAuthProvider();
-            provider.setCustomParameters({
-            "display": "  "
-            });
-            const result = await signInWithPopup(auth, provider);
-            const userForVerification = result.user;
-
-            toast({
-                title: "Email has sent to be verified!",
-                description: "Please check your email to verify your account.",
-                position: "top",
-                status: "success",
-                isClosable: true,
-            });
-            
-            await sendEmailVerification(userForVerification);
-            setRegistrationState("waitingForEmailVerification");   
-            logtail.info("Facebook registration email sent", {fbUser: userForVerification.uid, email: userForVerification.email});       
-        }  catch (error) {
-            toast({
-                title: "Registration for facebook user failed",
-                description: error.message,
-                position: "top",
-                status: "error",
-                isClosable: true,
-            });
-            logtail.error(`Facebook user registration error: ${error.message}`, {fbUser: auth.currentUser.uid});
-        }
+        RegisterFacebookUser(setFromOTP, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
+        handleInstructionsModalOpen();     
     }
 
     const handleRegister = async (data) => {
-        setFromSocialMedia(false);
-        setformData(data);
-
-        try {
-            saveData(data);
-        } catch (error) {console.log(error)}
-
-        // Verify email and password match
-        if (data.email !== data.confirmEmail || data.password !== data.confirmPassword) {
-            console.log("passwords or emails do not match"); //log for tests
-            toast({
-                title: "Error",
-                description: "Emails or passwords do not match.",
-                position: "top",
-                status: "error",
-                isClosable: true,
-            });
-            return;
-        }
-
-        try {
-            console.log("valid registration input"); //log for tests
-            /**
-             * Create users and send verification emails
-             * In Firebase, the default validity period for email verification links sent to users is 24 hours. 
-             * This means that users have 24 hours after receiving the email to click on the verification link 
-             * to complete their email verification process. If the user does not click on the verification link during this period, 
-             * the link will expire and the user needs to request a new verification email to complete the verification process.
-             */ 
-            const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
-            await sendEmailVerification(userCredential.user);
-            toast({
-                title: "Email has sent to be verified!",
-                description: "Please check your email to verify your account.",
-                position: "top",
-                status: "success",
-                isClosable: true,
-            });
-            logtail.info("Email registration email sent", {fbUser: userCredential.user.uid, email: data.email});       
-
-            // Update the status to reflect waiting for email verification. 
-            // When the user first clicks register button and sends an email, the button will change from register to verified status
-            setRegistrationState("waitingForEmailVerification");
-        } catch (error) {
-            toast({
-                title: "Registration failed",
-                description: error.message,
-                position: "top",
-                status: "error",
-                isClosable: true,
-            });
-            logtail.error(`Email user registration error: ${error.message}`, {fbUser: auth.currentUser.uid, email: data.email});
-        }
-
+        RegisterEmailAndPasswordUser(setFromOTP, saveData, setformData, data, setFromSocialMedia, setRegistrationState, toast); // assuming you have these variables defined in your register component
+        handleInstructionsModalOpen();
     }
+
+ 
+
+
+  
+
+  
 
     const handleResendVerificationEmail = async (event) => {
         try {
@@ -265,8 +98,8 @@ export const Register = ({saveData}) => {
                 status: "success",
                 isClosable: true,
             });
-            logtail.info("Registration email resent", {fbUser: user.id, email: user.email});       
         } catch (error) {
+            console.error("Error registering account:", error);
             toast({
                 title: "An email is already on the way",
                 description: "Please click the 'Resend Email' button if you did not receive an email after 1-3 minutes." + error.message,
@@ -274,36 +107,57 @@ export const Register = ({saveData}) => {
                 status: "error",
                 isClosable: true,
             });
-            logtail.error(`Registration email resend error: ${error.message}`, {fbUser: auth.currentUser.uid});       
         }
     };
 
-    // Logic for handling whether the user has verified their email
+  // Logic for handling whether the user has verified their email
     const handleCheckEmailVerified = async (event) => {
-        //logtail.info("checking verification status to store account info"); //console log for testing 
+        console.log("checking verification status to store account info"); //console log for testing 
         // Block default form submission behavior
         event.preventDefault();
 
         const user = auth.currentUser;
         await user.reload(); // Reload user status to obtain the latest email verification status
-      
+        console.log("user in handleCheckEmailVerified: ", user)
+
+        
         if (user.emailVerified) {
-            logtail.info("Email verified", {fbUser: user.uid, email: user.email});       
+            logtail.info("Email verified", {fbUser: user.uid, email: user.email});  
+            console.log("Email verified:", user.emailVerified);
             try {
               if(fromSocialMedia){
-                //  console.log("social media user:", socialMediaUser);
+            //  console.log("social media user:", socialMediaUser);
                 // Extract necessary user information
-                const { email, displayName, phoneNumber } = user;
-                const [firstName, lastName] = displayName.split(" ");
+        const { email, displayName, phoneNumber } = user;
+        const [firstName, lastName] = displayName.split(" ");
         
-                const socialMediaUser = {  email: email,
-                    firstName: firstName,
-                    lastName: lastName,
+        const socialMediaUser = {  email: email,
+            firstName: firstName,
+            lastName: lastName,
+            phone: phoneNumber}
+
+        // Call the Cloud Function and pass user data
+        const result = await registerNewAccount(socialMediaUser);
+        //const result = await registerNewAccount(socialMediaUser);
+             if (result.success) {
+                toast({
+                    title: "Account created",
+                    description: "Your account has been created successfully.",
+                    position: "top",
+                    status: "success",
+                    isClosable: true,
+                });
+                navigate("/login"); 
+              }}
+              else if(fromOTP){
+                const { email, phoneNumber} = user;
+                const OTP_user = {  
+                    email: email,
+                    firstName: "",
+                    lastName: "",
                     phone: phoneNumber}
 
-                // Call the Cloud Function and pass user data
-                const result = await registerNewAccount(socialMediaUser);
-                //const result = await registerNewAccount(socialMediaUser);
+                const result = await registerNewAccount(OTP_user); 
                 if (result.success) {
                     toast({
                         title: "Account created",
@@ -312,28 +166,36 @@ export const Register = ({saveData}) => {
                         status: "success",
                         isClosable: true,
                     });
-                    logtail.info("Social Media account created successfully", {fbUser: result.id, email: result.email});       
                     navigate("/login"); 
+                }else{
+                    toast({
+                        title: "Registration failed",
+                        description: "Please try again.",
+                        position: "top",
+                        status: "error",
+                        isClosable: true,
+                    });
                 }
+                
               }else{
-                    /*
-                    We will only call the cloud function to store the user"s personal information without password
-                    and redirect to the login page when our email authentication is passed
-                    */
-                    const result = await registerNewAccount(formdata); 
-                    if (result.success) {
-                        toast({
-                            title: "Account created",
-                            description: "Your account has been created successfully.",
-                            position: "top",
-                            status: "success",
-                            isClosable: true,
-                        });
-                        logtail.info("Account created successfully", {fbUser: result.id, email: result.email});       
-                        navigate("/login"); 
-                    }
-              }
-            } catch (error) {
+                /*
+                We will only call the cloud function to store the user"s personal information without password
+                and redirect to the login page when our email authentication is passed
+                */
+                const result = await registerNewAccount(formdata); 
+                if (result.success) {
+                    toast({
+                        title: "Account created",
+                        description: "Your account has been created successfully.",
+                        position: "top",
+                        status: "success",
+                        isClosable: true,
+                    });
+                    navigate("/login"); 
+                
+                }
+            } }catch (error) {
+                console.error("Error calling registerNewAccount:", error);
                 toast({
                     title: "Registration failed",
                     description: error.message,
@@ -341,7 +203,6 @@ export const Register = ({saveData}) => {
                     status: "error",
                     isClosable: true,
                 });
-                logtail.error(`Registration error: ${error.message}`, {fbUser: user.id, email: user.email});       
             }
         } else {
             toast({
@@ -351,7 +212,6 @@ export const Register = ({saveData}) => {
                 status: "warning",
                 isClosable: true,
             });
-            logtail.error("Email not verified. Validation required.", {fbUser: auth.currentUser.uid, email: user.email});       
         }
     };
 
@@ -386,27 +246,8 @@ export const Register = ({saveData}) => {
         );
     } else if (registrationState === "waitingForEmailVerification") {
         buttonContent = (
-            <>    <Modal  transition="3s" motionPreset="scale" onClose={onClose} isOpen={isOpen} isCentered>
-            <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
-              <ModalContent padding="20px" border="2px solid tan" fontFamily="'Raleway', sans-serif" borderRadius="25px" bg="black" color="white" >
-                <ModalHeader textAlign="center">REGISTRATION INSTRUCTIONS</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody  fontWeight="bold"  borderRadius="25px" textAlign="center" padding="20px" border="2px solid tan" pb={6}>
-                    <p>You will receive an email within 1-3 minutes. If you do not receive an email within that time frame, click on Resend Email.</p>
-                    <br></br>
-                    <p> Kindly review your email and proceed by clicking the verification link. To finalize the verification process, click on the Complete Registration button on this webpage.</p>
-                    <br></br>
-                    <p> Close this window to continue.</p>
-
-                  <br></br>
-                    <p> To finalize the verification process, click on the  &quot;Complete Registration &quot; button on the webpage.</p>
-
-                </ModalBody>
-                <ModalFooter><Button data-test="Close-Instructions-Button" color="white" bg="black" border="2px solid tan" mr={3} onClick={onClose}>
-        Close
-      </Button>  </ModalFooter>
-        </ModalContent>
-        </Modal>
+            <>  
+            <InstructionsModal isOpen={isInstructionsModalOpen} onClose={handleInstructionsModalClose}/>
             <Box 
                 title="register-verified-button"
                 align="center"
@@ -456,7 +297,8 @@ export const Register = ({saveData}) => {
     }
 
     return (
-        <><form className="Register" onSubmit={handleSubmit(handleRegister)}> 
+        <>
+        <form className="Register" onSubmit={handleSubmit(handleRegister)}> 
             <Flex  mb="5em" alignContent="center" justifyContent="center">
                 <Box border="outset 2px tan" borderRadius="25px"
                  title="register-form-box" id="register-form-box" bg="#000000" 
@@ -651,14 +493,13 @@ export const Register = ({saveData}) => {
                         <Divider  margin="20px" orientation="horizontal"/>
                    
                         <Center >
-                           <SimpleGrid columns={4}>
+                           <SimpleGrid columns={5}>
                             
                            <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}} bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset"onClick={handleGoogleRegister} ><FcGoogle  size="35px"  /></Box>
                             <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}} bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleFacebookRegister}><AiFillFacebook size="35px" color="#4267B2" /></Box>
                             <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleTwitterRegister}><FaTwitter  size="35px" color="#1DA1F2"  /></Box>
                             <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleYahooRegister}>< AiFillYahoo size="35px" color="#1DA1F2"  /></Box>
-                            {/* <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }} color="black" margin="10px"border="3px tan outset" onClick={handlePhoneLogin} ><MdPhoneAndroid textAlign="center" size={35} /></Box>
-                          */}
+                           
                            </SimpleGrid> 
                             </Center>
                     </VStack>

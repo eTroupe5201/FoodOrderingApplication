@@ -15,7 +15,7 @@ export function Footer() {
                     <Box colSpan={{base: 1, md:4,  xl: 4}}>
                         <Heading fontSize={{ base: "15px", md: "20px", lg: "30px" }}  fontFamily="'Raleway', sans-serif " mb={5} mt={10}>About Us</Heading>
                     
-                    <Center><Image width={{base:"50px"}} alt= "Favicon" height={{base:"50px"}}src="https://d1zh5cyxaugen.cloudfront.net/assets/WhiteFavicon.png"></Image></Center>
+                    <Center><Image width={{base:"50px"}} alt= "Favicon" height={{base:"50px"}}src="https://d1zh5cyxaugen.cloudfront.net/Favicon.png"></Image></Center>
             
                     <Text fontSize={{ base: "12px",md: "15px", lg: "18px"}} mt={5}>
                         Discover culinary excellence at Devine Delicacies. We are passionate about crafting 

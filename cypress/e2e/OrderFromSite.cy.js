@@ -1,0 +1,1 @@
+/*register, login, click menu, click item, add to cart, click checkout */

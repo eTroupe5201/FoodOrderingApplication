@@ -3,25 +3,26 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { ChakraProvider } from "@chakra-ui/react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Root } from "./pages/Root"; 
-import { Home } from "./pages/Home"; 
-import { Menu } from "./pages/Menu"; 
-import { Item } from "./pages/Item";
-import { Cart } from "./pages/Cart";
-import { CheckOut } from "./pages/CheckOut";
-import { Gratitude } from "./pages/Gratitude";
-import { Info } from "./pages/Info";
-import { Contact } from "./pages/Contact";
-import { Admin } from "./pages/Admin"; 
-import { Login } from "./pages/Login"; 
-import { Register } from "./pages/Register";
-import { Profile } from "./pages/Profile"; 
-import { EditProfile } from "./pages/EditProfile"; 
-import { Orders } from "./pages/Orders"; 
-import { ForgotPassword } from "./pages/ForgotPassword";
 import "./styles.css";
 import { DataProvider } from "./components/dataProvider";
+import loadable from "@loadable/component";
 
+const Root = loadable(() => import("./pages/Root"), {resolveComponent: (components) => components.Root});
+const Home = loadable(() => import("./pages/Home"), {resolveComponent: (components) => components.Home});
+const Menu = loadable(() => import("./pages/Menu"), {resolveComponent: (components) => components.Menu});
+const Item = loadable(() => import("./pages/Item"), {resolveComponent: (components) => components.Item});
+const Cart = loadable(() => import("./pages/Cart"), {resolveComponent: (components) => components.Cart});
+const CheckOut = loadable(() => import("./pages/CheckOut"), {resolveComponent: (components) => components.CheckOut});
+const Gratitude = loadable(() => import("./pages/Gratitude"), {resolveComponent: (components) => components.Gratitude});
+const Info = loadable(() => import("./pages/Info"), {resolveComponent: (components) => components.Info});
+const Contact =  loadable(() => import("./pages/Contact"), {resolveComponent: (components) => components.Contact});
+const Admin =  loadable(() => import("./pages/Admin"), {resolveComponent: (components) => components.Admin});
+const Login =  loadable(() => import("./pages/Login"), {resolveComponent: (components) => components.Login});
+const Register = loadable(() => import("./pages/Register"), {resolveComponent: (components) => components.Register});
+const Profile =  loadable(() => import("./pages/Profile"), {resolveComponent: (components) => components.Profile});
+const EditProfile =  loadable(() => import("./pages/EditProfile"), {resolveComponent: (components) => components.EditProfile});
+const Orders =  loadable(() => import("./pages/Orders"), {resolveComponent: (components) => components.Orders});
+const ForgotPassword =  loadable(() => import("./pages/ForgotPassword"), {resolveComponent: (components) => components.ForgotPassword});
 
 /**
  * default page is homepage, and click oder button will go to menu page of our restaurant
