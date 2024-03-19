@@ -1,13 +1,14 @@
-import { getAuth, signInWithPopup } from "firebase/auth";
+import { getAuth, signInWithPopup } from "firebase/auth"
 import { sendEmailVerification } from "firebase/auth"
-import { GoogleAuthProvider } from "firebase/auth";
+import { GoogleAuthProvider } from "firebase/auth"
 import logtail from "../logger.js";
 
 export const RegisterGoogleUser = async (setFromOTP,setFromSocialMedia, setRegistrationState, toast) => {
     setFromOTP(false);
-    setFromSocialMedia(true);
-    try{  
+    setFromSocialMedia(true); 
     const auth = getAuth();
+    try{  
+   
   
       const provider = new GoogleAuthProvider();
       

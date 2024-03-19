@@ -1,16 +1,14 @@
-import {Stack, Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, Center, useToast } from "@chakra-ui/react";
+import { Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, Center, useToast } from "@chakra-ui/react";
  import React from "react";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { auth } from "../utils/firebase" 
-// import {GoogleButton} from "react-google-button"
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useDataProvider } from "../components/dataProvider"
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react"
 import {FacebookLoginButton, TwitterLoginButton, GoogleLoginButton, YahooLoginButton} from "react-social-login-buttons"; //npm i react-social-login-buttons
-import { getAuth, signInWithPhoneNumber, RecaptchaVerifier, signInWithPopup, GoogleAuthProvider ,FacebookAuthProvider, TwitterAuthProvider, OAuthProvider} from "firebase/auth";
-import { MdPhoneAndroid } from "react-icons/md";
+import { getAuth, signInWithPopup, GoogleAuthProvider ,FacebookAuthProvider, TwitterAuthProvider, OAuthProvider} from "firebase/auth";
+
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button } from "@chakra-ui/react";
 import logtail from "../logger.js";
 
@@ -33,111 +31,7 @@ export const Login = ({saveData}) => {
     const navigateToRegister = () => {navigate("/register");}
     const navigateToResetPassword = () => {navigate("/forgotpassword");}
     
-    const [isAuthenticationModalOpen, setIsAuthenticationModalOpen] = useState(false);
-    const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
-    const [phone, setPhone] = useState("");
-    const [otp, setOTP] = useState(["", "", "", "", "","" ]);
 
-    const [isVerificationCompleted, setIsVerificationCompleted] = useState(false);
-
-useEffect(() => {
-    if (!isVerificationModalOpen && isVerificationCompleted) {
-   //     setOTP(["", "", "", "", "", ""]); // Reset OTP state
-        setIsVerificationCompleted(false);
-    }
-}, [isVerificationModalOpen, isVerificationCompleted]);
-
-
-const handleSubmitVerification = () => {
-    verifyOTP();
-    setIsVerificationCompleted(true);
-    handleCloseVerificationModal();
-};
-    const handleOpenAuthenticationModal = () => {
-      setIsAuthenticationModalOpen(true);
-    };
-  
-    const handleCloseAuthenticationModal = () => {
-      setIsAuthenticationModalOpen(false);
-    //  setOTP(["", "", "", "", "", ""]); // Reset OTP state
-       };
-    
-      const handleCloseVerificationModal = () => {
-        setIsVerificationModalOpen(false);
-      };
-
- 
-  const generateRecaptcha = () => {
-    return new RecaptchaVerifier("recaptcha-container", {
-      "size": "visible",
-      "type": "image",
-        "theme": "dark",
-        "callback": () => {
-            toast({
-                title: "reCAPTCHA solved, allow signInWithPhoneNumber.",
-                position: "top",
-                status: "success",
-                isClosable: true,
-            });
-            console.log("reCAPTCHA solved, allow signInWithPhoneNumber.");
-            sendOTP();
-        }
-    }, auth);
-  }
- 
-  const sendOTP = () => {
-    logtail.info(`[PHONE:${phone}] Sending OTP to this number`);
-  
-    const appVerifier = generateRecaptcha();
-    // Send OTP to the provided phone number
-    signInWithPhoneNumber(auth, phone, appVerifier)
-      .then(confirmResult => {
-        logtail.info(`[PHONE:${phone}] OTP sent successfully`);
-        setIsAuthenticationModalOpen(false);
-        setIsVerificationModalOpen(true);
-
-        window.confirmationResult = confirmResult;
-      }).catch(error => {
-        // Handle error
-        logtail.error(`[PHONE:${phone}] ${error.message}`);
-      });
-  }
-
-  const verifyOTP = () => {
-    console.log(otp.join(""));
-    window.confirmationResult.confirm(otp.join(""))
-      .then(result => {
-        // OTP verification successful
-        const user = result.user;
-        if(user.emailVerified){
-            getUserInfo(user);
-               // Show success message and navigate to homepage
-               toast({
-                title: "OTP Login Successful.",
-                position: "top",
-                status: "success",
-                isClosable: true,
-            });
-        
-            navigate("/");
-           
-        }else{
-                toast({
-                    title: "User not registered. Please register or Verify email.",
-                    position: "top",
-                    status: "error",
-                    isClosable: true,
-                });
-            }
-}
-        // Handle successful authentication
-      ).catch(error => {
-        // OTP verification failed
-        logtail.error(error.message);
-        // Handle failed authentication
-      });
-  }
-  
 
 
     const handleYahooLogin = async () => {
@@ -377,110 +271,7 @@ const handleSubmitVerification = () => {
     return ( 
     
         <>    
-        
-        <div><Modal isOpen={isAuthenticationModalOpen} onClose={handleCloseAuthenticationModal}>
-        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
-        <ModalContent border="3px outset tan" marginTop="10%" bg="black" color="white"   fontFamily="'Raleway', sans-serif ">
-          <ModalHeader textAlign="center">One-Time Password Authentication</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody   pb={6}>
-            <FormControl  > 
-              <FormLabel fontFamily= "'Times New Roman', Times, serif" marginTop="2%"  textAlign="center"> Please Enter Phone Number</FormLabel>
-             
-           <Input  fontFamily= "'Times New Roman', Times, serif"
-           marginTop="2%" bg="white" color="black" varient="outlined"
-                country={"us"}
-                onChange={(e) => setPhone("+1" + e.target.value)}
-                 />
-               
-                  <Button _hover={{ transform: "translateY(-2px)"}} 
-                  _active={{transform: "translateY(2px)"}}
-                   border="3px outset tan" alignContent="left"
-                    mb="8%" marginTop="10%" color="white" bg="black" marginLeft="70%" onClick={sendOTP}>Send OTP</Button>
-                
-                 <div id="recaptcha-container"></div>
-               
-            </FormControl>
-            
-          </ModalBody>
-          <ModalFooter>
-           
-          </ModalFooter>
-        </ModalContent>
-      </Modal></div>
 
-      <div>
-    <Modal size="xl" isOpen={isVerificationModalOpen} onClose={handleCloseVerificationModal}>
-      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
-        <ModalContent bg="black" borderRadius="25px" border="2.5px outset tan" color="white" fontFamily="Raleway, sans sarif"   >
-          <ModalHeader  textAlign="center">One-Time Password Verification</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody   pb={6}>
-            <FormControl   >
-          <FormLabel textAlign="center" marginTop="2%" fontWeight="bold">Please Enter One Time Password</FormLabel>
-          {/* <Input border="2px outset tan"marginTop="5%" fontWeight="bold" value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-           varient="outlined" placeholder="Enter OTP" /> */}
-            
-            <Flex direction="row"  >
-    {otp.map((digit, index) => (
-        <Input
-            key={index}
-            type="text"
-            color="black"
-            bg="white"
-            value={digit}
-            maxLength={1}
-            width="100px"
-            height="5em"
-            margin="5px"
-            padding="0"
-            fontWeight="bold"
-            fontSize="12px"
-            fontFamily="Arial, sans-serif" // Alternative font: Arial"
-            border="2.5px outset tan"
-            marginTop="5%"
-           
-            onChange={(e) => {
-                const value = e.target.value;
-                console.log(value);
-                setOTP((prevOTP) => {
-                    const newOTP = [...prevOTP];
-                    newOTP[index] = value;
-                    return newOTP;
-                });
-                if (value && index < otp.length - 1) {
-                    const nextInput = document.querySelector(`#otp-input-${index + 1}`);
-                    if (nextInput) {
-                        nextInput.focus();
-                    }
-                } else if (!value && index > 0) {
-                    const prevInput = document.querySelector(`#otp-input-${index - 1}`);
-                    if (prevInput) {
-                        prevInput.focus();
-                    }
-                }
-            }}
-            id={`otp-input-${index}`}
-        />
-    ))}
-</Flex>
-                
-          <Button marginTop="10%"
-           _hover={{ transform: "translateY(-2px)"}} 
-           _active={{transform: "translateY(2px)"}}
-            border="2px outset tan" 
-            marginLeft="70%"
-             color="white" bg="black"
-             
-             onClick={handleSubmitVerification } >SUBMIT</Button>
-          </FormControl>
-          </ModalBody>
-          <ModalFooter>
-           
-          </ModalFooter>
-        </ModalContent>
-      </Modal></div>
         <Center>
             <Box w={{base:"25em", sm:"30em", md:"35em"}}height="100%"  borderRadius="25px" bg="black" color="white" mt={{base:"7%", sm:"15%", md:"15%", lg:"12%", xl:"8%"}} mb={{base:"40%", sm:"35%", md:"20%", lg:"15%", xl:"10%"}}>
      <Tabs  borderRadius="25px" className="tab" border="tan 2px outset"  isFitted variant="enclosed" >
@@ -609,10 +400,10 @@ const handleSubmitVerification = () => {
                                 <Flex alignContent="center" justifyContent="center">
                             <VStack mt="6em" >
                              <Box width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}} data-test="google-login-button"   onClick={handleGoogleLogin} ><GoogleLoginButton  /></Box>
-                              <Box data-test="OTP-Button" width="95%" borderRadius="3px" background= "linear-gradient(to right, tan, white, tan)" height="50px" _hover={{ transform: "translateY(-2px)" }} _active={{ transform: "translateY(2px)" }} onClick={handleOpenAuthenticationModal} as="button" display="flex" paddingLeft="5px" alignItems="center"  fontSize="18px" color="black"> <MdPhoneAndroid color="white" size={33} style={{ marginRight: "1em" }} /> <p>Login With Phone</p></Box>
+                              {/* <Box data-test="OTP-Button" width="95%" borderRadius="3px" background= "linear-gradient(to right, tan, white, tan)" height="50px" _hover={{ transform: "translateY(-2px)" }} _active={{ transform: "translateY(2px)" }} onClick={handleOpenAuthenticationModal} as="button" display="flex" paddingLeft="5px" alignItems="center"  fontSize="18px" color="black"> <MdPhoneAndroid color="white" size={33} style={{ marginRight: "1em" }} /> <p>Login With Phone</p></Box> */}
                              <Box data-test="Facebook-login-button"  width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleFacebookLogin}><FacebookLoginButton  /></Box>
                              <Box data-test="Yahoo-login-button" width="100%" _hover={{ transform: "translateY(-2px)"}} _active={{transform: "translateY(2px)"}}   onClick={handleYahooLogin} ><YahooLoginButton  /></Box>
-                                   <Box data-test="Twitter-login-button" width="100%" _hover={{ transform: "translateY(-2px)"}}_active={{transform: "translateY(2px)"}} onClick={handleTwitterLogin}><TwitterLoginButton    /></Box>
+                            <Box data-test="Twitter-login-button" width="100%" _hover={{ transform: "translateY(-2px)"}}_active={{transform: "translateY(2px)"}} onClick={handleTwitterLogin}><TwitterLoginButton    /></Box>
                           
                                     </VStack>
                                </Flex> </TabPanel>

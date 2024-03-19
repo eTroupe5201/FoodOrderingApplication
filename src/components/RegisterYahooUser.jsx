@@ -1,13 +1,14 @@
-import { getAuth, signInWithPopup } from "firebase/auth";
-import { OAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup } from "firebase/auth"
+import { OAuthProvider } from "firebase/auth"
 import { sendEmailVerification } from "firebase/auth"
-import logtail from "../logger.js";
+import logtail from "../logger.js"
 
 export const RegisterYahooUser = async (setFromOTP,setFromSocialMedia, setRegistrationState, toast) => {
     setFromOTP(false);
     setFromSocialMedia(true);
+    const auth = getAuth();
     try {
-        const auth = getAuth();
+        
         const provider = new OAuthProvider("yahoo.com");
         const result = await signInWithPopup(auth, provider);
         const userForVerification = result.user;

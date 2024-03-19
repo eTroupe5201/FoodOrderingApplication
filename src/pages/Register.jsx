@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from "react";
-import {Divider, Button, Stack,SimpleGrid, Center, Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, useToast} from "@chakra-ui/react";
+import React, {useState, } from "react";
+import {Divider, SimpleGrid, Center, Box, Text, Flex, VStack, InputGroup, Input, InputRightElement, FormControl, FormLabel, FormErrorMessage, useToast} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import {  set, useForm } from "react-hook-form";
 import { useDataProvider } from "../components/dataProvider"
-import { auth } from "../utils/firebase" 
-import {sendEmailVerification, signInWithPhoneNumber } from "firebase/auth";
+import { auth } from "../utils/firebase"   
+import { sendEmailVerification} from "firebase/auth";
 import {FcGoogle} from "react-icons/fc";
 import { FaTwitter} from "react-icons/fa";
 import { AiFillFacebook,  AiFillYahoo} from "react-icons/ai";
@@ -14,9 +14,7 @@ import { RegisterTwitterUser } from "../components/RegisterTwitterUser";
 import { RegisterGoogleUser } from "../components/RegisterGoogleUser";
 import { RegisterFacebookUser } from "../components/RegisterFacebookUser";
 import { RegisterEmailAndPasswordUser } from "../components/RegisterEmailAndPasswordUser";
-import { MdPhoneAndroid } from "react-icons/md";
-import { RecaptchaVerifier } from "firebase/auth";
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react";
+
 /* Register page - use React hook Forms for collecting input and validating. Once validated and submitted, send request to Firebase and:
 *   - if account exists with provided email, route to Login page
 *   - if no account exists with provided email, create account and store user info in DB. Upon return, route back to Home page
@@ -40,24 +38,7 @@ export const Register = ({saveData}) => {
     const handleShowConfirmPassword= () => setShowConfirmPassword(!showConfirmPassword)
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     const [isInstructionsModalOpen, setInstructionsModalOpen] = React.useState(false);
-    const [isAuthenticationModalOpen, setIsAuthenticationModalOpen] = useState(false);
-    const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
-    const [OTPemail, setOTPEmail] = useState("");
-    const [isVerificationCompleted, setIsVerificationCompleted] = useState(false);
-    const [OTPphoneNumber, setOTPPhoneNumber] = useState("");
-    const [otp, setOTP] = useState(["", "", "", "", "","" ]);
-    
-    useEffect(() => {
-        if (!isVerificationModalOpen && isVerificationCompleted) {
-            setOTP(["", "", "", "", "", ""]); // Reset OTP state
-            setIsVerificationCompleted(false);
-        }
-    }, [isVerificationModalOpen, isVerificationCompleted]);
-    
-    const handleEmail = (e) => {
-        setOTPEmail(e.target.value);
-    };
-    
+ 
     const handleInstructionsModalOpen = () => {
       setInstructionsModalOpen(true);
     };
@@ -96,101 +77,11 @@ export const Register = ({saveData}) => {
 
  
 
-const handleSubmitVerification = () => {
-    setFromOTP(true);
-    setFromSocialMedia(false);
-    verifyOTP();
-    setIsVerificationCompleted(true);
-    handleCloseVerificationModal();
-};
-    const handleOpenAuthenticationModal = () => {
-      setIsAuthenticationModalOpen(true);
-    };
+
   
-    const handleCloseAuthenticationModal = () => {
-      setIsAuthenticationModalOpen(false);
-      setOTP(["", "", "", "", "", ""]); // Reset OTP state
-       };
-       
-      const handleCloseVerificationModal = () => {
-        setIsVerificationModalOpen(false);
-      };
 
-
-  const generateRecaptcha = () => {
-    return new RecaptchaVerifier("recaptcha-container", {
-      "size": "visible",
-      "type": "image",
-        "theme": "dark",
-        "callback": () => {
-            toast({
-                title: "reCAPTCHA solved, allow signInWithPhoneNumber.",
-                position: "top",
-                status: "success",
-                isClosable: true,
-            });
-            console.log("reCAPTCHA solved, allow signInWithPhoneNumber.");
-            sendOTP();
-        }
-    }, auth);
-  }
-
-
-
-
-  const sendOTP = () => {
-    console.log("phone", OTPphoneNumber);
-    
-    const appVerifier = generateRecaptcha();
-    console.log("in send Otp");
-    // Send OTP to the provided phone number
-  signInWithPhoneNumber(auth, OTPphoneNumber, appVerifier)
-  .then((confirmationResult) => {
-    user = confirmationResult;
-    user.email = OTPemail;
-    
-    window.confirmationResult = confirmationResult;
-    toast({
-        title: "OTP sent successfully.",
-        position: "top",
-        status: "success",
-        isClosable: true,
-    });
-    setIsAuthenticationModalOpen(false);
-    setIsVerificationModalOpen(true); 
-      
-  })}
-
-
-const handleOTP_User = async (user) => {
-    console.log("user in handleOtpUser: ", user);
-    await sendEmailVerification(user)
-    setRegistrationState("waitingForEmailVerification");
-    handleInstructionsModalOpen();
-}
-  const verifyOTP = async () => {
-    // Verify OTP entered by the user
-    window.confirmationResult.confirm(otp.join(""))
-      .then(result => {
-       if(result){
-        handleOTP_User(user);
-        console.log("OTP verified successfully:", result);
-        toast({
-            title: "OTP verified successfully.",
-            position: "top",
-            status: "success",
-            isClosable: true,
-        });
-       }
-      }
-        // Handle successful authentication
-      ).catch(error => {
-        // OTP verification failed
-        console.error(error);
-        // Handle failed authentication
-      });
-  }
   
+
     const handleResendVerificationEmail = async (event) => {
         try {
             //reload user created with initial authorization attempt 
@@ -258,12 +149,12 @@ const handleOTP_User = async (user) => {
                 navigate("/login"); 
               }}
               else if(fromOTP){
-                const { email, OTPphoneNumber } = user;
+                const { email, phoneNumber} = user;
                 const OTP_user = {  
                     email: email,
                     firstName: "",
                     lastName: "",
-                    phone: OTPphoneNumber}
+                    phone: phoneNumber}
 
                 const result = await registerNewAccount(OTP_user); 
                 if (result.success) {
@@ -406,109 +297,6 @@ const handleOTP_User = async (user) => {
 
     return (
         <>
-        <div><Modal isOpen={isAuthenticationModalOpen} onClose={handleCloseAuthenticationModal}>
-        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
-        <ModalContent border="3px outset tan" borderRadius="25px" marginTop="10%" bg="black" color="white"   fontFamily="'Raleway', sans-serif ">
-          <ModalHeader textAlign="center">One-Time Password Authentication</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody   pb={6}>
-            <FormControl  > 
-            <FormLabel fontFamily="'Times New Roman', Times, serif" marginTop="2%" textAlign="center"> Please Enter Email Address</FormLabel>
-            <Input fontFamily="'Times New Roman', Times, serif" marginTop="2%" bg="white" color="black" varient="outlined" onChange={(e) => setOTPEmail(e.target.value)}/>
-              <FormLabel fontFamily= "'Times New Roman', Times, serif" marginTop="2%"  textAlign="center"> Please Enter Phone Number</FormLabel>
-             
-           <Input  fontFamily= "'Times New Roman', Times, serif"
-           marginTop="2%" bg="white" color="black" varient="outlined"
-                country={"us"}
-                onChange={(e) => setOTPPhoneNumber("+1" + e.target.value)}
-                 />
-               
-                  <Button _hover={{ transform: "translateY(-2px)"}} 
-                  _active={{transform: "translateY(2px)"}}
-                   border="3px outset tan" alignContent="left"
-                    mb="8%" marginTop="10%" color="white" bg="black" marginLeft="70%" onClick={sendOTP}>Send OTP</Button>
-                
-                 <div id="recaptcha-container"></div>
-               
-            </FormControl>
-            
-          </ModalBody>
-          <ModalFooter>
-           
-          </ModalFooter>
-        </ModalContent>
-      </Modal></div>
-
-      <div><Modal size="xl" isOpen={isVerificationModalOpen} onClose={handleCloseVerificationModal}>
-      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(-10deg)" />
-        <ModalContent  border="3px outset tan" borderRadius="25px" marginTop="10%" bg="black" color="white"   fontFamily="'Raleway', sans-serif ">
-          <ModalHeader  textAlign="center">One-Time Password Verification</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody   pb={6}>
-            <FormControl   >
-          <FormLabel textAlign="center" marginTop="2%" fontWeight="bold">Please Enter One Time Password</FormLabel>
-          {/* <Input border="2px outset tan"marginTop="5%" fontWeight="bold" value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-           varient="outlined" placeholder="Enter OTP" /> */}
-        <Flex direction="row"  >
-    {otp.map((digit, index) => (
-        <Input
-            key={index}
-            type="text"
-            color="black"
-            bg="white"
-            value={digit}
-            maxLength={1}
-            width="100px"
-            height="5em"
-            margin="5px"
-            padding="0"
-            fontWeight="bold"
-            fontSize="12px"
-            fontFamily="Arial, sans-serif" // Alternative font: Arial"
-            border="2.5px outset tan"
-            marginTop="5%"
-           
-            onChange={(e) => {
-                const value = e.target.value;
-                console.log(value);
-                setOTP((prevOTP) => {
-                    const newOTP = [...prevOTP];
-                    newOTP[index] = value;
-                    return newOTP;
-                });
-                if (value && index < otp.length - 1) {
-                    const nextInput = document.querySelector(`#otp-input-${index + 1}`);
-                    if (nextInput) {
-                        nextInput.focus();
-                    }
-                } else if (!value && index > 0) {
-                    const prevInput = document.querySelector(`#otp-input-${index - 1}`);
-                    if (prevInput) {
-                        prevInput.focus();
-                    }
-                }
-            }}
-            id={`otp-input-${index}`}
-        />
-    ))}
-</Flex>
-                
-          <Button marginTop="10%"
-           _hover={{ transform: "translateY(-2px)"}} 
-           _active={{transform: "translateY(2px)"}}
-            border="2px outset tan" 
-            marginLeft="70%"
-             color="white" bg="black"
-             
-             onClick={handleSubmitVerification } >SUBMIT</Button>
-          </FormControl>
-          </ModalBody>
-          <ModalFooter>
-           
-          </ModalFooter>
-        </ModalContent>
-      </Modal></div>
         <form className="Register" onSubmit={handleSubmit(handleRegister)}> 
             <Flex  mb="5em" alignContent="center" justifyContent="center">
                 <Box border="outset 2px tan" borderRadius="25px"
@@ -710,8 +498,7 @@ const handleOTP_User = async (user) => {
                             <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}} bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleFacebookRegister}><AiFillFacebook size="35px" color="#4267B2" /></Box>
                             <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleTwitterRegister}><FaTwitter  size="35px" color="#1DA1F2"  /></Box>
                             <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }}  margin="10px"border="3px tan outset" onClick={handleYahooRegister}>< AiFillYahoo size="35px" color="#1DA1F2"  /></Box>
-                             <Box _active={{ bg: "rgba(255, 255, 255, 0.9)", transform: "translateY(2px)"}}bg="white" padding="5px"borderRadius="10px"_hover={{ boxShadow: "0 0 5px 1px tan" }} color="black" margin="10px"border="3px tan outset" onClick={handleOpenAuthenticationModal} ><MdPhoneAndroid textAlign="center" size={35} /></Box>
-                          
+                           
                            </SimpleGrid> 
                             </Center>
                     </VStack>

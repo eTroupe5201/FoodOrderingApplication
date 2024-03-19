@@ -62,7 +62,7 @@ describe("User Registration with Email Verification",{defaultCommandTimeout: 350
     cy.visit("/login");
     cy.get("[data-test='forgot-password']").click();
     cy.get("[data-test='forgot-password-email-input']").type(userEmail);
-    cy.get('[data-test="send-reset-email-button"]').click();
+    cy.get("[data-test='send-reset-email-button']").click();
 
     cy.mailosaurGetMessage(serverId, { sentTo: userEmail })
     .then((email) => {
@@ -70,25 +70,19 @@ describe("User Registration with Email Verification",{defaultCommandTimeout: 350
       expect(email.subject).to.equal("Reset your password for project-731811052079");
       let resetPasswordLink = email.html.links[0].href;
        cy.visit(resetPasswordLink);
-       cy.origin('https://food-odering-project-3e43f.firebaseapp.com', () => {
-  // Commands targeting https://food-odering-project-3e43f.firebaseapp.com go here
-  cy.root();
-  cy.get("form").within(($form) => {
-    cy.get("input[name='newPassword']").type("ThisIsTheNewPassword1234");
-    cy.root.submit()
-  });
-});
+       cy.get("input[type='password'][name='newPassword']").type("newPassword123");
+       cy.get("button[type='submit'].firebaseui-id-submit").click();
 
-   
- 
+  });  
   cy.visit("/login");
   cy.get("[data-test='email-input']").type(userEmail);
   cy.get("[data-test='password-input']").type("ThisIsTheNewPassword1234");
   cy.get("[data-test='submit']").click();
-  
-      
 });
-  });
+
+   
  
 
+  
+      
 });

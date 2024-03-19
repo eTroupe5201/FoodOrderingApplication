@@ -1,14 +1,15 @@
-import { getAuth, signInWithPopup } from "firebase/auth";;
+import { getAuth, signInWithPopup } from "firebase/auth"
 import { sendEmailVerification } from "firebase/auth"
-import { TwitterAuthProvider } from "firebase/auth";
-import logtail from "../logger.js";
+import { TwitterAuthProvider } from "firebase/auth"
+import logtail from "../logger.js"
 
 export const RegisterTwitterUser = async (setFromOTP, setFromSocialMedia, setRegistrationState, toast) => {
     setFromOTP(false);
-    setFromSocialMedia(true);
-    try{  
+    setFromSocialMedia(true); 
     const auth = getAuth();
   
+    try{  
+   
       const provider = new TwitterAuthProvider();
       provider.setCustomParameters({
       "display": "popup"
@@ -22,7 +23,7 @@ export const RegisterTwitterUser = async (setFromOTP, setFromSocialMedia, setReg
             position: "top",
             status: "success",
             isClosable: true,
-        });
+        })
          
  await sendEmailVerification(userForVerification);
  setRegistrationState("waitingForEmailVerification");   
@@ -36,8 +37,8 @@ export const RegisterTwitterUser = async (setFromOTP, setFromSocialMedia, setReg
                   status: "error",
                   isClosable: true,
               });
-              logtail.error(`Twitter user registration error: ${error.message}`, {fbUser: auth.currentUser.uid});
+               logtail.error(`Twitter user registration error: ${error.message}`, {fbUser: auth.currentUser.uid});
 
       }
       
-};
+}

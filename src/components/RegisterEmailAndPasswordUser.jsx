@@ -1,7 +1,7 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth"
 import { auth } from "../utils/firebase" 
 import { sendEmailVerification } from "firebase/auth"
-import logtail from "../logger.js";
+import logtail from "../logger.js"
                  
 export const RegisterEmailAndPasswordUser = async (setFromOTP, saveData, setformData, data, setFromSocialMedia, setRegistrationState, toast) => {
     setFromSocialMedia(false);

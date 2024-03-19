@@ -1,13 +1,14 @@
-import { getAuth, signInWithPopup } from "firebase/auth";
+import { getAuth, signInWithPopup } from "firebase/auth"
 import { sendEmailVerification } from "firebase/auth"
-import { FacebookAuthProvider } from "firebase/auth";
-import logtail from "../logger.js";
+import { FacebookAuthProvider } from "firebase/auth"
+import logtail from "../logger.js"
 
 export const RegisterFacebookUser = async (setFromOTP, setFromSocialMedia, setRegistrationState, toast) => {
     setFromOTP(false);
     setFromSocialMedia(true);
+     const auth = getAuth();
     try{  
-    const auth = getAuth();
+   
   
       const provider = new FacebookAuthProvider();
       provider.setCustomParameters({
