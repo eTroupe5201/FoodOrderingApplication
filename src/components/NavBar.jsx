@@ -72,35 +72,34 @@ export function NavBar() {
     return (
         <div className="NavDiv">
         <nav className="nav">      
-{isSmallScreen ? (
-    
-            <Link to="/">  
-            <Image    
-            _hover={{ boxShadow: "0 0 10px 1px tan"}}                     
-            w={{ base: "3em", sm: "4em" }}
-            maxH={{ base: "3em", sm: "4em"}}
-            maxW={{ base: "3em", sm: "4em"}}
-            className="photo" src="https://d1zh5cyxaugen.cloudfront.net/Favicon.webp" alt="logo" /></Link> 
+            {isSmallScreen ? (
+        
+                <Link to="/">  
+                <Image    
+                _hover={{ boxShadow: "0 0 10px 1px tan"}}                     
+                w={{ base: "3em", sm: "4em" }}
+                maxH={{ base: "3em", sm: "4em"}}
+                maxW={{ base: "3em", sm: "4em"}}
+                className="photo" src="https://d1zh5cyxaugen.cloudfront.net/Favicon.webp" alt="logo" /></Link> 
+            ) : (
+                <Link to="/">  
+                <Image
+                alt="logo"
+                _hover={{ boxShadow: "0 0 10px 1px tan"}}
+                w={{  md: "18em" }}
+                maxH={{  md: "11em"}}
+                className="photo" src="https://d1zh5cyxaugen.cloudfront.net/divineDelicaciesResizedTiny.png" /> 
+                </Link> 
+            )}
 
-                ) : (
-                    <Link to="/">  
-                    <Image
-                    alt="logo"
-                    _hover={{ boxShadow: "0 0 10px 1px tan"}}
-                    w={{  md: "18em" }}
-                    maxH={{  md: "11em"}}
-                    className="photo" src="https://d1zh5cyxaugen.cloudfront.net/divineDelicaciesResizedTiny.png" /> 
-                    </Link> 
-                )}
-
-            <ul display="block">
-            <li>{!isSmallScreen&& <SearchBar />}</li>
-            <li><Link to="/"><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Home</Text></Link></li>
-     
+            <ul display="flex">
+                <li>{!isSmallScreen&& <SearchBar />}</li>
+                {!isSmallScreen&& <li> <Link to="/"><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Home</Text></Link> </li> }
+        
                 {/* <li><Link to="/item"> Menu </Link></li> */}
-                <li><Link to="/contact"><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}> Contact Us</Text> </Link></li>
-                <li><Link to="/menu"> <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Order </Text></Link> </li>
-                <li > 
+                {!isSmallScreen&& <li> <Link to="/contact"><Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}> Contact Us</Text> </Link> </li> }
+                {!isSmallScreen&& <li> <Link to="/menu"> <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Order </Text></Link> </li> }
+                {!isSmallScreen&& <li > 
                     {user ? (
                         <Box as="button" onClick={logout} >
                             <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}> 
@@ -108,11 +107,14 @@ export function NavBar() {
                             </Text> 
                         </Box>
                     ) : (
-                        <Link to="/login"> <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>Login </Text></Link> 
+                        <Link to="/login"> <Text fontSize={{ base: "0em", sm: "0em", md: "0em", lg: "25px" }}>
+                                Login 
+                            </Text>
+                        </Link> 
                     ) }
-                </li>
-                <HStack spacing="1.5rem">
-                <li > 
+                </li> }
+                <HStack>
+                    <li> 
                         {user ? (
                             <Flex align="center">
                                 <Link to="/profile">
@@ -121,7 +123,7 @@ export function NavBar() {
                                 <Text pl={2} fontSize="xl">{userProfile?.firstName}</Text> 
                             </Flex>
                         ) : (
-                            <TiUser style={{visibility: "hidden"}} />
+                            <TiUser style={{display: "none"}} />
                         ) }
                     </li>
                     <li>
@@ -135,11 +137,10 @@ export function NavBar() {
                                                        </Button><CartModal isOpen={isOpen} onClose={onClose} /></> 
                                                      
                         ) : (
-                            <TiShoppingCart style={{ opacity: 0.5, cursor: "not-allowed" }} />
+                            <TiShoppingCart style={{ opacity: 0.5, cursor: "not-allowed", marginTop: "0.5rem", marginRight: "0.5rem"}} />
                         )}
                     </li>
-                    <li>{isSmallScreen&& <MobileNav />}</li>
-                    
+                    <li>{isSmallScreen&& <MobileNav/>}</li>             
                 </HStack>
                 {/* <li><Link to="/info"> OurInfo </Link></li> */}
             </ul>
