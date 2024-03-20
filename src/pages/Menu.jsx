@@ -32,7 +32,9 @@ export const Menu = () => {
             {selectedFilter === "Dietary" && <DietaryNeeds />}
             {(selectedFilter === "") && (
                 <Center>
+
                     <Box title="menu-grid" alignItems="center" textAlign="center" mt="30px" maxW="90%" p={5}>
+
                         {categories.map((category) => (
                             <Box key={category.id} p={5} boxShadow="md" border="2px tan outset" color="white" bg="black" borderRadius="25px" width="100%">
                                 <Center>
