@@ -31,6 +31,7 @@ export function ImageSlider() {
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -42,6 +43,10 @@ export function ImageSlider() {
     return () => clearInterval(interval);
   }, [images.length]);
 
+  const handleImageLoad = () => {
+    setIsLoaded(true);
+  };
+
   return (
     <>
       <Helmet>
@@ -50,7 +55,7 @@ export function ImageSlider() {
       </Helmet>
 
       <Container className="imageContainer" paddingX={0} maxWidth="100%">
-        <div className="SliderContent">
+        <div className="SliderContent" style={{ visibility: isLoaded ? "visible" : "hidden" }}>
           <Text
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -73,7 +78,7 @@ export function ImageSlider() {
               <motion.button
                 whileHover={{ scale: 1.1, textShadow: "0px 0px 8px rgb(255, 255, 255)" }}
               >
-                <Text paddingBottom="10px" fontWeight="bold" fontSize={{ base: "9px", sm: "12px", md: "15px", lg: "17px" }} >
+                <Text fontWeight="bold">
                   {images[currentImageIndex].button}
                 </Text>
               </motion.button>
@@ -81,8 +86,7 @@ export function ImageSlider() {
           </div>
         </div>
 
-
-        <Box height={{ base: "70vh", sm: "80vh", md: "80vh", lg: "80vh", xl: "80vh" }} overflow="hidden">
+        <Box height={{ base: "80vh", sm: "80vh", md: "80vh", lg: "80vh", xl: "80vh" }} overflow="hidden">
           <Image
             rel="preload"
             boxSize="100%"
@@ -90,10 +94,10 @@ export function ImageSlider() {
             src={images[currentImageIndex].url}
             alt="Slider Image"
             objectFit="cover"
+            onLoad={handleImageLoad}
           />
         </Box>
       </Container>
     </>
-
   );
 }

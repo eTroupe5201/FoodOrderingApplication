@@ -1,7 +1,9 @@
 import { Banner} from "../components/Banner";
 import { ImageSlider} from "../components/ImageSlider";
-import { DiscoverOurStory} from "../components/DiscoverOurStory";
-import { OurTeam} from "../components/OurTeam";
+import loadable from "@loadable/component";
+
+const DiscoverOurStory = loadable(() => import("../components/DiscoverOurStory"), {resolveComponent: (components) => components.DiscoverOurStory});
+const OurTeam = loadable(() => import("../components/OurTeam"), {resolveComponent: (components) => components.OurTeam});
 
 export function Home(){
 
