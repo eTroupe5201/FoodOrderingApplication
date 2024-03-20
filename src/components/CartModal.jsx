@@ -43,7 +43,7 @@ export const CartModal = ({ isOpen, onClose }) => {
                 bottom="0"
                 ml="0"
                 mt="0"
-                height="100vh" // Make the modal full height
+                height="100svh" // Make the modal full height
                 width={{ base: "100%", md: "50%", lg: "50%", xl: "50%" }}
                 boxShadow="0px 0px 10px rgba(0, 0, 0, 0.1)"
                 borderRadius="0"

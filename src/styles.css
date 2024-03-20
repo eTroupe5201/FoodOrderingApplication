@@ -54,7 +54,6 @@
 
 .nav {
     color: #fff;
-    padding-right: 100px;;
    
     font-weight: 100;
     background: #000000;
@@ -66,11 +65,15 @@
     -ms-animation: 3s ease-out 0s 1 slideInFromLeft;
    
     display: flex;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
 
-    gap: 3rem;
-    padding: 0 2rem;
+    /* gap: 3rem; */
+    /* padding: 0 2rem; */
+    gap: 3svw;
+    padding-left: 1.5rem; 
+    padding-right: 1.5rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
