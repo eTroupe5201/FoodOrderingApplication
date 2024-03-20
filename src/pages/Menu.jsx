@@ -32,7 +32,9 @@ export const Menu = () => {
             {selectedFilter === "Dietary" && <DietaryNeeds />}
             {(selectedFilter === "") && (
                 <Center>
-                    <Box alignItems="center" textAlign="center" mt="30px" maxW="90%" p={5}>
+
+                    <Box title="menu-grid" alignItems="center" textAlign="center" mt="30px" maxW="90%" p={5}>
+
                         {categories.map((category) => (
                             <Box key={category.id} p={5} boxShadow="md" border="2px tan outset" color="white" bg="black" borderRadius="25px" width="100%">
                                 <Center>
@@ -47,7 +49,7 @@ export const Menu = () => {
                                         )}
                                     </Box>
                                 </Center>
-                                <SimpleGrid
+                                <SimpleGrid 
                                     templateColumns={{ base: "repeat(1, 1fr)", sm: "repeat(2, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)", xl: "repeat(4, 1fr)" }}
                                     spacing={10}>
                                     {getItemsByCategory(category.id).map((item) => (
